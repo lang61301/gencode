@@ -3,6 +3,7 @@
  */
 package me.paddingdun.gen.code.util;
 
+import java.awt.EventQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
@@ -15,7 +16,12 @@ public class TaskHelper {
 	
 	public static <V> void runInNonEDT(Callable<V> callable){
 		FutureTask<V> ft = new FutureTask<V>(callable);
-		new Thread(ft).start();
+		//判断当前线程是否是edt线程,如果是edt则启动新的线程;
+		if(EventQueue.isDispatchThread()){
+			new Thread(ft).start();
+		}else{
+			ft.run();
+		}
 	}
 	
 	public static void main(String[] args)throws Exception {
@@ -39,13 +45,14 @@ public class TaskHelper {
 //		System.out.println(ft.get()[0]);
 //		executor.shutdown();
 //		
-//		FutureTask<Integer> ft = new FutureTask<Integer>(new Callable<Integer>() {
-//
-//			public Integer call() throws Exception {
-//				System.out.println("................");
-//				return null;
-//			}
-//		});
+		FutureTask<Integer> ft = new FutureTask<Integer>(new Callable<Integer>() {
+
+			public Integer call() throws Exception {
+				System.out.println("................");
+				return null;
+			}
+		});
+		ft.run();
 //		new Thread(ft).start();
 	}
 
