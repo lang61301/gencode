@@ -5,22 +5,15 @@
  */
 package me.paddingdun.gen.code;
 
-import java.awt.Component;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.Vector;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.Rectangle;
 
-import javax.swing.JCheckBox;
-import javax.swing.JTable;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
+import javax.swing.JDesktopPane;
 
-import me.paddingdun.gen.code.data.tabletree.Table;
-import me.paddingdun.gen.code.db.TableHelper;
+import me.paddingdun.gen.code.gui.perspective.IPerspective;
+import me.paddingdun.gen.code.gui.perspective.designer.DesignerPerspective;
+import me.paddingdun.gen.code.gui.view.dbtable.TableTreeView;
 
 /**
  *
@@ -29,85 +22,10 @@ import me.paddingdun.gen.code.db.TableHelper;
 public class MainFrame extends javax.swing.JFrame {
 
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	/**
      * Creates new form MainFrame
      */
     public MainFrame() {
         initComponents();
-        
-        initData();
-    }
-    
-    public void initData(){
-    	DefaultTreeModel tm = new DefaultTreeModel(TableHelper.TableTreeNode());
-        tableTree.addTreeSelectionListener(new TreeSelectionListener() {
-			
-			public void valueChanged(TreeSelectionEvent e) {
-				Object[] objs = e.getPath().getPath();
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode)objs[objs.length - 1];
-				if(node.isLeaf()){
-					Object uo = node.getUserObject();
-					if( uo instanceof Table){
-						Table t = (Table)uo;
-						System.out.println("click:" + t);
-						Vector<Vector<Object>> v = TableHelper.tableRecord(t.getCat(), t.getTableName());
-						Vector<Object> v2 = new Vector<Object>();
-	//					DefaultTableColumnModel dtcm = new DefaultTableColumnModel();
-				    	String[] heads = new String[]{"列名称", "列类型", "列描述"};
-				    	v2.add("select");
-				    	for (int i = 0; i < heads.length; i++) {
-	//			    		TableColumn h = new TableColumn(i);
-	//			        	h.setHeaderValue(heads[i]);
-	//			        	dtcm.addColumn(h);
-				        	v2.add(heads[i]);
-						}
-	//			    	table.setColumnModel(dtcm);
-						DefaultTableModel dtm = new DefaultTableModel(v, v2){
-							/**
-							 * 
-							 */
-							private static final long serialVersionUID = 1L;
-	
-							public Class<?> getColumnClass(int col){
-								Object value = getValueAt(0, col);
-						        if(value!=null)
-						            return value.getClass();
-						        else 
-						        	return super.getClass();
-							}
-						};
-				    	table.setModel(dtm);
-				    	
-				    	table.addMouseListener(new MouseAdapter() {
-				    	    @Override
-				    	    public void mouseClicked(MouseEvent e){
-//				    	    	int x = e.getX();
-//				    	    	int y = e.getY();
-//				    	    	Component c =  table.getComponentAt(x, y);
-				    	    	System.out.println(table.getSelectedRow());
-//				    	        if(table.getColumnModel().getColumnIndexAtX(e.getX())==0){//如果点击的是第0列，即checkbox这一列
-//				    	            JCheckBox Checkbox = (JCheckBox)check;
-//				    	            boolean b = !check.isSelected();
-//				    	            check.setSelected(b);
-//				    	            table.getTableHeader().repaint();
-//				    	            for(int i=0;i<table.getRowCount();i++){
-//				    	                table.getModel().setValueAt(b, i, 0);//把这一列都设成和表头一样
-//				    	            }
-//				    	        }
-				    	    }
-				    	});
-				    	
-				    	final MyCheckBoxRenderer check = new MyCheckBoxRenderer();
-						table.getColumn("select").setHeaderRenderer(check);
-				    	table.updateUI();
-					}
-				}
-			}
-		});
-    	tableTree.setModel(tm);
     }
 
     /**
@@ -120,14 +38,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         toolBar = new javax.swing.JToolBar();
-        main = new javax.swing.JSplitPane();
-        left = new javax.swing.JSplitPane();
-        tableListPanel = new javax.swing.JScrollPane();
-        tableTree = new javax.swing.JTree();
-        right = new javax.swing.JSplitPane();
-        middle = new javax.swing.JSplitPane();
-        tablePanel = new javax.swing.JScrollPane();
-        table = new javax.swing.JTable();
+        container = new javax.swing.JDesktopPane();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         editMenu = new javax.swing.JMenu();
@@ -142,22 +53,17 @@ public class MainFrame extends javax.swing.JFrame {
 
         toolBar.setRollover(true);
 
-        left.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
-
-        tableListPanel.setViewportView(tableTree);
-
-        left.setBottomComponent(tableListPanel);
-
-        main.setLeftComponent(left);
-
-        middle.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
-        right.setLeftComponent(middle);
-
-        tablePanel.setViewportView(table);
-
-        right.setRightComponent(tablePanel);
-
-        main.setRightComponent(right);
+        javax.swing.GroupLayout containerLayout = new javax.swing.GroupLayout(container);
+        container.setLayout(containerLayout);
+        container.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
+        containerLayout.setHorizontalGroup(
+            containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        containerLayout.setVerticalGroup(
+            containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 248, Short.MAX_VALUE)
+        );
 
         fileMenu.setText("File");
         menuBar.add(fileMenu);
@@ -171,27 +77,36 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(main, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addComponent(container)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(main, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE))
+                .addComponent(container))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void afterShow(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_afterShow
-        right.setDividerLocation(0.6);
-        main.setDividerLocation(0.2);
-        left.setDividerLocation(0.5);
-        middle.setDividerLocation(0.5);
-       
+      
+    	init_perspective();
     }//GEN-LAST:event_afterShow
+    
+    private IPerspective perspective = null;
+    
+    /**
+     * 初始化视图;
+     */
+    private void init_perspective(){
+    	
+    	if(perspective == null){
+    		perspective = new DesignerPerspective(container);
+    	}
+    }
 
     /**
      * @param args the command line arguments
@@ -229,35 +144,10 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JDesktopPane container;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenu fileMenu;
-    private javax.swing.JSplitPane left;
-    private javax.swing.JSplitPane main;
     private javax.swing.JMenuBar menuBar;
-    private javax.swing.JSplitPane middle;
-    private javax.swing.JSplitPane right;
-    private javax.swing.JTable table;
-    private javax.swing.JScrollPane tableListPanel;
-    private javax.swing.JScrollPane tablePanel;
-    private javax.swing.JTree tableTree;
     private javax.swing.JToolBar toolBar;
     // End of variables declaration//GEN-END:variables
-}
-
-
-class MyCheckBoxRenderer extends JCheckBox implements TableCellRenderer{
-	 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	public MyCheckBoxRenderer () {
-        this.setBorderPainted(true);
-    }
-    
-    public Component getTableCellRendererComponent(JTable table, Object value,
-            boolean isSelected, boolean hasFocus, int row, int column) {
-        return this;
-    }   
 }

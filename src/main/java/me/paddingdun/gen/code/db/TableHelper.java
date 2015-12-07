@@ -79,7 +79,7 @@ public class TableHelper {
 				int type = rs1.getInt("DATA_TYPE");
 				String common = rs1.getString("REMARKS");
 				Vector<Object> el = new Vector<Object>();
-				el.add(Boolean.FALSE);
+//				el.add(Boolean.FALSE);
 				el.add(name);
 				el.add(type);
 				el.add(common);
