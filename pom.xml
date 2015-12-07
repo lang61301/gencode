@@ -47,5 +47,18 @@
 		    <artifactId>slf4j-log4j12</artifactId>  
 		    <version>1.7.5</version>  
 		</dependency>  
+		
+		<!-- mysql驱动包 -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.21</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.mxgraph</groupId>
+            <artifactId>jgraphx</artifactId>
+            <version>3.4.0.3</version>
+        </dependency>
   </dependencies>
 </project>
