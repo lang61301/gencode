@@ -4,6 +4,9 @@
 package me.paddingdun.gen.code.data.tabletree;
 
 import java.io.Serializable;
+import java.util.List;
+
+import me.paddingdun.gen.code.data.table.TableColumn;
 
 /**
  * @author paddingdun
@@ -19,6 +22,7 @@ public class Table implements Serializable {
 	private String cat;
 	private String tableName;
 	private String tableType;
+	private String tableCommon;
 	
 	/**
 	 * @param cat
@@ -43,6 +47,13 @@ public class Table implements Serializable {
 	public void setTableType(String tableType) {
 		this.tableType = tableType;
 	}
+	
+	public String getTableCommon() {
+		return tableCommon;
+	}
+	public void setTableCommon(String tableCommon) {
+		this.tableCommon = tableCommon;
+	}
 	@Override
 	public String toString() {
 		return tableName;
@@ -54,4 +65,21 @@ public class Table implements Serializable {
 		this.cat = cat;
 	}
 	
+	private List<TableColumn> columns;
+
+	public List<TableColumn> getColumns() {
+		return columns;
+	}
+	public void setColumns(List<TableColumn> columns) {
+		this.columns = columns;
+	}
+	
+	private String entityBeanName;
+
+	public String getEntityBeanName() {
+		return entityBeanName;
+	}
+	public void setEntityBeanName(String entityBeanName) {
+		this.entityBeanName = entityBeanName;
+	}
 }

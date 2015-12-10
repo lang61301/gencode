@@ -1,0 +1,33 @@
+/**
+ * 
+ */
+package abc.padding;
+
+/**
+ * autogenerate
+ * @author paddingdun
+ * ${tableCommon}
+ * ${date}
+ */
+public class ${entityBeanName} {
+	
+	#foreach( $column in $columns)
+	/**
+	 * ${column.columnCommon}
+	 */
+    private ${column.javaType} ${column.propertyName};
+    	
+	#end
+	
+	#foreach( $column in $columns)
+public void  ${column.setMethod}(${column.javaType} ${column.propertyName}){
+    this.${column.propertyName} = ${column.propertyName};
+	}
+	
+	public ${column.javaType}  ${column.getMethod}(){
+    return this.${column.propertyName};
+	}
+	
+	#end
+}
+

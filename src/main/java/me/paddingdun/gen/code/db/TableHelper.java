@@ -6,14 +6,14 @@ package me.paddingdun.gen.code.db;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-import me.paddingdun.gen.code.data.table.TableRecord;
+import me.paddingdun.gen.code.data.table.TableColumn;
 import me.paddingdun.gen.code.data.tabletree.Table;
 import me.paddingdun.gen.code.util.IOHelper;
 
@@ -47,9 +47,12 @@ public class TableHelper {
 						String cat  = rs2.getString("TABLE_CAT");
 						String name = rs2.getString("TABLE_NAME");
 						String type = rs2.getString("TABLE_TYPE");
+						String remark = rs2.getString("REMARKS");
 						
 						DefaultMutableTreeNode node_table  = new DefaultMutableTreeNode();
-						node_table.setUserObject(new Table(cat, name, type));
+						Table t = new Table(cat, name, type);
+						t.setTableCommon(remark);
+						node_table.setUserObject(t);
 						node_db.add(node_table);
 					}
 				}finally{
@@ -65,8 +68,24 @@ public class TableHelper {
 		return root;
 	}
 	
-	public static Vector<Vector<Object>>  tableRecord(String catalog, String tableName){
+	public static Vector<Vector<Object>>  transform1(List<TableColumn> list){
 		Vector<Vector<Object>> result = new Vector<Vector<Object>>();
+		for (TableColumn r : list) {
+			String name = r.getColumnName();
+			int type = r.getType();
+			String common = r.getColumnCommon();
+			Vector<Object> el = new Vector<Object>();
+//			el.add(Boolean.FALSE);
+			el.add(name);
+			el.add(type);
+			el.add(common);
+			result.add(el);
+		}
+		return result;
+	}
+	
+	public static List<TableColumn>  tableColumn(String catalog, String tableName){
+		List<TableColumn> result = new ArrayList<TableColumn>();
 		Connection conn = null;
 		ResultSet  rs1	= null;
 		try{
@@ -78,11 +97,8 @@ public class TableHelper {
 				String name = rs1.getString("COLUMN_NAME");
 				int type = rs1.getInt("DATA_TYPE");
 				String common = rs1.getString("REMARKS");
-				Vector<Object> el = new Vector<Object>();
-//				el.add(Boolean.FALSE);
-				el.add(name);
-				el.add(type);
-				el.add(common);
+				
+				TableColumn el = new TableColumn(name, type, common);
 				result.add(el);
 			}
 		}catch(Exception e){

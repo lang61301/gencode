@@ -8,26 +8,41 @@ package me.paddingdun.gen.code.gui.view.dbtable;
 import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.Callable;
 
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.tree.DefaultTreeModel;
+
+import org.apache.log4j.Logger;
 
 import me.paddingdun.gen.code.data.message.Message;
+import me.paddingdun.gen.code.data.table.TableColumn;
 import me.paddingdun.gen.code.data.tabletree.Table;
 import me.paddingdun.gen.code.db.TableHelper;
 import me.paddingdun.gen.code.gui.perspective.designer.DesignerPerspective;
 import me.paddingdun.gen.code.gui.view.AbstractView;
 import me.paddingdun.gen.code.util.TaskHelper;
+import me.paddingdun.gen.code.util.VelocityHelper;
 
 /**
  *
  * @author admin
  */
 public class TableView extends AbstractView {
+	
+	/**
+	 * TableView 日志变量;
+	 */
+	private final static Logger logger = Logger.getLogger(TableView.class);
+
 
 	private DesignerPerspective perspective;
+	
+	private Table currentData = null;
 	
     /**
      * Creates new form TableFrame
@@ -53,8 +68,10 @@ public class TableView extends AbstractView {
         setMaximizable(true);
         setResizable(true);
         setTitle("数据库表详细内容");
+        fileChooser = new javax.swing.JFileChooser();
         sp = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
+        btnGen = new javax.swing.JButton();
 
         sp.setViewportView(table);
         
@@ -63,16 +80,30 @@ public class TableView extends AbstractView {
                 afterShow(evt);
             }
         });
+        
+        btnGen.setText("生成");
+        btnGen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(sp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                    .addComponent(btnGen)
+                    .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(sp, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
+        		layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addComponent(sp, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(45, 45, 45)
+                    .addComponent(btnGen)
+                    .addContainerGap(413, Short.MAX_VALUE))
         );
 
         pack();
@@ -86,9 +117,37 @@ public class TableView extends AbstractView {
     	    }
     	});
     }
+    
+    private void btnGenActionPerformed(java.awt.event.ActionEvent evt) {
+    	if(currentData != null){
+	    	fileChooser.setFileSelectionMode(JFileChooser.SAVE_DIALOG|JFileChooser.DIRECTORIES_ONLY);
+	        int opt = fileChooser.showSaveDialog(null);
+	        //保存;
+	        if(JFileChooser.APPROVE_OPTION == opt){
+	        	TaskHelper.runInNonEDT(new Callable<Integer[]>() {
+					public Integer[] call() throws Exception {
+						File saveFile = fileChooser.getSelectedFile();
+			        	if(!saveFile.exists())
+			        		saveFile.mkdirs();
+			        	
+			        	System.out.println(VelocityHelper.entityBean(currentData));
+			        	
+			        	EventQueue.invokeLater(new Runnable() {
+							public void run() {
+								JOptionPane.showMessageDialog(null, "生成文件完成!");
+							}
+						});
+						return null;
+					}
+				});
+	        }
+    	}
+    }   
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnGen;
+    private javax.swing.JFileChooser fileChooser;
     private javax.swing.JScrollPane sp;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
@@ -105,7 +164,12 @@ public class TableView extends AbstractView {
 			TaskHelper.runInNonEDT(new Callable<Integer[]>() {
 				public Integer[] call() throws Exception {
 					
-					Vector<Vector<Object>> v = TableHelper.tableRecord(t.getCat(), t.getTableName());
+					List<TableColumn> list_tr = TableHelper.tableColumn(t.getCat(), t.getTableName());
+					t.setColumns(list_tr);
+					
+					currentData = t;
+					
+					Vector<Vector<Object>> v = TableHelper.transform1(list_tr);
 					Vector<Object> v2 = new Vector<Object>();
 //								DefaultTableColumnModel dtcm = new DefaultTableColumnModel();
 			    	String[] heads = new String[]{"列名称", "列类型", "列描述"};
