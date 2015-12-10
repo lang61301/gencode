@@ -19,6 +19,14 @@
          <property name="url" value="${jdbc_url}" />
          <property name="username" value="${jdbc_username}" />
          <property name="password" value="${jdbc_password}" />
+         
+         <!-- 当数据库是mysql时,为了能够读取table的common注释添加的属性 -->
+         <property name="connectProperties">
+         	<props>
+         		<prop key="useInformationSchema">true</prop>
+         	</props>
+         </property>
+         
  
          <!-- 初始化连接大小 -->
          <property name="initialSize" value="0" />
