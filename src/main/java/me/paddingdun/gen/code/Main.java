@@ -6,7 +6,6 @@ package me.paddingdun.gen.code;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import me.paddingdun.gen.code.gui.MainFrame;
-import me.paddingdun.gen.code.util.VelocityHelper;
 
 /**
  * @author paddingdun

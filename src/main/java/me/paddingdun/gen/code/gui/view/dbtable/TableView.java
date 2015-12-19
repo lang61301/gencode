@@ -9,6 +9,8 @@ import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.StringReader;
+import java.util.Formatter;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.Callable;
@@ -27,6 +29,8 @@ import me.paddingdun.gen.code.gui.perspective.designer.DesignerPerspective;
 import me.paddingdun.gen.code.gui.view.AbstractView;
 import me.paddingdun.gen.code.util.TaskHelper;
 import me.paddingdun.gen.code.util.VelocityHelper;
+import net.barenca.jastyle.ASFormatter;
+import net.barenca.jastyle.FormatterHelper;
 
 /**
  *
@@ -129,8 +133,14 @@ public class TableView extends AbstractView {
 						File saveFile = fileChooser.getSelectedFile();
 			        	if(!saveFile.exists())
 			        		saveFile.mkdirs();
+			        	ASFormatter formatter = new ASFormatter();
+			        	formatter.setJavaStyle();
+			        	System.out.println(FormatterHelper.format(new StringReader(VelocityHelper.entityBean(currentData)), formatter));
 			        	
-			        	System.out.println(VelocityHelper.entityBean(currentData));
+			        	System.out.println(VelocityHelper.sqlMap(currentData));
+			        	
+			        	
+			        	System.out.println(VelocityHelper.dataTable(currentData));
 			        	
 			        	EventQueue.invokeLater(new Runnable() {
 							public void run() {

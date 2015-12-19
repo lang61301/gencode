@@ -81,4 +81,14 @@ public class TableColumn implements Serializable {
 	public void setSetMethod(String setMethod) {
 		this.setMethod = setMethod;
 	}
+	
+	private boolean gson = true;
+
+
+	public boolean isGson() {
+		return gson;
+	}
+	public void setGson(boolean gson) {
+		this.gson = gson;
+	}
 }

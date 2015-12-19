@@ -24,8 +24,8 @@ public class TypesHelper {
 		map_types.put(java.sql.Types.FLOAT, "java.lang.Float");
 		map_types.put(java.sql.Types.REAL, "boolean");
 		map_types.put(java.sql.Types.DOUBLE, "java.lang.Double");
-		map_types.put(java.sql.Types.NUMERIC, "java.lang.BigDecimal");
-		map_types.put(java.sql.Types.DECIMAL, "java.lang.BigDecimal");
+		map_types.put(java.sql.Types.NUMERIC, "java.math.BigDecimal");
+		map_types.put(java.sql.Types.DECIMAL, "java.math.BigDecimal");
 		map_types.put(java.sql.Types.CHAR, "java.lang.Character");
 		map_types.put(java.sql.Types.VARCHAR, "java.lang.String");
 		map_types.put(java.sql.Types.LONGVARCHAR, "java.lang.String");

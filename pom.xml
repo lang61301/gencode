@@ -167,6 +167,19 @@
 			<artifactId>velocity</artifactId>
 			<version>1.7</version>
 		</dependency>
+		
+		<!-- 格式化java代码 -->
+		<dependency>
+			<groupId>net.barenca</groupId>
+			<artifactId>jastyle</artifactId>
+			<version>0.5</version>
+		</dependency>
+		 
+		<!-- dependency>
+		  <groupId>com.google.googlejavaformat</groupId>
+		  <artifactId>google-java-format</artifactId>
+		  <version>0.1-alpha</version>
+		</dependency-->
         
   </dependencies>
 </project>

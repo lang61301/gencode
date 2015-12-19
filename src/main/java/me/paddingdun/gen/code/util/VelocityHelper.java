@@ -4,9 +4,6 @@
 package me.paddingdun.gen.code.util;
 
 import java.beans.PropertyDescriptor;
-import java.lang.reflect.InvocationTargetException;
-import java.sql.Types;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,6 +67,56 @@ public class VelocityHelper {
 			} 
 		}
 		String s = VelocityEngineUtils.mergeTemplateIntoString(helper.engine, "template/velocity/EntityBean.vm", "utf-8", model);
+		return s;
+	}
+	
+	public static String sqlMap(Table table){
+		table.setEntityBeanName(TableHelper.table(table.getTableName()));
+		List<TableColumn> list = table.getColumns();
+		for (TableColumn tc : list) {
+			tc.setJavaType(TypesHelper.map_types.get(tc.getType()));
+			String pn = TableHelper.col(tc.getColumnName());
+			tc.setPropertyName(pn);
+			tc.setSetMethod(TableHelper.set(pn));
+			tc.setGetMethod(TableHelper.get(pn, tc.getType()));
+		}
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("date", DateHelper.now());
+		PropertyDescriptor[] pds = PropertyUtils.getPropertyDescriptors(table);
+		for (PropertyDescriptor pd : pds) {
+			try {
+				model.put(pd.getName(), PropertyUtils.getProperty(table, pd.getName()));
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			} 
+		}
+		String s = VelocityEngineUtils.mergeTemplateIntoString(helper.engine, "template/velocity/SqlMap.vm", "utf-8", model);
+		return s;
+	}
+	
+	public static String dataTable(Table table){
+		table.setEntityBeanName(TableHelper.table(table.getTableName()));
+		List<TableColumn> list = table.getColumns();
+		for (TableColumn tc : list) {
+			tc.setJavaType(TypesHelper.map_types.get(tc.getType()));
+			String pn = TableHelper.col(tc.getColumnName());
+			tc.setPropertyName(pn);
+			tc.setSetMethod(TableHelper.set(pn));
+			tc.setGetMethod(TableHelper.get(pn, tc.getType()));
+		}
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("date", DateHelper.now());
+		PropertyDescriptor[] pds = PropertyUtils.getPropertyDescriptors(table);
+		for (PropertyDescriptor pd : pds) {
+			try {
+				model.put(pd.getName(), PropertyUtils.getProperty(table, pd.getName()));
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			} 
+		}
+		String s = VelocityEngineUtils.mergeTemplateIntoString(helper.engine, "template/velocity/DataTable.vm", "utf-8", model);
 		return s;
 	}
 
