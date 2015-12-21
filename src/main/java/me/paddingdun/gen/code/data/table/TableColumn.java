@@ -19,6 +19,8 @@ public class TableColumn implements Serializable {
 	private String columnName;
 	private int type;
 	private String columnCommon;
+	private boolean autoIncrement;
+	private boolean primary;
 	
 	
 	/**
@@ -50,7 +52,21 @@ public class TableColumn implements Serializable {
 	public void setColumnCommon(String columnCommon) {
 		this.columnCommon = columnCommon;
 	}
-	
+	public boolean isAutoIncrement() {
+		return autoIncrement;
+	}
+	public void setAutoIncrement(boolean autoIncrement) {
+		this.autoIncrement = autoIncrement;
+	}
+	public boolean isPrimary() {
+		return primary;
+	}
+	public void setPrimary(boolean primary) {
+		this.primary = primary;
+	}
+
+
+
 	private String javaType;
 	private String propertyName;
 	private String getMethod;

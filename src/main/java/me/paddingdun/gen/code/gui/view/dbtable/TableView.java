@@ -46,7 +46,10 @@ public class TableView extends AbstractView {
 
 	private DesignerPerspective perspective;
 	
-	private Table currentData = null;
+	/**
+	 * 数据;
+	 */
+	private TableViewModel model = null;
 	
     /**
      * Creates new form TableFrame
@@ -57,6 +60,13 @@ public class TableView extends AbstractView {
         initComponents();
         
         init();
+    }
+    
+    @Override
+    public void init(){
+    	super.init();
+    	
+    	model = new TableViewModel();
     }
 
     /**
@@ -73,18 +83,38 @@ public class TableView extends AbstractView {
         setResizable(true);
         setTitle("数据库表详细内容");
         fileChooser = new javax.swing.JFileChooser();
+        bg1 = new javax.swing.ButtonGroup();
+        spp = new javax.swing.JSplitPane();
         sp = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
+        sp2 = new javax.swing.JScrollPane();
+        pane = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        txtPgName = new javax.swing.JTextField();
+        jRadioButton1 = new javax.swing.JRadioButton();
+        jRadioButton2 = new javax.swing.JRadioButton();
+        jLabel2 = new javax.swing.JLabel();
         btnGen = new javax.swing.JButton();
+        
+        spp.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
 
         sp.setViewportView(table);
-        
-        this.addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentShown(java.awt.event.ComponentEvent evt) {
-                afterShow(evt);
-            }
-        });
-        
+
+        spp.setLeftComponent(sp);
+
+        sp2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        jLabel1.setText("包名称");
+
+        bg1.add(jRadioButton1);
+        jRadioButton1.setSelected(true);
+        jRadioButton1.setText("属性名称");
+
+        bg1.add(jRadioButton2);
+        jRadioButton2.setText("表字段名称");
+
+        jLabel2.setText("SQL传入值占位符");
+
         btnGen.setText("生成");
         btnGen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -92,24 +122,71 @@ public class TableView extends AbstractView {
             }
         });
 
+        javax.swing.GroupLayout paneLayout = new javax.swing.GroupLayout(pane);
+        pane.setLayout(paneLayout);
+        paneLayout.setHorizontalGroup(
+            paneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(paneLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(paneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGap(16, 16, 16)
+                .addGroup(paneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(paneLayout.createSequentialGroup()
+                        .addComponent(jRadioButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jRadioButton2))
+                    .addGroup(paneLayout.createSequentialGroup()
+                        .addComponent(txtPgName, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnGen)))
+                .addContainerGap(185, Short.MAX_VALUE))
+        );
+        paneLayout.setVerticalGroup(
+            paneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(paneLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(paneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPgName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGen))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(paneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jRadioButton1)
+                    .addComponent(jRadioButton2)
+                    .addComponent(jLabel2))
+                .addContainerGap(338, Short.MAX_VALUE))
+        );
+
+        paneLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel1, jLabel2});
+
+        sp2.setViewportView(pane);
+
+        spp.setBottomComponent(sp2);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(sp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                    .addComponent(btnGen)
-                    .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(spp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
-        		layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addComponent(sp, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(45, 45, 45)
-                    .addComponent(btnGen)
-                    .addContainerGap(413, Short.MAX_VALUE))
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(spp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
         );
+        
 
+        
+        
+        
+        
+        this.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                afterShow(evt);
+            }
+        });
+        
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
@@ -120,10 +197,12 @@ public class TableView extends AbstractView {
     	    	System.out.println(table.getSelectedRow());
     	    }
     	});
+    	
+    	spp.setDividerLocation(0.5);
     }
     
     private void btnGenActionPerformed(java.awt.event.ActionEvent evt) {
-    	if(currentData != null){
+    	if(model.getTable() != null){
 	    	fileChooser.setFileSelectionMode(JFileChooser.SAVE_DIALOG|JFileChooser.DIRECTORIES_ONLY);
 	        int opt = fileChooser.showSaveDialog(null);
 	        //保存;
@@ -135,12 +214,12 @@ public class TableView extends AbstractView {
 			        		saveFile.mkdirs();
 			        	ASFormatter formatter = new ASFormatter();
 			        	formatter.setJavaStyle();
-			        	System.out.println(FormatterHelper.format(new StringReader(VelocityHelper.entityBean(currentData)), formatter));
+			        	System.out.println(FormatterHelper.format(new StringReader(VelocityHelper.entityBean(model)), formatter));
 			        	
-			        	System.out.println(VelocityHelper.sqlMap(currentData));
+			        	System.out.println(VelocityHelper.sqlMap(model));
 			        	
 			        	
-			        	System.out.println(VelocityHelper.dataTable(currentData));
+			        	System.out.println(VelocityHelper.dataTable(model));
 			        	
 			        	EventQueue.invokeLater(new Runnable() {
 							public void run() {
@@ -156,10 +235,21 @@ public class TableView extends AbstractView {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    
+    private javax.swing.ButtonGroup bg1;
     private javax.swing.JButton btnGen;
     private javax.swing.JFileChooser fileChooser;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JRadioButton jRadioButton2;
+    private javax.swing.JPanel pane;
     private javax.swing.JScrollPane sp;
+    private javax.swing.JScrollPane sp2;
+    private javax.swing.JSplitPane spp;
     private javax.swing.JTable table;
+    private javax.swing.JTextField txtPgName;
+    
     // End of variables declaration//GEN-END:variables
 
 	/* (non-Javadoc)
@@ -177,12 +267,12 @@ public class TableView extends AbstractView {
 					List<TableColumn> list_tr = TableHelper.tableColumn(t.getCat(), t.getTableName());
 					t.setColumns(list_tr);
 					
-					currentData = t;
+					model.setTable(t);
 					
 					Vector<Vector<Object>> v = TableHelper.transform1(list_tr);
 					Vector<Object> v2 = new Vector<Object>();
 //								DefaultTableColumnModel dtcm = new DefaultTableColumnModel();
-			    	String[] heads = new String[]{"列名称", "列类型", "列描述"};
+			    	String[] heads = new String[]{"主键", "列名称", "列类型", "列描述"};
 //			    	v2.add("select");
 			    	for (int i = 0; i < heads.length; i++) {
 //						    		TableColumn h = new TableColumn(i);
@@ -191,7 +281,7 @@ public class TableView extends AbstractView {
 			        	v2.add(heads[i]);
 					}
 //						    	table.setColumnModel(dtcm);
-					final DefaultTableModel dtm = new DefaultTableModel(v, v2)/**{
+					final DefaultTableModel dtm = new DefaultTableModel(v, v2){
 						private static final long serialVersionUID = 1L;
 
 						public Class<?> getColumnClass(int col){
@@ -201,7 +291,7 @@ public class TableView extends AbstractView {
 					        else 
 					        	return super.getClass();
 						}
-					}**/;
+					};
 					
 					EventQueue.invokeLater(new Runnable() {
 						public void run() {

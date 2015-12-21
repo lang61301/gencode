@@ -1,0 +1,14 @@
+<insert id="save${table.entityBeanName}" parameterClass="">
+	insert into ${table.tableName}(#foreach( $column in ${table.columns}) #if ($velocityCount != 1), #end ${column.columnName} #end ) values( #foreach( $column in ${table.columns}) #if ($velocityCount != 1) , #end #${column.propertyName}# #end )
+	<selectKey resultClass="java.lang.Long" keyProperty=""> 
+		<![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>   
+	</selectKey>
+</insert>
+	
+<update id="update${table.entityBeanName}" parameterClass="">
+	update ${table.tableName} set #foreach( $column in $columns) #if ($velocityCount != 1), #end ${column.columnName} = #${column.propertyName}# #end  where 
+</update>
+	
+<select id="get${table.entityBeanName}" parameterClass="">
+	select #foreach( $column in ${table.columns}) #if ($velocityCount != 1), #end ${column.columnName} #end from ${table.tableName} where 
+</select>

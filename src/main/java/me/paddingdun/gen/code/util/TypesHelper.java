@@ -21,8 +21,8 @@ public class TypesHelper {
 		map_types.put(java.sql.Types.SMALLINT, "java.lang.Integer");
 		map_types.put(java.sql.Types.INTEGER, "java.lang.Integer");
 		map_types.put(java.sql.Types.BIGINT, "java.lang.Long");
-		map_types.put(java.sql.Types.FLOAT, "java.lang.Float");
-		map_types.put(java.sql.Types.REAL, "boolean");
+		map_types.put(java.sql.Types.FLOAT, "java.lang.Double");
+		map_types.put(java.sql.Types.REAL, "java.lang.Float");
 		map_types.put(java.sql.Types.DOUBLE, "java.lang.Double");
 		map_types.put(java.sql.Types.NUMERIC, "java.math.BigDecimal");
 		map_types.put(java.sql.Types.DECIMAL, "java.math.BigDecimal");
@@ -40,8 +40,7 @@ public class TypesHelper {
 	}
 	
 	public static boolean isBooleanType(int type){
-		if(type == java.sql.Types.REAL
-				|| type== java.sql.Types.BOOLEAN)
+		if(type== java.sql.Types.BOOLEAN)
 			return true;
 		else
 			return false;

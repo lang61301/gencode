@@ -3,7 +3,6 @@
  */
 package me.paddingdun.gen.code.util;
 
-import java.beans.PropertyDescriptor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +10,6 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.context.annotation.Lazy;
@@ -20,6 +18,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
 
 import me.paddingdun.gen.code.data.table.TableColumn;
 import me.paddingdun.gen.code.data.tabletree.Table;
+import me.paddingdun.gen.code.gui.view.dbtable.TableViewModel;
 
 /**
  * @author paddingdun
@@ -45,7 +44,8 @@ public class VelocityHelper {
 	@Resource(name="velocityEngine")
 	private VelocityEngine  engine;
 	
-	public static String entityBean(Table table){
+	public static String entityBean(TableViewModel tableViewModel){
+		Table table = tableViewModel.getTable();
 		table.setEntityBeanName(TableHelper.table(table.getTableName()));
 		List<TableColumn> list = table.getColumns();
 		for (TableColumn tc : list) {
@@ -57,20 +57,13 @@ public class VelocityHelper {
 		}
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("date", DateHelper.now());
-		PropertyDescriptor[] pds = PropertyUtils.getPropertyDescriptors(table);
-		for (PropertyDescriptor pd : pds) {
-			try {
-				model.put(pd.getName(), PropertyUtils.getProperty(table, pd.getName()));
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
-			} 
-		}
+		CollectionHelper.object2Map(tableViewModel, model);
 		String s = VelocityEngineUtils.mergeTemplateIntoString(helper.engine, "template/velocity/EntityBean.vm", "utf-8", model);
 		return s;
 	}
 	
-	public static String sqlMap(Table table){
+	public static String sqlMap(TableViewModel tableViewModel){
+		Table table = tableViewModel.getTable();
 		table.setEntityBeanName(TableHelper.table(table.getTableName()));
 		List<TableColumn> list = table.getColumns();
 		for (TableColumn tc : list) {
@@ -82,20 +75,13 @@ public class VelocityHelper {
 		}
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("date", DateHelper.now());
-		PropertyDescriptor[] pds = PropertyUtils.getPropertyDescriptors(table);
-		for (PropertyDescriptor pd : pds) {
-			try {
-				model.put(pd.getName(), PropertyUtils.getProperty(table, pd.getName()));
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
-			} 
-		}
+		CollectionHelper.object2Map(tableViewModel, model);
 		String s = VelocityEngineUtils.mergeTemplateIntoString(helper.engine, "template/velocity/SqlMap.vm", "utf-8", model);
 		return s;
 	}
 	
-	public static String dataTable(Table table){
+	public static String dataTable(TableViewModel tableViewModel){
+		Table table = tableViewModel.getTable();
 		table.setEntityBeanName(TableHelper.table(table.getTableName()));
 		List<TableColumn> list = table.getColumns();
 		for (TableColumn tc : list) {
@@ -107,15 +93,7 @@ public class VelocityHelper {
 		}
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("date", DateHelper.now());
-		PropertyDescriptor[] pds = PropertyUtils.getPropertyDescriptors(table);
-		for (PropertyDescriptor pd : pds) {
-			try {
-				model.put(pd.getName(), PropertyUtils.getProperty(table, pd.getName()));
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
-			} 
-		}
+		CollectionHelper.object2Map(tableViewModel, model);
 		String s = VelocityEngineUtils.mergeTemplateIntoString(helper.engine, "template/velocity/DataTable.vm", "utf-8", model);
 		return s;
 	}

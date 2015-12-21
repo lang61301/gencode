@@ -1,0 +1,9 @@
+<tr>
+#foreach( $column in $table.columns)<th>${column.columnCommon}</th>#end
+</tr>
+
+columns:[#foreach( $column in $table.columns) #if ($velocityCount != 1), #end 
+{"data":"${column.propertyName}", "defaultContent":""} #end]
+
+columns:[#foreach( $column in $table.columns) #if ($velocityCount != 1), #end 
+{"data":"${column.columnName}", "defaultContent":""} #end]

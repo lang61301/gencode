@@ -9,9 +9,9 @@ package abc.padding;
  * ${tableCommon}
  * ${date}
  */
-public class ${entityBeanName} {
+public class ${table.entityBeanName} {
 	
-	#foreach( $column in $columns)
+	#foreach( $column in ${table.columns})
 	/**
 	 * ${column.columnCommon}
 	 */
@@ -22,7 +22,7 @@ public class ${entityBeanName} {
     	
 	#end
 	
-	#foreach( $column in $columns)
+	#foreach( $column in ${table.columns})
 public void  ${column.setMethod}(${column.javaType} ${column.propertyName}){
     this.${column.propertyName} = ${column.propertyName};
 	}

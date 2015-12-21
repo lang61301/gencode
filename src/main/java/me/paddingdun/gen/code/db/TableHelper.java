@@ -6,8 +6,11 @@ package me.paddingdun.gen.code.db;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
+import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -76,6 +79,7 @@ public class TableHelper {
 			String common = r.getColumnCommon();
 			Vector<Object> el = new Vector<Object>();
 //			el.add(Boolean.FALSE);
+			el.add(Boolean.valueOf(r.isPrimary()));
 			el.add(name);
 			el.add(type);
 			el.add(common);
@@ -92,13 +96,26 @@ public class TableHelper {
 			conn = DBHelper.getConnection();
 			DatabaseMetaData dmd =  conn.getMetaData();
 			
+			rs1 = dmd.getPrimaryKeys(catalog, null, tableName);
+			Set<String> set_primary = new HashSet<String>(); 
+			while(rs1.next()){
+				set_primary.add(rs1.getString("COLUMN_NAME"));
+			}
+			rs1.close();
+			
 			rs1 = dmd.getColumns(catalog, null, tableName, null);
 			while(rs1.next()){
 				String name = rs1.getString("COLUMN_NAME");
 				int type = rs1.getInt("DATA_TYPE");
 				String common = rs1.getString("REMARKS");
+				String is_autoincrement = rs1.getString("IS_AUTOINCREMENT");
 				
 				TableColumn el = new TableColumn(name, type, common);
+				if(set_primary.contains(name))
+					el.setPrimary(true);
+				
+				if("YES".equals(is_autoincrement))
+					el.setAutoIncrement(true);
 				result.add(el);
 			}
 		}catch(Exception e){
