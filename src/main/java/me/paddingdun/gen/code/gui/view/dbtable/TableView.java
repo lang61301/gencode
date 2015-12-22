@@ -10,7 +10,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.StringReader;
-import java.util.Formatter;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.Callable;
@@ -21,12 +20,17 @@ import javax.swing.table.DefaultTableModel;
 
 import org.apache.log4j.Logger;
 
+import layout.TableLayout;
 import me.paddingdun.gen.code.data.message.Message;
+import me.paddingdun.gen.code.data.option.ModelValue;
+import me.paddingdun.gen.code.data.option.Option;
 import me.paddingdun.gen.code.data.table.TableColumn;
 import me.paddingdun.gen.code.data.tabletree.Table;
 import me.paddingdun.gen.code.db.TableHelper;
 import me.paddingdun.gen.code.gui.perspective.designer.DesignerPerspective;
 import me.paddingdun.gen.code.gui.view.AbstractView;
+import me.paddingdun.gen.code.util.CollectionHelper;
+import me.paddingdun.gen.code.util.ModelHelper;
 import me.paddingdun.gen.code.util.TaskHelper;
 import me.paddingdun.gen.code.util.VelocityHelper;
 import net.barenca.jastyle.ASFormatter;
@@ -83,18 +87,30 @@ public class TableView extends AbstractView {
         setResizable(true);
         setTitle("数据库表详细内容");
         fileChooser = new javax.swing.JFileChooser();
-        bg1 = new javax.swing.ButtonGroup();
         spp = new javax.swing.JSplitPane();
         sp = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
         sp2 = new javax.swing.JScrollPane();
         pane = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        txtPgName = new javax.swing.JTextField();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jLabel2 = new javax.swing.JLabel();
+        pkgName = new javax.swing.JTextField();
         btnGen = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jcombo_sqlMapMarkUse = new javax.swing.JComboBox<Option<Integer>>();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jcombo_showGsonAnnotation = new javax.swing.JComboBox<Option<Boolean>>();
+        saveMethodPrefix = new javax.swing.JTextField();
+        updateMethodPrefix = new javax.swing.JTextField();
+        getMethodPrefix = new javax.swing.JTextField();
+        deleteMethodPrefix = new javax.swing.JTextField();
+        queryMethodPrefix = new javax.swing.JTextField();
+        queryPagingMethodPrefix = new javax.swing.JTextField();
         
         spp.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
 
@@ -106,61 +122,79 @@ public class TableView extends AbstractView {
 
         jLabel1.setText("包名称");
 
-        bg1.add(jRadioButton1);
-        jRadioButton1.setSelected(true);
-        jRadioButton1.setText("属性名称");
-
-        bg1.add(jRadioButton2);
-        jRadioButton2.setText("表字段名称");
+        btnGen.setText("生成");
 
         jLabel2.setText("SQL传入值占位符");
 
-        btnGen.setText("生成");
+//        sqlMapMarkUse.setModel(null);
+
+        jLabel3.setText("保存方法前缀");
+
+        jLabel4.setText("更新方法前缀");
+
+        jLabel5.setText("获取方法前缀");
+
+        jLabel6.setText("删除方法前缀");
+
+        jLabel7.setText("列表方法前缀");
+
+        jLabel8.setText("分页方法前缀");
+
+        jLabel9.setText("是否显示gosn注释");
+
+//        showGsonAnnotation.setModel(null);
+
         btnGen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGenActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout paneLayout = new javax.swing.GroupLayout(pane);
-        pane.setLayout(paneLayout);
-        paneLayout.setHorizontalGroup(
-            paneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(paneLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(paneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(16, 16, 16)
-                .addGroup(paneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(paneLayout.createSequentialGroup()
-                        .addComponent(jRadioButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jRadioButton2))
-                    .addGroup(paneLayout.createSequentialGroup()
-                        .addComponent(txtPgName, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnGen)))
-                .addContainerGap(185, Short.MAX_VALUE))
-        );
-        paneLayout.setVerticalGroup(
-            paneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(paneLayout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(paneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPgName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnGen))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(paneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2)
-                    .addComponent(jLabel2))
-                .addContainerGap(338, Short.MAX_VALUE))
-        );
-
-        paneLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel1, jLabel2});
-
+        
+        TableLayout tableLayout = new TableLayout();
+        double border = 2;			      //0      1    2     3    4     5     6
+        tableLayout.setColumn(new double[]{border, 50,  50,   80,  -1,  50,   70, border});
+        tableLayout.setRow(new double[]{border,30, 30, 30, 30, 30, 30, 30, 30, 30, border});
+        pane.setLayout(tableLayout);
+        
+        pane.add(jLabel1, "1,1,2,1");
+        pane.add(pkgName, "3,1,5,1");
+        pane.add(btnGen, "6,1");
+        
+        pane.add(jLabel2, "1,2,2,2");
+        pane.add(jcombo_sqlMapMarkUse, "3,2,4,2");
+        
+        pane.add(jLabel9, "1,3,2,3");
+        pane.add(jcombo_showGsonAnnotation, "3,3,4,3");
+        
+        pane.add(jLabel3, "1,4,2,4");
+        pane.add(saveMethodPrefix, "3,4,4,4");
+        
+        pane.add(jLabel4, "1,5,2,5");
+        pane.add(updateMethodPrefix, "3,5,4,5");
+        
+        pane.add(jLabel5, "1,6,2,6");
+        pane.add(getMethodPrefix, "3,6,4,6");
+        
+        pane.add(jLabel6, "1,7,2,7");
+        pane.add(deleteMethodPrefix, "3,7,4,7");
+        
+        pane.add(jLabel7, "1,8,2,8");
+        pane.add(queryMethodPrefix, "3,8,4,8");
+        
+        pane.add(jLabel8, "1,9,2,9");
+        pane.add(queryPagingMethodPrefix, "3,9,4,9");
+        
+        
+        sqlMapMarkUse.addElement(CollectionHelper.option("属性名称", 1));
+        sqlMapMarkUse.addElement(CollectionHelper.option("表字段名称", 2));
+       jcombo_sqlMapMarkUse.setModel(sqlMapMarkUse);
+       
+       showGsonAnnotation.addElement(CollectionHelper.option("是", Boolean.TRUE));
+       showGsonAnnotation.addElement(CollectionHelper.option("否", Boolean.FALSE));
+       jcombo_showGsonAnnotation.setModel(showGsonAnnotation);
+       
+       
+        
         sp2.setViewportView(pane);
 
         spp.setBottomComponent(sp2);
@@ -199,6 +233,8 @@ public class TableView extends AbstractView {
     	});
     	
     	spp.setDividerLocation(0.5);
+    	
+    	ModelHelper.simpleGetAndComplexSet(model, TableView.this);
     }
     
     private void btnGenActionPerformed(java.awt.event.ActionEvent evt) {
@@ -212,6 +248,9 @@ public class TableView extends AbstractView {
 						File saveFile = fileChooser.getSelectedFile();
 			        	if(!saveFile.exists())
 			        		saveFile.mkdirs();
+			        	//设置值;
+			        	ModelHelper.complexGetAndSimpleSet(TableView.this, model);
+			        	
 			        	ASFormatter formatter = new ASFormatter();
 			        	formatter.setJavaStyle();
 			        	System.out.println(FormatterHelper.format(new StringReader(VelocityHelper.entityBean(model)), formatter));
@@ -236,19 +275,47 @@ public class TableView extends AbstractView {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     
-    private javax.swing.ButtonGroup bg1;
     private javax.swing.JButton btnGen;
+    
+    @ModelValue(valueGetFuncName = "getText", valueSetFuncName ="setText")
+    private javax.swing.JTextField deleteMethodPrefix;
     private javax.swing.JFileChooser fileChooser;
+    
+    @ModelValue(valueGetFuncName = "getText", valueSetFuncName ="setText")
+    private javax.swing.JTextField getMethodPrefix;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel pane;
+    @ModelValue(valueGetFuncName = "getText", valueSetFuncName ="setText")
+    private javax.swing.JTextField pkgName;
+    @ModelValue(valueGetFuncName = "getText", valueSetFuncName ="setText")
+    private javax.swing.JTextField queryMethodPrefix;
+    @ModelValue(valueGetFuncName = "getText", valueSetFuncName ="setText")
+    private javax.swing.JTextField queryPagingMethodPrefix;
+    @ModelValue(valueGetFuncName = "getText", valueSetFuncName ="setText")
+    private javax.swing.JTextField saveMethodPrefix;
+    private javax.swing.JComboBox<Option<Boolean>> jcombo_showGsonAnnotation;
     private javax.swing.JScrollPane sp;
     private javax.swing.JScrollPane sp2;
     private javax.swing.JSplitPane spp;
+    private javax.swing.JComboBox<Option<Integer>> jcombo_sqlMapMarkUse;
     private javax.swing.JTable table;
-    private javax.swing.JTextField txtPgName;
+    @ModelValue(valueGetFuncName = "getText", valueSetFuncName ="setText")
+    private javax.swing.JTextField updateMethodPrefix;
+    
+    @ModelValue()
+    private OptionComboBoxModel<Integer> sqlMapMarkUse = new OptionComboBoxModel<Integer>();
+    @ModelValue()
+    private OptionComboBoxModel<Boolean> showGsonAnnotation = new OptionComboBoxModel<Boolean>();
+    
+    
     
     // End of variables declaration//GEN-END:variables
 
@@ -272,7 +339,7 @@ public class TableView extends AbstractView {
 					Vector<Vector<Object>> v = TableHelper.transform1(list_tr);
 					Vector<Object> v2 = new Vector<Object>();
 //								DefaultTableColumnModel dtcm = new DefaultTableColumnModel();
-			    	String[] heads = new String[]{"主键", "列名称", "列类型", "列描述"};
+			    	String[] heads = new String[]{"主键", "自增长", "列名称", "列类型", "列描述"};
 //			    	v2.add("select");
 			    	for (int i = 0; i < heads.length; i++) {
 //						    		TableColumn h = new TableColumn(i);

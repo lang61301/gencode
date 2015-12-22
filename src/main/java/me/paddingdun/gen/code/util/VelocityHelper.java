@@ -54,6 +54,7 @@ public class VelocityHelper {
 			tc.setPropertyName(pn);
 			tc.setSetMethod(TableHelper.set(pn));
 			tc.setGetMethod(TableHelper.get(pn, tc.getType()));
+			tc.setGson(tableViewModel.getShowGsonAnnotation());
 		}
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("date", DateHelper.now());

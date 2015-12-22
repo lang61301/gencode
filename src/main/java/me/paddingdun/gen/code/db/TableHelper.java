@@ -80,6 +80,7 @@ public class TableHelper {
 			Vector<Object> el = new Vector<Object>();
 //			el.add(Boolean.FALSE);
 			el.add(Boolean.valueOf(r.isPrimary()));
+			el.add(Boolean.valueOf(r.isAutoIncrement()));
 			el.add(name);
 			el.add(type);
 			el.add(common);

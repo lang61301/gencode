@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
+import me.paddingdun.gen.code.data.option.Option;
 import me.paddingdun.gen.code.exception.BusinessException;
 
 /**
@@ -36,5 +37,16 @@ public class CollectionHelper {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * 创建option对象;
+	 * @param title
+	 * @param value
+	 * @return
+	 */
+	public static <T> Option<T> option(String title, T value){
+		Option<T> o = new Option<T>(title, value);
+		return o;
 	}
 }

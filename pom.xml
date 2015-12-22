@@ -78,6 +78,12 @@
             <version>3.4.0.3</version>
         </dependency>
         
+        <dependency>
+            <groupId>layout</groupId>
+            <artifactId>tablelayout</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        
         <!-- 这个jar文件包含Spring框架基本的核心工具类，Spring其它组件要都要使用到这个包里的类，是其它组件的基本核心，当然你也可以在自己的应用系统中使用这些工具类。 -->
 	    <dependency>
 	    	<groupId>org.springframework</groupId>

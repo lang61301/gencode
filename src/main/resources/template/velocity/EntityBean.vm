@@ -1,13 +1,13 @@
 /**
  * 
  */
-package abc.padding;
+package ${pkgName};
 
 /**
  * autogenerate
  * @author paddingdun
- * ${tableCommon}
- * ${date}
+ * ${table.tableCommon}
+ * @${date}
  */
 public class ${table.entityBeanName} {
 	

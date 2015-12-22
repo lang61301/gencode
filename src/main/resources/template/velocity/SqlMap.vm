@@ -1,14 +1,19 @@
-<insert id="save${table.entityBeanName}" parameterClass="">
-	insert into ${table.tableName}(#foreach( $column in ${table.columns}) #if ($velocityCount != 1), #end ${column.columnName} #end ) values( #foreach( $column in ${table.columns}) #if ($velocityCount != 1) , #end #${column.propertyName}# #end )
-	<selectKey resultClass="java.lang.Long" keyProperty=""> 
+#set($i = 0)
+#set($j = 0)
+#set($H='#')
+<insert id="${saveMethodPrefix}${table.entityBeanName}" parameterClass="${pkgName}.${table.entityBeanName}">
+	insert into ${table.tableName}(#foreach( $column in ${table.columns}) #if ($i != 0), #end #if(${column.autoIncrement} == false) ${column.columnName} #set($i = $i + 1) #end #end ) values( #foreach( $column in ${table.columns}) #if ($j != 0), #end #if(${column.autoIncrement} == false) $H#if(${sqlMapMarkUse}==1)${column.propertyName}#else${column.columnName}#end$H #set($j = $j + 1) #end #end )
+	<selectKey resultClass="java.lang.Long" keyProperty="#foreach( $column in ${table.columns})#if(${column.autoIncrement})${column.propertyName}#end#end"> 
 		<![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>   
 	</selectKey>
 </insert>
-	
-<update id="update${table.entityBeanName}" parameterClass="">
-	update ${table.tableName} set #foreach( $column in $columns) #if ($velocityCount != 1), #end ${column.columnName} = #${column.propertyName}# #end  where 
+
+#set($i = 0)
+#set($j = 0)
+<update id="${updateMethodPrefix}${table.entityBeanName}" parameterClass="${pkgName}.${table.entityBeanName}">
+	update ${table.tableName} set #foreach( $column in ${table.columns}) #if ($i != 0), #end #if(${column.primary} == false) ${column.columnName} = $H#if(${sqlMapMarkUse}==1)${column.propertyName}#else${column.columnName}#end$H #set($i = $i + 1) #end #end  where #foreach( $column in ${table.columns}) #if (${column.primary}) #if ($j != 0)and #end ${column.columnName} = $H#if(${sqlMapMarkUse}==1)${column.propertyName}#else${column.columnName}#end$H #set($j = $j + 1) #end #end
 </update>
-	
-<select id="get${table.entityBeanName}" parameterClass="">
-	select #foreach( $column in ${table.columns}) #if ($velocityCount != 1), #end ${column.columnName} #end from ${table.tableName} where 
+#set($j=0)	
+<select id="${getMethodPrefix}${table.entityBeanName}" parameterClass="" resultClass="${pkgName}.${table.entityBeanName}">
+	select #foreach( $column in ${table.columns}) #if ($velocityCount != 1), #end ${column.columnName} #end from ${table.tableName} where #foreach( $column in ${table.columns}) #if (${column.primary}) #if ($j != 0)and #end ${column.columnName} = $H#if(${sqlMapMarkUse}==1)${column.propertyName}#else${column.columnName}#end$H #set($j = $j + 1) #end #end 
 </select>
