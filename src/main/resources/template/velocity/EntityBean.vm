@@ -7,7 +7,7 @@ package ${pkgName};
  * autogenerate
  * @author paddingdun
  * ${table.tableCommon}
- * @${date}
+ * @date ${date}
  */
 public class ${table.entityBeanName} {
 	

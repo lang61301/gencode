@@ -13,6 +13,7 @@ import java.io.StringReader;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.Callable;
+import java.util.logging.FileHandler;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -30,6 +31,7 @@ import me.paddingdun.gen.code.db.TableHelper;
 import me.paddingdun.gen.code.gui.perspective.designer.DesignerPerspective;
 import me.paddingdun.gen.code.gui.view.AbstractView;
 import me.paddingdun.gen.code.util.CollectionHelper;
+import me.paddingdun.gen.code.util.FileHelper;
 import me.paddingdun.gen.code.util.ModelHelper;
 import me.paddingdun.gen.code.util.TaskHelper;
 import me.paddingdun.gen.code.util.VelocityHelper;
@@ -253,9 +255,14 @@ public class TableView extends AbstractView {
 			        	
 			        	ASFormatter formatter = new ASFormatter();
 			        	formatter.setJavaStyle();
-			        	System.out.println(FormatterHelper.format(new StringReader(VelocityHelper.entityBean(model)), formatter));
 			        	
-			        	System.out.println(VelocityHelper.sqlMap(model));
+			        	String javaContent = FormatterHelper.format(new StringReader(VelocityHelper.entityBean(model)), formatter);
+			        	System.out.println(javaContent);
+			        	FileHelper.genJavaFile(saveFile.getAbsolutePath(), model.getPkgName(), model.getTable().getEntityBeanName(), javaContent);
+			        	
+			        	String sqlMapContent = VelocityHelper.sqlMap(model);
+			        	FileHelper.genSqlMapXmlFile(saveFile.getAbsolutePath(), model.getTable().getEntityBeanName(), sqlMapContent);
+			        	System.out.println(sqlMapContent);
 			        	
 			        	
 			        	System.out.println(VelocityHelper.dataTable(model));
