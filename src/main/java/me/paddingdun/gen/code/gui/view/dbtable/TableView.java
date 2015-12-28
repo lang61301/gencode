@@ -33,6 +33,7 @@ import me.paddingdun.gen.code.gui.view.AbstractView;
 import me.paddingdun.gen.code.util.CollectionHelper;
 import me.paddingdun.gen.code.util.FileHelper;
 import me.paddingdun.gen.code.util.ModelHelper;
+import me.paddingdun.gen.code.util.SpringHelper;
 import me.paddingdun.gen.code.util.TaskHelper;
 import me.paddingdun.gen.code.util.VelocityHelper;
 import net.barenca.jastyle.ASFormatter;
@@ -72,7 +73,7 @@ public class TableView extends AbstractView {
     public void init(){
     	super.init();
     	
-    	model = new TableViewModel();
+    	model = SpringHelper.getBean(TableViewModel.class);
     }
 
     /**
@@ -95,7 +96,7 @@ public class TableView extends AbstractView {
         sp2 = new javax.swing.JScrollPane();
         pane = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        pkgName = new javax.swing.JTextField();
+        basePackageName = new javax.swing.JTextField();
         btnGen = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jcombo_sqlMapMarkUse = new javax.swing.JComboBox<Option<Integer>>();
@@ -122,7 +123,7 @@ public class TableView extends AbstractView {
 
         sp2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        jLabel1.setText("包名称");
+        jLabel1.setText("基础包名称");
 
         btnGen.setText("生成");
 
@@ -159,7 +160,7 @@ public class TableView extends AbstractView {
         pane.setLayout(tableLayout);
         
         pane.add(jLabel1, "1,1,2,1");
-        pane.add(pkgName, "3,1,5,1");
+        pane.add(basePackageName, "3,1,5,1");
         pane.add(btnGen, "6,1");
         
         pane.add(jLabel2, "1,2,2,2");
@@ -258,7 +259,7 @@ public class TableView extends AbstractView {
 			        	
 			        	String javaContent = FormatterHelper.format(new StringReader(VelocityHelper.entityBean(model)), formatter);
 			        	System.out.println(javaContent);
-			        	FileHelper.genJavaFile(saveFile.getAbsolutePath(), model.getPkgName(), model.getTable().getEntityBeanName(), javaContent);
+			        	FileHelper.genJavaFile(saveFile.getAbsolutePath(), model.getPojoFullPackageName(), model.getTable().getEntityBeanName(), javaContent);
 			        	
 			        	String sqlMapContent = VelocityHelper.sqlMap(model);
 			        	FileHelper.genSqlMapXmlFile(saveFile.getAbsolutePath(), model.getTable().getEntityBeanName(), sqlMapContent);
@@ -301,7 +302,7 @@ public class TableView extends AbstractView {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel pane;
     @ModelValue(valueGetFuncName = "getText", valueSetFuncName ="setText")
-    private javax.swing.JTextField pkgName;
+    private javax.swing.JTextField basePackageName;
     @ModelValue(valueGetFuncName = "getText", valueSetFuncName ="setText")
     private javax.swing.JTextField queryMethodPrefix;
     @ModelValue(valueGetFuncName = "getText", valueSetFuncName ="setText")

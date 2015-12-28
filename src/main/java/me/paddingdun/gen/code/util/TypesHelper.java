@@ -5,6 +5,8 @@ package me.paddingdun.gen.code.util;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
+
 
 /**
  * @author paddingdun
@@ -37,6 +39,47 @@ public class TypesHelper {
 		map_types.put(java.sql.Types.NCHAR, "java.lang.String");
 		map_types.put(java.sql.Types.NVARCHAR, "java.lang.String");
 		map_types.put(java.sql.Types.LONGNVARCHAR, "java.lang.String");
+	}
+	
+	public static Object convertBasic(Class<?> clazz, String obj){
+		if(obj == null)return null;
+		
+		if(clazz == int.class){
+			return Integer.valueOf(obj).intValue();
+		}else if(clazz == long.class){
+			return Long.valueOf(obj).longValue();
+		}else if(clazz == float.class){
+			return Float.valueOf(obj).floatValue();
+		}else if(clazz == double.class){
+			return Double.valueOf(obj).doubleValue();
+		}else if(clazz == char.class){
+			return Character.valueOf(obj.charAt(0)).charValue();
+		}else if(clazz == byte.class){
+			
+		}else if(clazz == short.class){
+			return Short.valueOf(obj).shortValue();
+		}else if(clazz == boolean.class){
+			return Boolean.valueOf(obj).booleanValue();
+		}else if(clazz == java.lang.Short.class){
+			return Short.valueOf(obj);
+		}else if(clazz == java.lang.Integer.class){
+			return Integer.valueOf(obj);
+		}else if(clazz == java.lang.Long.class){
+			return Long.valueOf(obj);
+		}else if(clazz == java.lang.Float.class){
+			return Float.valueOf(obj);
+		}else if(clazz == java.lang.Double.class){
+			return Double.valueOf(obj);
+		}else if(clazz == java.lang.Byte.class){
+			
+		}else if(clazz == java.lang.Boolean.class){
+			return Boolean.valueOf(obj);
+		}else if(clazz == java.lang.Character.class){
+			return Character.valueOf(obj.charAt(0));
+		}else if(clazz == java.lang.String.class){
+			return obj;
+		}
+		return obj;
 	}
 	
 	public static boolean isBooleanType(int type){

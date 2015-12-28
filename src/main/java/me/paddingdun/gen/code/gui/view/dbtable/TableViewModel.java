@@ -3,6 +3,12 @@
  */
 package me.paddingdun.gen.code.gui.view.dbtable;
 
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import me.paddingdun.gen.code.IConsant;
+import me.paddingdun.gen.code.annotation.Value1;
 import me.paddingdun.gen.code.data.tabletree.Table;
 
 /**
@@ -10,6 +16,8 @@ import me.paddingdun.gen.code.data.tabletree.Table;
  *
  * 2015年12月21日
  */
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class TableViewModel {
 	
 	/**
@@ -22,26 +30,80 @@ public class TableViewModel {
 	 * 1:属性名称;
 	 * 2:字段名称;
 	 */
-	private Integer sqlMapMarkUse=1;
+	@Value1(def="1")
+	private Integer sqlMapMarkUse;
 	
 	/**
 	 * 是否显示gosn注释;
 	 * 1:显示;
 	 * 0:不显示;
 	 */
-	private Boolean showGsonAnnotation = true;
+	@Value1(def="true")
+	private Boolean showGsonAnnotation;
 	
 	/**
-	 * 包名称;
+	 * 基础包名称;
 	 */
-	private String pkgName="";
+	@Value1(def="me.paddingdun")
+	private String basePackageName;
+	@Value1(def="service")
+	private String servicePackageName;
+	@Value1(def="data")
+	private String pojoPackageName;
+	@Value1(def="dao")
+	private String daoPackageName;
+	@Value1(def="web.action")
+	private String webActionPackageName;
 	
-	private String saveMethodPrefix ="save";
-	private String updateMethodPrefix ="update";
-	private String getMethodPrefix ="get";
-	private String deleteMethodPrefix ="delete";
-	private String queryMethodPrefix ="query";
-	private String queryPagingMethodPrefix ="queryPaging";
+	@Value1(def="save")
+	private String saveMethodPrefix;
+	@Value1(def="update")
+	private String updateMethodPrefix;
+	@Value1(def="get")
+	private String getMethodPrefix;
+	@Value1(def="delete")
+	private String deleteMethodPrefix;
+	@Value1(def="query")
+	private String queryMethodPrefix;
+	@Value1(def="queryPaging")
+	private String queryPagingMethodPrefix;
+	@Value1(def="getPagingCount")
+	private String getPagingCountPrefix;
+	
+	@Value1
+	private String pojoFullPackageName;
+	@Value1
+	private String daoFullPackageName;
+	@Value1
+	private String serviceFullPackageName;
+	@Value1
+	private String webActionFullPackageName;
+	@Value1
+	private boolean genStringDate;
+	
+	public String getPojoPackageName() {
+		return pojoPackageName;
+	}
+
+	public void setPojoPackageName(String pojoPackageName) {
+		this.pojoPackageName = pojoPackageName;
+	}
+
+	public String getDaoPackageName() {
+		return daoPackageName;
+	}
+
+	public void setDaoPackageName(String daoPackageName) {
+		this.daoPackageName = daoPackageName;
+	}
+
+	public String getWebActionPackageName() {
+		return webActionPackageName;
+	}
+
+	public void setWebActionPackageName(String webActionPackageName) {
+		this.webActionPackageName = webActionPackageName;
+	}
 
 	public Table getTable() {
 		return table;
@@ -115,11 +177,73 @@ public class TableViewModel {
 		this.queryPagingMethodPrefix = queryPagingMethodPrefix;
 	}
 
-	public String getPkgName() {
-		return pkgName;
+	public String getBasePackageName() {
+		return basePackageName;
 	}
 
-	public void setPkgName(String pkgName) {
-		this.pkgName = pkgName;
+	public void setBasePackageName(String basePackageName) {
+		this.basePackageName = basePackageName;
 	}
+
+	public String getServicePackageName() {
+		return servicePackageName;
+	}
+
+	public void setServicePackageName(String servicePackageName) {
+		this.servicePackageName = servicePackageName;
+	}
+
+	public String getPojoFullPackageName() {
+		if(pojoFullPackageName == null){
+			pojoFullPackageName = basePackageName + IConsant.PACKAGE_SEPARATE + pojoPackageName;
+		}
+		return pojoFullPackageName;
+	}
+
+	public void setPojoFullPackageName(String pojoFullPackageName) {
+		this.pojoFullPackageName = pojoFullPackageName;
+	}
+
+	public String getDaoFullPackageName() {
+		if(daoFullPackageName == null){
+			daoFullPackageName = basePackageName + IConsant.PACKAGE_SEPARATE + daoPackageName;
+		}
+		return daoFullPackageName;
+	}
+
+	public void setDaoFullPackageName(String daoFullPackageName) {
+		this.daoFullPackageName = daoFullPackageName;
+	}
+
+	public String getServiceFullPackageName() {
+		if(serviceFullPackageName == null){
+			serviceFullPackageName = basePackageName + IConsant.PACKAGE_SEPARATE + servicePackageName;
+		}
+		return serviceFullPackageName;
+	}
+
+	public void setServiceFullPackageName(String serviceFullPackageName) {
+		this.serviceFullPackageName = serviceFullPackageName;
+	}
+
+	public String getWebActionFullPackageName() {
+		if(webActionFullPackageName == null){
+			webActionFullPackageName = basePackageName + IConsant.PACKAGE_SEPARATE + webActionPackageName;
+		}
+		return webActionFullPackageName;
+	}
+
+	public void setWebActionFullPackageName(String webActionFullPackageName) {
+		this.webActionFullPackageName = webActionFullPackageName;
+	}
+
+	public boolean isGenStringDate() {
+		return genStringDate;
+	}
+
+	public void setGenStringDate(boolean genStringDate) {
+		this.genStringDate = genStringDate;
+	}
+	
+	
 }

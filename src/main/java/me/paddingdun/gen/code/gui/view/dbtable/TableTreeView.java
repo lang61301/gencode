@@ -5,6 +5,7 @@
  */
 package me.paddingdun.gen.code.gui.view.dbtable;
 
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.util.concurrent.Callable;
 
@@ -47,37 +48,55 @@ public class TableTreeView extends  AbstractView {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
-        sp = new javax.swing.JScrollPane();
-        tableTree = new javax.swing.JTree();
-
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
         setTitle("数据库表");
+        
+        sp = new javax.swing.JScrollPane();
+        tableTree = new javax.swing.JTree();
+        spp = new javax.swing.JSplitPane();
+        pane = new javax.swing.JPanel();
+        btnRefresh = new javax.swing.JButton();
+        
+        btnRefresh.setText("刷新");
+        
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
+            }
+        });
 
         this.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 afterShow(evt);
             }
         });
+        spp.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+        spp.setLeftComponent(sp);
         sp.setViewportView(tableTree);
+        
+        spp.setBottomComponent(pane);
+        
+        pane.setLayout(new BorderLayout());
+        pane.add(btnRefresh, BorderLayout.WEST);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(sp, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+            .addComponent(spp, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(sp, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
+            .addComponent(spp, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void afterShow(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_afterShow
+    	spp.setDividerLocation(0.9);
     	tableTree.addTreeSelectionListener(new TreeSelectionListener() {
 			
 			public void valueChanged(TreeSelectionEvent e) {
@@ -97,6 +116,11 @@ public class TableTreeView extends  AbstractView {
 			}
 		});
 
+    	btnRefreshActionPerformed(null);
+    	
+    }//GEN-LAST:event_afterShow
+    
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {
     	TaskHelper.runInNonEDT(new Callable<Integer[]>() {
 			public Integer[] call() throws Exception {
 				final DefaultTreeModel tm = new DefaultTreeModel(TableHelper.TableTreeNode());
@@ -108,13 +132,16 @@ public class TableTreeView extends  AbstractView {
 				return new Integer[]{0};
 			}
 		});
-    	
-    }//GEN-LAST:event_afterShow
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JSplitPane spp;
+    private javax.swing.JPanel pane;
     private javax.swing.JScrollPane sp;
     private javax.swing.JTree tableTree;
+    private javax.swing.JButton btnRefresh;
+    
     // End of variables declaration//GEN-END:variables
 
 	/* (non-Javadoc)

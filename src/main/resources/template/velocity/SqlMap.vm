@@ -4,7 +4,7 @@
 #set($i = 0)
 #set($j = 0)
 #set($H='#')
-<insert id="${saveMethodPrefix}${table.entityBeanName}" parameterClass="${pkgName}.${table.entityBeanName}">
+<insert id="${saveMethodPrefix}${table.entityBeanName}" parameterClass="${pojoFullPackageName}.${table.entityBeanName}">
 	<![CDATA[insert into ${table.tableName}(#foreach( $column in ${table.columns}) #if ($i != 0), #end #if(${column.autoIncrement} == false) ${column.columnName} #set($i = $i + 1) #end #end ) values( #foreach( $column in ${table.columns}) #if ($j != 0), #end #if(${column.autoIncrement} == false) $H#if(${sqlMapMarkUse}==1)${column.propertyName}#else${column.columnName}#end$H #set($j = $j + 1) #end #end )]]>
 	<selectKey resultClass="java.lang.Long" keyProperty="#foreach( $column in ${table.columns})#if(${column.autoIncrement})${column.propertyName}#end#end"> 
 		<![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>   
@@ -13,7 +13,7 @@
 
 #set($i = 0)
 #set($j = 0)
-<update id="${updateMethodPrefix}${table.entityBeanName}" parameterClass="${pkgName}.${table.entityBeanName}">
+<update id="${updateMethodPrefix}${table.entityBeanName}" parameterClass="${pojoFullPackageName}.${table.entityBeanName}">
 <![CDATA[update ${table.tableName} set #foreach( $column in ${table.columns}) #if ($i != 0), #end #if(${column.primary} == false) ${column.columnName} = $H#if(${sqlMapMarkUse}==1)${column.propertyName}#else${column.columnName}#end$H #set($i = $i + 1) #end #end  where #foreach( $column in ${table.columns}) #if (${column.primary}) #if ($j != 0)and #end ${column.columnName} = $H#if(${sqlMapMarkUse}==1)${column.propertyName}#else${column.columnName}#end$H #set($j = $j + 1) #end #end]]>
 </update>
 #set($j=0)	
@@ -26,7 +26,7 @@
 <![CDATA[delete from ${table.tableName} where #foreach( $column in ${table.columns}) #if (${column.primary}) #if ($j != 0)and #end ${column.columnName} = $H#if(${sqlMapMarkUse}==1)${column.propertyName}#else${column.columnName}#end$H #set($j = $j + 1) #end #end]]> 
 </delete>
 	
-<select id="${queryMethodPrefix}${table.entityBeanName}" parameterClass="${pkgName}.${table.entityBeanName}" resultClass="java.util.HashMap">
+<select id="${queryMethodPrefix}${table.entityBeanName}" parameterClass="${pojoFullPackageName}.${table.entityBeanName}" resultClass="java.util.HashMap">
 <![CDATA[select #foreach( $column in ${table.columns}) #if ($velocityCount != 1), #end ${column.columnName} #end from ${table.tableName}]]> 
 </select>
 
@@ -37,5 +37,9 @@
 			limit #start#, #length#
 		</isNotEmpty>
 	</isNotEmpty>
+</select>
+
+<select id="${getPagingCountPrefix}${table.entityBeanName}" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+<![CDATA[select count(1) from ${table.tableName}]]>
 </select>
 </sqlMap>

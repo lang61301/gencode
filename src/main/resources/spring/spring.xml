@@ -8,8 +8,20 @@
  http://www.springframework.org/schema/context/spring-context-3.0.xsd
  " default-lazy-init="true">
      <!-- 引入属性文件,config.properties位于src/main/resources目录下 -->
-     <context:property-placeholder location="classpath:config.properties,
-     										 classpath:datasource.properties"/>
+     <!-- 扩展自定义注释,获取properties文件内容,默认用属性名称获取 -->
+     <bean  
+        class="me.paddingdun.gen.code.extend.spring.ExtendPropertyPlaceholderConfigurer">  
+        <property name="ignoreResourceNotFound" value="true" />  
+        <property name="locations">  
+            <list>  
+                <value>classpath*:/config.properties</value>
+                <value>classpath*:/datasource.properties</value>
+            </list>  
+        </property>  
+    </bean>
+    
+    <!-- context:property-placeholder location="classpath:config.properties,
+     										 classpath:datasource.properties"/--> 
  
      <!-- 自动扫描service和组件包(自动注入) -->
      <context:component-scan base-package="me.paddingdun" />

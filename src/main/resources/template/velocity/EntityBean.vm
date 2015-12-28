@@ -1,10 +1,10 @@
 /**
  * 
  */
-package ${pkgName};
+package ${pojoFullPackageName};
 
 /**
- * autogenerate
+ * autogen
  * @author paddingdun
  * ${table.tableCommon}
  * @date ${date}
