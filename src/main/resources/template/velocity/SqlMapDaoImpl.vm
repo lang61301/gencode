@@ -1,0 +1,53 @@
+/**
+ * 
+ */
+package ${daoImplFullPackageName};
+
+
+/**
+ * autogen
+ * @author paddingdun
+ * ${table.tableCommon} dao impl;
+ * @date ${date}
+ */
+@org.springframework.stereotype.Repository
+public class ${sqlMapDaoImplJavaClassName} implements ${daoFullPackageName}.${sqlMapIDaoJavaClassName} {
+
+	@org.springframework.beans.factory.annotation.Autowired
+	private com.incito.logistics.base.BaseService baseDao;
+	
+	@Override
+	public void ${saveMethodPrefix}${table.entityBeanName}(${pojoFullPackageName}.${table.entityBeanName} obj){
+		baseDao.insert("${saveMethodPrefix}${table.entityBeanName}", obj);
+	}
+	
+	@Override
+	public void ${updateMethodPrefix}${table.entityBeanName}(${pojoFullPackageName}.${table.entityBeanName} obj){
+		baseDao.update("${saveMethodPrefix}${table.entityBeanName}", obj);
+	}
+	
+	@Override
+	public java.util.Map<java.lang.String, java.lang.Object> ${getMethodPrefix}${table.entityBeanName}(java.util.Map<java.lang.String, java.lang.Object> params){
+		return (java.util.Map<java.lang.String, java.lang.Object>)baseDao.findForObject("${getMethodPrefix}${table.entityBeanName}", params);
+	}
+	
+	@Override
+	public void ${deleteMethodPrefix}${table.entityBeanName}(java.util.Map<java.lang.String, java.lang.Object> params){
+		baseDao.delete("${deleteMethodPrefix}${table.entityBeanName}", params);
+	}
+	
+	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> ${queryMethodPrefix}${table.entityBeanName}(${pojoFullPackageName}.${table.entityBeanName} obj){
+		return baseDao.findForList("${queryMethodPrefix}${table.entityBeanName}", obj);
+	}
+	
+	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> ${queryPagingMethodPrefix}${table.entityBeanName}(java.util.Map<java.lang.String, java.lang.Object> params){
+		return baseDao.findForList("${queryPagingMethodPrefix}${table.entityBeanName}", params);
+	}
+	
+	@Override
+	public java.lang.Integer ${getPagingCountPrefix}${table.entityBeanName}(java.util.Map<java.lang.String, java.lang.Object> params){
+		return (java.lang.Integer)baseDao.findForObject("${getPagingCountPrefix}${table.entityBeanName}", params);
+	}
+}

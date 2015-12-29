@@ -5,9 +5,7 @@ package me.paddingdun.gen.code.util;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.util.regex.Matcher;
@@ -19,16 +17,15 @@ import java.util.regex.Matcher;
  */
 public class FileHelper {
 	
-	public static void genJavaFile(String baseDir, String pkgName, String fileName, String fileContent){
+	private static void genJavaFile(String baseDir, String pkgName, String fileName, String fileContent){
 		String dir_str = pkgName.replaceAll("\\.", Matcher.quoteReplacement(File.separator));
 		File dir = new File(baseDir, dir_str);
 		if(!dir.exists())
 			dir.mkdirs();
 		
-		String fn = fileName + ".java";
 		BufferedWriter bw = null;
 		try {
-			bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(dir, fn)), Charset.forName("UTF-8")));
+			bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(dir, fileName)), Charset.forName("UTF-8")));
 			bw.write(fileContent);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -37,9 +34,14 @@ public class FileHelper {
 		}
 	}
 	
-	public static void genSqlMapXmlFile(String baseDir, String fileName, String fileContent){
+	public static void genPojoJavaFile(String baseDir, String pkgName, String entityName, String fileContent){
+		String fileName = GenFilenameHelper.javaEntityFile(entityName);
+		genJavaFile(baseDir, pkgName, fileName, fileContent);
+	}
+	
+	public static void genSqlMapXmlFile(String baseDir, String entityName, String fileContent){
 
-		String fn = fileName + "_sql.xml";
+		String fn = GenFilenameHelper.sqlMapXmlFile(entityName);
 		BufferedWriter bw = null;
 		try {
 			bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(baseDir, fn)), Charset.forName("UTF-8")));
@@ -49,6 +51,26 @@ public class FileHelper {
 		}finally{
 			IOHelper.close(bw);
 		}
+	}
+	
+	public static void genSqlMapIDaoJavaFile(String baseDir, String pkgName, String entityName, String fileContent){
+		String fileName = GenFilenameHelper.sqlMapIDaoJavaFile(entityName);
+		genJavaFile(baseDir, pkgName, fileName, fileContent);
+	}
+	
+	public static void genSqlMapDaoImplJavaFile(String baseDir, String pkgName, String entityName, String fileContent){
+		String fileName = GenFilenameHelper.sqlMapDaoImplJavaFile(entityName);
+		genJavaFile(baseDir, pkgName, fileName, fileContent);
+	}
+	
+	public static void genSqlMapIServiceJavaFile(String baseDir, String pkgName, String entityName, String fileContent){
+		String fileName = GenFilenameHelper.sqlMapIServiceJavaFile(entityName);
+		genJavaFile(baseDir, pkgName, fileName, fileContent);
+	}
+	
+	public static void genSqlMapServiceImplJavaFile(String baseDir, String pkgName, String entityName, String fileContent){
+		String fileName = GenFilenameHelper.sqlMapServiceImplJavaFile(entityName);
+		genJavaFile(baseDir, pkgName, fileName, fileContent);
 	}
 
 	/**

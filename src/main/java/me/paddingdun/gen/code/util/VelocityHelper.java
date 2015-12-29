@@ -44,7 +44,7 @@ public class VelocityHelper {
 	@Resource(name="velocityEngine")
 	private VelocityEngine  engine;
 	
-	public static String entityBean(TableViewModel tableViewModel){
+	private static String rawTable(TableViewModel tableViewModel, String templateName){
 		Table table = tableViewModel.getTable();
 		table.setEntityBeanName(TableHelper.table(table.getTableName()));
 		List<TableColumn> list = table.getColumns();
@@ -59,44 +59,49 @@ public class VelocityHelper {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("date", DateHelper.now());
 		CollectionHelper.object2Map(tableViewModel, model);
-		String s = VelocityEngineUtils.mergeTemplateIntoString(helper.engine, "template/velocity/EntityBean.vm", "utf-8", model);
+		String s = VelocityEngineUtils.mergeTemplateIntoString(helper.engine, templateName, "utf-8", model);
 		return s;
 	}
 	
+	public static String entityBean(TableViewModel tableViewModel){
+		String s = rawTable(tableViewModel, "template/velocity/EntityBean.vm");
+		
+		String af = ContentFormatHelper.formatJava(s);
+		return af;
+	}
+	
 	public static String sqlMap(TableViewModel tableViewModel){
-		Table table = tableViewModel.getTable();
-		table.setEntityBeanName(TableHelper.table(table.getTableName()));
-		List<TableColumn> list = table.getColumns();
-		for (TableColumn tc : list) {
-			tc.setJavaType(TypesHelper.map_types.get(tc.getType()));
-			String pn = TableHelper.col(tc.getColumnName());
-			tc.setPropertyName(pn);
-			tc.setSetMethod(TableHelper.set(pn));
-			tc.setGetMethod(TableHelper.get(pn, tc.getType()));
-		}
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("date", DateHelper.now());
-		CollectionHelper.object2Map(tableViewModel, model);
-		String s = VelocityEngineUtils.mergeTemplateIntoString(helper.engine, "template/velocity/SqlMap.vm", "utf-8", model);
+		String s = rawTable(tableViewModel, "template/velocity/SqlMap.vm");
 		return s;
 	}
 	
 	public static String dataTable(TableViewModel tableViewModel){
-		Table table = tableViewModel.getTable();
-		table.setEntityBeanName(TableHelper.table(table.getTableName()));
-		List<TableColumn> list = table.getColumns();
-		for (TableColumn tc : list) {
-			tc.setJavaType(TypesHelper.map_types.get(tc.getType()));
-			String pn = TableHelper.col(tc.getColumnName());
-			tc.setPropertyName(pn);
-			tc.setSetMethod(TableHelper.set(pn));
-			tc.setGetMethod(TableHelper.get(pn, tc.getType()));
-		}
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("date", DateHelper.now());
-		CollectionHelper.object2Map(tableViewModel, model);
-		String s = VelocityEngineUtils.mergeTemplateIntoString(helper.engine, "template/velocity/DataTable.vm", "utf-8", model);
+		String s = rawTable(tableViewModel, "template/velocity/DataTable.vm");
 		return s;
+	}
+	
+	public static String sqlMapIDao(TableViewModel tableViewModel){
+		String s = rawTable(tableViewModel, "template/velocity/SqlMapIDao.vm");
+		String af = ContentFormatHelper.formatJava(s);
+    	return af;
+	}
+	
+	public static String sqlMapDaoImpl(TableViewModel tableViewModel){
+		String s = rawTable(tableViewModel, "template/velocity/SqlMapDaoImpl.vm");
+		String af = ContentFormatHelper.formatJava(s);
+    	return af;
+	}
+	
+	public static String sqlMapIService(TableViewModel tableViewModel){
+		String s = rawTable(tableViewModel, "template/velocity/SqlMapIService.vm");
+		String af = ContentFormatHelper.formatJava(s);
+    	return af;
+	}
+	
+	public static String sqlMapServiceImpl(TableViewModel tableViewModel){
+		String s = rawTable(tableViewModel, "template/velocity/SqlMapServiceImpl.vm");
+		String af = ContentFormatHelper.formatJava(s);
+    	return af;
 	}
 
 }

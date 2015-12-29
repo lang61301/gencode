@@ -1,0 +1,48 @@
+/**
+ * 
+ */
+package ${daoFullPackageName};
+
+/**
+ * autogen
+ * @author paddingdun
+ * ${table.tableCommon} dao interface;
+ * @date ${date}
+ */
+public interface ${sqlMapIDaoJavaClassName} {
+
+	/**
+	 * save pojo;
+	 */
+	public void ${saveMethodPrefix}${table.entityBeanName}(${pojoFullPackageName}.${table.entityBeanName} obj);
+	
+	/**
+	 * update pojo;
+	 */
+	public void ${updateMethodPrefix}${table.entityBeanName}(${pojoFullPackageName}.${table.entityBeanName} obj);
+	
+	/**
+	 * get pojo by pk;
+	 */
+	public java.util.Map<java.lang.String, java.lang.Object> ${getMethodPrefix}${table.entityBeanName}(java.util.Map<java.lang.String, java.lang.Object> params);
+	
+	/**
+	 * delete pojo by pk;
+	 */
+	public void ${deleteMethodPrefix}${table.entityBeanName}(java.util.Map<java.lang.String, java.lang.Object> params);
+	
+	/**
+	 * query pojo list;
+	 */
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> ${queryMethodPrefix}${table.entityBeanName}(${pojoFullPackageName}.${table.entityBeanName} obj);
+	
+	/**
+	 * query paging pojo list;
+	 */
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> ${queryPagingMethodPrefix}${table.entityBeanName}(java.util.Map<java.lang.String, java.lang.Object> params);
+	
+	/**
+	 * get paging total rows;
+	 */
+	public java.lang.Integer ${getPagingCountPrefix}${table.entityBeanName}(java.util.Map<java.lang.String, java.lang.Object> params);
+}

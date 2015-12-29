@@ -1,0 +1,46 @@
+#parse("template/velocity/fun.vm")
+/**
+ * 
+ */
+package ${serviceFullPackageName};
+
+/**
+ * autogen
+ * @author paddingdun
+ * ${table.tableCommon} service interface;
+ * @date ${date}
+ */
+public interface ${sqlMapIServiceJavaClassName} {
+	
+	/**
+	 * save pojo;
+	 * @param obj
+	 */
+	public void ${saveMethodPrefix}${table.entityBeanName}(${pojoFullPackageName}.${table.entityBeanName} obj);
+	
+	/**
+	 * update pojo;
+	 * @param obj
+	 */
+	public void ${updateMethodPrefix}${table.entityBeanName}(${pojoFullPackageName}.${table.entityBeanName} obj);
+	
+	/**
+	 * get pojo by pk;
+	 */
+	public ${pojoFullPackageName}.${table.entityBeanName} ${getMethodPrefix}${table.entityBeanName}(#pks_argument(${table.columns} ${sqlMapMarkUse}));
+	
+	/**
+	 * delete pojo by pk;
+	 */
+	public void ${deleteMethodPrefix}${table.entityBeanName}(#pks_argument(${table.columns} ${sqlMapMarkUse}));
+	
+	/**
+	 * query pojo list;
+	 */
+	public java.util.List<${pojoFullPackageName}.${table.entityBeanName}> ${queryMethodPrefix}${table.entityBeanName}(${pojoFullPackageName}.${table.entityBeanName} obj);
+	
+	/**
+	 * query paging pojo list;
+	 */
+	public ${idataCollectionPackageName}.IDataCollection<${pojoFullPackageName}.${table.entityBeanName}> ${queryPagingMethodPrefix}${table.entityBeanName}(${pojoFullPackageName}.${table.entityBeanName} obj, ${pagingPackageName}.Paging paging);
+}

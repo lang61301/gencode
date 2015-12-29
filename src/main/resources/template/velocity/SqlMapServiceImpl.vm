@@ -1,0 +1,102 @@
+#parse("template/velocity/fun.vm")
+/**
+ * 
+ */
+package ${serviceImplFullPackageName};
+
+/**
+ * autogen
+ * @author paddingdun
+ * ${table.tableCommon} service impl;
+ * @date ${date}
+ */
+@org.springframework.stereotype.Service
+public class ${sqlMapServiceImplJavaClassName} implements ${serviceFullPackageName}.${sqlMapIServiceJavaClassName} {
+	
+	@org.springframework.beans.factory.annotation.Autowired
+	private ${daoFullPackageName}.${sqlMapIDaoJavaClassName} dao;
+	
+	/**
+	 * save pojo;
+	 */
+	@org.springframework.transaction.annotation.Transactional
+	@Override
+	public void ${saveMethodPrefix}${table.entityBeanName}(${pojoFullPackageName}.${table.entityBeanName} obj){
+		dao.${saveMethodPrefix}${table.entityBeanName}(obj);
+	}
+	
+	/**
+	 * update pojo;
+	 */
+	@org.springframework.transaction.annotation.Transactional
+	@Override
+	public void ${updateMethodPrefix}${table.entityBeanName}(${pojoFullPackageName}.${table.entityBeanName} obj){
+		dao.${updateMethodPrefix}${table.entityBeanName}(obj);
+	}
+	
+	/**
+	 * get pojo by pk;
+	 */
+	@Override
+	public ${pojoFullPackageName}.${table.entityBeanName} ${getMethodPrefix}${table.entityBeanName}(#pks_argument(${table.columns} ${sqlMapMarkUse})){
+		java.util.Map<String, Object> params = new java.util.HashMap<String, Object>();
+		#pks_params(${table.columns} ${sqlMapMarkUse})
+		java.util.Map<java.lang.String, java.lang.Object> tmp = dao.${getMethodPrefix}${table.entityBeanName}(params);
+		if(tmp == null) return null;
+		com.google.gson.Gson gson = com.incito.zhcs.util.GsonHelper.create();
+		Object result = gson.fromJson(gson.toJson(tmp), ${pojoFullPackageName}.${table.entityBeanName}.class);
+		return result;
+	}
+	
+	/**
+	 * delete pojo by pk;
+	 */
+	@Override
+	public void ${deleteMethodPrefix}${table.entityBeanName}(#pks_argument(${table.columns} ${sqlMapMarkUse})){
+		java.util.Map<String, Object> params = new java.util.HashMap<String, Object>();
+		#pks_params(${table.columns} ${sqlMapMarkUse})
+		this.dao.${deleteMethodPrefix}${table.entityBeanName}(params);
+	}
+	
+	/**
+	 * query pojo list;
+	 */
+	@Override
+	public java.util.List<${pojoFullPackageName}.${table.entityBeanName}> ${queryMethodPrefix}${table.entityBeanName}(${pojoFullPackageName}.${table.entityBeanName} obj){
+		java.util.List<java.util.Map<String, Object>> list = this.dao.${queryMethodPrefix}${table.entityBeanName}(obj);
+		com.google.gson.Gson gson = ${gsonHelperPackageName}.GsonHelper.create();
+		java.util.List<${pojoFullPackageName}.${table.entityBeanName}> result = new java.util.ArrayList<${pojoFullPackageName}.${table.entityBeanName}>();
+		for (java.util.Map<String, Object> map : list) {
+			${pojoFullPackageName}.${table.entityBeanName} o = gson.fromJson(gson.toJson(map), ${pojoFullPackageName}.${table.entityBeanName}.class);
+			result.add(o);
+		}
+		return result;
+	}
+	
+	/**
+	 * query paging pojo list;
+	 */
+	@Override
+	public ${idataCollectionPackageName}.IDataCollection<${pojoFullPackageName}.${table.entityBeanName}> ${queryPagingMethodPrefix}${table.entityBeanName}(${pojoFullPackageName}.${table.entityBeanName} obj, ${pagingPackageName}.Paging paging){
+		${defaultListDataCollectionPackageName}.DefaultListDataCollection<${pojoFullPackageName}.${table.entityBeanName}> result = new ${defaultListDataCollectionPackageName}.DefaultListDataCollection<${pojoFullPackageName}.${table.entityBeanName}>();
+		java.util.List<${pojoFullPackageName}.${table.entityBeanName}> empty = java.util.Collections.emptyList();
+		result.setData(empty);
+		java.util.Map<java.lang.String, java.lang.Object> params = new java.util.HashMap<java.lang.String, java.lang.Object>();
+		Integer totalRows = this.dao.${getPagingCountPrefix}${table.entityBeanName}(params);
+		if(Integer.valueOf("0").equals(totalRows)){
+			result.setTotal(0);
+			return result;
+		}
+		params.put("start", paging.getStart());
+		params.put("length", paging.getLength());
+		java.util.List<java.util.Map<String, java.lang.Object>> list = this.dao.${queryPagingMethodPrefix}${table.entityBeanName}(params);
+		com.google.gson.Gson gson = ${gsonHelperPackageName}.GsonHelper.create();
+		java.util.List<${pojoFullPackageName}.${table.entityBeanName}> data = new java.util.ArrayList<${pojoFullPackageName}.${table.entityBeanName}>();
+		for (java.util.Map<String, Object> map : list) {
+			${pojoFullPackageName}.${table.entityBeanName} o = gson.fromJson(gson.toJson(map), ${pojoFullPackageName}.${table.entityBeanName}.class);
+			data.add(o);
+		}
+		result.setData(data);
+		return result;
+	}
+}

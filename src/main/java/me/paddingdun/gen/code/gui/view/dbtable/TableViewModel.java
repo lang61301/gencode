@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import me.paddingdun.gen.code.IConsant;
 import me.paddingdun.gen.code.annotation.Value1;
 import me.paddingdun.gen.code.data.tabletree.Table;
+import me.paddingdun.gen.code.util.GenFilenameHelper;
 
 /**
  * @author paddingdun
@@ -46,12 +47,24 @@ public class TableViewModel {
 	 */
 	@Value1(def="me.paddingdun")
 	private String basePackageName;
+	/**
+	 * 服务包名称;
+	 */
 	@Value1(def="service")
 	private String servicePackageName;
+	/**
+	 * pojo包名称;
+	 */
 	@Value1(def="data")
 	private String pojoPackageName;
+	/**
+	 * dao包名称;
+	 */
 	@Value1(def="dao")
 	private String daoPackageName;
+	/**
+	 * web.action包名称;
+	 */
 	@Value1(def="web.action")
 	private String webActionPackageName;
 	
@@ -75,12 +88,84 @@ public class TableViewModel {
 	@Value1
 	private String daoFullPackageName;
 	@Value1
+	private String daoImplFullPackageName;
+	@Value1
 	private String serviceFullPackageName;
+	@Value1
+	private String serviceImplFullPackageName;
 	@Value1
 	private String webActionFullPackageName;
 	@Value1
 	private boolean genStringDate;
 	
+	@Value1(def="com.incito.zhcs.data.paging")
+	private String idataCollectionPackageName;
+	
+	@Value1(def="com.incito.zhcs.data.paging.impl")
+	private String defaultListDataCollectionPackageName;
+	
+	@Value1(def="com.incito.zhcs.data.paging")
+	private String pagingPackageName;
+	
+	@Value1(def="com.incito.zhcs.util")
+	private String gsonHelperPackageName;
+	
+	public String getDefaultListDataCollectionPackageName() {
+		return defaultListDataCollectionPackageName;
+	}
+
+	public void setDefaultListDataCollectionPackageName(String defaultListDataCollectionPackageName) {
+		this.defaultListDataCollectionPackageName = defaultListDataCollectionPackageName;
+	}
+
+	public String getGsonHelperPackageName() {
+		return gsonHelperPackageName;
+	}
+
+	public void setGsonHelperPackageName(String gsonHelperPackageName) {
+		this.gsonHelperPackageName = gsonHelperPackageName;
+	}
+
+	public String getIdataCollectionPackageName() {
+		return idataCollectionPackageName;
+	}
+
+	public void setIdataCollectionPackageName(String idataCollectionPackageName) {
+		this.idataCollectionPackageName = idataCollectionPackageName;
+	}
+
+	public String getPagingPackageName() {
+		return pagingPackageName;
+	}
+
+	public void setPagingPackageName(String pagingPackageName) {
+		this.pagingPackageName = pagingPackageName;
+	}
+
+	public String getSqlMapIDaoJavaClassName(){
+		return GenFilenameHelper.sqlMapIDaoJavaClassName(table.getEntityBeanName());
+	}
+	
+	public String getSqlMapDaoImplJavaClassName(){
+		return GenFilenameHelper.sqlMapDaoImplJavaClassName(table.getEntityBeanName());
+	}
+	
+	public String getSqlMapIServiceJavaClassName(){
+		return GenFilenameHelper.sqlMapIServiceJavaClassName(table.getEntityBeanName());
+	}
+	
+	public String getSqlMapServiceImplJavaClassName(){
+		return GenFilenameHelper.sqlMapServiceImplJavaClassName(table.getEntityBeanName());
+	}
+	
+	public String getGetPagingCountPrefix() {
+		return getPagingCountPrefix;
+	}
+
+	public void setGetPagingCountPrefix(String getPagingCountPrefix) {
+		this.getPagingCountPrefix = getPagingCountPrefix;
+	}
+
 	public String getPojoPackageName() {
 		return pojoPackageName;
 	}
@@ -244,6 +329,26 @@ public class TableViewModel {
 	public void setGenStringDate(boolean genStringDate) {
 		this.genStringDate = genStringDate;
 	}
-	
-	
+
+	public String getDaoImplFullPackageName() {
+		if(daoImplFullPackageName == null){
+			daoImplFullPackageName = getDaoFullPackageName() + IConsant.PACKAGE_SEPARATE + IConsant.INTERFACE_IMPL_PACKAGE_NAME;
+		}
+		return daoImplFullPackageName;
+	}
+
+	public void setDaoImplFullPackageName(String daoImplFullPackageName) {
+		this.daoImplFullPackageName = daoImplFullPackageName;
+	}
+
+	public String getServiceImplFullPackageName() {
+		if(serviceImplFullPackageName == null){
+			serviceImplFullPackageName = getServiceFullPackageName() + IConsant.PACKAGE_SEPARATE + IConsant.INTERFACE_IMPL_PACKAGE_NAME;
+		}
+		return serviceImplFullPackageName;
+	}
+
+	public void setServiceImplFullPackageName(String serviceImplFullPackageName) {
+		this.serviceImplFullPackageName = serviceImplFullPackageName;
+	}
 }

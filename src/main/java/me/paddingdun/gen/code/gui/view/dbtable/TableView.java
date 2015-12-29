@@ -9,11 +9,9 @@ import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.StringReader;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.Callable;
-import java.util.logging.FileHandler;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -36,8 +34,6 @@ import me.paddingdun.gen.code.util.ModelHelper;
 import me.paddingdun.gen.code.util.SpringHelper;
 import me.paddingdun.gen.code.util.TaskHelper;
 import me.paddingdun.gen.code.util.VelocityHelper;
-import net.barenca.jastyle.ASFormatter;
-import net.barenca.jastyle.FormatterHelper;
 
 /**
  *
@@ -243,6 +239,7 @@ public class TableView extends AbstractView {
     private void btnGenActionPerformed(java.awt.event.ActionEvent evt) {
     	if(model.getTable() != null){
 	    	fileChooser.setFileSelectionMode(JFileChooser.SAVE_DIALOG|JFileChooser.DIRECTORIES_ONLY);
+	    	fileChooser.setCurrentDirectory(new File("C:\\Users\\admin\\Desktop"));
 	        int opt = fileChooser.showSaveDialog(null);
 	        //保存;
 	        if(JFileChooser.APPROVE_OPTION == opt){
@@ -254,19 +251,27 @@ public class TableView extends AbstractView {
 			        	//设置值;
 			        	ModelHelper.complexGetAndSimpleSet(TableView.this, model);
 			        	
-			        	ASFormatter formatter = new ASFormatter();
-			        	formatter.setJavaStyle();
-			        	
-			        	String javaContent = FormatterHelper.format(new StringReader(VelocityHelper.entityBean(model)), formatter);
-			        	System.out.println(javaContent);
-			        	FileHelper.genJavaFile(saveFile.getAbsolutePath(), model.getPojoFullPackageName(), model.getTable().getEntityBeanName(), javaContent);
+			        	String javaContent = VelocityHelper.entityBean(model);
+//			        	System.out.println(javaContent);
+			        	FileHelper.genPojoJavaFile(saveFile.getAbsolutePath(), model.getPojoFullPackageName(), model.getTable().getEntityBeanName(), javaContent);
 			        	
 			        	String sqlMapContent = VelocityHelper.sqlMap(model);
 			        	FileHelper.genSqlMapXmlFile(saveFile.getAbsolutePath(), model.getTable().getEntityBeanName(), sqlMapContent);
-			        	System.out.println(sqlMapContent);
-			        	
+//			        	System.out.println(sqlMapContent);
 			        	
 			        	System.out.println(VelocityHelper.dataTable(model));
+			        	
+			        	String sqlMapIDaoContent = VelocityHelper.sqlMapIDao(model);
+			        	FileHelper.genSqlMapIDaoJavaFile(saveFile.getAbsolutePath(), model.getDaoFullPackageName(), model.getTable().getEntityBeanName(), sqlMapIDaoContent);
+			        	
+			        	String sqlMapDaoImplContent = VelocityHelper.sqlMapDaoImpl(model);
+			        	FileHelper.genSqlMapDaoImplJavaFile(saveFile.getAbsolutePath(), model.getDaoImplFullPackageName(), model.getTable().getEntityBeanName(), sqlMapDaoImplContent);
+			        	
+			        	String sqlMapIServiceContent = VelocityHelper.sqlMapIService(model);
+			        	FileHelper.genSqlMapIServiceJavaFile(saveFile.getAbsolutePath(), model.getServiceFullPackageName(), model.getTable().getEntityBeanName(), sqlMapIServiceContent);
+			        	
+			        	String sqlMapServiceImplContent = VelocityHelper.sqlMapServiceImpl(model);
+			        	FileHelper.genSqlMapServiceImplJavaFile(saveFile.getAbsolutePath(), model.getServiceImplFullPackageName(), model.getTable().getEntityBeanName(), sqlMapServiceImplContent);
 			        	
 			        	EventQueue.invokeLater(new Runnable() {
 							public void run() {
