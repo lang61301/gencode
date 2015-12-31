@@ -174,11 +174,18 @@
 			<version>1.7</version>
 		</dependency>
 		
-		<!-- 格式化java代码 -->
-		<dependency>
+		<!-- 格式化java代码,有bug;将"=="格式化成"= =" -->
+		<!-- dependency>
 			<groupId>net.barenca</groupId>
 			<artifactId>jastyle</artifactId>
 			<version>0.5</version>
+		</dependency-->
+		
+		<!-- eclipse format java code -->
+		<dependency>
+			<groupId>org.eclipse.jdt</groupId>
+			<artifactId>core</artifactId>
+			<version>3.3.0-v_771</version>
 		</dependency>
 		 
 		<!-- dependency>
