@@ -142,22 +142,6 @@ public class TableViewModel {
 		this.pagingPackageName = pagingPackageName;
 	}
 
-	public String getSqlMapIDaoJavaClassName(){
-		return GenFilenameHelper.sqlMapIDaoJavaClassName(table.getEntityBeanName());
-	}
-	
-	public String getSqlMapDaoImplJavaClassName(){
-		return GenFilenameHelper.sqlMapDaoImplJavaClassName(table.getEntityBeanName());
-	}
-	
-	public String getSqlMapIServiceJavaClassName(){
-		return GenFilenameHelper.sqlMapIServiceJavaClassName(table.getEntityBeanName());
-	}
-	
-	public String getSqlMapServiceImplJavaClassName(){
-		return GenFilenameHelper.sqlMapServiceImplJavaClassName(table.getEntityBeanName());
-	}
-	
 	public String getGetPagingCountPrefix() {
 		return getPagingCountPrefix;
 	}
@@ -278,44 +262,16 @@ public class TableViewModel {
 		this.servicePackageName = servicePackageName;
 	}
 
-	public String getPojoFullPackageName() {
-		if(pojoFullPackageName == null){
-			pojoFullPackageName = basePackageName + IConsant.PACKAGE_SEPARATE + pojoPackageName;
-		}
-		return pojoFullPackageName;
-	}
-
 	public void setPojoFullPackageName(String pojoFullPackageName) {
 		this.pojoFullPackageName = pojoFullPackageName;
-	}
-
-	public String getDaoFullPackageName() {
-		if(daoFullPackageName == null){
-			daoFullPackageName = basePackageName + IConsant.PACKAGE_SEPARATE + daoPackageName;
-		}
-		return daoFullPackageName;
 	}
 
 	public void setDaoFullPackageName(String daoFullPackageName) {
 		this.daoFullPackageName = daoFullPackageName;
 	}
 
-	public String getServiceFullPackageName() {
-		if(serviceFullPackageName == null){
-			serviceFullPackageName = basePackageName + IConsant.PACKAGE_SEPARATE + servicePackageName;
-		}
-		return serviceFullPackageName;
-	}
-
 	public void setServiceFullPackageName(String serviceFullPackageName) {
 		this.serviceFullPackageName = serviceFullPackageName;
-	}
-
-	public String getWebActionFullPackageName() {
-		if(webActionFullPackageName == null){
-			webActionFullPackageName = basePackageName + IConsant.PACKAGE_SEPARATE + webActionPackageName;
-		}
-		return webActionFullPackageName;
 	}
 
 	public void setWebActionFullPackageName(String webActionFullPackageName) {
@@ -330,25 +286,70 @@ public class TableViewModel {
 		this.genStringDate = genStringDate;
 	}
 
+	public void setDaoImplFullPackageName(String daoImplFullPackageName) {
+		this.daoImplFullPackageName = daoImplFullPackageName;
+	}
+
+	public void setServiceImplFullPackageName(String serviceImplFullPackageName) {
+		this.serviceImplFullPackageName = serviceImplFullPackageName;
+	}
+	
+	
+	public String getSqlMapIDaoJavaClassName(){
+		return GenFilenameHelper.sqlMapIDaoJavaClassName(table.getEntityBeanName());
+	}
+	
+	public String getSqlMapDaoImplJavaClassName(){
+		return GenFilenameHelper.sqlMapDaoImplJavaClassName(table.getEntityBeanName());
+	}
+	
+	public String getSqlMapIServiceJavaClassName(){
+		return GenFilenameHelper.sqlMapIServiceJavaClassName(table.getEntityBeanName());
+	}
+	
+	public String getSqlMapServiceImplJavaClassName(){
+		return GenFilenameHelper.sqlMapServiceImplJavaClassName(table.getEntityBeanName());
+	}
+	
+	public String getPojoFullPackageName() {
+		if(pojoFullPackageName == null){
+			pojoFullPackageName = basePackageName + IConsant.PACKAGE_SEPARATE + pojoPackageName;
+		}
+		return pojoFullPackageName;
+	}
+	
+	public String getDaoFullPackageName() {
+		if(daoFullPackageName == null){
+			daoFullPackageName = basePackageName + IConsant.PACKAGE_SEPARATE + daoPackageName;
+		}
+		return daoFullPackageName;
+	}
+	
+	public String getServiceFullPackageName() {
+		if(serviceFullPackageName == null){
+			serviceFullPackageName = basePackageName + IConsant.PACKAGE_SEPARATE + servicePackageName;
+		}
+		return serviceFullPackageName;
+	}
+	
+	public String getWebActionFullPackageName() {
+		if(webActionFullPackageName == null){
+			webActionFullPackageName = basePackageName + IConsant.PACKAGE_SEPARATE + webActionPackageName;
+		}
+		return webActionFullPackageName;
+	}
+	
 	public String getDaoImplFullPackageName() {
 		if(daoImplFullPackageName == null){
 			daoImplFullPackageName = getDaoFullPackageName() + IConsant.PACKAGE_SEPARATE + IConsant.INTERFACE_IMPL_PACKAGE_NAME;
 		}
 		return daoImplFullPackageName;
 	}
-
-	public void setDaoImplFullPackageName(String daoImplFullPackageName) {
-		this.daoImplFullPackageName = daoImplFullPackageName;
-	}
-
+	
 	public String getServiceImplFullPackageName() {
 		if(serviceImplFullPackageName == null){
 			serviceImplFullPackageName = getServiceFullPackageName() + IConsant.PACKAGE_SEPARATE + IConsant.INTERFACE_IMPL_PACKAGE_NAME;
 		}
 		return serviceImplFullPackageName;
-	}
-
-	public void setServiceImplFullPackageName(String serviceImplFullPackageName) {
-		this.serviceImplFullPackageName = serviceImplFullPackageName;
 	}
 }

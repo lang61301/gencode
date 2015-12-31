@@ -1,0 +1,101 @@
+#parse("template/velocity/fun.vm")
+package com.incito.zhcs.app;
+
+
+import com.incito.zhcs.data.json.JsonResult2;
+import com.incito.zhcs.data.paging.IDataCollection;
+import com.incito.zhcs.data.paging.Paging;
+import com.incito.zhcs.exception.BusinessException;
+import com.incito.zhcs.exception.IErrorCode;
+
+/**
+ * autogen
+ * @author paddingdun
+ * ${table.tableCommon}
+ * @date ${date}
+ */
+@org.springframework.stereotype.Controller
+@org.springframework.web.bind.annotation.RequestMapping("/ditask")
+public class ACtrl {
+	
+	@org.springframework.beans.factory.annotation.Autowired
+	private com.incito.zhcs.app.service.IBaseService service;
+	
+	/**
+	 * 主页;
+	 * @return
+	 */
+	@org.springframework.web.bind.annotation.RequestMapping
+	public String index() {
+		return "zhcs/ditask/index";
+	}
+
+	/**
+	 * 分页查询;
+	 * @param obj
+	 * @param paging
+	 * @return
+	 */
+	@org.springframework.web.bind.annotation.RequestMapping(value="/queryPaging", method = org.springframework.web.bind.annotation.RequestMethod.POST)
+	@org.springframework.web.bind.annotation.ResponseBody
+	public com.incito.zhcs.data.json.JsonResult2<com.incito.zhcs.data.paging.IDataCollection<Object>> queryPaging(Object obj, Paging paging) {
+		com.incito.zhcs.data.json.JsonResult2<IDataCollection<Object>> jr = new com.incito.zhcs.data.json.JsonResult2<IDataCollection<Object>>();
+		try{
+			IDataCollection<Object> data = service.queryPagingA(obj, paging);
+			jr.setData(data);
+		}catch(Exception e){
+			jr.setStatus(IErrorCode.UNKNOW_EXCEPTION);
+			jr.setMsg("查询异常");
+			e.printStackTrace();
+		}
+		return jr;
+	}
+	
+	/**
+	 * new or edit;
+	 * @param obj
+	 * @return
+	 */
+	@org.springframework.web.bind.annotation.RequestMapping(value="/edit", method = org.springframework.web.bind.annotation.RequestMethod.POST)
+	@org.springframework.web.bind.annotation.ResponseBody
+	public JsonResult2<String> edit(Object obj) {
+		JsonResult2<String> jr = new JsonResult2<String>();
+		try{
+			boolean update = false;
+			//判断是是否存在主键;
+			if(update){
+				service.updateA(obj);
+			}else{
+				service.saveA(obj);
+			}
+			jr.setMsg("保存成功!");
+		}catch(BusinessException e){
+			jr.setStatus(IErrorCode.UNKNOW_EXCEPTION);
+			jr.setMsg(e.getMessage());
+		}catch(Exception e){
+			jr.setStatus(IErrorCode.UNKNOW_EXCEPTION);
+			jr.setMsg("编辑报错");
+			e.printStackTrace();
+		}
+		return jr;
+	}
+	
+	@org.springframework.web.bind.annotation.RequestMapping(value="/get")
+	@org.springframework.web.bind.annotation.ResponseBody
+	public JsonResult2<Object> get(/**foreach**/@org.springframework.web.bind.annotation.RequestParam(value="id")Long diTaskId) {
+		JsonResult2<Object> jr = new JsonResult2<Object>();
+		try{
+			Object obj = service.getA();
+			jr.setData(obj);
+		}catch(BusinessException e){
+			jr.setStatus(IErrorCode.UNKNOW_EXCEPTION);
+			jr.setMsg(e.getMessage());
+		}catch(Exception e){
+			jr.setStatus(IErrorCode.UNKNOW_EXCEPTION);
+			jr.setMsg("未知错误");
+			e.printStackTrace();
+		}
+		return jr;
+	}
+
+}

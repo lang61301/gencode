@@ -7,3 +7,7 @@ columns:[#foreach( $column in $table.columns) #if ($velocityCount != 1), #end
 
 columns:[#foreach( $column in $table.columns) #if ($velocityCount != 1), #end 
 {"data":"${column.columnName}", "defaultContent":""} #end]
+		
+#foreach( $column in $table.columns)
+#if(${foreach.count} != 1),#end new ReportColumn("${column.propertyName}","",new ReportType[0],ReportColumn.RANGE_TYPE)
+#end

@@ -44,7 +44,7 @@ public class ${sqlMapServiceImplJavaClassName} implements ${serviceFullPackageNa
 		java.util.Map<java.lang.String, java.lang.Object> tmp = dao.${getMethodPrefix}${table.entityBeanName}(params);
 		if(tmp == null) return null;
 		com.google.gson.Gson gson = com.incito.zhcs.util.GsonHelper.create();
-		Object result = gson.fromJson(gson.toJson(tmp), ${pojoFullPackageName}.${table.entityBeanName}.class);
+		${pojoFullPackageName}.${table.entityBeanName} result = gson.fromJson(gson.toJson(tmp), ${pojoFullPackageName}.${table.entityBeanName}.class);
 		return result;
 	}
 	
@@ -83,8 +83,8 @@ public class ${sqlMapServiceImplJavaClassName} implements ${serviceFullPackageNa
 		result.setData(empty);
 		java.util.Map<java.lang.String, java.lang.Object> params = new java.util.HashMap<java.lang.String, java.lang.Object>();
 		Integer totalRows = this.dao.${getPagingCountPrefix}${table.entityBeanName}(params);
+		result.setTotal(totalRows);
 		if(Integer.valueOf("0").equals(totalRows)){
-			result.setTotal(0);
 			return result;
 		}
 		params.put("start", paging.getStart());

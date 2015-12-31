@@ -27,11 +27,11 @@
 </delete>
 	
 <select id="${queryMethodPrefix}${table.entityBeanName}" parameterClass="${pojoFullPackageName}.${table.entityBeanName}" resultClass="java.util.HashMap">
-<![CDATA[select #foreach( $column in ${table.columns}) #if ($velocityCount != 1), #end ${column.columnName} #end from ${table.tableName}]]> 
+<![CDATA[select #foreach( $column in ${table.columns}) #if ($velocityCount != 1), #end t1.${column.columnName} #end from ${table.tableName} t1]]> 
 </select>
 
 <select id="${queryPagingMethodPrefix}${table.entityBeanName}" parameterClass="java.util.Map" resultClass="java.util.HashMap">
-<![CDATA[select #foreach( $column in ${table.columns}) #if ($velocityCount != 1), #end ${column.columnName} #end from ${table.tableName}]]>
+<![CDATA[select #foreach( $column in ${table.columns}) #if ($velocityCount != 1), #end t1.${column.columnName} #end from ${table.tableName} t1]]>
 	<isNotEmpty property="start">
 		<isNotEmpty property="length">
 			limit #start#, #length#
@@ -40,6 +40,6 @@
 </select>
 
 <select id="${getPagingCountPrefix}${table.entityBeanName}" parameterClass="java.util.Map" resultClass="java.lang.Integer">
-<![CDATA[select count(1) from ${table.tableName}]]>
+<![CDATA[select count(1) from ${table.tableName} t1]]>
 </select>
 </sqlMap>
