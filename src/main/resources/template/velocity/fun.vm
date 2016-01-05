@@ -3,6 +3,16 @@
 #foreach( $column in ${cols}) #if (${column.primary}) #if ($j != 0), #end ${column.javaType} #if(${sqlMapMarkUse}==1) ${column.propertyName} #else ${column.columnName} #end #set($j = $j + 1) #end #end
 #end
 
+#macro( pks_web_argument $cols $sqlMapMarkUse )
+#set( $j = 0 )
+#foreach( $column in ${cols}) #if (${column.primary}) #if ($j != 0), #end org.springframework.web.bind.annotation.RequestParam(value="${column.propertyName}")${column.javaType} #if(${sqlMapMarkUse}==1) ${column.propertyName} #else ${column.columnName} #end #set($j = $j + 1) #end #end
+#end
+
 #macro( pks_params $cols $sqlMapMarkUse )
 #foreach( $column in ${cols}) #if (${column.primary}) params.put(#if(${sqlMapMarkUse}==1)"${column.propertyName}"#else"${column.columnName}"#end, #if(${sqlMapMarkUse}==1)${column.propertyName}#else${column.columnName}#end); #end #end
+#end
+
+#macro( pks_isnull $cols $sqlMapMarkUse )
+#set( $j = 0 )
+save = (#foreach( $column in ${cols}) #if (${column.primary}) #if ($j != 0) || #end (${column.javaType} #if(${sqlMapMarkUse}==1) ${column.propertyName} #else ${column.columnName} #end == null) #set($j = $j + 1) #end #end);
 #end

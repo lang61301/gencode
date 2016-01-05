@@ -16,7 +16,7 @@ public class GenFilenameHelper {
 	 * @param entityName
 	 * @return
 	 */
-	public static String javaEntityFile(String entityName){
+	public static String javaEntityFileName(String entityName){
 		return entityName + ".java";
 	}
 	
@@ -25,7 +25,7 @@ public class GenFilenameHelper {
 	 * @param entityName
 	 * @return
 	 */
-	public static String sqlMapXmlFile(String entityName){
+	public static String sqlMapXmlFileName(String entityName){
 		return entityName + "_sql.xml";
 	}
 	
@@ -34,7 +34,7 @@ public class GenFilenameHelper {
 	 * @param entityName
 	 * @return
 	 */
-	public static String sqlMapIDaoJavaFile(String entityName){
+	public static String sqlMapIDaoJavaFileName(String entityName){
 		return sqlMapIDaoJavaClassName(entityName) + ".java";
 	}
 	
@@ -52,7 +52,7 @@ public class GenFilenameHelper {
 	 * @param entityName
 	 * @return
 	 */
-	public static String sqlMapDaoImplJavaFile(String entityName){
+	public static String sqlMapDaoImplJavaFileName(String entityName){
 		return sqlMapDaoImplJavaClassName(entityName) + ".java";
 	}
 	
@@ -70,7 +70,7 @@ public class GenFilenameHelper {
 	 * @param entityName
 	 * @return
 	 */
-	public static String sqlMapIServiceJavaFile(String entityName){
+	public static String sqlMapIServiceJavaFileName(String entityName){
 		return sqlMapIServiceJavaClassName(entityName) + ".java";
 	}
 	
@@ -88,7 +88,7 @@ public class GenFilenameHelper {
 	 * @param entityName
 	 * @return
 	 */
-	public static String sqlMapServiceImplJavaFile(String entityName){
+	public static String sqlMapServiceImplJavaFileName(String entityName){
 		return sqlMapServiceImplJavaClassName(entityName) + ".java";
 	}
 	
@@ -99,5 +99,22 @@ public class GenFilenameHelper {
 	 */
 	public static String sqlMapServiceImplJavaClassName(String entityName){
 		return entityName + "ServiceImpl";
+	}
+	
+	/**
+	 * java spring web controller class name;
+	 * @param entityName
+	 * @return
+	 */
+	public static String springWebActionJavaClassName(String entityName){
+		return entityName + "Ctrl";
+	}
+	/**
+	 * java spring web controller java class file name;
+	 * @param entityName
+	 * @return
+	 */
+	public static String springWebActionJavaFileName(String entityName){
+		return springWebActionJavaClassName(entityName) + ".java";
 	}
 }

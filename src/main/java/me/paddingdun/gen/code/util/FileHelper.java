@@ -35,13 +35,13 @@ public class FileHelper {
 	}
 	
 	public static void genPojoJavaFile(String baseDir, String pkgName, String entityName, String fileContent){
-		String fileName = GenFilenameHelper.javaEntityFile(entityName);
+		String fileName = GenFilenameHelper.javaEntityFileName(entityName);
 		genJavaFile(baseDir, pkgName, fileName, fileContent);
 	}
 	
 	public static void genSqlMapXmlFile(String baseDir, String entityName, String fileContent){
 
-		String fn = GenFilenameHelper.sqlMapXmlFile(entityName);
+		String fn = GenFilenameHelper.sqlMapXmlFileName(entityName);
 		BufferedWriter bw = null;
 		try {
 			bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(baseDir, fn)), Charset.forName("UTF-8")));
@@ -54,22 +54,27 @@ public class FileHelper {
 	}
 	
 	public static void genSqlMapIDaoJavaFile(String baseDir, String pkgName, String entityName, String fileContent){
-		String fileName = GenFilenameHelper.sqlMapIDaoJavaFile(entityName);
+		String fileName = GenFilenameHelper.sqlMapIDaoJavaFileName(entityName);
 		genJavaFile(baseDir, pkgName, fileName, fileContent);
 	}
 	
 	public static void genSqlMapDaoImplJavaFile(String baseDir, String pkgName, String entityName, String fileContent){
-		String fileName = GenFilenameHelper.sqlMapDaoImplJavaFile(entityName);
+		String fileName = GenFilenameHelper.sqlMapDaoImplJavaFileName(entityName);
 		genJavaFile(baseDir, pkgName, fileName, fileContent);
 	}
 	
 	public static void genSqlMapIServiceJavaFile(String baseDir, String pkgName, String entityName, String fileContent){
-		String fileName = GenFilenameHelper.sqlMapIServiceJavaFile(entityName);
+		String fileName = GenFilenameHelper.sqlMapIServiceJavaFileName(entityName);
 		genJavaFile(baseDir, pkgName, fileName, fileContent);
 	}
 	
 	public static void genSqlMapServiceImplJavaFile(String baseDir, String pkgName, String entityName, String fileContent){
-		String fileName = GenFilenameHelper.sqlMapServiceImplJavaFile(entityName);
+		String fileName = GenFilenameHelper.sqlMapServiceImplJavaFileName(entityName);
+		genJavaFile(baseDir, pkgName, fileName, fileContent);
+	}
+	
+	public static void genSpringWebActionJavaFile(String baseDir, String pkgName, String entityName, String fileContent){
+		String fileName = GenFilenameHelper.springWebActionJavaFileName(entityName);
 		genJavaFile(baseDir, pkgName, fileName, fileContent);
 	}
 

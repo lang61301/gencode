@@ -273,6 +273,9 @@ public class TableView extends AbstractView {
 			        	String sqlMapServiceImplContent = VelocityHelper.sqlMapServiceImpl(model);
 			        	FileHelper.genSqlMapServiceImplJavaFile(saveFile.getAbsolutePath(), model.getServiceImplFullPackageName(), model.getTable().getEntityBeanName(), sqlMapServiceImplContent);
 			        	
+			        	String springWebActionContent = VelocityHelper.springWebAction(model);
+			        	FileHelper.genSpringWebActionJavaFile(saveFile.getAbsolutePath(), model.getWebActionFullPackageName(), model.getTable().getEntityBeanName(), springWebActionContent);
+			        	
 			        	EventQueue.invokeLater(new Runnable() {
 							public void run() {
 								JOptionPane.showMessageDialog(null, "生成文件完成!");

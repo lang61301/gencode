@@ -1,25 +1,19 @@
 #parse("template/velocity/fun.vm")
-package com.incito.zhcs.app;
+package ${webActionFullPackageName};
 
-
-import com.incito.zhcs.data.json.JsonResult2;
-import com.incito.zhcs.data.paging.IDataCollection;
-import com.incito.zhcs.data.paging.Paging;
-import com.incito.zhcs.exception.BusinessException;
-import com.incito.zhcs.exception.IErrorCode;
 
 /**
  * autogen
  * @author paddingdun
- * ${table.tableCommon}
+ * ${table.tableCommon} spring web controller;
  * @date ${date}
  */
 @org.springframework.stereotype.Controller
 @org.springframework.web.bind.annotation.RequestMapping("/ditask")
-public class ACtrl {
+public class ${springWebActionJavaClassName} {
 	
 	@org.springframework.beans.factory.annotation.Autowired
-	private com.incito.zhcs.app.service.IBaseService service;
+	private ${serviceFullPackageName}.${${sqlMapIServiceJavaClassName}} service;
 	
 	/**
 	 * 主页;
@@ -31,20 +25,23 @@ public class ACtrl {
 	}
 
 	/**
-	 * 分页查询;
+	 * paging query by parameters;
 	 * @param obj
 	 * @param paging
 	 * @return
 	 */
-	@org.springframework.web.bind.annotation.RequestMapping(value="/queryPaging", method = org.springframework.web.bind.annotation.RequestMethod.POST)
+	@org.springframework.web.bind.annotation.RequestMapping(value="/${queryPagingMethodPrefix}", method = org.springframework.web.bind.annotation.RequestMethod.POST)
 	@org.springframework.web.bind.annotation.ResponseBody
-	public com.incito.zhcs.data.json.JsonResult2<com.incito.zhcs.data.paging.IDataCollection<Object>> queryPaging(Object obj, Paging paging) {
-		com.incito.zhcs.data.json.JsonResult2<IDataCollection<Object>> jr = new com.incito.zhcs.data.json.JsonResult2<IDataCollection<Object>>();
+	public ${jsonResultPackageName}.JsonResult2<${idataCollectionPackageName}.IDataCollection<${pojoFullPackageName}.${table.entityBeanName}>> ${queryPagingMethodPrefix}(${pojoFullPackageName}.${table.entityBeanName} obj, ${pagingPackageName}.Paging paging) {
+		${jsonResultPackageName}.JsonResult2<${idataCollectionPackageName}.IDataCollection<${pojoFullPackageName}.${table.entityBeanName}>> jr = new ${jsonResultPackageName}.JsonResult2<${idataCollectionPackageName}.IDataCollection<${pojoFullPackageName}.${table.entityBeanName}>>();
 		try{
-			IDataCollection<Object> data = service.queryPagingA(obj, paging);
+			${idataCollectionPackageName}.IDataCollection<${pojoFullPackageName}.${table.entityBeanName}> data = service.${queryPagingMethodPrefix}${table.entityBeanName}(obj, paging);
 			jr.setData(data);
-		}catch(Exception e){
-			jr.setStatus(IErrorCode.UNKNOW_EXCEPTION);
+		}catch(${businessExceptionPackageName}.BusinessException e){
+			jr.setStatus(${ierrorCodePackageName}.IErrorCode.UNKNOW_EXCEPTION);
+			jr.setMsg(e.getMessage());
+		}catch(java.lang.Exception e){
+			jr.setStatus(${ierrorCodePackageName}.IErrorCode.UNKNOW_EXCEPTION);
 			jr.setMsg("查询异常");
 			e.printStackTrace();
 		}
@@ -58,41 +55,64 @@ public class ACtrl {
 	 */
 	@org.springframework.web.bind.annotation.RequestMapping(value="/edit", method = org.springframework.web.bind.annotation.RequestMethod.POST)
 	@org.springframework.web.bind.annotation.ResponseBody
-	public JsonResult2<String> edit(Object obj) {
-		JsonResult2<String> jr = new JsonResult2<String>();
+	public ${jsonResultPackageName}.JsonResult2<String> edit(${pojoFullPackageName}.${table.entityBeanName} obj) {
+		${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${table.entityBeanName}> jr = new ${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${table.entityBeanName}>();
 		try{
-			boolean update = false;
-			//判断是是否存在主键;
-			if(update){
-				service.updateA(obj);
+			boolean save = false;
+			#pks_isnull(${table.columns} ${sqlMapMarkUse})
+			if(save){
+				service.${saveMethodPrefix}${table.entityBeanName}(obj);
 			}else{
-				service.saveA(obj);
+				service.${updateMethodPrefix}${table.entityBeanName}(obj);
 			}
 			jr.setMsg("保存成功!");
-		}catch(BusinessException e){
-			jr.setStatus(IErrorCode.UNKNOW_EXCEPTION);
+		}catch(${businessExceptionPackageName}.BusinessException e){
+			jr.setStatus(${ierrorCodePackageName}.IErrorCode.UNKNOW_EXCEPTION);
 			jr.setMsg(e.getMessage());
-		}catch(Exception e){
-			jr.setStatus(IErrorCode.UNKNOW_EXCEPTION);
-			jr.setMsg("编辑报错");
+		}catch(java.lang.Exception e){
+			jr.setStatus(${ierrorCodePackageName}.IErrorCode.UNKNOW_EXCEPTION);
+			jr.setMsg("保存异常");
 			e.printStackTrace();
 		}
 		return jr;
 	}
 	
-	@org.springframework.web.bind.annotation.RequestMapping(value="/get")
+	/**
+	 * get object;
+	 */
+	@org.springframework.web.bind.annotation.RequestMapping(value="/${getMethodPrefix}")
 	@org.springframework.web.bind.annotation.ResponseBody
-	public JsonResult2<Object> get(/**foreach**/@org.springframework.web.bind.annotation.RequestParam(value="id")Long diTaskId) {
-		JsonResult2<Object> jr = new JsonResult2<Object>();
+	public ${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${table.entityBeanName}> ${getMethodPrefix}(#pks_web_argument(${table.columns} ${sqlMapMarkUse})) {
+		${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${table.entityBeanName}> jr = new ${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${table.entityBeanName}>();
 		try{
-			Object obj = service.getA();
+			${pojoFullPackageName}.${table.entityBeanName} obj = service.${getMethodPrefix}${table.entityBeanName}(#pks_argument(${table.columns} ${sqlMapMarkUse}));
 			jr.setData(obj);
-		}catch(BusinessException e){
-			jr.setStatus(IErrorCode.UNKNOW_EXCEPTION);
+		}catch(${businessExceptionPackageName}.BusinessException e){
+			jr.setStatus(${ierrorCodePackageName}.IErrorCode.UNKNOW_EXCEPTION);
 			jr.setMsg(e.getMessage());
-		}catch(Exception e){
-			jr.setStatus(IErrorCode.UNKNOW_EXCEPTION);
-			jr.setMsg("未知错误");
+		}catch(java.lang.Exception e){
+			jr.setStatus(${ierrorCodePackageName}.IErrorCode.UNKNOW_EXCEPTION);
+			jr.setMsg("获取对象异常");
+			e.printStackTrace();
+		}
+		return jr;
+	}
+	
+	/**
+	 * delete object
+	 */
+	@org.springframework.web.bind.annotation.RequestMapping(value="/${deleteMethodPrefix}")
+	@org.springframework.web.bind.annotation.ResponseBody
+	public ${jsonResultPackageName}.JsonResult2<java.lang.Void> ${deleteMethodPrefix}(#pks_web_argument(${table.columns} ${sqlMapMarkUse})) {
+		${jsonResultPackageName}.JsonResult2<java.lang.Void> jr = new ${jsonResultPackageName}.JsonResult2<java.lang.Void>();
+		try{
+			service.${deleteMethodPrefix}${table.entityBeanName}(#pks_argument(${table.columns} ${sqlMapMarkUse}));
+		}catch(${businessExceptionPackageName}.BusinessException e){
+			jr.setStatus(${ierrorCodePackageName}.IErrorCode.UNKNOW_EXCEPTION);
+			jr.setMsg(e.getMessage());
+		}catch(java.lang.Exception e){
+			jr.setStatus(${ierrorCodePackageName}.IErrorCode.UNKNOW_EXCEPTION);
+			jr.setMsg("删除对象异常");
 			e.printStackTrace();
 		}
 		return jr;

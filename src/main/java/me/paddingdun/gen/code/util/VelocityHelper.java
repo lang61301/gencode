@@ -103,5 +103,11 @@ public class VelocityHelper {
 		String af = ContentFormatHelper.formatJava(s);
     	return af;
 	}
+	
+	public static String springWebAction(TableViewModel tableViewModel){
+		String s = rawTable(tableViewModel, "template/velocity/SpringMvcAction.vm");
+		String af = ContentFormatHelper.formatJava(s);
+    	return af;
+	}
 
 }

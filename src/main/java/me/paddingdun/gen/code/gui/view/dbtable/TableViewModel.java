@@ -83,21 +83,30 @@ public class TableViewModel {
 	@Value1(def="getPagingCount")
 	private String getPagingCountPrefix;
 	
+	/**start data**/
 	@Value1
 	private String pojoFullPackageName;
+
+	/**start dao**/
 	@Value1
 	private String daoFullPackageName;
 	@Value1
 	private String daoImplFullPackageName;
+	
+	/**start service**/
 	@Value1
 	private String serviceFullPackageName;
 	@Value1
 	private String serviceImplFullPackageName;
+	
+	/**start web.Action**/
 	@Value1
 	private String webActionFullPackageName;
 	@Value1
 	private boolean genStringDate;
 	
+	
+	/**start special assistant class name or package name **/
 	@Value1(def="com.incito.zhcs.data.paging")
 	private String idataCollectionPackageName;
 	
@@ -110,6 +119,39 @@ public class TableViewModel {
 	@Value1(def="com.incito.zhcs.util")
 	private String gsonHelperPackageName;
 	
+	@Value1(def="com.incito.zhcs.data.json")
+	private String jsonResultPackageName;
+	
+	@Value1(def="com.incito.zhcs.exception")
+	private String businessExceptionPackageName;
+	
+	@Value1(def="com.incito.zhcs.exception")
+	private String ierrorCodePackageName;
+	
+	public String getBusinessExceptionPackageName() {
+		return businessExceptionPackageName;
+	}
+
+	public void setBusinessExceptionPackageName(String businessExceptionPackageName) {
+		this.businessExceptionPackageName = businessExceptionPackageName;
+	}
+
+	public String getIerrorCodePackageName() {
+		return ierrorCodePackageName;
+	}
+
+	public void setIerrorCodePackageName(String ierrorCodePackageName) {
+		this.ierrorCodePackageName = ierrorCodePackageName;
+	}
+
+	public String getJsonResultPackageName() {
+		return jsonResultPackageName;
+	}
+
+	public void setJsonResultPackageName(String jsonResultPackageName) {
+		this.jsonResultPackageName = jsonResultPackageName;
+	}
+
 	public String getDefaultListDataCollectionPackageName() {
 		return defaultListDataCollectionPackageName;
 	}
@@ -309,6 +351,10 @@ public class TableViewModel {
 	
 	public String getSqlMapServiceImplJavaClassName(){
 		return GenFilenameHelper.sqlMapServiceImplJavaClassName(table.getEntityBeanName());
+	}
+	
+	public String getSpringWebActionJavaClassName(){
+		return GenFilenameHelper.springWebActionJavaClassName(table.getEntityBeanName());
 	}
 	
 	public String getPojoFullPackageName() {
