@@ -11,9 +11,14 @@ package me.paddingdun.gen.code;
 public interface IConsant {
 
 	/**
-	 * 包分隔符;
+	 * java package name separate character;
 	 */
 	String PACKAGE_SEPARATE = ".";
+	
+	/**
+	 * http path separate character;
+	 */
+	String URL_PATH_SEPARATE = "/";
 	
 	/**
 	 * java接口实现类包名;

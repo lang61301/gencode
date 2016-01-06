@@ -9,11 +9,11 @@ package ${webActionFullPackageName};
  * @date ${date}
  */
 @org.springframework.stereotype.Controller
-@org.springframework.web.bind.annotation.RequestMapping("/ditask")
+@org.springframework.web.bind.annotation.RequestMapping("${webActionRequestMapping}")
 public class ${springWebActionJavaClassName} {
 	
 	@org.springframework.beans.factory.annotation.Autowired
-	private ${serviceFullPackageName}.${${sqlMapIServiceJavaClassName}} service;
+	private ${serviceFullPackageName}.${sqlMapIServiceJavaClassName} service;
 	
 	/**
 	 * 主页;
@@ -21,7 +21,7 @@ public class ${springWebActionJavaClassName} {
 	 */
 	@org.springframework.web.bind.annotation.RequestMapping
 	public String index() {
-		return "zhcs/ditask/index";
+		return "${springJspViewResolverMiddleFullPath}";
 	}
 
 	/**
@@ -53,9 +53,9 @@ public class ${springWebActionJavaClassName} {
 	 * @param obj
 	 * @return
 	 */
-	@org.springframework.web.bind.annotation.RequestMapping(value="/edit", method = org.springframework.web.bind.annotation.RequestMethod.POST)
+	@org.springframework.web.bind.annotation.RequestMapping(value="/${webActionEditMethodName}", method = org.springframework.web.bind.annotation.RequestMethod.POST)
 	@org.springframework.web.bind.annotation.ResponseBody
-	public ${jsonResultPackageName}.JsonResult2<String> edit(${pojoFullPackageName}.${table.entityBeanName} obj) {
+	public ${jsonResultPackageName}.JsonResult2<String> ${webActionEditMethodName}(${pojoFullPackageName}.${table.entityBeanName} obj) {
 		${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${table.entityBeanName}> jr = new ${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${table.entityBeanName}>();
 		try{
 			boolean save = false;
@@ -85,7 +85,7 @@ public class ${springWebActionJavaClassName} {
 	public ${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${table.entityBeanName}> ${getMethodPrefix}(#pks_web_argument(${table.columns} ${sqlMapMarkUse})) {
 		${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${table.entityBeanName}> jr = new ${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${table.entityBeanName}>();
 		try{
-			${pojoFullPackageName}.${table.entityBeanName} obj = service.${getMethodPrefix}${table.entityBeanName}(#pks_argument(${table.columns} ${sqlMapMarkUse}));
+			${pojoFullPackageName}.${table.entityBeanName} obj = service.${getMethodPrefix}${table.entityBeanName}(#pks_call_argument(${table.columns} ${sqlMapMarkUse}));
 			jr.setData(obj);
 		}catch(${businessExceptionPackageName}.BusinessException e){
 			jr.setStatus(${ierrorCodePackageName}.IErrorCode.UNKNOW_EXCEPTION);
@@ -106,7 +106,7 @@ public class ${springWebActionJavaClassName} {
 	public ${jsonResultPackageName}.JsonResult2<java.lang.Void> ${deleteMethodPrefix}(#pks_web_argument(${table.columns} ${sqlMapMarkUse})) {
 		${jsonResultPackageName}.JsonResult2<java.lang.Void> jr = new ${jsonResultPackageName}.JsonResult2<java.lang.Void>();
 		try{
-			service.${deleteMethodPrefix}${table.entityBeanName}(#pks_argument(${table.columns} ${sqlMapMarkUse}));
+			service.${deleteMethodPrefix}${table.entityBeanName}(#pks_call_argument(${table.columns} ${sqlMapMarkUse}));
 		}catch(${businessExceptionPackageName}.BusinessException e){
 			jr.setStatus(${ierrorCodePackageName}.IErrorCode.UNKNOW_EXCEPTION);
 			jr.setMsg(e.getMessage());

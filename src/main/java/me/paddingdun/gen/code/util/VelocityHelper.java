@@ -65,7 +65,6 @@ public class VelocityHelper {
 	
 	public static String entityBean(TableViewModel tableViewModel){
 		String s = rawTable(tableViewModel, "template/velocity/EntityBean.vm");
-		
 		String af = ContentFormatHelper.formatJava(s);
 		return af;
 	}

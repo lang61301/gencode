@@ -11,6 +11,7 @@ import me.paddingdun.gen.code.IConsant;
 import me.paddingdun.gen.code.annotation.Value1;
 import me.paddingdun.gen.code.data.tabletree.Table;
 import me.paddingdun.gen.code.util.GenFilenameHelper;
+import me.paddingdun.gen.code.util.PathHelper;
 
 /**
  * @author paddingdun
@@ -42,6 +43,23 @@ public class TableViewModel {
 	@Value1(def="true")
 	private Boolean showGsonAnnotation;
 	
+	
+	@Value1(def="save")
+	private String saveMethodPrefix;
+	@Value1(def="update")
+	private String updateMethodPrefix;
+	@Value1(def="get")
+	private String getMethodPrefix;
+	@Value1(def="delete")
+	private String deleteMethodPrefix;
+	@Value1(def="query")
+	private String queryMethodPrefix;
+	@Value1(def="queryPaging")
+	private String queryPagingMethodPrefix;
+	@Value1(def="getPagingCount")
+	private String getPagingCountPrefix;
+	
+
 	/**
 	 * 基础包名称;
 	 */
@@ -68,24 +86,19 @@ public class TableViewModel {
 	@Value1(def="web.action")
 	private String webActionPackageName;
 	
-	@Value1(def="save")
-	private String saveMethodPrefix;
-	@Value1(def="update")
-	private String updateMethodPrefix;
-	@Value1(def="get")
-	private String getMethodPrefix;
-	@Value1(def="delete")
-	private String deleteMethodPrefix;
-	@Value1(def="query")
-	private String queryMethodPrefix;
-	@Value1(def="queryPaging")
-	private String queryPagingMethodPrefix;
-	@Value1(def="getPagingCount")
-	private String getPagingCountPrefix;
-	
 	/**start data**/
 	@Value1
 	private String pojoFullPackageName;
+	
+	/**
+	 * 需要针对每个实体进行个性化设置;
+	 */
+	private String cateGoryPackageName;
+	
+	/**
+	 * 需要针对每个实体页面进行个性化设置; 用于页面存放和页面映射路径位置;
+	 */
+	private String cateGoryMappingPath;
 
 	/**start dao**/
 	@Value1
@@ -102,6 +115,14 @@ public class TableViewModel {
 	/**start web.Action**/
 	@Value1
 	private String webActionFullPackageName;
+	@Value1
+	private String webActionRequestMapping;
+	@Value1
+	private String springJspViewResolverMiddleFullPath;
+	@Value1(def="edit")
+	private String webActionEditMethodName;
+	
+	
 	@Value1
 	private boolean genStringDate;
 	
@@ -128,6 +149,22 @@ public class TableViewModel {
 	@Value1(def="com.incito.zhcs.exception")
 	private String ierrorCodePackageName;
 	
+	public String getWebActionEditMethodName() {
+		return webActionEditMethodName;
+	}
+
+	public void setWebActionEditMethodName(String webActionEditMethodName) {
+		this.webActionEditMethodName = webActionEditMethodName;
+	}
+
+	public void setSpringJspViewResolverMiddleFullPath(String springJspViewResolverMiddleFullPath) {
+		this.springJspViewResolverMiddleFullPath = springJspViewResolverMiddleFullPath;
+	}
+
+	public void setWebActionRequestMapping(String webActionRequestMapping) {
+		this.webActionRequestMapping = webActionRequestMapping;
+	}
+
 	public String getBusinessExceptionPackageName() {
 		return businessExceptionPackageName;
 	}
@@ -359,43 +396,54 @@ public class TableViewModel {
 	
 	public String getPojoFullPackageName() {
 		if(pojoFullPackageName == null){
-			pojoFullPackageName = basePackageName + IConsant.PACKAGE_SEPARATE + pojoPackageName;
+			pojoFullPackageName = PathHelper.concatPackageName(basePackageName, pojoPackageName);
 		}
 		return pojoFullPackageName;
 	}
 	
 	public String getDaoFullPackageName() {
 		if(daoFullPackageName == null){
-			daoFullPackageName = basePackageName + IConsant.PACKAGE_SEPARATE + daoPackageName;
+			daoFullPackageName = PathHelper.concatPackageName(basePackageName, daoPackageName);
 		}
 		return daoFullPackageName;
 	}
 	
 	public String getServiceFullPackageName() {
 		if(serviceFullPackageName == null){
-			serviceFullPackageName = basePackageName + IConsant.PACKAGE_SEPARATE + servicePackageName;
+			serviceFullPackageName = PathHelper.concatPackageName(basePackageName, servicePackageName);
 		}
 		return serviceFullPackageName;
 	}
 	
 	public String getWebActionFullPackageName() {
 		if(webActionFullPackageName == null){
-			webActionFullPackageName = basePackageName + IConsant.PACKAGE_SEPARATE + webActionPackageName;
+			webActionFullPackageName = PathHelper.concatPackageName(basePackageName, webActionPackageName);
 		}
 		return webActionFullPackageName;
 	}
 	
 	public String getDaoImplFullPackageName() {
 		if(daoImplFullPackageName == null){
-			daoImplFullPackageName = getDaoFullPackageName() + IConsant.PACKAGE_SEPARATE + IConsant.INTERFACE_IMPL_PACKAGE_NAME;
+			daoImplFullPackageName = PathHelper.concatPackageName(getDaoFullPackageName(), IConsant.INTERFACE_IMPL_PACKAGE_NAME);
 		}
 		return daoImplFullPackageName;
 	}
 	
 	public String getServiceImplFullPackageName() {
 		if(serviceImplFullPackageName == null){
-			serviceImplFullPackageName = getServiceFullPackageName() + IConsant.PACKAGE_SEPARATE + IConsant.INTERFACE_IMPL_PACKAGE_NAME;
+			serviceImplFullPackageName = PathHelper.concatPackageName(getServiceFullPackageName(), IConsant.INTERFACE_IMPL_PACKAGE_NAME);
 		}
 		return serviceImplFullPackageName;
+	}
+	
+	public String getWebActionRequestMapping() {
+		if(webActionRequestMapping == null){
+			webActionRequestMapping = "/" + this.table.getEntityBeanName();
+		}
+		return webActionRequestMapping;
+	}
+	
+	public String getSpringJspViewResolverMiddleFullPath() {
+		return springJspViewResolverMiddleFullPath;
 	}
 }
