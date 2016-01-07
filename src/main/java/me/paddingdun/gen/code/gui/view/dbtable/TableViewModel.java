@@ -93,11 +93,15 @@ public class TableViewModel {
 	/**
 	 * 需要针对每个实体进行个性化设置;
 	 */
+	@Value1
 	private String cateGoryPackageName;
 	
 	/**
 	 * 需要针对每个实体页面进行个性化设置; 用于页面存放和页面映射路径位置;
+	 * 如果为null,将cateGoryPackageName获取最后一个包名称作为路径path;
+	 * 如果cateGoryPackageName为null或者空串表明放在根目录下;
 	 */
+	@Value1
 	private String cateGoryMappingPath;
 
 	/**start dao**/
@@ -115,10 +119,20 @@ public class TableViewModel {
 	/**start web.Action**/
 	@Value1
 	private String webActionFullPackageName;
+	
+	/**
+	 * 如果该值为null,则使用 cateGoryMappingPath  + entityBeanName
+	 * @return
+	 */
 	@Value1
 	private String webActionRequestMapping;
+	
+	/**
+	 * 如果该值为null,则使用
+	 */
 	@Value1
 	private String springJspViewResolverMiddleFullPath;
+	
 	@Value1(def="edit")
 	private String webActionEditMethodName;
 	
@@ -128,27 +142,39 @@ public class TableViewModel {
 	
 	
 	/**start special assistant class name or package name **/
-	@Value1(def="com.incito.zhcs.data.paging")
+	@Value1
 	private String idataCollectionPackageName;
 	
-	@Value1(def="com.incito.zhcs.data.paging.impl")
+	@Value1
 	private String defaultListDataCollectionPackageName;
 	
-	@Value1(def="com.incito.zhcs.data.paging")
+	@Value1
 	private String pagingPackageName;
 	
-	@Value1(def="com.incito.zhcs.util")
+	@Value1
 	private String gsonHelperPackageName;
 	
-	@Value1(def="com.incito.zhcs.data.json")
+	@Value1
 	private String jsonResultPackageName;
 	
-	@Value1(def="com.incito.zhcs.exception")
+	@Value1
 	private String businessExceptionPackageName;
 	
-	@Value1(def="com.incito.zhcs.exception")
+	@Value1
 	private String ierrorCodePackageName;
 	
+	public String getCateGoryPackageName() {
+		return cateGoryPackageName;
+	}
+
+	public void setCateGoryPackageName(String cateGoryPackageName) {
+		this.cateGoryPackageName = cateGoryPackageName;
+	}
+
+	public void setCateGoryMappingPath(String cateGoryMappingPath) {
+		this.cateGoryMappingPath = cateGoryMappingPath;
+	}
+
 	public String getWebActionEditMethodName() {
 		return webActionEditMethodName;
 	}
@@ -396,28 +422,28 @@ public class TableViewModel {
 	
 	public String getPojoFullPackageName() {
 		if(pojoFullPackageName == null){
-			pojoFullPackageName = PathHelper.concatPackageName(basePackageName, pojoPackageName);
+			pojoFullPackageName = PathHelper.concatPackageName(basePackageName, pojoPackageName, getCateGoryPackageName());
 		}
 		return pojoFullPackageName;
 	}
 	
 	public String getDaoFullPackageName() {
 		if(daoFullPackageName == null){
-			daoFullPackageName = PathHelper.concatPackageName(basePackageName, daoPackageName);
+			daoFullPackageName = PathHelper.concatPackageName(basePackageName, daoPackageName, getCateGoryPackageName());
 		}
 		return daoFullPackageName;
 	}
 	
 	public String getServiceFullPackageName() {
 		if(serviceFullPackageName == null){
-			serviceFullPackageName = PathHelper.concatPackageName(basePackageName, servicePackageName);
+			serviceFullPackageName = PathHelper.concatPackageName(basePackageName, servicePackageName, getCateGoryPackageName());
 		}
 		return serviceFullPackageName;
 	}
 	
 	public String getWebActionFullPackageName() {
 		if(webActionFullPackageName == null){
-			webActionFullPackageName = PathHelper.concatPackageName(basePackageName, webActionPackageName);
+			webActionFullPackageName = PathHelper.concatPackageName(basePackageName, webActionPackageName, getCateGoryPackageName());
 		}
 		return webActionFullPackageName;
 	}
@@ -436,14 +462,33 @@ public class TableViewModel {
 		return serviceImplFullPackageName;
 	}
 	
+	public String getCateGoryMappingPath() {
+		if(cateGoryMappingPath == null){
+			cateGoryMappingPath = PathHelper.lastPackageName(this.getCateGoryPackageName());
+		}
+		return cateGoryMappingPath;
+	}
+	
 	public String getWebActionRequestMapping() {
 		if(webActionRequestMapping == null){
-			webActionRequestMapping = "/" + this.table.getEntityBeanName();
+			webActionRequestMapping = PathHelper.concatMappingPath(this.getCateGoryMappingPath(), this.table.getEntityBeanName());
 		}
 		return webActionRequestMapping;
 	}
 	
+	/**
+	 * 获取jsp文件存放路径;
+	 *  jsp路径默认获取action映射路径;
+	 * @return
+	 */
+	public String getJspWebinfAfterDir() {
+		return this.getCateGoryMappingPath();
+	}
+	
 	public String getSpringJspViewResolverMiddleFullPath() {
+		if(springJspViewResolverMiddleFullPath == null){
+			springJspViewResolverMiddleFullPath = PathHelper.concatJspMiddlePath(getJspWebinfAfterDir(), this.table.getEntityBeanName());
+		}
 		return springJspViewResolverMiddleFullPath;
 	}
 }
