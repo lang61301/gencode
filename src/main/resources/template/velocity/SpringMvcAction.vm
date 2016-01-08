@@ -58,8 +58,8 @@ public class ${springWebActionJavaClassName} {
 	public ${jsonResultPackageName}.JsonResult2<String> ${webActionEditMethodName}(${pojoFullPackageName}.${table.entityBeanName} obj) {
 		${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${table.entityBeanName}> jr = new ${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${table.entityBeanName}>();
 		try{
-			boolean save = false;
-			#pks_isnull(${table.columns} ${sqlMapMarkUse})
+			#set($objName="obj")
+			boolean save = #pks_isnull(${table.columns} ${objName})
 			if(save){
 				service.${saveMethodPrefix}${table.entityBeanName}(obj);
 			}else{

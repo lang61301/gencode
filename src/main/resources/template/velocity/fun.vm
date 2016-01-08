@@ -17,7 +17,17 @@
 #foreach( $column in ${cols}) #if (${column.primary}) params.put(#if(${sqlMapMarkUse}==1)"${column.propertyName}"#else"${column.columnName}"#end, #if(${sqlMapMarkUse}==1)${column.propertyName}#else${column.columnName}#end); #end #end
 #end
 
-#macro( pks_isnull $cols $sqlMapMarkUse )
+#macro( pks_isnull $cols $objName )
 #set( $j = 0 )
-save = (#foreach( $column in ${cols}) #if (${column.primary}) #if ($j != 0) || #end (${column.javaType} #if(${sqlMapMarkUse}==1) ${column.propertyName} #else ${column.columnName} #end == null) #set($j = $j + 1) #end #end);
+(#foreach( $column in ${cols}) 
+	#if (${column.primary}) 
+		#if ($j != 0) || #end 
+		#if(${column.javaType} == "java.lang.String")
+			org.apache.commons.lang.StringUtils.isBlank(${objName}.${column.getMethod}())
+		#else
+			(${objName}.${column.getMethod}() == null)
+		#end
+		#set($j = $j + 1) 
+	#end 
+#end);
 #end
