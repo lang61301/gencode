@@ -117,4 +117,13 @@ public class GenFilenameHelper {
 	public static String springWebActionJavaFileName(String entityName){
 		return springWebActionJavaClassName(entityName) + ".java";
 	}
+	
+	/**
+	 * jsp page file name;
+	 * @param entityName
+	 * @return
+	 */
+	public static String bootstrapDataTableJspFileName(String entityName){
+		return entityName + ".html";
+	}
 }

@@ -10,6 +10,8 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * @author paddingdun
  *
@@ -76,6 +78,29 @@ public class FileHelper {
 	public static void genSpringWebActionJavaFile(String baseDir, String pkgName, String entityName, String fileContent){
 		String fileName = GenFilenameHelper.springWebActionJavaFileName(entityName);
 		genJavaFile(baseDir, pkgName, fileName, fileContent);
+	}
+	
+	public static void genBootstrapDataTableJspFile(String baseDir, String categoryDir, String entityName, String fileContent){
+
+		String fn = GenFilenameHelper.bootstrapDataTableJspFileName(entityName);
+		BufferedWriter bw = null;
+		try {
+			File dir = null;
+			if(StringUtils.isNotBlank(categoryDir)){
+				dir = new File(baseDir, categoryDir);
+			}else{
+				dir = new File(baseDir);
+			}
+			if(!dir.exists())
+				dir.mkdirs();
+			
+			bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(dir, fn)), Charset.forName("UTF-8")));
+			bw.write(fileContent);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			IOHelper.close(bw);
+		}
 	}
 
 	/**

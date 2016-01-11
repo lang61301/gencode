@@ -61,17 +61,8 @@ public class TableView extends AbstractView {
     	super();
     	this.perspective = perspective;
         initComponents();
-        
-        init();
     }
     
-    @Override
-    public void init(){
-    	super.init();
-    	
-    	model = SpringHelper.getBean(TableViewModel.class);
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -232,12 +223,10 @@ public class TableView extends AbstractView {
     	});
     	
     	spp.setDividerLocation(0.5);
-    	
-    	ModelHelper.simpleGetAndComplexSet(model, TableView.this);
     }
     
     private void btnGenActionPerformed(java.awt.event.ActionEvent evt) {
-    	if(model.getTable() != null){
+    	if(model!= null){
 	    	fileChooser.setFileSelectionMode(JFileChooser.SAVE_DIALOG|JFileChooser.DIRECTORIES_ONLY);
 	    	fileChooser.setCurrentDirectory(new File("C:\\Users\\admin\\Desktop"));
 	        int opt = fileChooser.showSaveDialog(null);
@@ -259,7 +248,8 @@ public class TableView extends AbstractView {
 			        	FileHelper.genSqlMapXmlFile(saveFile.getAbsolutePath(), model.getTable().getEntityBeanName(), sqlMapContent);
 //			        	System.out.println(sqlMapContent);
 			        	
-			        	System.out.println(VelocityHelper.dataTable(model));
+			        	String bootstrapDataTableJspContent = VelocityHelper.bootstrapDataTableJsp(model);
+			        	FileHelper.genBootstrapDataTableJspFile(saveFile.getAbsolutePath(), model.getJspWebinfAfterDir(), model.getTable().getEntityBeanName(), bootstrapDataTableJspContent);
 			        	
 			        	String sqlMapIDaoContent = VelocityHelper.sqlMapIDao(model);
 			        	FileHelper.genSqlMapIDaoJavaFile(saveFile.getAbsolutePath(), model.getDaoFullPackageName(), model.getTable().getEntityBeanName(), sqlMapIDaoContent);
@@ -333,6 +323,12 @@ public class TableView extends AbstractView {
     
     
     
+    private void initModel(Table t){
+    	model = SpringHelper.getBean(TableViewModel.class);
+    	ModelHelper.simpleGetAndComplexSet(model, TableView.this);
+    	model.setTable(t);
+    }
+    
     // End of variables declaration//GEN-END:variables
 
 	/* (non-Javadoc)
@@ -347,10 +343,10 @@ public class TableView extends AbstractView {
 			TaskHelper.runInNonEDT(new Callable<Integer[]>() {
 				public Integer[] call() throws Exception {
 					
+					initModel(t);
+					
 					List<TableColumn> list_tr = TableHelper.tableColumn(t.getCat(), t.getTableName());
 					t.setColumns(list_tr);
-					
-					model.setTable(t);
 					
 					Vector<Vector<Object>> v = TableHelper.transform1(list_tr);
 					Vector<Object> v2 = new Vector<Object>();

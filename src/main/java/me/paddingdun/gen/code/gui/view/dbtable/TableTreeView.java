@@ -36,8 +36,6 @@ public class TableTreeView extends  AbstractView {
     	super();
     	this.perspective = perspective;
         initComponents();
-        
-        init();
     }
 
     /**

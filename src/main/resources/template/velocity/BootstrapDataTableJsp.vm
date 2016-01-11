@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title></title>
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link href="//cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+
+  </head>
+  <body>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12 col-md-12 main">
+        <table id="table_id" class="table table-striped table-bordered" width="100%" cellspacing="0">
+		 <thead>
+				 <tr>
+				 #foreach( $column in $table.columns)<th>${column.columnCommon}</th>#end
+				 </tr>
+			</thead>
+		 <tbody>
+		 </tbody>
+		</table>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">编辑</h4>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+		    <div class="row">
+				<div class="col-md-12">
+					<form class="form-horizontal" role="form">
+						<div class="form-group">
+							<label for="inputEmail3" class="col-sm-2 control-label">
+								Email
+							</label>
+							<div class="col-sm-10">
+								<input type="email" class="form-control" id="inputEmail3">
+							</div>
+						</div>
+						<div class="form-group">
+							 
+							<label for="inputPassword3" class="col-sm-2 control-label">
+								Password
+							</label>
+							<div class="col-sm-10">
+								<input type="password" class="form-control" id="inputPassword3">
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-10">
+								<div class="checkbox">
+									 
+									<label>
+										<input type="checkbox"> Remember me
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-10">
+								 
+								<button type="submit" class="btn btn-default">
+									Sign in
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+      	</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary saveEdit">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	/**var table = Tables.initTable($("#table_id"), {
+		"processing":true,
+		"serverSide": true,
+		"createdRow": function ( row, data, index ) {
+        },
+        columnDefs:[
+					{'targets':0,
+						 'width':'20',
+						 "orderable": false,
+						 "searchable": false,
+				         'className': " "
+						 "render":function render( data, type, row, meta ){
+							 return '<input type="checkbox" value="' + data[""]+ '">';
+						 }
+					},
+					{
+			         'targets': [-1], 
+			         'width':'80',
+			      	  "render":function render( data, type, row, meta ){
+						 return '<button type="button" class="btn btn-primary" onclick="edit(' + row["diTaskId"]+')">编辑</button>'+
+						 '<button type="button" class="btn btn-primary" style="margin-top:5px;" onclick="change(' + row["diTaskId"]+', '+ row["diTaskStatus"] +')">'+(row["diTaskStatus"] == 1 ? "停止":"启动") +'</button>'+
+						 '<button type="button" class="btn btn-primary" style="margin-top:5px;" onclick="hurry(' + row["diTaskId"]+', this)">手动执行</button>' +
+						 '<button type="button" class="btn btn-primary showLog" style="margin-top:5px;" >显示日志</button>';
+					 }
+				 	}
+					 ],
+        columns:[{"data":"diTaskModel", "defaultContent":""}  , {"data":"diTaskName", "defaultContent":""}  , {"data":"diTaskDes", "defaultContent":""}  , {"data":"diTrigger", "defaultContent":""}  ,
+                 {"data":null, "defaultContent":"", "render":function render( data, type, row, meta ){
+					 return row["diTaskStatus"] == 1 ? '运行':'停止';}}  , {"data":"remoteUrl", "defaultContent":""}  , {"data":"createTimeStr", "defaultContent":""}  , {"data":"lastUpdateTimeStr", "defaultContent":""}  , {"data":"diTaskImplClass", "defaultContent":""}  , {"data":"lastRunDatetimeStr", "defaultContent":""} 
+					 , {"data":null, "defaultContent":"", "render":function render( data, type, row, meta ){
+						 return row["lastRunStatus"] == undefined ? '':(row["lastRunStatus"]==1?'成功':'失败');}} 
+        		 ,{"data":null, "defaultContent":""}]
+        ,"ajax":{
+			"url":"${_ctx}/ditask/list",
+			"dataType": "json",
+			"type":"post",
+			"dataSrc":function(json){
+				json.recordsTotal = json.data.total;
+				json.recordsFiltered = json.data.total;
+				
+				var data = json["data"]["data"];
+				return data;
+			},
+			"data":function(d){
+				plainfy_datatables(d);
+			},
+			"complete":function(d){
+			}
+			
+		}
+	});**/
+	
+	$(".saveEdit").on("click", function(){
+		$.blockUI({"baseZ":2001,
+			"message":"<h2>保存中...</h2>",
+			"css":{border:		'',
+				backgroundColor:''}});
+		var diTaskId = $("#diTaskId").val();
+		var diTrigger = $("#diTrigger").val();
+		var remoteUrl = $("#remoteUrl").val();
+		$.ajax("ditask/edit", {data:{"diTaskId":diTaskId, "diTrigger":diTrigger, "remoteUrl":remoteUrl}, type:"post",
+    		dataType:"json", success:function(d){
+    			alert(d.msg);
+    			if(d.status == 0){
+    				$('#editModal').modal('hide');
+    				$("#table_id").DataTable().draw();
+    			}
+    		},error:function(e){
+    			
+    		},complete:function(e){
+    			/**$("#diTaskId").val("");
+				$("#diTrigger").val("");
+				$("#remoteUrl").val("");**/
+    			$.unblockUI();
+    		}});
+	});
+});
+
+function edit(id){
+	$.ajax("ditask/get", {data:{"id":id}, type:"get",
+		dataType:"json", success:function(d){
+			if(d.status == 0){
+				var o = d.data;
+				$("#diTaskId").val(o.diTaskId);
+				$("#diTrigger").val(o.diTrigger);
+				$("#remoteUrl").val(o.remoteUrl);
+				$("#des1").html(o.diTaskDes);
+				$('#editModal').modal({
+		   		  keyboard: false
+		   		});
+			}else{
+				alert(d.msg);
+			}
+		}});
+}
+</script>
+</body>
+</html>
+
+
+<!--columns:[#foreach( $column in $table.columns) #if ($velocityCount != 1), #end 
+{"data":"${column.propertyName}", "defaultContent":""} #end]
+
+columns:[#foreach( $column in $table.columns) #if ($velocityCount != 1), #end 
+{"data":"${column.columnName}", "defaultContent":""} #end]
+		
+#foreach( $column in $table.columns)
+#if(${foreach.count} != 1),#end new ReportColumn("${column.propertyName}","",new ReportType[0],ReportColumn.RANGE_TYPE)
+#end
+-->

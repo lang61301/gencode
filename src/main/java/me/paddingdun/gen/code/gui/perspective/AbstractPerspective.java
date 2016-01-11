@@ -3,8 +3,11 @@
  */
 package me.paddingdun.gen.code.gui.perspective;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.beanutils.BeanUtils;
 
 import me.paddingdun.gen.code.data.message.Message;
 import me.paddingdun.gen.code.gui.view.IView;
@@ -40,8 +43,15 @@ public abstract class AbstractPerspective implements IPerspective {
 					&& !views.isEmpty()){
 				for(IView v : views){
 					if(v != message.getSource()){
-						message.setTarget(v);
-						v.receiveMessage(message);
+						//复制消息;
+						Message newMessage = new Message();
+						try {
+							BeanUtils.copyProperties(newMessage, message);
+							newMessage.setTarget(v);
+							v.receiveMessage(newMessage);
+						} catch (Exception e) {
+							e.printStackTrace();
+						} 
 					}
 				}
 			}

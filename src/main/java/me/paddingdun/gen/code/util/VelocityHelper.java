@@ -74,9 +74,9 @@ public class VelocityHelper {
 		return s;
 	}
 	
-	public static String dataTable(TableViewModel tableViewModel){
-		String s = rawTable(tableViewModel, "template/velocity/DataTable.vm");
-		return s;
+	public static String bootstrapDataTableJsp(TableViewModel tableViewModel){
+		String s = rawTable(tableViewModel, "template/velocity/BootstrapDataTableJsp.vm");
+    	return s;
 	}
 	
 	public static String sqlMapIDao(TableViewModel tableViewModel){

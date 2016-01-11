@@ -20,6 +20,10 @@ public  abstract class AbstractView extends javax.swing.JInternalFrame implement
 	
 	protected boolean running = true;
 	
+	public AbstractView(){
+		init();
+	}
+	
 	/**
 	 * 启动消息队列;
 	 */
