@@ -138,6 +138,11 @@ public class TableColumn implements Serializable {
 	 */
 	private int editRenderWay  = RenderWayType.edit_default.getType();
 	
+	/**
+	 * 列标题;
+	 */
+	private String columnTitle;
+	
 	public boolean isQueryRenderShow() {
 		return queryRenderShow;
 	}
@@ -173,5 +178,14 @@ public class TableColumn implements Serializable {
 	}
 	public void setEditRenderWay(int editRenderWay) {
 		this.editRenderWay = editRenderWay;
+	}
+	public String getColumnTitle() {
+		if(columnTitle == null){
+			columnTitle = columnCommon;
+		}
+		return columnTitle;
+	}
+	public void setColumnTitle(String columnTitle) {
+		this.columnTitle = columnTitle;
 	}
 }

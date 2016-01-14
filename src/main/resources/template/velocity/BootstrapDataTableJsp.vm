@@ -1,3 +1,4 @@
+#parse("template/velocity/jspComponent.vm")
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -58,7 +59,7 @@
 				 <tr>
 				 #foreach( $column in $table.jspColumns)
 					#if( ${column.listRender.show} )
-						<th>${column.columnCommon}</th>
+						<th>${column.listRender.title}</th>
 					#end
 				#end
 				 </tr>
@@ -153,11 +154,7 @@ $(document).ready(function(){
 				 	}
 					 ],
         columns:[
-        #foreach( $column in $table.jspColumns)
-			#if( ${column.listRender.show} )
-				${column.listRender.render}
-			#end
-		#end
+        #datatable_columns($table.jspColumns)
         ]
         ,"ajax":{
 			"url":"${_ctx}${webActionRequestMapping}${queryPagingMethodPrefix}",

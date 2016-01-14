@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<snippets>
+	<snippet name="list_text">
+	<![CDATA[
+		{"data":"{0}", "defaultContent":"{1}"}
+	]]> 
+	</snippet>
+	<snippet name="list_checkbox">
+	<![CDATA[
+		{"data":"{0}", "defaultContent":"{1}",
+		 "render":function( data, type, row, meta ){
+		 	return "<input type='checkbox' class='list_checkbox' value='" + data + "'>";
+		 }
+		}
+	]]> 
+	</snippet>
+	<snippet name="list_customer">
+	<![CDATA[
+		{"data":"{0}", "defaultContent":"{1}",
+		 {2}
+		}
+	]]> 
+	</snippet>
+
+
+	<snippet name="edit_input">
+	<![CDATA[
+		<div class="form-group">
+			<label for="{0}" class="col-sm-2 control-label">
+			{1}
+			</label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control" id="{0}" name="{0}">
+			</div>
+		</div>
+	]]> 
+	</snippet>
+	<snippet name="edit_hidden">
+	<![CDATA[
+		<input type="hidden" id="{0}" name="{0}">
+	]]> 
+	</snippet>
+	<snippet name="edit_checkbox">
+	<![CDATA[
+		<div class="form-group">
+			<label for="{0}" class="col-sm-2 control-label">
+			{1}
+			</label>
+			<div class="col-sm-10">
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="{0}" name="{0}"> 
+					</label>
+				</div>
+			</div>
+		</div>
+	]]> 
+	</snippet>
+</snippets>

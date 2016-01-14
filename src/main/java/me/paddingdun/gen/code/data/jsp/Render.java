@@ -12,6 +12,10 @@ public class Render {
 
 	private String render;
 	
+	public Render(){
+		
+	}
+	
 	public Render(String render){
 		this.render = render;
 	}

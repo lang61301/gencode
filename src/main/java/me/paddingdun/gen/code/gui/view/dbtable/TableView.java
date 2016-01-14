@@ -106,6 +106,8 @@ public class TableView extends AbstractView {
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        columnTitle = new javax.swing.JTextField();
         jcombo_showGsonAnnotation = new javax.swing.JComboBox<Option<Boolean>>();
         jcombo_queryRenderShow = new javax.swing.JComboBox<Option<Boolean>>();
         jcombo_listRenderShow = new javax.swing.JComboBox<Option<Boolean>>();
@@ -165,10 +167,12 @@ public class TableView extends AbstractView {
         jLabel14.setText("编辑中是否显示");
         jLabel15.setText("编辑中显示方式");
         
+        jLabel16.setText("字段标题");
+        
         TableLayout tableLayout_ptba = new TableLayout();
         double border = 2;			      //0      1    2     3    4     5     6
         tableLayout_ptba.setColumn(new double[]{border, 50,  50,   80,  -1,  50,   70, border});
-        tableLayout_ptba.setRow(new double[]{border,30, 30, 30, 30, 30, 30, border});
+        tableLayout_ptba.setRow(new double[]{border,30, 30, 30, 30, 30, 30, 30, border});
         ptba.setLayout(tableLayout_ptba);
         
         queryRenderShow.addElement(CollectionHelper.option("是", Boolean.TRUE));
@@ -209,6 +213,9 @@ public class TableView extends AbstractView {
         ptba.add(jcombo_editRenderShow, "3,5,4,5");
         ptba.add(jLabel15, "1,6,2,6");
         ptba.add(jcombo_editRenderWay, "3,6,4,6");
+        
+        ptba.add(jLabel16, "1,7,2,7");
+        ptba.add(columnTitle, "3,7,4,7");
 
 //        showGsonAnnotation.setModel(null);
 
@@ -227,7 +234,7 @@ public class TableView extends AbstractView {
         TableLayout tableLayout_pba = new TableLayout();
 //        double border = 2;			      //0      1    2     3    4     5     6
         tableLayout_pba.setColumn(new double[]{border, 50,  50,   80,  -1,  50,   70, border});
-        tableLayout_pba.setRow(new double[]{border,30, 30, 30, 30, 30, 30, 30, 30, 30, border});
+        tableLayout_pba.setRow(new double[]{border,30, 30, 30, 30, 30, 30, 30, 30, 30, 30, border});
         pba.setLayout(tableLayout_pba);
         
         pba.add(jLabel1, "1,1,2,1");
@@ -482,6 +489,9 @@ public class TableView extends AbstractView {
     @ModelValue(category=ModelValueCategory.Column)
     private OptionComboBoxModel<Boolean> editRenderShow = new OptionComboBoxModel<Boolean>();
     
+    private javax.swing.JLabel jLabel16;
+    @ModelValue(category=ModelValueCategory.Column, valueGetFuncName = "getText", valueSetFuncName ="setText")
+    private javax.swing.JTextField columnTitle; 
     
     
     private void initModel(Table t){
