@@ -5,6 +5,8 @@ package me.paddingdun.gen.code.data.table;
 
 import java.io.Serializable;
 
+import me.paddingdun.gen.code.data.jsp.RenderWayType;
+
 /**
  * @author paddingdun
  *
@@ -106,5 +108,70 @@ public class TableColumn implements Serializable {
 	}
 	public void setGson(boolean gson) {
 		this.gson = gson;
+	}
+	
+	
+	/***jsp使用********************************************************************************/
+	/**
+	 * 是否显示;
+	 */
+	private boolean queryRenderShow = true;
+	/**
+	 * 是否显示;
+	 */
+	private boolean listRenderShow = true;
+	/**
+	 * 是否显示;
+	 */
+	private boolean editRenderShow = true;
+	
+	/**
+	 * 用来定义查询显示方式;
+	 */
+	private int queryRenderWay = RenderWayType.query_default.getType();
+	/**
+	 * 用来定义列表显示方式;
+	 */
+	private int listRenderWay  = RenderWayType.list_default.getType();
+	/**
+	 * 用来定义编辑列显示方式;
+	 */
+	private int editRenderWay  = RenderWayType.edit_default.getType();
+	
+	public boolean isQueryRenderShow() {
+		return queryRenderShow;
+	}
+	public void setQueryRenderShow(boolean queryRenderShow) {
+		this.queryRenderShow = queryRenderShow;
+	}
+	public boolean isListRenderShow() {
+		return listRenderShow;
+	}
+	public void setListRenderShow(boolean listRenderShow) {
+		this.listRenderShow = listRenderShow;
+	}
+	public boolean isEditRenderShow() {
+		return editRenderShow;
+	}
+	public void setEditRenderShow(boolean editRenderShow) {
+		this.editRenderShow = editRenderShow;
+	}
+	public int getQueryRenderWay() {
+		return queryRenderWay;
+	}
+	public void setQueryRenderWay(int queryRenderWay) {
+		this.queryRenderWay = queryRenderWay;
+	}
+	public int getListRenderWay() {
+		return listRenderWay;
+	}
+	public void setListRenderWay(int listRenderWay) {
+		this.listRenderWay = listRenderWay;
+	}
+	public int getEditRenderWay() {
+		return editRenderWay;
+	}
+	public void setEditRenderWay(int editRenderWay) {
+		this.editRenderWay = editRenderWay;
 	}
 }

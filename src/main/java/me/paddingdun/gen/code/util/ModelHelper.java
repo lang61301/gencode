@@ -5,13 +5,22 @@ package me.paddingdun.gen.code.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.MethodUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 
+import me.paddingdun.gen.code.data.jsp.Render;
 import me.paddingdun.gen.code.data.option.ModelValue;
+import me.paddingdun.gen.code.data.option.ModelValueCategory;
+import me.paddingdun.gen.code.data.table.JspColumn;
+import me.paddingdun.gen.code.data.table.TableColumn;
+import me.paddingdun.gen.code.data.tabletree.Table;
+import me.paddingdun.gen.code.gui.view.dbtable.TableViewModel;
 
 /**
  * @author paddingdun
@@ -49,6 +58,10 @@ public class ModelHelper {
 	 * @param dest
 	 */
 	public static void complexGetAndSimpleSet(Object src, Object dest){
+		complexGetAndSimpleSet(src, dest, ModelValueCategory.Default);
+	}
+	
+	public static void complexGetAndSimpleSet(Object src, Object dest, ModelValueCategory category){
 		if(src != null
 				&& dest != null){
 			Field[] fields = src.getClass().getDeclaredFields();
@@ -57,7 +70,8 @@ public class ModelHelper {
 				String pName = field.getName();
 				Class<?> clazz = field.getDeclaringClass();
 				ModelValue mv = field.getAnnotation(ModelValue.class);
-				if(mv != null){
+				if(mv != null
+						&& mv.category() == category){
 					String valueGetFuncName = mv.valueGetFuncName();
 					try {
 						field.setAccessible(true);
@@ -87,6 +101,10 @@ public class ModelHelper {
 	 * @param dest
 	 */
 	public static void simpleGetAndComplexSet(Object src, Object dest){
+		simpleGetAndComplexSet(src, dest, ModelValueCategory.Default);
+	}
+	
+	public static void simpleGetAndComplexSet(Object src, Object dest, ModelValueCategory category){
 		if(src != null 
 				&& dest != null){
 			Field[] fields = dest.getClass().getDeclaredFields();
@@ -95,7 +113,8 @@ public class ModelHelper {
 				String pName = field.getName();
 				Class<?> clazz = field.getDeclaringClass();
 				ModelValue mv = field.getAnnotation(ModelValue.class);
-				if(mv != null){
+				if(mv != null
+						&& mv.category() == category){
 					String valueSetFuncName = mv.valueSetFuncName();
 					try {
 						field.setAccessible(true);
@@ -109,22 +128,61 @@ public class ModelHelper {
 								System.out.println(pName);
 							}else
 								try{
-							MethodUtils.invokeMethod(field_object, valueSetFuncName, new Object[]{value});
+									MethodUtils.invokeMethod(field_object, valueSetFuncName, new Object[]{value});
 								}catch(Exception e4){
-									System.out.println(field_object.getClass() + "==========" + pName + "|" + valueSetFuncName);
 									throw new RuntimeException(e4);
 								}
 						}
-					} catch (IllegalAccessException e) {
-						e.printStackTrace();
-					} catch (InvocationTargetException e) {
-						e.printStackTrace();
-					} catch (NoSuchMethodException e) {
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
 			}
 		}
+	}
+	
+	/**
+	 * 加工model,准备数据;
+	 * @param tableViewModel
+	 */
+	public static void processTableViewModel(TableViewModel tableViewModel){
+		Table table = tableViewModel.getTable();
+		table.setEntityBeanName(TableHelper.table(table.getTableName()));
+		List<TableColumn> list = table.getColumns();
+		//补全column 属性
+		/**
+		 * pojo用;
+		 * 1.设置javaType
+		 * 2.设置属性名称
+		 * 3.设置set方法名称
+		 * 4.设置get方法名称
+		 * 5.设置是否显示gson的annotation
+		 * 
+		**/
+		List<JspColumn> jspColumns = new ArrayList<JspColumn>();
+		for (TableColumn tc : list) {
+			tc.setJavaType(TypesHelper.map_types.get(tc.getType()));
+			String pn = TableHelper.col(tc.getColumnName());
+			tc.setPropertyName(pn);
+			tc.setSetMethod(TableHelper.set(pn));
+			tc.setGetMethod(TableHelper.get(pn, tc.getType()));
+			tc.setGson(tableViewModel.getShowGsonAnnotation());
+			
+			JspColumn jspColumn = new JspColumn(tc.getColumnName(), tc.getType(), tc.getColumnCommon());
+			try{
+				BeanUtils.copyProperties(jspColumn, tc);
+			}catch(Exception e){
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+			
+			jspColumn.setQueryRender(RenderHelper.createQueryRender(jspColumn, tableViewModel.getSqlMapMarkUse(), tc.isQueryRenderShow()));
+			jspColumn.setEditRender(RenderHelper.createEditRender(jspColumn, tableViewModel.getSqlMapMarkUse(), tc.isEditRenderShow()));
+			jspColumn.setListRender(RenderHelper.createListRender(jspColumn, tableViewModel.getSqlMapMarkUse(), tc.isListRenderShow()));
+			jspColumns.add(jspColumn);
+		}
+		//生成jspcolumn;
+		tableViewModel.getTable().setJspColumns(jspColumns);
 	}
 
 }

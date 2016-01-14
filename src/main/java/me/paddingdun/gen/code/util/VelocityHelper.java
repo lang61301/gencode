@@ -4,7 +4,6 @@
 package me.paddingdun.gen.code.util;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -16,8 +15,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 
-import me.paddingdun.gen.code.data.table.TableColumn;
-import me.paddingdun.gen.code.data.tabletree.Table;
 import me.paddingdun.gen.code.gui.view.dbtable.TableViewModel;
 
 /**
@@ -45,17 +42,6 @@ public class VelocityHelper {
 	private VelocityEngine  engine;
 	
 	private static String rawTable(TableViewModel tableViewModel, String templateName){
-		Table table = tableViewModel.getTable();
-		table.setEntityBeanName(TableHelper.table(table.getTableName()));
-		List<TableColumn> list = table.getColumns();
-		for (TableColumn tc : list) {
-			tc.setJavaType(TypesHelper.map_types.get(tc.getType()));
-			String pn = TableHelper.col(tc.getColumnName());
-			tc.setPropertyName(pn);
-			tc.setSetMethod(TableHelper.set(pn));
-			tc.setGetMethod(TableHelper.get(pn, tc.getType()));
-			tc.setGson(tableViewModel.getShowGsonAnnotation());
-		}
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("date", DateHelper.now());
 		CollectionHelper.object2Map(tableViewModel, model);

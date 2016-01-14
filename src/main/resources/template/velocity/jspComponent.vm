@@ -1,0 +1,22 @@
+#macro( edit_input $column )
+<div class="form-group">
+	<label for="${column.propertyName}" class="col-sm-2 control-label">
+	${column.columnCommon}
+	</label>
+	<div class="col-sm-10">
+		<input type="text" class="form-control" id="${column.propertyName}">
+	</div>
+</div>
+#end
+
+#macro( edit_hidden $column )
+<input type="hidden" id="${column.propertyName}" name="${column.propertyName}">
+<div class="form-group">
+	<label for="${column.propertyName}" class="col-sm-2 control-label">
+	${column.columnCommon}
+	</label>
+	<div class="col-sm-10">
+		<input type="text" class="form-control" id="${column.propertyName}">
+	</div>
+</div>
+#end

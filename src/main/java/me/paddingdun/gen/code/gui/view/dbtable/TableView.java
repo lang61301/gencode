@@ -20,8 +20,10 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
 
 import layout.TableLayout;
+import me.paddingdun.gen.code.data.jsp.RenderWayType;
 import me.paddingdun.gen.code.data.message.Message;
 import me.paddingdun.gen.code.data.option.ModelValue;
+import me.paddingdun.gen.code.data.option.ModelValueCategory;
 import me.paddingdun.gen.code.data.option.Option;
 import me.paddingdun.gen.code.data.table.TableColumn;
 import me.paddingdun.gen.code.data.tabletree.Table;
@@ -77,14 +79,18 @@ public class TableView extends AbstractView {
         setResizable(true);
         setTitle("数据库表详细内容");
         fileChooser = new javax.swing.JFileChooser();
-        spp = new javax.swing.JSplitPane();
-        sp = new javax.swing.JScrollPane();
+        p = new javax.swing.JSplitPane();
+        pt = new javax.swing.JSplitPane();
+        ptt = new javax.swing.JScrollPane();
+        ptb = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
-        sp2 = new javax.swing.JScrollPane();
-        pane = new javax.swing.JPanel();
+        pb = new javax.swing.JScrollPane();
+        pba = new javax.swing.JPanel();
+        ptba = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         basePackageName = new javax.swing.JTextField();
         btnGen = new javax.swing.JButton();
+        btnOk = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jcombo_sqlMapMarkUse = new javax.swing.JComboBox<Option<Integer>>();
         jLabel3 = new javax.swing.JLabel();
@@ -94,7 +100,19 @@ public class TableView extends AbstractView {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
         jcombo_showGsonAnnotation = new javax.swing.JComboBox<Option<Boolean>>();
+        jcombo_queryRenderShow = new javax.swing.JComboBox<Option<Boolean>>();
+        jcombo_listRenderShow = new javax.swing.JComboBox<Option<Boolean>>();
+        jcombo_editRenderShow = new javax.swing.JComboBox<Option<Boolean>>();
+        jcombo_queryRenderWay = new javax.swing.JComboBox<Option<Integer>>();
+        jcombo_listRenderWay = new javax.swing.JComboBox<Option<Integer>>();
+        jcombo_editRenderWay = new javax.swing.JComboBox<Option<Integer>>();
         saveMethodPrefix = new javax.swing.JTextField();
         updateMethodPrefix = new javax.swing.JTextField();
         getMethodPrefix = new javax.swing.JTextField();
@@ -102,17 +120,23 @@ public class TableView extends AbstractView {
         queryMethodPrefix = new javax.swing.JTextField();
         queryPagingMethodPrefix = new javax.swing.JTextField();
         
-        spp.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+        p.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+        pt.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+        ptt.setViewportView(table);
 
-        sp.setViewportView(table);
-
-        spp.setLeftComponent(sp);
-
-        sp2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-
+        p.setLeftComponent(pt);
+        
+        pt.setTopComponent(ptt);
+        pt.setBottomComponent(ptb);
+        
+        pb.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        ptb.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        ptb.setViewportView(ptba);
+        
         jLabel1.setText("基础包名称");
 
         btnGen.setText("生成");
+        btnOk.setText("Ok");
 
         jLabel2.setText("SQL传入值占位符");
 
@@ -131,6 +155,60 @@ public class TableView extends AbstractView {
         jLabel8.setText("分页方法前缀");
 
         jLabel9.setText("是否显示gosn注释");
+        
+        jLabel10.setText("查询中是否显示");
+        jLabel11.setText("查询中显示方式");
+        
+        jLabel12.setText("列表中是否显示");
+        jLabel13.setText("列表中显示方式");
+        
+        jLabel14.setText("编辑中是否显示");
+        jLabel15.setText("编辑中显示方式");
+        
+        TableLayout tableLayout_ptba = new TableLayout();
+        double border = 2;			      //0      1    2     3    4     5     6
+        tableLayout_ptba.setColumn(new double[]{border, 50,  50,   80,  -1,  50,   70, border});
+        tableLayout_ptba.setRow(new double[]{border,30, 30, 30, 30, 30, 30, border});
+        ptba.setLayout(tableLayout_ptba);
+        
+        queryRenderShow.addElement(CollectionHelper.option("是", Boolean.TRUE));
+        queryRenderShow.addElement(CollectionHelper.option("否", Boolean.FALSE));
+        jcombo_queryRenderShow.setModel(queryRenderShow);
+        
+        listRenderShow.addElement(CollectionHelper.option("是", Boolean.TRUE));
+        listRenderShow.addElement(CollectionHelper.option("否", Boolean.FALSE));
+        jcombo_listRenderShow.setModel(listRenderShow);
+        
+        editRenderShow.addElement(CollectionHelper.option("是", Boolean.TRUE));
+        editRenderShow.addElement(CollectionHelper.option("否", Boolean.FALSE));
+        jcombo_editRenderShow.setModel(editRenderShow);
+        
+        
+        
+        CollectionHelper.renderWayOption(queryRenderWay,"query");
+        jcombo_queryRenderWay.setModel(queryRenderWay);
+
+        CollectionHelper.renderWayOption(listRenderWay,"list");
+        jcombo_listRenderWay.setModel(listRenderWay);
+
+        CollectionHelper.renderWayOption(editRenderWay,"edit");
+        jcombo_editRenderWay.setModel(editRenderWay);
+        
+        ptba.add(jLabel10, "1,1,2,1");
+        ptba.add(jcombo_queryRenderShow, "3,1,4,1");
+        ptba.add(btnOk, "6,1");
+        ptba.add(jLabel11, "1,2,2,2");
+        ptba.add(jcombo_queryRenderWay, "3,2,4,2");
+        
+        ptba.add(jLabel12, "1,3,2,3");
+        ptba.add(jcombo_listRenderShow, "3,3,4,3");
+        ptba.add(jLabel13, "1,4,2,4");
+        ptba.add(jcombo_listRenderWay, "3,4,4,4");
+        
+        ptba.add(jLabel14, "1,5,2,5");
+        ptba.add(jcombo_editRenderShow, "3,5,4,5");
+        ptba.add(jLabel15, "1,6,2,6");
+        ptba.add(jcombo_editRenderWay, "3,6,4,6");
 
 //        showGsonAnnotation.setModel(null);
 
@@ -140,39 +218,45 @@ public class TableView extends AbstractView {
             }
         });
         
-        TableLayout tableLayout = new TableLayout();
-        double border = 2;			      //0      1    2     3    4     5     6
-        tableLayout.setColumn(new double[]{border, 50,  50,   80,  -1,  50,   70, border});
-        tableLayout.setRow(new double[]{border,30, 30, 30, 30, 30, 30, 30, 30, 30, border});
-        pane.setLayout(tableLayout);
+        btnOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOkActionPerformed(evt);
+            }
+        });
         
-        pane.add(jLabel1, "1,1,2,1");
-        pane.add(basePackageName, "3,1,5,1");
-        pane.add(btnGen, "6,1");
+        TableLayout tableLayout_pba = new TableLayout();
+//        double border = 2;			      //0      1    2     3    4     5     6
+        tableLayout_pba.setColumn(new double[]{border, 50,  50,   80,  -1,  50,   70, border});
+        tableLayout_pba.setRow(new double[]{border,30, 30, 30, 30, 30, 30, 30, 30, 30, border});
+        pba.setLayout(tableLayout_pba);
         
-        pane.add(jLabel2, "1,2,2,2");
-        pane.add(jcombo_sqlMapMarkUse, "3,2,4,2");
+        pba.add(jLabel1, "1,1,2,1");
+        pba.add(basePackageName, "3,1,5,1");
+        pba.add(btnGen, "6,1");
         
-        pane.add(jLabel9, "1,3,2,3");
-        pane.add(jcombo_showGsonAnnotation, "3,3,4,3");
+        pba.add(jLabel2, "1,2,2,2");
+        pba.add(jcombo_sqlMapMarkUse, "3,2,4,2");
         
-        pane.add(jLabel3, "1,4,2,4");
-        pane.add(saveMethodPrefix, "3,4,4,4");
+        pba.add(jLabel9, "1,3,2,3");
+        pba.add(jcombo_showGsonAnnotation, "3,3,4,3");
         
-        pane.add(jLabel4, "1,5,2,5");
-        pane.add(updateMethodPrefix, "3,5,4,5");
+        pba.add(jLabel3, "1,4,2,4");
+        pba.add(saveMethodPrefix, "3,4,4,4");
         
-        pane.add(jLabel5, "1,6,2,6");
-        pane.add(getMethodPrefix, "3,6,4,6");
+        pba.add(jLabel4, "1,5,2,5");
+        pba.add(updateMethodPrefix, "3,5,4,5");
         
-        pane.add(jLabel6, "1,7,2,7");
-        pane.add(deleteMethodPrefix, "3,7,4,7");
+        pba.add(jLabel5, "1,6,2,6");
+        pba.add(getMethodPrefix, "3,6,4,6");
         
-        pane.add(jLabel7, "1,8,2,8");
-        pane.add(queryMethodPrefix, "3,8,4,8");
+        pba.add(jLabel6, "1,7,2,7");
+        pba.add(deleteMethodPrefix, "3,7,4,7");
         
-        pane.add(jLabel8, "1,9,2,9");
-        pane.add(queryPagingMethodPrefix, "3,9,4,9");
+        pba.add(jLabel7, "1,8,2,8");
+        pba.add(queryMethodPrefix, "3,8,4,8");
+        
+        pba.add(jLabel8, "1,9,2,9");
+        pba.add(queryPagingMethodPrefix, "3,9,4,9");
         
         
         sqlMapMarkUse.addElement(CollectionHelper.option("属性名称", 1));
@@ -185,19 +269,19 @@ public class TableView extends AbstractView {
        
        
         
-        sp2.setViewportView(pane);
+        pb.setViewportView(pba);
 
-        spp.setBottomComponent(sp2);
+        p.setBottomComponent(pb);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(spp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
+            .addComponent(p, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(spp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
+            .addComponent(p, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
         );
         
 
@@ -218,11 +302,52 @@ public class TableView extends AbstractView {
     	table.addMouseListener(new MouseAdapter() {
     	    @Override
     	    public void mouseClicked(MouseEvent e){
-    	    	System.out.println(table.getSelectedRow());
+    	    	if(model != null
+    	    			&& model.getTable() != null
+    	    			&& model.getTable().getColumns() != null){
+    	    		TaskHelper.runInNonEDT(new Callable<Void>() {
+						public Void call() throws Exception {
+							int index = table.getSelectedRow();
+		    	    		List<TableColumn> list = model.getTable().getColumns();
+		    	    		if(index < list.size()){
+		    	    			final TableColumn tc = list.get(index);
+		    	    			EventQueue.invokeLater(new Runnable() {
+									public void run() {
+										ModelHelper.simpleGetAndComplexSet(tc, TableView.this, ModelValueCategory.Column);
+									}
+								});
+		    	    		}
+							return null;
+						}
+    	    		});
+    	    	}
     	    }
     	});
+    	p.setDividerLocation(0.75);
     	
-    	spp.setDividerLocation(0.5);
+    	EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				pt.setDividerLocation(0.5);
+			}
+		});
+    }
+    
+    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {
+    	if(model != null
+    			&& model.getTable() != null
+    			&& model.getTable().getColumns() != null){
+    		TaskHelper.runInNonEDT(new Callable<Void>() {
+				public Void call() throws Exception {
+					int index = table.getSelectedRow();
+    	    		List<TableColumn> list = model.getTable().getColumns();
+    	    		if(index < list.size()){
+    	    			TableColumn tc = list.get(index);
+    	    			ModelHelper.complexGetAndSimpleSet(TableView.this, tc, ModelValueCategory.Column);
+    	    		}
+					return null;
+				}
+    		});
+    	}
     }
     
     private void btnGenActionPerformed(java.awt.event.ActionEvent evt) {
@@ -239,6 +364,8 @@ public class TableView extends AbstractView {
 			        		saveFile.mkdirs();
 			        	//设置值;
 			        	ModelHelper.complexGetAndSimpleSet(TableView.this, model);
+			        	//加工model;
+			        	ModelHelper.processTableViewModel(model);
 			        	
 			        	String javaContent = VelocityHelper.entityBean(model);
 //			        	System.out.println(javaContent);
@@ -282,6 +409,7 @@ public class TableView extends AbstractView {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     
     private javax.swing.JButton btnGen;
+    private javax.swing.JButton btnOk;
     
     @ModelValue(valueGetFuncName = "getText", valueSetFuncName ="setText")
     private javax.swing.JTextField deleteMethodPrefix;
@@ -298,7 +426,14 @@ public class TableView extends AbstractView {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel pane;
+    
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    
     @ModelValue(valueGetFuncName = "getText", valueSetFuncName ="setText")
     private javax.swing.JTextField basePackageName;
     @ModelValue(valueGetFuncName = "getText", valueSetFuncName ="setText")
@@ -308,9 +443,13 @@ public class TableView extends AbstractView {
     @ModelValue(valueGetFuncName = "getText", valueSetFuncName ="setText")
     private javax.swing.JTextField saveMethodPrefix;
     private javax.swing.JComboBox<Option<Boolean>> jcombo_showGsonAnnotation;
-    private javax.swing.JScrollPane sp;
-    private javax.swing.JScrollPane sp2;
-    private javax.swing.JSplitPane spp;
+    private javax.swing.JPanel pba;
+    private javax.swing.JScrollPane pb;
+    private javax.swing.JSplitPane p;
+    private javax.swing.JSplitPane pt;
+    private javax.swing.JScrollPane ptt;
+    private javax.swing.JScrollPane ptb;
+    private javax.swing.JPanel ptba;
     private javax.swing.JComboBox<Option<Integer>> jcombo_sqlMapMarkUse;
     private javax.swing.JTable table;
     @ModelValue(valueGetFuncName = "getText", valueSetFuncName ="setText")
@@ -320,6 +459,28 @@ public class TableView extends AbstractView {
     private OptionComboBoxModel<Integer> sqlMapMarkUse = new OptionComboBoxModel<Integer>();
     @ModelValue()
     private OptionComboBoxModel<Boolean> showGsonAnnotation = new OptionComboBoxModel<Boolean>();
+    
+    private javax.swing.JComboBox<Option<Integer>> jcombo_queryRenderWay;
+    private javax.swing.JComboBox<Option<Integer>> jcombo_listRenderWay;
+    private javax.swing.JComboBox<Option<Integer>> jcombo_editRenderWay;
+    
+    @ModelValue(category=ModelValueCategory.Column)
+    private OptionComboBoxModel<Integer> queryRenderWay = new OptionComboBoxModel<Integer>();
+    @ModelValue(category=ModelValueCategory.Column)
+    private OptionComboBoxModel<Integer> listRenderWay = new OptionComboBoxModel<Integer>();
+    @ModelValue(category=ModelValueCategory.Column)
+    private OptionComboBoxModel<Integer> editRenderWay = new OptionComboBoxModel<Integer>();
+    
+    private javax.swing.JComboBox<Option<Boolean>> jcombo_queryRenderShow;
+    private javax.swing.JComboBox<Option<Boolean>> jcombo_listRenderShow;
+    private javax.swing.JComboBox<Option<Boolean>> jcombo_editRenderShow;
+    
+    @ModelValue(category=ModelValueCategory.Column)
+    private OptionComboBoxModel<Boolean> queryRenderShow = new OptionComboBoxModel<Boolean>();
+    @ModelValue(category=ModelValueCategory.Column)
+    private OptionComboBoxModel<Boolean> listRenderShow = new OptionComboBoxModel<Boolean>();
+    @ModelValue(category=ModelValueCategory.Column)
+    private OptionComboBoxModel<Boolean> editRenderShow = new OptionComboBoxModel<Boolean>();
     
     
     

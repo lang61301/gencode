@@ -4,12 +4,15 @@
 package me.paddingdun.gen.code.util;
 
 import java.beans.PropertyDescriptor;
+import java.util.Collection;
 import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
+import me.paddingdun.gen.code.data.jsp.RenderWayType;
 import me.paddingdun.gen.code.data.option.Option;
 import me.paddingdun.gen.code.exception.BusinessException;
+import me.paddingdun.gen.code.gui.view.dbtable.OptionComboBoxModel;
 
 /**
  * @author paddingdun
@@ -48,5 +51,13 @@ public class CollectionHelper {
 	public static <T> Option<T> option(String title, T value){
 		Option<T> o = new Option<T>(title, value);
 		return o;
+	}
+	
+	public static void renderWayOption(OptionComboBoxModel<Integer> model, String category){
+		for (RenderWayType rwt : RenderWayType.values()) {
+			if(category.equals(rwt.getCategory())){
+				model.addElement(CollectionHelper.option(rwt.getTitle(), rwt.getType()));
+			}
+		}
 	}
 }

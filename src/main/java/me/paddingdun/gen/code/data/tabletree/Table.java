@@ -6,6 +6,7 @@ package me.paddingdun.gen.code.data.tabletree;
 import java.io.Serializable;
 import java.util.List;
 
+import me.paddingdun.gen.code.data.table.JspColumn;
 import me.paddingdun.gen.code.data.table.TableColumn;
 
 /**
@@ -81,5 +82,17 @@ public class Table implements Serializable {
 	}
 	public void setEntityBeanName(String entityBeanName) {
 		this.entityBeanName = entityBeanName;
+	}
+	
+	/**
+	 * 单独弄出一个jspcolumns因为它的列有可能比column多;
+	 */
+	private List<JspColumn> jspColumns;
+
+	public List<JspColumn> getJspColumns() {
+		return jspColumns;
+	}
+	public void setJspColumns(List<JspColumn> jspColumns) {
+		this.jspColumns = jspColumns;
 	}
 }

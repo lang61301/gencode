@@ -20,6 +20,13 @@ import java.lang.annotation.Target;
 public @interface ModelValue {
 	
 	/**
+	 * 表示同一类型的modelvalue;
+	 * 常用于分类;
+	 * @return
+	 */
+	public ModelValueCategory category() default ModelValueCategory.Default;
+	
+	/**
 	 * 默认获取值的方法名称;
 	 * @return
 	 */
