@@ -2,27 +2,37 @@
 <snippets>
 	<snippet name="list_text">
 	<![CDATA[
-		{"data":"{0}", "defaultContent":"{1}"}
+		'{"data":"'{0}", "defaultContent":"{1}"}
 	]]> 
 	</snippet>
 	<snippet name="list_checkbox">
 	<![CDATA[
-		{"data":"{0}", "defaultContent":"{1}",
-		 "render":function( data, type, row, meta ){
-		 	return "<input type='checkbox' class='list_checkbox' value='" + data + "'>";
+		'{"data":"'{0}", "defaultContent":"",
+		 "render":function( data, type, row, meta )'{
+		 	return "<input type='checkbox' class='list_group_checkbox' value='" + data + "'>";
 		 }
 		}
 	]]> 
 	</snippet>
 	<snippet name="list_customer">
 	<![CDATA[
-		{"data":"{0}", "defaultContent":"{1}",
+		'{"data":"'{0}", "defaultContent":"{1}",
 		 {2}
 		}
 	]]> 
 	</snippet>
-
-
+	<snippet name="list_snippet_default_customer">
+	<![CDATA[
+		"render":function( data, type, row, meta ){ 
+				return data; 
+		}
+	]]> 
+	</snippet>
+	<snippet name="list_snippet_checkbox_title">
+	<![CDATA[
+		<input type="checkbox" class="list_head_group_checkbox">
+	]]> 
+	</snippet>
 	<snippet name="edit_input">
 	<![CDATA[
 		<div class="form-group">

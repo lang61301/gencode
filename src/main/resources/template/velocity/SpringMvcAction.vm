@@ -55,7 +55,7 @@ public class ${springWebActionJavaClassName} {
 	 */
 	@org.springframework.web.bind.annotation.RequestMapping(value="/${webActionEditMethodName}", method = org.springframework.web.bind.annotation.RequestMethod.POST)
 	@org.springframework.web.bind.annotation.ResponseBody
-	public ${jsonResultPackageName}.JsonResult2<String> ${webActionEditMethodName}(${pojoFullPackageName}.${table.entityBeanName} obj) {
+	public ${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${table.entityBeanName}> ${webActionEditMethodName}(${pojoFullPackageName}.${table.entityBeanName} obj) {
 		${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${table.entityBeanName}> jr = new ${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${table.entityBeanName}>();
 		try{
 			#set($objName="obj")

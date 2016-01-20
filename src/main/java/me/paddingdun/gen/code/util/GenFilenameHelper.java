@@ -124,6 +124,6 @@ public class GenFilenameHelper {
 	 * @return
 	 */
 	public static String bootstrapDataTableJspFileName(String entityName){
-		return entityName + ".html";
+		return entityName + ".jsp";
 	}
 }

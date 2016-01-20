@@ -163,6 +163,48 @@ public class TableViewModel {
 	@Value1
 	private String ierrorCodePackageName;
 	
+	/**
+	 * jsp中datatables表格id;
+	 */
+	@Value1(def="table_id")
+	private String jspDatatableId;
+	
+	/**
+	 * jsp中datatables表格th中的第一列的checkbox的特定className
+	 */
+	@Value1(def="list_head_group_checkbox")
+	private String headGroupCheckboxClassName;
+	
+	/**
+	 * jsp中datatables表格td中的第一列的checkbox的特定className
+	 */
+	@Value1(def="list_group_checkbox")
+	private String groupCheckboxClassName;
+	
+	public String getJspDatatableId() {
+		return jspDatatableId;
+	}
+
+	public void setJspDatatableId(String jspDatatableId) {
+		this.jspDatatableId = jspDatatableId;
+	}
+
+	public String getHeadGroupCheckboxClassName() {
+		return headGroupCheckboxClassName;
+	}
+
+	public void setHeadGroupCheckboxClassName(String headGroupCheckboxClassName) {
+		this.headGroupCheckboxClassName = headGroupCheckboxClassName;
+	}
+
+	public String getGroupCheckboxClassName() {
+		return groupCheckboxClassName;
+	}
+
+	public void setGroupCheckboxClassName(String groupCheckboxClassName) {
+		this.groupCheckboxClassName = groupCheckboxClassName;
+	}
+
 	public String getCateGoryPackageName() {
 		return cateGoryPackageName;
 	}

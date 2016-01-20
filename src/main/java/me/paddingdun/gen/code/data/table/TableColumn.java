@@ -115,7 +115,7 @@ public class TableColumn implements Serializable {
 	/**
 	 * 是否显示;
 	 */
-	private boolean queryRenderShow = true;
+	private boolean queryRenderShow = false;
 	/**
 	 * 是否显示;
 	 */

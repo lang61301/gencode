@@ -7,6 +7,7 @@ import java.text.MessageFormat;
 
 import org.apache.commons.lang.StringUtils;
 
+import me.paddingdun.gen.code.component.JspRenderFactory;
 import me.paddingdun.gen.code.data.jsp.Render;
 import me.paddingdun.gen.code.data.jsp.RenderWayType;
 import me.paddingdun.gen.code.data.table.JspColumn;
@@ -21,20 +22,11 @@ import me.paddingdun.gen.code.exception.BusinessException;
 public class RenderHelper {
 	
 	public static String list(String keyName, String defaultContent, RenderWayType rwt, String customer){
-		String render = " {\"data\":" + keyName + ",\r\n";
 		String dc = "";
 		if(StringUtils.isNotBlank(defaultContent)){
 			dc = defaultContent.trim();
 		}
-		render += "\"defaultContent\":\"" + dc + "\"";
-		
-		String cu = "render\":function( data, type, row, meta ){\r\n" + 
-				"	return data;\r\n" + 
-				"}";
-		if(StringUtils.isNotBlank(customer)){
-			cu = customer.trim();
-		}
-		
+		String render = MessageFormat.format(JspSnippetHelper.getSnippet("list_text"), keyName, dc);
 		switch (rwt) {
 		case list_text:
 
@@ -43,28 +35,27 @@ public class RenderHelper {
 
 			break;
 		case list_checkbox:
-			render += ",\"render\":function( data, type, row, meta ){\r\n" + 
-					"	return \"<input type='checkbox' class='list_checkbox' value='\" + data + \"'>\";\r\n" + 
-					"}";
+			render = MessageFormat.format(JspSnippetHelper.getSnippet("list_checkbox"), keyName);
 			break;
 		case list_customer:
-			render += "," + cu;
+			String cu = JspSnippetHelper.getSnippet("list_snippet_default_customer");
+			if(StringUtils.isNotBlank(customer)){
+				cu = customer.trim();
+			}
+			cu = "," + cu;
+			render = MessageFormat.format(JspSnippetHelper.getSnippet("list_customer"), keyName, dc, cu);
 			break;
 		default:
 			throw new BusinessException("list:do not have implement RenderWayType:" + rwt);
 		}
-		
-		render += "}";
-		
 		return render;
 	}
 	
 	public static String edit(String keyName, String title, RenderWayType rwt){
-		String render = JspSnippetHelper.getSnippet(RenderWayType.edit_input.name());
+		String render = MessageFormat.format(JspSnippetHelper.getSnippet(RenderWayType.edit_input.name()), keyName, title);
 		
 		switch (rwt) {
 		case edit_input:
-			render = MessageFormat.format(render, keyName, title);
 			break;
 		case edit_hidden:
 			render = MessageFormat.format(JspSnippetHelper.getSnippet(RenderWayType.edit_hidden.name()), keyName);
@@ -115,12 +106,12 @@ public class RenderHelper {
 		String keyName = keyName(column, sqlMapMarkUse);
 		RenderWayType rwt =  RenderWayType.parse(column.getListRenderWay());
 		Render render = new Render();
-		render.setTitle(column.getColumnCommon());
+		render.setTitle(column.getColumnTitle());
 		render.setShow(show);
 		if(RenderWayType.list_default == rwt){
 			if(column.isPrimary()){
 				rwt = RenderWayType.list_checkbox;
-				render.setTitle("");
+				render.setTitle(JspSnippetHelper.getSnippet("list_snippet_checkbox_title"));
 			}else{
 				rwt = RenderWayType.list_text;
 			}
@@ -137,7 +128,7 @@ public class RenderHelper {
 		String keyName = keyName(column, sqlMapMarkUse);
 		RenderWayType rwt =  RenderWayType.parse(column.getEditRenderWay());
 		Render render = new Render();
-		render.setTitle(column.getColumnCommon());
+		render.setTitle(column.getColumnTitle());
 		render.setShow(show);
 		if(RenderWayType.edit_default == rwt){
 			if(column.isPrimary()){
