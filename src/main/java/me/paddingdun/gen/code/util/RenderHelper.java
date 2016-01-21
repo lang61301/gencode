@@ -7,11 +7,11 @@ import java.text.MessageFormat;
 
 import org.apache.commons.lang.StringUtils;
 
-import me.paddingdun.gen.code.component.JspRenderFactory;
 import me.paddingdun.gen.code.data.jsp.Render;
 import me.paddingdun.gen.code.data.jsp.RenderWayType;
 import me.paddingdun.gen.code.data.table.JspColumn;
 import me.paddingdun.gen.code.exception.BusinessException;
+import me.paddingdun.gen.code.gui.view.dbtable.TableViewModel;
 
 /**
  * 
@@ -21,7 +21,7 @@ import me.paddingdun.gen.code.exception.BusinessException;
  */
 public class RenderHelper {
 	
-	public static String list(String keyName, String defaultContent, RenderWayType rwt, String customer){
+	public static String list(String keyName, String defaultContent, RenderWayType rwt, String customer, String groupCheckboxClassName){
 		String dc = "";
 		if(StringUtils.isNotBlank(defaultContent)){
 			dc = defaultContent.trim();
@@ -35,7 +35,7 @@ public class RenderHelper {
 
 			break;
 		case list_checkbox:
-			render = MessageFormat.format(JspSnippetHelper.getSnippet("list_checkbox"), keyName);
+			render = MessageFormat.format(JspSnippetHelper.getSnippet("list_checkbox"), keyName, groupCheckboxClassName);
 			break;
 		case list_customer:
 			String cu = JspSnippetHelper.getSnippet("list_snippet_default_customer");
@@ -102,7 +102,7 @@ public class RenderHelper {
 		return Integer.valueOf("1").equals(sqlMapMarkUse) ? column.getPropertyName() : column.getColumnName();
 	}
 	
-	public static Render createListRender(JspColumn column, Integer sqlMapMarkUse, boolean show){
+	public static Render createListRender(TableViewModel model, JspColumn column, Integer sqlMapMarkUse, boolean show){
 		String keyName = keyName(column, sqlMapMarkUse);
 		RenderWayType rwt =  RenderWayType.parse(column.getListRenderWay());
 		Render render = new Render();
@@ -111,17 +111,31 @@ public class RenderHelper {
 		if(RenderWayType.list_default == rwt){
 			if(column.isPrimary()){
 				rwt = RenderWayType.list_checkbox;
-				render.setTitle(JspSnippetHelper.getSnippet("list_snippet_checkbox_title"));
+				render.setTitle(MessageFormat.format(JspSnippetHelper.getSnippet("list_snippet_checkbox_title"), model.getHeadGroupCheckboxClassName()));
 			}else{
 				rwt = RenderWayType.list_text;
 			}
 		}
-		render.setRender(list(keyName, "", rwt, ""));
+		render.setRender(list(keyName, "", rwt, "", model.getGroupCheckboxClassName()));
 		return render;
 	}
 	
 	public static Render createQueryRender(JspColumn column, Integer sqlMapMarkUse, boolean show){
 		return null;
+	}
+	
+	public static Render createListOperateRender(JspColumn column, boolean show){
+		Render render = new Render();
+		render.setTitle(column.getColumnTitle());
+		render.setShow(show);
+		render.setRender(JspSnippetHelper.getSnippet("list_snippet_operate"));
+		return render;
+	}
+	
+	public static Render createDisAllowShowRender(){
+		Render render = new Render();
+		render.setShow(false);
+		return render;
 	}
 	
 	public static Render createEditRender(JspColumn column, Integer sqlMapMarkUse, boolean show){

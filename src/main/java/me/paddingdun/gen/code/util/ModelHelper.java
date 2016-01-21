@@ -178,9 +178,17 @@ public class ModelHelper {
 			
 			jspColumn.setQueryRender(RenderHelper.createQueryRender(jspColumn, tableViewModel.getSqlMapMarkUse(), tc.isQueryRenderShow()));
 			jspColumn.setEditRender(RenderHelper.createEditRender(jspColumn, tableViewModel.getSqlMapMarkUse(), tc.isEditRenderShow()));
-			jspColumn.setListRender(RenderHelper.createListRender(jspColumn, tableViewModel.getSqlMapMarkUse(), tc.isListRenderShow()));
+			jspColumn.setListRender(RenderHelper.createListRender(tableViewModel, jspColumn, tableViewModel.getSqlMapMarkUse(), tc.isListRenderShow()));
 			jspColumns.add(jspColumn);
 		}
+		
+		//是否生成操作列;
+		JspColumn op = new  JspColumn(null, -1, "操作");
+		op.setQueryRender(RenderHelper.createDisAllowShowRender());
+		op.setEditRender(RenderHelper.createDisAllowShowRender());
+		op.setListRender(RenderHelper.createListOperateRender(op, true));
+		jspColumns.add(op);
+		
 		//生成jspcolumn;
 		tableViewModel.getTable().setJspColumns(jspColumns);
 	}
