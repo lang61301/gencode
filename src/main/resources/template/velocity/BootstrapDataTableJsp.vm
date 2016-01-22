@@ -161,7 +161,7 @@ $(document).ready(function(){
 				return data;
 			},
 			"data":function(d){
-				me.pdd.Util.plainfy_datatables(d);
+				me.pdd.DataTable.plainfy_datatables(d);
 			},
 			"complete":function(d){
 			}
@@ -169,11 +169,44 @@ $(document).ready(function(){
 		}
 	});
 	
+	/**
+	 * 全选事件;
+	 */
 	$("#${jspDatatableId}").on("click", ".${headGroupCheckboxClassName}", function(){
 		var f = this.checked; 
 		$(".${groupCheckboxClassName}").each(function(){
 			this.checked = f;
 		});
+	});
+	
+	/**
+	 * 编辑;
+	 */
+	$("#${jspDatatableId}").on("click", ".glyphicon-edit", function(){
+		//var id = $(this).closest("tr").find(".${groupCheckboxClassName}").val();
+		var row = $(this).closest("tr");
+		var rowData = table.row(row).data();
+		#ajax_pks_get_data(${table.columns} ${sqlMapMarkUse})
+		$.ajax("${_ctx}${webActionRequestMapping}/${getMethodPrefix}", {"data":objData, type:"get",
+			dataType:"json", success:function(d){
+				if(d.status == 0){
+					var o = d.data;
+					me.pdd.Form.setForm($(".form-horizontal"), o);
+					$('#editModal').modal({
+			   		  keyboard: false
+			   		});
+				}else{
+					alert(d.msg);
+				}
+			}});
+	});
+	
+	/**
+	 * 删除;
+	 */
+	$("#${jspDatatableId}").on("click", ".glyphicon-remove-circle", function(){
+		var id = $(this).closest("tr").find(".${groupCheckboxClassName}").val();
+		console.info(id);
 	});
 	
 	$(".save${webActionEditMethodName}").on("click", function(){

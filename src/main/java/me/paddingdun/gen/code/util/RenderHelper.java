@@ -3,8 +3,6 @@
  */
 package me.paddingdun.gen.code.util;
 
-import java.text.MessageFormat;
-
 import org.apache.commons.lang.StringUtils;
 
 import me.paddingdun.gen.code.data.jsp.Render;
@@ -26,7 +24,7 @@ public class RenderHelper {
 		if(StringUtils.isNotBlank(defaultContent)){
 			dc = defaultContent.trim();
 		}
-		String render = MessageFormat.format(JspSnippetHelper.getSnippet("list_text"), keyName, dc);
+		String render = JspSnippetHelper.getSnippet("list_text", keyName, dc);
 		switch (rwt) {
 		case list_text:
 
@@ -35,7 +33,7 @@ public class RenderHelper {
 
 			break;
 		case list_checkbox:
-			render = MessageFormat.format(JspSnippetHelper.getSnippet("list_checkbox"), keyName, groupCheckboxClassName);
+			render = JspSnippetHelper.getSnippet("list_checkbox", keyName, groupCheckboxClassName);
 			break;
 		case list_customer:
 			String cu = JspSnippetHelper.getSnippet("list_snippet_default_customer");
@@ -43,7 +41,7 @@ public class RenderHelper {
 				cu = customer.trim();
 			}
 			cu = "," + cu;
-			render = MessageFormat.format(JspSnippetHelper.getSnippet("list_customer"), keyName, dc, cu);
+			render = JspSnippetHelper.getSnippet("list_customer", keyName, dc, cu);
 			break;
 		default:
 			throw new BusinessException("list:do not have implement RenderWayType:" + rwt);
@@ -52,16 +50,16 @@ public class RenderHelper {
 	}
 	
 	public static String edit(String keyName, String title, RenderWayType rwt){
-		String render = MessageFormat.format(JspSnippetHelper.getSnippet(RenderWayType.edit_input.name()), keyName, title);
+		String render = JspSnippetHelper.getSnippet(RenderWayType.edit_input.name(), keyName, title);
 		
 		switch (rwt) {
 		case edit_input:
 			break;
 		case edit_hidden:
-			render = MessageFormat.format(JspSnippetHelper.getSnippet(RenderWayType.edit_hidden.name()), keyName);
+			render = JspSnippetHelper.getSnippet(RenderWayType.edit_hidden.name(), keyName);
 			break;
 		case edit_checkbox:
-			render = MessageFormat.format(JspSnippetHelper.getSnippet(RenderWayType.edit_checkbox.name()), keyName, title);
+			render = JspSnippetHelper.getSnippet(RenderWayType.edit_checkbox.name(), keyName, title);
 			break;
 		case edit_datepicker:
 
@@ -111,7 +109,7 @@ public class RenderHelper {
 		if(RenderWayType.list_default == rwt){
 			if(column.isPrimary()){
 				rwt = RenderWayType.list_checkbox;
-				render.setTitle(MessageFormat.format(JspSnippetHelper.getSnippet("list_snippet_checkbox_title"), model.getHeadGroupCheckboxClassName()));
+				render.setTitle(JspSnippetHelper.getSnippet("list_snippet_checkbox_title", model.getHeadGroupCheckboxClassName()));
 			}else{
 				rwt = RenderWayType.list_text;
 			}

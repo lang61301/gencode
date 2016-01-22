@@ -3,6 +3,7 @@
  */
 package me.paddingdun.gen.code.util;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,9 +58,14 @@ public class JspSnippetHelper {
 	}
 	
 	public static String getSnippet(String key){
+		return getSnippet(key, new Object[0]);
+	}
+	
+	public static String getSnippet(String key, Object...objects ){
 		String s = map.get(key);
 		if(StringUtils.isEmpty(s))
 			throw new BusinessException("can't not config snippet[" + key +"] in JspComponent.xml!");
-		return s;
+		String tmp = MessageFormat.format(s, objects);
+		return tmp;
 	}
 }
