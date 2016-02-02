@@ -4,7 +4,6 @@
 package me.paddingdun.gen.code.data.table;
 
 import me.paddingdun.gen.code.data.jsp.Render;
-import me.paddingdun.gen.code.data.jsp.RenderWayType;
 
 /**
  * @author paddingdun
@@ -30,8 +29,12 @@ public class JspColumn extends TableColumn {
 	/**jsp 使用************************************************************/
 	/**
 	 * query;
+	 * 
+	 * modify by:2016-02-02
+	 * 由于布局问题, 查询代码需要一次生成, 所以将其提升到table的queryFormRender;
+	 * 
 	 */
-	private Render queryRender;
+//	private Render queryRender;
 	/**
 	 * list;
 	 */
@@ -42,12 +45,12 @@ public class JspColumn extends TableColumn {
 	private Render editRender;
 
 
-	public Render getQueryRender() {
-		return queryRender;
-	}
-	public void setQueryRender(Render queryRender) {
-		this.queryRender = queryRender;
-	}
+//	public Render getQueryRender() {
+//		return queryRender;
+//	}
+//	public void setQueryRender(Render queryRender) {
+//		this.queryRender = queryRender;
+//	}
 	public Render getListRender() {
 		return listRender;
 	}

@@ -3,6 +3,11 @@
  */
 package me.paddingdun.gen.code.util;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 
 import me.paddingdun.gen.code.data.jsp.Render;
@@ -73,12 +78,11 @@ public class RenderHelper {
 		return render;
 	}
 	
-	public static String query(String keyName, RenderWayType rwt){
-		String render = "";
-		
+	public static String query(String keyName, String title, RenderWayType rwt, int colWidth){
+		String render = JspSnippetHelper.getSnippet("query_input", title, colWidth, keyName);
 		switch (rwt) {
 		case query_input:
-
+			
 			break;
 		case query_checkbox:
 
@@ -100,6 +104,14 @@ public class RenderHelper {
 		return Integer.valueOf("1").equals(sqlMapMarkUse) ? column.getPropertyName() : column.getColumnName();
 	}
 	
+	/**
+	 * 列表render入口;
+	 * @param model
+	 * @param column
+	 * @param sqlMapMarkUse
+	 * @param show
+	 * @return
+	 */
 	public static Render createListRender(TableViewModel model, JspColumn column, Integer sqlMapMarkUse, boolean show){
 		String keyName = keyName(column, sqlMapMarkUse);
 		RenderWayType rwt =  RenderWayType.parse(column.getListRenderWay());
@@ -118,10 +130,33 @@ public class RenderHelper {
 		return render;
 	}
 	
-	public static Render createQueryRender(JspColumn column, Integer sqlMapMarkUse, boolean show){
-		return null;
+	/**
+	 * 查询render入口;
+	 * @param model
+	 * @param column
+	 * @param sqlMapMarkUse
+	 * @param show
+	 * @return
+	 */
+	private static Render createQueryRender(JspColumn column, Integer sqlMapMarkUse, int colWidth){
+		String keyName = keyName(column, sqlMapMarkUse);
+		RenderWayType rwt =  RenderWayType.parse(column.getQueryRenderWay());
+		Render render = new Render();
+		render.setTitle(column.getColumnTitle());
+		render.setShow(true);
+		if(RenderWayType.query_default == rwt){
+			rwt = RenderWayType.query_input;
+		}
+		render.setRender(query(keyName, render.getTitle(), rwt, colWidth));
+		return render;
 	}
 	
+	/**
+	 * 操作Render;
+	 * @param column
+	 * @param show
+	 * @return
+	 */
 	public static Render createListOperateRender(JspColumn column, boolean show){
 		Render render = new Render();
 		render.setTitle(column.getColumnTitle());
@@ -130,12 +165,23 @@ public class RenderHelper {
 		return render;
 	}
 	
+	/**
+	 * 不显示的Render;
+	 * @return
+	 */
 	public static Render createDisAllowShowRender(){
 		Render render = new Render();
 		render.setShow(false);
 		return render;
 	}
 	
+	/**
+	 * 编辑Render入口;
+	 * @param column
+	 * @param sqlMapMarkUse
+	 * @param show
+	 * @return
+	 */
 	public static Render createEditRender(JspColumn column, Integer sqlMapMarkUse, boolean show){
 		String keyName = keyName(column, sqlMapMarkUse);
 		RenderWayType rwt =  RenderWayType.parse(column.getEditRenderWay());
@@ -150,6 +196,66 @@ public class RenderHelper {
 			}
 		}
 		render.setRender(edit(keyName, render.getTitle(), rwt));
+		return render;
+	}
+	
+	/**
+	 * 创建查询render;
+	 * @param model
+	 * @param sqlMapMarkUse
+	 * @param show
+	 * @return
+	 */
+	public static Render createQueryFormRender(TableViewModel model, Integer sqlMapMarkUse, boolean show){
+		Render render = new Render();
+		render.setShow(show);
+		if(!show) return render;
+		List<JspColumn> jspColumns = model.getTable().getJspColumns();
+		List<JspColumn> queryJspColumns = new ArrayList<JspColumn>();
+		for(JspColumn jspColumn : jspColumns){
+			if(jspColumn.isQueryRenderShow())
+				queryJspColumns.add(jspColumn);
+		}
+		//为空不显示查询form;
+		if(queryJspColumns.isEmpty()){
+			render.setShow(false);
+			return render;
+		}
+		
+		int size = queryJspColumns.size();
+		
+		Integer[] validColumnCount = new Integer[]{2, 3};
+		Integer columnCount = model.getJspQueryColumnCount();
+		boolean valid = false;
+		for (Integer v : validColumnCount) {
+			if(v.equals(columnCount)){
+				valid = true;
+				break;
+			}
+		}
+		if(!valid){
+			columnCount = Integer.valueOf("3");
+		}
+		int colWidth = (12 - columnCount.intValue() * 2) / columnCount.intValue();
+		
+		Map<Integer, List<String>> map = new LinkedHashMap<Integer, List<String>>();
+		for (int i = 0; i < size; i++) {
+			JspColumn jc = queryJspColumns.get(i);
+			int key = i / columnCount;
+			List<String> l = map.get(key);
+			if(l == null){
+				l = new ArrayList<String>();
+				map.put(key, l);
+			}
+			Render r = createQueryRender(jc, sqlMapMarkUse, colWidth);
+			l.add(r.getRender());
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		for (List<String> l : map.values()) {
+			sb.append(JspSnippetHelper.getSnippet("query_form", StringUtils.join(l, "")));
+		}
+		render.setRender(sb.toString());
 		return render;
 	}
 	

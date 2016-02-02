@@ -107,6 +107,7 @@ public class ${springWebActionJavaClassName} {
 		${jsonResultPackageName}.JsonResult2<java.lang.Void> jr = new ${jsonResultPackageName}.JsonResult2<java.lang.Void>();
 		try{
 			service.${deleteMethodPrefix}${table.entityBeanName}(#pks_call_argument(${table.columns} ${sqlMapMarkUse}));
+			jr.setMsg("删除成功!");
 		}catch(${businessExceptionPackageName}.BusinessException e){
 			jr.setStatus(${ierrorCodePackageName}.IErrorCode.UNKNOW_EXCEPTION);
 			jr.setMsg(e.getMessage());

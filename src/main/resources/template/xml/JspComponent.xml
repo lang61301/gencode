@@ -83,4 +83,53 @@
 		</div>
 	]]> 
 	</snippet>
+	
+	
+	<snippet name="query_input">
+	<![CDATA[
+		<label class="col-sm-2 control-label">
+		{0}
+		</label>
+		<div class="col-sm-{1}">
+			<input type="text" class="form-control" name="{2}">
+		</div>
+	]]> 
+	</snippet>
+	<snippet name="query_dropdownlist">
+	<![CDATA[
+		<label class="col-sm-2 control-label">
+		{0}
+		</label>
+		<div class="col-sm-{1}">
+			<select class="form-control" name="{2}">
+			
+			</select>
+		</div>
+	]]> 
+	</snippet>
+	<snippet name="query_checkbox">
+	<![CDATA[
+		<label class="col-sm-2 control-label">
+		{0}
+		</label>
+		<div class="col-sm-{1}">
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" name="{2}"> 
+				</label>
+			</div>
+		</div>
+	]]> 
+	</snippet>
+	
+	
+	<snippet name="query_form">
+	<![CDATA[
+		<div class="form-group">
+		{0}
+		</div>
+	]]> 
+	</snippet>
+	
+	
 </snippets>

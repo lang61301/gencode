@@ -176,7 +176,7 @@ public class ModelHelper {
 				throw new RuntimeException(e);
 			}
 			
-			jspColumn.setQueryRender(RenderHelper.createQueryRender(jspColumn, tableViewModel.getSqlMapMarkUse(), tc.isQueryRenderShow()));
+//			jspColumn.setQueryRender(RenderHelper.createQueryRender(tableViewModel, jspColumn, tableViewModel.getSqlMapMarkUse(), tc.isQueryRenderShow()));
 			jspColumn.setEditRender(RenderHelper.createEditRender(jspColumn, tableViewModel.getSqlMapMarkUse(), tc.isEditRenderShow()));
 			jspColumn.setListRender(RenderHelper.createListRender(tableViewModel, jspColumn, tableViewModel.getSqlMapMarkUse(), tc.isListRenderShow()));
 			jspColumns.add(jspColumn);
@@ -184,13 +184,19 @@ public class ModelHelper {
 		
 		//是否生成操作列;
 		JspColumn op = new  JspColumn(null, -1, "操作");
-		op.setQueryRender(RenderHelper.createDisAllowShowRender());
+		op.setQueryRenderShow(false);
+//		op.setQueryRender(RenderHelper.createDisAllowShowRender());
 		op.setEditRender(RenderHelper.createDisAllowShowRender());
+		op.setEditRenderShow(false);
 		op.setListRender(RenderHelper.createListOperateRender(op, true));
+		op.setListRenderShow(true);
 		jspColumns.add(op);
 		
 		//生成jspcolumn;
 		tableViewModel.getTable().setJspColumns(jspColumns);
+		
+		//设置formRender
+		tableViewModel.getTable().setQueryFormRender(RenderHelper.createQueryFormRender(tableViewModel, tableViewModel.getSqlMapMarkUse(), true));
 	}
 
 }

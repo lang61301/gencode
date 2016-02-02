@@ -181,6 +181,20 @@ public class TableViewModel {
 	@Value1(def="list_group_checkbox")
 	private String groupCheckboxClassName;
 	
+	/**
+	 * jsp页面查询参数列数;
+	 */
+	@Value1(def="3")
+	private Integer jspQueryColumnCount;
+	
+	public Integer getJspQueryColumnCount() {
+		return jspQueryColumnCount;
+	}
+
+	public void setJspQueryColumnCount(Integer jspQueryColumnCount) {
+		this.jspQueryColumnCount = jspQueryColumnCount;
+	}
+
 	public String getJspDatatableId() {
 		return jspDatatableId;
 	}
