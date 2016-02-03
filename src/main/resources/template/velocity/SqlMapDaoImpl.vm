@@ -23,7 +23,7 @@ public class ${sqlMapDaoImplJavaClassName} implements ${daoFullPackageName}.${sq
 	
 	@Override
 	public void ${updateMethodPrefix}${table.entityBeanName}(${pojoFullPackageName}.${table.entityBeanName} obj){
-		baseDao.update("${saveMethodPrefix}${table.entityBeanName}", obj);
+		baseDao.update("${updateMethodPrefix}${table.entityBeanName}", obj);
 	}
 	
 	@Override
