@@ -1,11 +1,14 @@
 package me.paddingdun.gen.code.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.SimpleTimeZone;
 import java.util.TimeZone;
+
+import org.apache.commons.lang.time.DateUtils;
 
 import com.mysql.jdbc.util.TimezoneDump;
 
@@ -29,7 +32,10 @@ public class DateHelper {
 	 */
 	public final static String DATE_FMT_1 = "yyyy-MM-dd";
 	
-	
+	public final static String[] DATE_PATTERN = new String[]{
+			DATE_FMT_DEFAULT, 
+			DATE_FMT_1, 
+			"yyyy/MM/dd"};
 	/**
 	 * format the date to special str;
 	 * @param date
@@ -39,6 +45,17 @@ public class DateHelper {
 	public static String format(Date date, String pattern){
 		SimpleDateFormat sdf = new SimpleDateFormat(pattern);
 		return sdf.format(date);
+	}
+	
+	public static Date parseDate(String str){
+		Date result = null;
+		try {
+			result = DateUtils.parseDate(str, DATE_PATTERN);
+		} catch (ParseException e) {
+			result = null;
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 	public static Date now(){

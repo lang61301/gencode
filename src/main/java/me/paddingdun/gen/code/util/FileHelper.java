@@ -102,6 +102,28 @@ public class FileHelper {
 			IOHelper.close(bw);
 		}
 	}
+	
+	public static void genConfigXmlFile(String baseDir, String categoryDir, String name, String fileContent){
+		String fn = GenFilenameHelper.configXmlFileName(name);
+		BufferedWriter bw = null;
+		try {
+			File dir = null;
+			if(StringUtils.isNotBlank(categoryDir)){
+				dir = new File(baseDir, categoryDir);
+			}else{
+				dir = new File(baseDir);
+			}
+			if(!dir.exists())
+				dir.mkdirs();
+			
+			bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(dir, fn)), Charset.forName("UTF-8")));
+			bw.write(fileContent);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			IOHelper.close(bw);
+		}
+	}
 
 	/**
 	 * @param args

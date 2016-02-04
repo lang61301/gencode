@@ -197,6 +197,9 @@ public class ModelHelper {
 		
 		//设置formRender
 		tableViewModel.getTable().setQueryFormRender(RenderHelper.createQueryFormRender(tableViewModel, tableViewModel.getSqlMapMarkUse(), true));
+		
+		//生成配置文件;
+		ConfigHelper.genConfigXmlFile(tableViewModel.getTable());
 	}
 
 }

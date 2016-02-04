@@ -126,4 +126,13 @@ public class GenFilenameHelper {
 	public static String bootstrapDataTableJspFileName(String entityName){
 		return entityName + ".jsp";
 	}
+	
+	/**
+	 * the user config file name;
+	 * @param name
+	 * @return
+	 */
+	public static String configXmlFileName(String name){
+		return name + ".xml";
+	}
 }
