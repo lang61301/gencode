@@ -147,7 +147,7 @@ public class ModelHelper {
 	 */
 	public static void processTableViewModel(TableViewModel tableViewModel){
 		Table table = tableViewModel.getTable();
-		table.setEntityBeanName(TableHelper.table(table.getTableName()));
+		table.setEntityBeanName(TableHelper.table(table.getTableId()));
 		List<TableColumn> list = table.getColumns();
 		//补全column 属性
 		/**

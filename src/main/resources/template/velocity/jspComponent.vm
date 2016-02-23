@@ -1,12 +1,5 @@
 #macro( datatable_columns $jspColumns )
-#set($j = 0)
-	#foreach( $column in $jspColumns)
-		#if($j > 0),#end
-		#if( ${column.listRender.show} )
-			${column.listRender.render}
-			#set($j = $j + 1)
-		#end
-	#end
+#set($j = 0)#foreach( $column in $jspColumns)#if( ${column.listRender.show} )#if($j > 0),#end${column.listRender.render}#set($j = $j + 1)#end#end
 #end
 
 #macro( ajax_pks_get_data $cols $sqlMapMarkUse )

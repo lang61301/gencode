@@ -6,6 +6,8 @@ package me.paddingdun.gen.code;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import me.paddingdun.gen.code.gui.MainFrame;
+import me.paddingdun.gen.code.util.BufferHelper;
+import me.paddingdun.gen.code.util.DirectoryHelper;
 
 /**
  * @author paddingdun
@@ -13,6 +15,10 @@ import me.paddingdun.gen.code.gui.MainFrame;
  * 2015年12月8日
  */
 public class Main {
+	
+	private static void init(){
+		BufferHelper.readConfigXmlBuffer(DirectoryHelper.getUserDir(), "table");
+	}
 
 	/**
 	 * @param args
@@ -20,6 +26,8 @@ public class Main {
 	public static void main(String[] args) {
 		//启动spring;
 		ClassPathXmlApplicationContext ac = new ClassPathXmlApplicationContext(new String[]{"spring/spring.xml"});
+		
+		init();
 		
 		try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {

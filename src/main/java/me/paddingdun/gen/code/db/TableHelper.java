@@ -18,6 +18,8 @@ import javax.swing.tree.TreeNode;
 
 import me.paddingdun.gen.code.data.table.TableColumn;
 import me.paddingdun.gen.code.data.tabletree.Table;
+import me.paddingdun.gen.code.util.BufferHelper;
+import me.paddingdun.gen.code.util.ConfigHelper;
 import me.paddingdun.gen.code.util.IOHelper;
 
 /**
@@ -94,6 +96,10 @@ public class TableHelper {
 		Connection conn = null;
 		ResultSet  rs1	= null;
 		try{
+			//缓存;
+			String key = ConfigHelper.tableCfgName(catalog, tableName);
+			Table tableBuffer = BufferHelper.readTable(key);
+			
 			conn = DBHelper.getConnection();
 			DatabaseMetaData dmd =  conn.getMetaData();
 			
@@ -117,7 +123,22 @@ public class TableHelper {
 				
 				if("YES".equals(is_autoincrement))
 					el.setAutoIncrement(true);
-				result.add(el);
+				
+				//缓存更新;
+				boolean hasBuffer = false;
+				if(tableBuffer != null){
+					List<TableColumn> list_tc = tableBuffer.getColumns();
+					for (TableColumn tc : list_tc) {
+						if(tc.equals(el)){
+							hasBuffer = true;
+							result.add(tc);
+							break;
+						}
+					}
+				}
+				
+				if(!hasBuffer)
+					result.add(el);
 			}
 		}catch(Exception e){
 			e.printStackTrace();

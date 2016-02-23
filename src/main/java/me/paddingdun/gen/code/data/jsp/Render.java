@@ -8,7 +8,7 @@ package me.paddingdun.gen.code.data.jsp;
  *
  * 2016年1月12日
  */
-public class Render {
+public class Render{
 
 	private String render;
 	
@@ -47,5 +47,4 @@ public class Render {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
 }

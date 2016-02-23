@@ -96,8 +96,8 @@
 	  <div class="panel-heading">
 	  	   <div class="row">
 	    		<div class="col-lg-2">
-	    			<a class="btn btn-primary" href="#" role="button">新增</a>
-	    			<a class="btn btn-primary" href="#" role="button">删除</a>
+	    			<a class="btn btn-primary ${table.entityBeanName}new" href="#" role="button">新增</a>
+	    			<a class="btn btn-primary ${table.entityBeanName}deleteall" href="#" role="button">删除</a>
 	    		</div>
 	    	</div>
 	  </div>
@@ -160,7 +160,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-        <button type="button" class="btn btn-primary save${webActionEditMethodName}">保存</button>
+        <button type="button" class="btn btn-primary ${table.entityBeanName}save">保存</button>
       </div>
     </div>
   </div>
@@ -237,6 +237,11 @@ $(document).ready(function(){
 		var row = $(this).closest("tr");
 		var rowData = table.row(row).data();
 		#ajax_pks_get_data(${table.columns} ${sqlMapMarkUse})
+		
+		$.blockUI({"baseZ":2001,
+			"message":"",
+			"css":{border:		'',
+				backgroundColor:''}});
 		$.ajax("${_ctx}${webActionRequestMapping}/${getMethodPrefix}", 
 			{"data":objData, type:"get",
 			dataType:"json", success:function(d){
@@ -249,11 +254,11 @@ $(document).ready(function(){
 				}else{
 					alert(d.msg);
 				}
-			}, complete:function(){}});
+			}, complete:function(){$.unblockUI();}});
 	});
 	
 	/**
-	 * 删除;
+	 * 单个删除;
 	 */
 	$("#${jspDatatableId}").on("click", ".glyphicon-remove-circle", function(){
 		if(confirm("确定要删除吗?")){
@@ -279,9 +284,20 @@ $(document).ready(function(){
 	});
 	
 	/**
+	 * 打开新增;
+	 */
+	$(".${table.entityBeanName}new").on("click", function(){
+		//清空form;
+		me.pdd.Form.clearForm($("#${webActionEditMethodName}Modal .form-horizontal"));
+		$('#${webActionEditMethodName}Modal').modal({
+   		  keyboard: false
+   		});
+	});
+	
+	/**
 	 * 编辑保存;
 	 */
-	$(".save${webActionEditMethodName}").on("click", function(){
+	$(".${table.entityBeanName}save").on("click", function(){
 		$.blockUI({"baseZ":2001,
 			"message":"<h2>保存中...</h2>",
 			"css":{border:		'',

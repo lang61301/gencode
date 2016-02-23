@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -20,7 +21,7 @@ import org.apache.commons.lang.StringUtils;
 public class FileHelper {
 	
 	private static void genJavaFile(String baseDir, String pkgName, String fileName, String fileContent){
-		String dir_str = pkgName.replaceAll("\\.", Matcher.quoteReplacement(File.separator));
+		String dir_str = pkgName.replaceAll(Pattern.quote("."), Matcher.quoteReplacement(File.separator));
 		File dir = new File(baseDir, dir_str);
 		if(!dir.exists())
 			dir.mkdirs();
@@ -124,7 +125,7 @@ public class FileHelper {
 			IOHelper.close(bw);
 		}
 	}
-
+	
 	/**
 	 * @param args
 	 */

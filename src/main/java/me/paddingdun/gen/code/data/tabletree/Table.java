@@ -15,7 +15,7 @@ import me.paddingdun.gen.code.data.table.TableColumn;
  *
  * 2015年12月3日
  */
-public class Table implements Serializable {
+public class Table implements Serializable{
 
 	/**
 	 * 
@@ -26,6 +26,22 @@ public class Table implements Serializable {
 	private String tableType;
 	private String tableCommon;
 	
+	/**
+	 * modify 2016-02-17 
+	 * 用来唯一标识表格名称;
+	 * 暂时未使用;
+	 */
+	private String tableId;
+	
+	public String getTableId() {
+		if(tableId == null){
+			tableId = tableName;
+		}
+		return tableId;
+	}
+	public void setTableId(String tableId) {
+		this.tableId = tableId;
+	}
 	/**
 	 * @param cat
 	 * @param tableName

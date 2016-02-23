@@ -2,41 +2,30 @@
 <!-- MessageFormat使用时,用'表示转义,''表示',对于非占位符{要用'{';-->
 <snippets>
 	<snippet name="list_text">
-	<![CDATA[
-		'{'"data":"{0}", "defaultContent":"{1}"}
-	]]> 
+	<![CDATA['{'"data":"{0}", "defaultContent":"{1}"}]]> 
 	</snippet>
 	<snippet name="list_checkbox">
-	<![CDATA[
-		'{'"data":"{0}", "defaultContent":"",
-		 "render":function( data, type, row, meta )'{'
-		 	return ''<input type="checkbox" class="{1}" value="'' + data + ''">'';
-		 }
-		}
-	]]> 
+	<![CDATA['{'"data":"{0}", "defaultContent":"",
+				 "render":function( data, type, row, meta )'{'
+				 	return ''<input type="checkbox" class="{1}" value="'' + data + ''">'';
+				 }
+				}]]> 
 	</snippet>
 	<snippet name="list_customer">
-	<![CDATA[
-		'{'"data":"{0}", "defaultContent":"{1}",
+	<![CDATA['{'"data":"{0}", "defaultContent":"{1}",
 		 {2}
-		}
-	]]> 
+		}]]> 
 	</snippet>
 	<snippet name="list_snippet_default_customer">
-	<![CDATA[
-		"render":function( data, type, row, meta )'{' 
+	<![CDATA["render":function( data, type, row, meta )'{' 
 				return data; 
-		}
-	]]> 
+		}]]> 
 	</snippet>
 	<snippet name="list_snippet_checkbox_title">
-	<![CDATA[
-		<input type="checkbox" class="{0}">
-	]]> 
+	<![CDATA[<input type="checkbox" class="{0}">]]> 
 	</snippet>
 	<snippet name="list_snippet_operate">
-	<![CDATA[
-		'{'"data":null, "defaultContent":"",
+	<![CDATA['{'"data":null, "defaultContent":"",
 		 "render":function( data, type, row, meta )'{'
 			return ''<button type="button" class="btn btn-default">''+
 			  ''<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>''+
@@ -45,31 +34,25 @@
 			  ''<span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>''+
 			''</button>'';
 		 }
-		}
-	]]> 
+		}]]> 
 	</snippet>
 	
 	
 	<snippet name="edit_input">
-	<![CDATA[
-		<div class="form-group">
+	<![CDATA[<div class="form-group">
 			<label for="{0}" class="col-sm-2 control-label">
 			{1}
 			</label>
 			<div class="col-sm-10">
 				<input type="text" class="form-control" id="{0}" name="{0}">
 			</div>
-		</div>
-	]]> 
+		</div>]]> 
 	</snippet>
 	<snippet name="edit_hidden">
-	<![CDATA[
-		<input type="hidden" id="{0}" name="{0}">
-	]]> 
+	<![CDATA[<input type="hidden" id="{0}" name="{0}">]]> 
 	</snippet>
 	<snippet name="edit_checkbox">
-	<![CDATA[
-		<div class="form-group">
+	<![CDATA[<div class="form-group">
 			<label for="{0}" class="col-sm-2 control-label">
 			{1}
 			</label>
@@ -80,36 +63,30 @@
 					</label>
 				</div>
 			</div>
-		</div>
-	]]> 
+		</div>]]> 
 	</snippet>
 	
 	
 	<snippet name="query_input">
-	<![CDATA[
-		<label class="col-sm-2 control-label">
+	<![CDATA[<label class="col-sm-2 control-label">
 		{0}
 		</label>
 		<div class="col-sm-{1}">
 			<input type="text" class="form-control" name="{2}">
-		</div>
-	]]> 
+		</div>]]> 
 	</snippet>
 	<snippet name="query_dropdownlist">
-	<![CDATA[
-		<label class="col-sm-2 control-label">
+	<![CDATA[<label class="col-sm-2 control-label">
 		{0}
 		</label>
 		<div class="col-sm-{1}">
 			<select class="form-control" name="{2}">
 			
 			</select>
-		</div>
-	]]> 
+		</div>]]> 
 	</snippet>
 	<snippet name="query_checkbox">
-	<![CDATA[
-		<label class="col-sm-2 control-label">
+	<![CDATA[<label class="col-sm-2 control-label">
 		{0}
 		</label>
 		<div class="col-sm-{1}">
@@ -118,17 +95,14 @@
 					<input type="checkbox" name="{2}"> 
 				</label>
 			</div>
-		</div>
-	]]> 
+		</div>]]> 
 	</snippet>
 	
 	
 	<snippet name="query_form">
-	<![CDATA[
-		<div class="form-group">
+	<![CDATA[<div class="form-group">
 		{0}
-		</div>
-	]]> 
+		</div>]]> 
 	</snippet>
 	
 	
