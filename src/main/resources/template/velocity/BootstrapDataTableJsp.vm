@@ -97,7 +97,7 @@
 	  	   <div class="row">
 	    		<div class="col-lg-2">
 	    			<a class="btn btn-primary ${table.entityBeanName}new" href="#" role="button">新增</a>
-	    			<a class="btn btn-primary ${table.entityBeanName}deleteall" href="#" role="button">删除</a>
+	    			<a class="btn btn-primary ${table.entityBeanName}delete" href="#" role="button">删除</a>
 	    		</div>
 	    	</div>
 	  </div>
@@ -264,13 +264,15 @@ $(document).ready(function(){
 		if(confirm("确定要删除吗?")){
 			var row = $(this).closest("tr");
 			var rowData = table.row(row).data();
-			#ajax_pks_get_data(${table.columns} ${sqlMapMarkUse})
+			var dataArr = [];
+			#ajax_pks_get_data_array(${table.columns} ${sqlMapMarkUse} true)
+			
 			$.blockUI({"baseZ":2001,
 				"message":"<h2>删除中...</h2>",
 				"css":{border:		'',
 					backgroundColor:''}});
 			$.ajax("${_ctx}${webActionRequestMapping}/${deleteMethodPrefix}", 
-				{"data":objData, type:"get",
+				{"data":objData, type:"post",
 					dataType:"json", success:function(d){
 						alert(d.msg);
 						if(d.status == 0){
@@ -282,6 +284,40 @@ $(document).ready(function(){
 				});
 		}
 	});
+	
+	/**
+	 * 选择删除;
+	 */
+	$(".${table.entityBeanName}delete").on("click", function(){
+		  var dataArr = [];
+		  $("#${jspDatatableId} .${groupCheckboxClassName}").each(function(){
+			  if(this.checked)
+				  dataArr.push(this.value);
+		  });
+		  if(dataArr.length == 0){
+			  alert("请至少选择一项");
+			  return;
+		  }
+		  if(confirm("确定要删除吗?")){
+		   $.blockUI({"baseZ":2001,
+						"message":"<h2>删除中...</h2>",
+						"css":{border:		'',
+							backgroundColor:''}});
+				#ajax_pks_get_data_array(${table.columns} ${sqlMapMarkUse} false)
+				
+				$.ajax("${_ctx}${webActionRequestMapping}/${deleteMethodPrefix}", 
+					{"data":objData, type:"post",
+						dataType:"json", success:function(d){
+							alert(d.msg);
+							if(d.status == 0){
+								table.ajax.reload();
+							}
+						}, complete:function(){   
+							$.unblockUI();
+						} 
+					});
+			}
+	  });
 	
 	/**
 	 * 打开新增;

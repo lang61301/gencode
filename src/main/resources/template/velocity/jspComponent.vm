@@ -7,3 +7,11 @@ var objData = {};
 #foreach( $column in ${cols}) #if (${column.primary}) #if(${sqlMapMarkUse}==1) objData["${column.propertyName}"]=rowData["${column.propertyName}"]; #else objData["${column.columnName}"]=rowData["${column.columnName}"]; #end #end 
 #end
 #end
+
+#macro( ajax_pks_get_data_array $cols $sqlMapMarkUse $single )
+var objData = {};
+#foreach( $column in ${cols}) #if (${column.primary}) #if(${sqlMapMarkUse}==1) #if(${single})dataArr.push(rowData["${column.propertyName}"]);
+#end objData["${column.propertyName}"]=dataArr; #else #if(${single})dataArr.push(rowData["${column.columnName}"]);
+#end objData["${column.columnName}"]=dataArr; #end #end 
+#end
+#end

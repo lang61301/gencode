@@ -32,7 +32,7 @@ public interface ${sqlMapIServiceJavaClassName} {
 	/**
 	 * delete pojo by pk;
 	 */
-	public void ${deleteMethodPrefix}${table.entityBeanName}(#pks_argument(${table.columns} ${sqlMapMarkUse}));
+	public void ${deleteMethodPrefix}${table.entityBeanName}(#pks_argument_array(${table.columns} ${sqlMapMarkUse}));
 	
 	/**
 	 * query pojo list;

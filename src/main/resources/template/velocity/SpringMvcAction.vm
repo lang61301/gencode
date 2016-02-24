@@ -103,7 +103,7 @@ public class ${springWebActionJavaClassName} {
 	 */
 	@org.springframework.web.bind.annotation.RequestMapping(value="/${deleteMethodPrefix}")
 	@org.springframework.web.bind.annotation.ResponseBody
-	public ${jsonResultPackageName}.JsonResult2<java.lang.Void> ${deleteMethodPrefix}(#pks_web_argument(${table.columns} ${sqlMapMarkUse})) {
+	public ${jsonResultPackageName}.JsonResult2<java.lang.Void> ${deleteMethodPrefix}(#pks_web_argument_array(${table.columns} ${sqlMapMarkUse})) {
 		${jsonResultPackageName}.JsonResult2<java.lang.Void> jr = new ${jsonResultPackageName}.JsonResult2<java.lang.Void>();
 		try{
 			service.${deleteMethodPrefix}${table.entityBeanName}(#pks_call_argument(${table.columns} ${sqlMapMarkUse}));

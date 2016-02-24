@@ -23,7 +23,11 @@
 
 #set($j=0)
 <delete id="${deleteMethodPrefix}${table.entityBeanName}" parameterClass="java.util.Map">
-<![CDATA[delete from ${table.tableName} where #foreach( $column in ${table.columns}) #if (${column.primary}) #if ($j != 0)and #end ${column.columnName} = $H#if(${sqlMapMarkUse}==1)${column.propertyName}#else${column.columnName}#end$H #set($j = $j + 1) #end #end]]> 
+<![CDATA[delete from ${table.tableName} where #foreach( $column in ${table.columns}) #if (${column.primary}) #if ($j != 0)and #end ${column.columnName} in ]]> 
+<iterate open="(" close=")" conjunction="," property="#if(${sqlMapMarkUse}==1)${column.propertyName}#else${column.columnName}#end" >
+<![CDATA[$H#if(${sqlMapMarkUse}==1)${column.propertyName}#else${column.columnName}#end[]$H]]>
+</iterate> #set($j = $j + 1) #end #end
+
 </delete>
 	
 <select id="${queryMethodPrefix}${table.entityBeanName}" parameterClass="${pojoFullPackageName}.${table.entityBeanName}" resultClass="java.util.HashMap">
