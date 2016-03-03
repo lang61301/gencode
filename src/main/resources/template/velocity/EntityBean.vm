@@ -16,7 +16,7 @@ public class ${table.entityBeanName} {
 	 * ${column.columnCommon}
 	 */
 	#if($column.gson)
-	@com.google.gson.annotations.SerializedName("${column.columnName}")
+	@com.google.gson.annotations.SerializedName("${column.columnAlias}")
 	#end
     private ${column.javaType} ${column.propertyName};
     	

@@ -51,6 +51,7 @@ public class ${sqlMapServiceImplJavaClassName} implements ${serviceFullPackageNa
 	/**
 	 * delete pojo by pk;
 	 */
+	@org.springframework.transaction.annotation.Transactional
 	@Override
 	public void ${deleteMethodPrefix}${table.entityBeanName}(#pks_argument_array(${table.columns} ${sqlMapMarkUse})){
 		java.util.Map<String, Object> params = new java.util.HashMap<String, Object>();

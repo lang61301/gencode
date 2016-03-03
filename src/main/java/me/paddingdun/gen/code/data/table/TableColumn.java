@@ -6,6 +6,8 @@ package me.paddingdun.gen.code.data.table;
 import java.io.Serializable;
 
 import me.paddingdun.gen.code.data.jsp.RenderWayType;
+import me.paddingdun.gen.code.data.option.ModelValue;
+import me.paddingdun.gen.code.data.option.ModelValueCategory;
 
 /**
  * @author paddingdun
@@ -23,6 +25,8 @@ public class TableColumn implements Serializable{
 	private String columnCommon;
 	private boolean autoIncrement;
 	private boolean primary;
+	@ModelValue(category=ModelValueCategory.Column, valueGetFuncName="getColumnAlias")
+	private String columnAlias;
 	
 	
 	/**
@@ -100,6 +104,17 @@ public class TableColumn implements Serializable{
 		this.setMethod = setMethod;
 	}
 	
+	public String getColumnAlias() {
+		if(columnAlias == null)
+			columnAlias = columnName;
+		return columnAlias;
+	}
+	public void setColumnAlias(String columnAlias) {
+		this.columnAlias = columnAlias;
+	}
+
+
+
 	private boolean gson = true;
 
 

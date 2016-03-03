@@ -330,11 +330,11 @@ public class TableView extends AbstractView {
     	    	}
     	    }
     	});
-    	p.setDividerLocation(0.75);
+    	p.setDividerLocation(0.85);
     	
     	EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				pt.setDividerLocation(0.5);
+				pt.setDividerLocation(0.4);
 			}
 		});
     }
@@ -350,6 +350,12 @@ public class TableView extends AbstractView {
     	    		if(index < list.size()){
     	    			TableColumn tc = list.get(index);
     	    			ModelHelper.complexGetAndSimpleSet(TableView.this, tc, ModelValueCategory.Column);
+    	    			
+    	    			//变更第4列(列别名)的值进入TableColumn
+    	    			String ca = (String)table.getModel().getValueAt(index, 3);
+    	    			TableColumn tmp_tc = new TableColumn(tc.getColumnName(), tc.getType(), tc.getColumnCommon());
+    	    			tmp_tc.setColumnAlias(ca);
+    	    			ModelHelper.complexGetAndSimpleSet(tmp_tc, tc, ModelValueCategory.Column);
     	    		}
 					return null;
 				}
@@ -522,7 +528,7 @@ public class TableView extends AbstractView {
 					Vector<Vector<Object>> v = TableHelper.transform1(list_tr);
 					Vector<Object> v2 = new Vector<Object>();
 //								DefaultTableColumnModel dtcm = new DefaultTableColumnModel();
-			    	String[] heads = new String[]{"主键", "自增长", "列名称", "列类型", "列描述"};
+			    	String[] heads = new String[]{"主键", "自增长", "列名称", "列别名", "列类型", "列描述"};
 //			    	v2.add("select");
 			    	for (int i = 0; i < heads.length; i++) {
 //						    		TableColumn h = new TableColumn(i);

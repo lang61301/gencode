@@ -68,7 +68,7 @@ public class ModelHelper {
 			for (int i = 0; i < fields.length; i++) {
 				Field field = fields[i];
 				String pName = field.getName();
-				Class<?> clazz = field.getDeclaringClass();
+				Class<?> clazz = field.getType();
 				ModelValue mv = field.getAnnotation(ModelValue.class);
 				if(mv != null
 						&& mv.category() == category){

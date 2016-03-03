@@ -84,6 +84,7 @@ public class TableHelper {
 			el.add(Boolean.valueOf(r.isPrimary()));
 			el.add(Boolean.valueOf(r.isAutoIncrement()));
 			el.add(name);
+			el.add(r.getColumnAlias());
 			el.add(type);
 			el.add(common);
 			result.add(el);

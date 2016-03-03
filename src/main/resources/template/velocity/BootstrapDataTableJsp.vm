@@ -70,7 +70,7 @@
 	    	<div class="container-fluid">
 			    <div class="row">
 					<div class="col-md-12">
-						<form class="form-horizontal" role="form">
+						<form class="form-horizontal ${table.entityBeanName}formQuery" role="form">
 						${table.queryFormRender.render}
 						</form>
 					</div>
@@ -80,8 +80,8 @@
 		<div class="panel-heading">
 	    	<div class="row">
 	    		<div class="col-lg-offset-10 col-lg-2">
-	    			<a class="btn btn-primary" href="#" role="button">查询</a>
-	    			<a class="btn btn-default" href="#" role="button">重置</a>
+	    			<a class="btn btn-primary ${table.entityBeanName}query" href="#" role="button">查询</a>
+	    			<a class="btn btn-default ${table.entityBeanName}reset" href="#" role="button">重置</a>
 	    		</div>
 	    	</div>
 		</div>
@@ -130,7 +130,7 @@
         <div class="container-fluid">
 		    <div class="row">
 				<div class="col-md-12">
-					<form class="form-horizontal" role="form" action="${_ctx}${webActionRequestMapping}/${webActionEditMethodName}" method="post">
+					<form class="form-horizontal ${table.entityBeanName}formEdit" role="form" action="${_ctx}${webActionRequestMapping}/${webActionEditMethodName}" method="post">
 					#foreach( $column in $table.jspColumns)
 						#if( ${column.editRender.show} )
 							${column.editRender.render}
@@ -211,6 +211,7 @@ $(document).ready(function(){
 				return data;
 			},
 			"data":function(d){
+				//修正传入后台的数据, 使其可以对应java对象;
 				me.pdd.DataTable.plainfy_datatables(d);
 			},
 			"complete":function(d){
@@ -230,7 +231,7 @@ $(document).ready(function(){
 	});
 	
 	/**
-	 * 编辑;
+	 * 记录编辑;
 	 */
 	$("#${jspDatatableId}").on("click", ".glyphicon-edit", function(){
 		//var id = $(this).closest("tr").find(".${groupCheckboxClassName}").val();
@@ -247,7 +248,7 @@ $(document).ready(function(){
 			dataType:"json", success:function(d){
 				if(d.status == 0){
 					var o = d.data;
-					me.pdd.Form.setForm($("#${webActionEditMethodName}Modal .form-horizontal"), o);
+					me.pdd.Form.setForm($(".${table.entityBeanName}formEdit"), o);
 					$('#${webActionEditMethodName}Modal').modal({
 			   		  keyboard: false
 			   		});
@@ -324,7 +325,7 @@ $(document).ready(function(){
 	 */
 	$(".${table.entityBeanName}new").on("click", function(){
 		//清空form;
-		me.pdd.Form.clearForm($("#${webActionEditMethodName}Modal .form-horizontal"));
+		me.pdd.Form.clearForm($(".${table.entityBeanName}formEdit"));
 		$('#${webActionEditMethodName}Modal').modal({
    		  keyboard: false
    		});
@@ -339,7 +340,7 @@ $(document).ready(function(){
 			"css":{border:		'',
 				backgroundColor:''}});
 		
-		$("#${webActionEditMethodName}Modal .form-horizontal").ajaxSubmit(
+		$(".${table.entityBeanName}formEdit").ajaxSubmit(
 			{	success:function(d){
 					alert(d.msg);
 					if(d.status == 0){
@@ -353,6 +354,20 @@ $(document).ready(function(){
 					$.unblockUI();
 				}
 		});
+	});
+	
+	/**
+	 * 查询重置;
+	 */
+	$(".${table.entityBeanName}reset").on("click", function(){
+		me.pdd.Form.clearForm($(".${table.entityBeanName}formQuery"));
+	});
+	
+	/**
+	 * 查询;
+	 */
+	$(".${table.entityBeanName}query").on("click", function(){
+		me.pdd.Form.clearForm($(".${table.entityBeanName}formQuery"));
 	});
 });
 </script>

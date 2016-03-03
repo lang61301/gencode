@@ -18,36 +18,36 @@ public class ${sqlMapDaoImplJavaClassName} implements ${daoFullPackageName}.${sq
 	
 	@Override
 	public void ${saveMethodPrefix}${table.entityBeanName}(${pojoFullPackageName}.${table.entityBeanName} obj){
-		baseDao.insert("${saveMethodPrefix}${table.entityBeanName}", obj);
+		baseDao.insert("${pojoFullPackageName}.${table.entityBeanName}.${saveMethodPrefix}", obj);
 	}
 	
 	@Override
 	public void ${updateMethodPrefix}${table.entityBeanName}(${pojoFullPackageName}.${table.entityBeanName} obj){
-		baseDao.update("${updateMethodPrefix}${table.entityBeanName}", obj);
+		baseDao.update("${pojoFullPackageName}.${table.entityBeanName}.${updateMethodPrefix}", obj);
 	}
 	
 	@Override
 	public java.util.Map<java.lang.String, java.lang.Object> ${getMethodPrefix}${table.entityBeanName}(java.util.Map<java.lang.String, java.lang.Object> params){
-		return (java.util.Map<java.lang.String, java.lang.Object>)baseDao.findForObject("${getMethodPrefix}${table.entityBeanName}", params);
+		return (java.util.Map<java.lang.String, java.lang.Object>)baseDao.findForObject("${pojoFullPackageName}.${table.entityBeanName}.${getMethodPrefix}", params);
 	}
 	
 	@Override
 	public void ${deleteMethodPrefix}${table.entityBeanName}(java.util.Map<java.lang.String, java.lang.Object> params){
-		baseDao.delete("${deleteMethodPrefix}${table.entityBeanName}", params);
+		baseDao.delete("${pojoFullPackageName}.${table.entityBeanName}.${deleteMethodPrefix}", params);
 	}
 	
 	@Override
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> ${queryMethodPrefix}${table.entityBeanName}(${pojoFullPackageName}.${table.entityBeanName} obj){
-		return baseDao.findForList("${queryMethodPrefix}${table.entityBeanName}", obj);
+		return baseDao.findForList("${pojoFullPackageName}.${table.entityBeanName}.${queryMethodPrefix}", obj);
 	}
 	
 	@Override
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> ${queryPagingMethodPrefix}${table.entityBeanName}(java.util.Map<java.lang.String, java.lang.Object> params){
-		return baseDao.findForList("${queryPagingMethodPrefix}${table.entityBeanName}", params);
+		return baseDao.findForList("${pojoFullPackageName}.${table.entityBeanName}.${queryPagingMethodPrefix}", params);
 	}
 	
 	@Override
 	public java.lang.Integer ${getPagingCountPrefix}${table.entityBeanName}(java.util.Map<java.lang.String, java.lang.Object> params){
-		return (java.lang.Integer)baseDao.findForObject("${getPagingCountPrefix}${table.entityBeanName}", params);
+		return (java.lang.Integer)baseDao.findForObject("${pojoFullPackageName}.${table.entityBeanName}.${getPagingCountPrefix}", params);
 	}
 }
