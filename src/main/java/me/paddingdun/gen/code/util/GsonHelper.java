@@ -27,10 +27,10 @@ import com.google.gson.JsonSerializer;
 public class GsonHelper {
 	
 	public static Gson create(){
-		return create(false);
+		return create(false, false);
 	}
 
-	public static Gson create(boolean excludeFieldsWithoutExposeAnnotation){
+	public static Gson create(boolean excludeFieldsWithoutExposeAnnotation, boolean prettyShow){
 		GsonBuilder gb = new GsonBuilder();
 		gb.registerTypeAdapter(java.util.Date.class, new Date1TypeAdapter())
 		.registerTypeAdapter(java.sql.Date.class, new Date2TypeAdapter())
@@ -38,6 +38,9 @@ public class GsonHelper {
 		.registerTypeAdapter(BigDecimal.class, new BigDecimalDeserializer());
 		if(excludeFieldsWithoutExposeAnnotation){
 			gb.excludeFieldsWithoutExposeAnnotation();
+		}
+		if(prettyShow){
+			gb.setPrettyPrinting();
 		}
 		return gb.create();
 	}

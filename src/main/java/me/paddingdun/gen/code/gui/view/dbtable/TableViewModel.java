@@ -149,6 +149,9 @@ public class TableViewModel {
 	private String defaultListDataCollectionPackageName;
 	
 	@Value1
+	private String defaultCollectionHelperPackageName;
+	
+	@Value1
 	private String pagingPackageName;
 	
 	@Value1
@@ -187,6 +190,29 @@ public class TableViewModel {
 	@Value1(def="3")
 	private Integer jspQueryColumnCount;
 	
+	
+	/**
+	 * contextPath;
+	 */
+	@Value1(def="_ctx")
+	private String jspContextPathVar;
+	
+	public String getDefaultCollectionHelperPackageName() {
+		return defaultCollectionHelperPackageName;
+	}
+
+	public void setDefaultCollectionHelperPackageName(String defaultCollectionHelperPackageName) {
+		this.defaultCollectionHelperPackageName = defaultCollectionHelperPackageName;
+	}
+
+	public String getJspContextPathVar() {
+		return jspContextPathVar;
+	}
+
+	public void setJspContextPathVar(String jspContextPathVar) {
+		this.jspContextPathVar = jspContextPathVar;
+	}
+
 	public Integer getJspQueryColumnCount() {
 		return jspQueryColumnCount;
 	}

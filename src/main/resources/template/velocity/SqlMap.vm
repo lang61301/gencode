@@ -5,9 +5,8 @@
 #set($j = 0)
 #set($H='#')
 
-#**<sql id="${queryPagingMethodPrefix}Condition">
-	<dynamic prepend="WHERE">
-		<!-- iterate 表示迭代, 迭代必须是集合list -->
+#**
+<!-- iterate 表示迭代, 迭代必须是集合list -->
 		<isNotNull property="citys" prepend="and">
 			(
 				<iterate conjunction="or" open="(" close=")" property="citys">
@@ -15,13 +14,23 @@
                 </iterate>
              )                                                                                             
 		</isNotNull>
-		<isNotEmpty property="areaName" prepend="and"> a.area_name like CONCAT('%', #areaName# ,'%')</isNotEmpty>
-		<isNotEmpty property="ptName" prepend="and"> p.pt_name  like CONCAT('%', #ptName# ,'%')</isNotEmpty>
-		<isNotEmpty property="startDate" prepend="and"> r.iden_date &gt;= #startDate#</isNotEmpty>
-		<isNotEmpty property="endDate" prepend="and"> r.iden_date &lt;= #endDate#</isNotEmpty>
-		<isNotEmpty property="weekDes" prepend="and"> r.week_des = #weekDes#</isNotEmpty>
+**#
+
+<sql id="${queryPagingMethodPrefix}Condition">
+	<dynamic prepend="WHERE">
+		#foreach( $column in ${table.queryColumns})
+		#if($column.stringJavaType)
+		<isNotEmpty property="${column.propertyName}" prepend="and">
+		<![CDATA[ ${column.logicDes} ]]>
+		</isNotEmpty>
+		#else
+		<isNotNull property="${column.propertyName}" prepend="and">
+		<![CDATA[ ${column.logicDes} ]]>
+		</isNotNull>
+		#end
+		#end
 	</dynamic>
-</sql>**#
+</sql>
 	
 <insert id="${saveMethodPrefix}" parameterClass="${pojoFullPackageName}.${table.entityBeanName}">
 	<![CDATA[insert into ${table.tableName}(#foreach( $column in ${table.columns}) #if ($i != 0), #end #if(${column.autoIncrement} == false) ${column.columnName} #set($i = $i + 1) #end #end ) values( #foreach( $column in ${table.columns}) #if ($j != 0), #end #if(${column.autoIncrement} == false) $H#if(${sqlMapMarkUse}==1)${column.propertyName}#else${column.columnName}#end$H #set($j = $j + 1) #end #end )]]>
@@ -55,15 +64,16 @@
 
 <select id="${queryPagingMethodPrefix}" parameterClass="java.util.Map" resultClass="java.util.HashMap">
 <![CDATA[select #foreach( $column in ${table.columns}) #if ($velocityCount != 1), #end t1.${column.columnName} as ${column.columnAlias} #end from ${table.tableName} t1]]>
-	#**<include refid="${queryPagingMethodPrefix}Condition"/>**#
-	<isNotEmpty property="start">
-		<isNotEmpty property="length">
+	<include refid="${queryPagingMethodPrefix}Condition"/>
+	<isNotNull property="start">
+		<isNotNull property="length">
 			<![CDATA[limit #start#, #length#]]>
-		</isNotEmpty>
-	</isNotEmpty>
+		</isNotNull>
+	</isNotNull>
 </select>
 
 <select id="${getPagingCountPrefix}" parameterClass="java.util.Map" resultClass="java.lang.Integer">
 <![CDATA[select count(1) from ${table.tableName} t1]]>
+<include refid="${queryPagingMethodPrefix}Condition"/>
 </select>
 </sqlMap>

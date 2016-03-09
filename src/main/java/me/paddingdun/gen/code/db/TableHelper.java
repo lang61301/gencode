@@ -6,7 +6,6 @@ package me.paddingdun.gen.code.db;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -21,6 +20,7 @@ import me.paddingdun.gen.code.data.tabletree.Table;
 import me.paddingdun.gen.code.util.BufferHelper;
 import me.paddingdun.gen.code.util.ConfigHelper;
 import me.paddingdun.gen.code.util.IOHelper;
+import me.paddingdun.gen.code.util.ModelHelper;
 
 /**
  * @author paddingdun
@@ -124,6 +124,9 @@ public class TableHelper {
 				
 				if("YES".equals(is_autoincrement))
 					el.setAutoIncrement(true);
+				
+				//设置查询列的json参数;
+				el.setQueryColumnJson(ModelHelper.defaultQueryColumnJson(name, type));
 				
 				//缓存更新;
 				boolean hasBuffer = false;

@@ -28,6 +28,12 @@ public class TableColumn implements Serializable{
 	@ModelValue(category=ModelValueCategory.Column, valueGetFuncName="getColumnAlias")
 	private String columnAlias;
 	
+	/**
+	 * 用来实现查询参数的json字符串;
+	 * 由于没有进一步ui操作设计, 因此直接用json字符串表示多个字段;
+	 */
+	private String queryColumnJson;
+	
 	
 	/**
 	 * @param columnName
@@ -204,6 +210,13 @@ public class TableColumn implements Serializable{
 		this.columnTitle = columnTitle;
 	}
 	
+	public String getQueryColumnJson() {
+		return queryColumnJson;
+	}
+	public void setQueryColumnJson(String queryColumnJson) {
+		this.queryColumnJson = queryColumnJson;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -220,7 +233,4 @@ public class TableColumn implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
-	
 }

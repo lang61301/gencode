@@ -23,14 +23,38 @@ public class ${table.entityBeanName} {
 	#end
 	
 	#foreach( $column in ${table.columns})
-public void  ${column.setMethod}(${column.javaType} ${column.propertyName}){
-    this.${column.propertyName} = ${column.propertyName};
+	public void  ${column.setMethod}(${column.javaType} ${column.propertyName}){
+		this.${column.propertyName} = ${column.propertyName};
 	}
 	
 	public ${column.javaType}  ${column.getMethod}(){
-    return this.${column.propertyName};
+		return this.${column.propertyName};
+	}
+	#end
+	
+	
+	
+	
+	#foreach( $column in ${table.queryColumns})
+	#if($column.newProperty)
+	/**
+	 * ${column.title}
+	 * ext query property;
+	 */
+    private ${column.javaType} ${column.propertyName};
+    #end	
+	#end
+	
+	#foreach( $column in ${table.queryColumns})
+	#if($column.newProperty)
+	public void  ${column.setMethod}(${column.javaType} ${column.propertyName}){
+		this.${column.propertyName} = ${column.propertyName};
 	}
 	
+	public ${column.javaType}  ${column.getMethod}(){
+		return this.${column.propertyName};
+	}
+	#end
 	#end
 }
 

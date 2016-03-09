@@ -46,6 +46,15 @@ public class TableHelper {
 		return tmp;
 	}
 	
+	public static String get(String col, String javaType){
+		String prefix = "get";
+		if(TypesHelper.isBooleanType(javaType)){
+			prefix ="is";
+		}
+		String tmp = prefix + col.substring(0,1).toUpperCase() + col.substring(1);
+		return tmp;
+	}
+	
 	/**
 	 * 处理表格名称和表格字段;
 	 * 将其转换成符合java规范的实体类名称和字段名称;

@@ -13,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import me.paddingdun.gen.code.data.jsp.Render;
 import me.paddingdun.gen.code.data.jsp.RenderWayType;
 import me.paddingdun.gen.code.data.table.JspColumn;
+import me.paddingdun.gen.code.data.table.QueryColumn;
 import me.paddingdun.gen.code.exception.BusinessException;
 import me.paddingdun.gen.code.gui.view.dbtable.TableViewModel;
 
@@ -104,6 +105,10 @@ public class RenderHelper {
 		return Integer.valueOf("1").equals(sqlMapMarkUse) ? column.getPropertyName() : column.getColumnName();
 	}
 	
+	private static String keyName(QueryColumn column, Integer sqlMapMarkUse){
+		return column.getPropertyName();
+	}
+	
 	/**
 	 * 列表render入口;
 	 * @param model
@@ -131,18 +136,45 @@ public class RenderHelper {
 	}
 	
 	/**
+	 * 2016-03-08
+	 * 已经修改不使用JspColumn作为查询参数;
+	 * 修改为QueryColumn作为查询参数;
+	 * 
 	 * 查询render入口;
 	 * @param model
 	 * @param column
 	 * @param sqlMapMarkUse
 	 * @param show
 	 * @return
+	 * @deprecated
 	 */
 	private static Render createQueryRender(JspColumn column, Integer sqlMapMarkUse, int colWidth){
 		String keyName = keyName(column, sqlMapMarkUse);
 		RenderWayType rwt =  RenderWayType.parse(column.getQueryRenderWay());
 		Render render = new Render();
 		render.setTitle(column.getColumnTitle());
+		render.setShow(true);
+		if(RenderWayType.query_default == rwt){
+			rwt = RenderWayType.query_input;
+		}
+		render.setRender(query(keyName, render.getTitle(), rwt, colWidth));
+		return render;
+	}
+	
+	/**
+	 * 2016-03-08 新增;
+	 * 查询render入口;
+	 * @param column
+	 * @param sqlMapMarkUse
+	 * @param colWidth
+	 * @param queryRenderWay
+	 * @return
+	 */
+	private static Render createQueryRender(QueryColumn column, Integer sqlMapMarkUse, int colWidth, int queryRenderWay){
+		String keyName = keyName(column, sqlMapMarkUse);
+		RenderWayType rwt =  RenderWayType.parse(queryRenderWay);
+		Render render = new Render();
+		render.setTitle(column.getTitle());
 		render.setShow(true);
 		if(RenderWayType.query_default == rwt){
 			rwt = RenderWayType.query_input;
@@ -200,54 +232,49 @@ public class RenderHelper {
 	}
 	
 	/**
-	 * 创建查询render;
-	 * @param model
+	 * 创建查询显示render;
+	 * @param queryColumns	查询列集合;
+	 * @param showColumnCount 分几列显示;
 	 * @param sqlMapMarkUse
 	 * @param show
 	 * @return
 	 */
-	public static Render createQueryFormRender(TableViewModel model, Integer sqlMapMarkUse, boolean show){
+	public static Render createQueryFormRender(List<QueryColumn> queryColumns, Integer showColumnCount, Integer sqlMapMarkUse, boolean show){
 		Render render = new Render();
 		render.setShow(show);
 		if(!show) return render;
-		List<JspColumn> jspColumns = model.getTable().getJspColumns();
-		List<JspColumn> queryJspColumns = new ArrayList<JspColumn>();
-		for(JspColumn jspColumn : jspColumns){
-			if(jspColumn.isQueryRenderShow())
-				queryJspColumns.add(jspColumn);
-		}
+		
 		//为空不显示查询form;
-		if(queryJspColumns.isEmpty()){
+		if(queryColumns.isEmpty()){
 			render.setShow(false);
 			return render;
 		}
 		
-		int size = queryJspColumns.size();
+		int size = queryColumns.size();
 		
 		Integer[] validColumnCount = new Integer[]{2, 3};
-		Integer columnCount = model.getJspQueryColumnCount();
 		boolean valid = false;
 		for (Integer v : validColumnCount) {
-			if(v.equals(columnCount)){
+			if(v.equals(showColumnCount)){
 				valid = true;
 				break;
 			}
 		}
 		if(!valid){
-			columnCount = Integer.valueOf("3");
+			showColumnCount = Integer.valueOf("3");
 		}
-		int colWidth = (12 - columnCount.intValue() * 2) / columnCount.intValue();
+		int colWidth = (12 - showColumnCount.intValue() * 2) / showColumnCount.intValue();
 		
 		Map<Integer, List<String>> map = new LinkedHashMap<Integer, List<String>>();
 		for (int i = 0; i < size; i++) {
-			JspColumn jc = queryJspColumns.get(i);
-			int key = i / columnCount;
+			QueryColumn qc = queryColumns.get(i);
+			int key = i / showColumnCount;
 			List<String> l = map.get(key);
 			if(l == null){
 				l = new ArrayList<String>();
 				map.put(key, l);
 			}
-			Render r = createQueryRender(jc, sqlMapMarkUse, colWidth);
+			Render r = createQueryRender(qc, sqlMapMarkUse, colWidth, qc.getRenderWayType());
 			l.add(r.getRender());
 		}
 		

@@ -8,6 +8,7 @@ import java.util.List;
 
 import me.paddingdun.gen.code.data.jsp.Render;
 import me.paddingdun.gen.code.data.table.JspColumn;
+import me.paddingdun.gen.code.data.table.QueryColumn;
 import me.paddingdun.gen.code.data.table.TableColumn;
 
 /**
@@ -123,5 +124,17 @@ public class Table implements Serializable{
 	}
 	public void setQueryFormRender(Render queryFormRender) {
 		this.queryFormRender = queryFormRender;
+	}
+	
+	/**
+	 * 查询列;
+	 */
+	private List<QueryColumn> queryColumns;
+
+	public List<QueryColumn> getQueryColumns() {
+		return queryColumns;
+	}
+	public void setQueryColumns(List<QueryColumn> queryColumns) {
+		this.queryColumns = queryColumns;
 	}
 }

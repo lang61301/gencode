@@ -83,6 +83,7 @@ public class ${sqlMapServiceImplJavaClassName} implements ${serviceFullPackageNa
 		java.util.List<${pojoFullPackageName}.${table.entityBeanName}> empty = java.util.Collections.emptyList();
 		result.setData(empty);
 		java.util.Map<java.lang.String, java.lang.Object> params = new java.util.HashMap<java.lang.String, java.lang.Object>();
+		${defaultCollectionHelperPackageName}.CollectionHelper.object2Map(obj, params);
 		Integer totalRows = this.dao.${getPagingCountPrefix}${table.entityBeanName}(params);
 		result.setTotal(totalRows);
 		if(Integer.valueOf("0").equals(totalRows)){

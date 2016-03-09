@@ -13,11 +13,14 @@ import java.util.Set;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.MethodUtils;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang.StringUtils;
 
-import me.paddingdun.gen.code.data.jsp.Render;
+import com.google.gson.reflect.TypeToken;
+
 import me.paddingdun.gen.code.data.option.ModelValue;
 import me.paddingdun.gen.code.data.option.ModelValueCategory;
 import me.paddingdun.gen.code.data.table.JspColumn;
+import me.paddingdun.gen.code.data.table.QueryColumn;
 import me.paddingdun.gen.code.data.table.TableColumn;
 import me.paddingdun.gen.code.data.tabletree.Table;
 import me.paddingdun.gen.code.gui.view.dbtable.TableViewModel;
@@ -142,6 +145,24 @@ public class ModelHelper {
 	}
 	
 	/**
+	 * 生成查询参数;
+	 * @param columnName
+	 * @param type
+	 * @return
+	 */
+	public static String defaultQueryColumnJson(String columnName, int type){
+		QueryColumn qp = new QueryColumn();
+		qp.setRelColumnName(columnName);
+		qp.setPropertyName(TableHelper.col(columnName));
+		qp.setJavaType(TypesHelper.map_types.get(type));
+		qp.setLogic("{0} = {1}");
+		List<QueryColumn> list = new ArrayList<QueryColumn>();
+		list.add(qp);
+		String result = GsonHelper.create(true, true).toJson(list);
+		return result;
+	}
+	
+	/**
 	 * 加工model,准备数据;
 	 * @param tableViewModel
 	 */
@@ -192,11 +213,51 @@ public class ModelHelper {
 		op.setListRenderShow(true);
 		jspColumns.add(op);
 		
-		//生成jspcolumn;
+		//生成JspColumn;
 		tableViewModel.getTable().setJspColumns(jspColumns);
 		
+		//生成QueryColumn;
+		List<QueryColumn> queryColumns = new ArrayList<QueryColumn>();
+		Set<String> set_propertyNames = new HashSet<String>();
+		for(JspColumn jspColumn : jspColumns){
+			set_propertyNames.add(jspColumn.getPropertyName());
+		}
+		for(JspColumn jspColumn : jspColumns){
+			if(jspColumn.isQueryRenderShow()){
+				
+				String queryColumnJson = jspColumn.getQueryColumnJson();
+				if(StringUtils.isNotBlank(queryColumnJson)){
+					queryColumnJson = queryColumnJson.trim();
+					List<QueryColumn> list_queryColumns = GsonHelper.create().fromJson(queryColumnJson, new TypeToken<List<QueryColumn>>(){}.getType());
+					for (QueryColumn qc : list_queryColumns) {
+						String pn = qc.getPropertyName();
+						if(set_propertyNames.contains(pn.trim())){
+							qc.setNewProperty(false);
+						}else{
+							qc.setNewProperty(true);
+						}
+						
+						qc.setRelColumnName(jspColumn.getColumnName());
+						
+						qc.setRenderWayType(jspColumn.getQueryRenderWay());
+						qc.setSetMethod(TableHelper.set(pn));
+						qc.setGetMethod(TableHelper.get(pn, qc.getJavaType()));
+						qc.setStringJavaType(TypesHelper.isStringType(qc.getJavaType()));
+						
+						if(qc.getTitle() == null){
+							qc.setTitle(jspColumn.getColumnTitle());
+						}
+						
+						queryColumns.add(qc);
+					}
+					
+				}
+			}
+		}
+		tableViewModel.getTable().setQueryColumns(queryColumns);
+		
 		//设置formRender
-		tableViewModel.getTable().setQueryFormRender(RenderHelper.createQueryFormRender(tableViewModel, tableViewModel.getSqlMapMarkUse(), true));
+		tableViewModel.getTable().setQueryFormRender(RenderHelper.createQueryFormRender(queryColumns, tableViewModel.getJspQueryColumnCount(), tableViewModel.getSqlMapMarkUse(), true));
 		
 		//生成配置文件;
 		ConfigHelper.genConfigXmlFile(tableViewModel.getTable());

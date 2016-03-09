@@ -1,6 +1,6 @@
 #parse("template/velocity/jspComponent.vm")
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
-<% session.setAttribute("_ctx", request.getContextPath()); %>
+<% session.setAttribute("${jspContextPathVar}", request.getContextPath()); %>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -13,9 +13,9 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <link href="${_ctx}/js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="${_ctx}/js/bootstrapvalidator/css/bootstrapValidator.css" rel="stylesheet">
-    <link href="${_ctx}/js/datatable/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="#[[${]]#${jspContextPathVar}#[[}]]#/js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="#[[${]]#${jspContextPathVar}#[[}]]#/js/bootstrapvalidator/css/bootstrapValidator.css" rel="stylesheet">
+    <link href="#[[${]]#${jspContextPathVar}#[[}]]#/js/datatable/css/dataTables.bootstrap.min.css" rel="stylesheet">
     
     #*
     <link href="//cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
@@ -130,7 +130,7 @@
         <div class="container-fluid">
 		    <div class="row">
 				<div class="col-md-12">
-					<form class="form-horizontal ${table.entityBeanName}formEdit" role="form" action="${_ctx}${webActionRequestMapping}/${webActionEditMethodName}" method="post">
+					<form class="form-horizontal ${table.entityBeanName}formEdit" role="form" action="#[[${]]#${jspContextPathVar}#[[}]]#${webActionRequestMapping}/${webActionEditMethodName}" method="post">
 					#foreach( $column in $table.jspColumns)
 						#if( ${column.editRender.show} )
 							${column.editRender.render}
@@ -165,15 +165,15 @@
     </div>
   </div>
 </div>
-<script src="${_ctx}/js/jquery-2.1.4/jquery-2.1.4.min.js"></script>
-<script src="${_ctx}/js/jquery/jquery.form.js"></script>
-<script src="${_ctx}/js/jquery/jquery.blockUI.js"></script>
-<script src="${_ctx}/js/bootstrap/js/bootstrap.min.js"></script>
-<script src="${_ctx}/js/bootstrapvalidator/js/bootstrapValidator.min.js"></script>
-<script src="${_ctx}/js/datatable/js/jquery.dataTables.min.js"></script>
-<script src="${_ctx}/js/datatable/js/dataTables.bootstrap.js"></script>
-<script src="${_ctx}/js/util2.js"></script>
-<script src="${_ctx}/js/tables.js"></script>
+<script src="#[[${]]#${jspContextPathVar}#[[}]]#/js/jquery-2.1.4/jquery-2.1.4.min.js"></script>
+<script src="#[[${]]#${jspContextPathVar}#[[}]]#/js/jquery/jquery.form.js"></script>
+<script src="#[[${]]#${jspContextPathVar}#[[}]]#/js/jquery/jquery.blockUI.js"></script>
+<script src="#[[${]]#${jspContextPathVar}#[[}]]#/js/bootstrap/js/bootstrap.min.js"></script>
+<script src="#[[${]]#${jspContextPathVar}#[[}]]#/js/bootstrapvalidator/js/bootstrapValidator.min.js"></script>
+<script src="#[[${]]#${jspContextPathVar}#[[}]]#/js/datatable/js/jquery.dataTables.min.js"></script>
+<script src="#[[${]]#${jspContextPathVar}#[[}]]#/js/datatable/js/dataTables.bootstrap.js"></script>
+<script src="#[[${]]#${jspContextPathVar}#[[}]]#/js/util2.js"></script>
+<script src="#[[${]]#${jspContextPathVar}#[[}]]#/js/tables.js"></script>
 
 #*
 <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
@@ -200,7 +200,7 @@ $(document).ready(function(){
         #datatable_columns($table.jspColumns)
         ]
         ,"ajax":{
-			"url":"${_ctx}${webActionRequestMapping}/${queryPagingMethodPrefix}",
+			"url":"#[[${]]#${jspContextPathVar}#[[}]]#${webActionRequestMapping}/${queryPagingMethodPrefix}",
 			"dataType": "json",
 			"type":"post",
 			"dataSrc":function(json){
@@ -213,6 +213,11 @@ $(document).ready(function(){
 			"data":function(d){
 				//修正传入后台的数据, 使其可以对应java对象;
 				me.pdd.DataTable.plainfy_datatables(d);
+				
+				#if(${table.queryColumns.size()} > 0)
+				var f = me.pdd.Form.getForm($(".${table.entityBeanName}formQuery"));
+				$.extend(d, f);
+				#end
 			},
 			"complete":function(d){
 			}
@@ -243,7 +248,7 @@ $(document).ready(function(){
 			"message":"",
 			"css":{border:		'',
 				backgroundColor:''}});
-		$.ajax("${_ctx}${webActionRequestMapping}/${getMethodPrefix}", 
+		$.ajax("#[[${]]#${jspContextPathVar}#[[}]]#${webActionRequestMapping}/${getMethodPrefix}", 
 			{"data":objData, type:"get",
 			dataType:"json", success:function(d){
 				if(d.status == 0){
@@ -272,7 +277,7 @@ $(document).ready(function(){
 				"message":"<h2>删除中...</h2>",
 				"css":{border:		'',
 					backgroundColor:''}});
-			$.ajax("${_ctx}${webActionRequestMapping}/${deleteMethodPrefix}", 
+			$.ajax("#[[${]]#${jspContextPathVar}#[[}]]#${webActionRequestMapping}/${deleteMethodPrefix}", 
 				{"data":objData, type:"post",
 					dataType:"json", success:function(d){
 						alert(d.msg);
@@ -306,7 +311,7 @@ $(document).ready(function(){
 							backgroundColor:''}});
 				#ajax_pks_get_data_array(${table.columns} ${sqlMapMarkUse} false)
 				
-				$.ajax("${_ctx}${webActionRequestMapping}/${deleteMethodPrefix}", 
+				$.ajax("#[[${]]#${jspContextPathVar}#[[}]]#${webActionRequestMapping}/${deleteMethodPrefix}", 
 					{"data":objData, type:"post",
 						dataType:"json", success:function(d){
 							alert(d.msg);
@@ -367,7 +372,7 @@ $(document).ready(function(){
 	 * 查询;
 	 */
 	$(".${table.entityBeanName}query").on("click", function(){
-		me.pdd.Form.clearForm($(".${table.entityBeanName}formQuery"));
+		table.ajax.reload();
 	});
 });
 </script>

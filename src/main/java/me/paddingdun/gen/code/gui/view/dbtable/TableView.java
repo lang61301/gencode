@@ -9,18 +9,19 @@ import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.Callable;
 
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 import org.apache.log4j.Logger;
 
 import layout.TableLayout;
-import me.paddingdun.gen.code.data.jsp.RenderWayType;
 import me.paddingdun.gen.code.data.message.Message;
 import me.paddingdun.gen.code.data.option.ModelValue;
 import me.paddingdun.gen.code.data.option.ModelValueCategory;
@@ -122,6 +123,10 @@ public class TableView extends AbstractView {
         queryMethodPrefix = new javax.swing.JTextField();
         queryPagingMethodPrefix = new javax.swing.JTextField();
         
+        queryColumnJson = new javax.swing.JTextArea(1, 10);
+        javax.swing.JScrollPane cqpc = new javax.swing.JScrollPane(queryColumnJson); 
+//        customQueryProperty.setAutoscrolls(true);
+        
         p.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         pt.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         ptt.setViewportView(table);
@@ -172,7 +177,7 @@ public class TableView extends AbstractView {
         TableLayout tableLayout_ptba = new TableLayout();
         double border = 2;			      //0      1    2     3    4     5     6
         tableLayout_ptba.setColumn(new double[]{border, 50,  50,   80,  -1,  50,   70, border});
-        tableLayout_ptba.setRow(new double[]{border,30, 30, 30, 30, 30, 30, 30, border});
+        tableLayout_ptba.setRow(new double[]{border,30, 30, 150, 30, 30, 30, 30, 30, border});
         ptba.setLayout(tableLayout_ptba);
         
         queryRenderShow.addElement(CollectionHelper.option("是", Boolean.TRUE));
@@ -198,24 +203,34 @@ public class TableView extends AbstractView {
         CollectionHelper.renderWayOption(editRenderWay,"edit");
         jcombo_editRenderWay.setModel(editRenderWay);
         
-        ptba.add(jLabel10, "1,1,2,1");
-        ptba.add(jcombo_queryRenderShow, "3,1,4,1");
-        ptba.add(btnOk, "6,1");
-        ptba.add(jLabel11, "1,2,2,2");
-        ptba.add(jcombo_queryRenderWay, "3,2,4,2");
+        int row = 1;
+        ptba.add(jLabel10, MessageFormat.format("1,{0},2,{0}", row, row));
+        ptba.add(jcombo_queryRenderShow, MessageFormat.format("3,{0},4,{0}", row));
+        ptba.add(btnOk, MessageFormat.format("6,{0}", row));
+        row++;
+        ptba.add(jLabel11, MessageFormat.format("1,{0},2,{0}", row));
+        ptba.add(jcombo_queryRenderWay, MessageFormat.format("3,{0},4,{0}", row));
+        row++;
+        ptba.add(new JLabel("查询参数"), MessageFormat.format("1,{0},2,{0}", row));
+        ptba.add(cqpc, MessageFormat.format("3,{0},6,{0}", row));
         
-        ptba.add(jLabel12, "1,3,2,3");
-        ptba.add(jcombo_listRenderShow, "3,3,4,3");
-        ptba.add(jLabel13, "1,4,2,4");
-        ptba.add(jcombo_listRenderWay, "3,4,4,4");
+        row++;
+        ptba.add(jLabel12, MessageFormat.format("1,{0},2,{0}", row));
+        ptba.add(jcombo_listRenderShow, MessageFormat.format("3,{0},4,{0}", row));
+        row++;
+        ptba.add(jLabel13, MessageFormat.format("1,{0},2,{0}", row));
+        ptba.add(jcombo_listRenderWay, MessageFormat.format("3,{0},4,{0}", row));
         
-        ptba.add(jLabel14, "1,5,2,5");
-        ptba.add(jcombo_editRenderShow, "3,5,4,5");
-        ptba.add(jLabel15, "1,6,2,6");
-        ptba.add(jcombo_editRenderWay, "3,6,4,6");
+        row++;
+        ptba.add(jLabel14, MessageFormat.format("1,{0},2,{0}", row));
+        ptba.add(jcombo_editRenderShow, MessageFormat.format("3,{0},4,{0}", row));
+        row++;
+        ptba.add(jLabel15, MessageFormat.format("1,{0},2,{0}", row));
+        ptba.add(jcombo_editRenderWay, MessageFormat.format("3,{0},4,{0}", row));
         
-        ptba.add(jLabel16, "1,7,2,7");
-        ptba.add(columnTitle, "3,7,4,7");
+        row++;
+        ptba.add(jLabel16, MessageFormat.format("1,{0},2,{0}", row));
+        ptba.add(columnTitle, MessageFormat.format("3,{0},4,{0}", row));
 
 //        showGsonAnnotation.setModel(null);
 
@@ -498,6 +513,9 @@ public class TableView extends AbstractView {
     private javax.swing.JLabel jLabel16;
     @ModelValue(category=ModelValueCategory.Column, valueGetFuncName = "getText", valueSetFuncName ="setText")
     private javax.swing.JTextField columnTitle; 
+    
+    @ModelValue(category=ModelValueCategory.Column,valueGetFuncName = "getText", valueSetFuncName ="setText")
+    private javax.swing.JTextArea queryColumnJson;
     
     
     private void initModel(Table t){

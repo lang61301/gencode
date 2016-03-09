@@ -89,5 +89,20 @@ public class TypesHelper {
 		else
 			return false;
 	}
+	
+	public static boolean isBooleanType(String javaType){
+		if(Boolean.class.getName().equals(javaType)
+				||boolean.class.getName().equals(javaType))
+			return true;
+		else
+			return false;
+	}
+	
+	public static boolean isStringType(String javaType){
+		if(String.class.getName().equals(javaType))
+			return true;
+		else
+			return false;
+	}
 
 }
