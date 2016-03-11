@@ -43,6 +43,26 @@ public class Table implements Serializable{
 	public void setTableId(String tableId) {
 		this.tableId = tableId;
 	}
+	
+	/**
+	 * modify 2016-03-10
+	 * 是否是自动生成主键;
+	 */
+	private boolean autoPrimary = false;
+	
+	public boolean isAutoPrimary() {
+		for (TableColumn tc : columns) {
+			if(tc.isPrimary() && tc.isAutoIncrement()){
+				autoPrimary = true;
+				break;
+			}
+		}
+		return autoPrimary;
+	}
+	public void setAutoPrimary(boolean autoPrimary) {
+		this.autoPrimary = autoPrimary;
+	}
+	
 	/**
 	 * @param cat
 	 * @param tableName

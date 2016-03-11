@@ -22,6 +22,13 @@ public class ${sqlMapServiceImplJavaClassName} implements ${serviceFullPackageNa
 	@org.springframework.transaction.annotation.Transactional
 	@Override
 	public void ${saveMethodPrefix}${table.entityBeanName}(${pojoFullPackageName}.${table.entityBeanName} obj){
+		#foreach( $column in ${table.jspColumns})
+		#if(${column.editRenderShow} == false)
+		#if(${column.newValueJavaCode})
+			${column.newValueJavaCode}
+		#end
+		#end
+		#end
 		dao.${saveMethodPrefix}${table.entityBeanName}(obj);
 	}
 	
@@ -31,6 +38,13 @@ public class ${sqlMapServiceImplJavaClassName} implements ${serviceFullPackageNa
 	@org.springframework.transaction.annotation.Transactional
 	@Override
 	public void ${updateMethodPrefix}${table.entityBeanName}(${pojoFullPackageName}.${table.entityBeanName} obj){
+		#foreach( $column in ${table.jspColumns})
+		#if(${column.editRenderShow} == false)
+		#if(${column.editValueJavaCode})
+			${column.editValueJavaCode}
+		#end
+		#end
+		#end
 		dao.${updateMethodPrefix}${table.entityBeanName}(obj);
 	}
 	

@@ -34,15 +34,17 @@
 	
 <insert id="${saveMethodPrefix}" parameterClass="${pojoFullPackageName}.${table.entityBeanName}">
 	<![CDATA[insert into ${table.tableName}(#foreach( $column in ${table.columns}) #if ($i != 0), #end #if(${column.autoIncrement} == false) ${column.columnName} #set($i = $i + 1) #end #end ) values( #foreach( $column in ${table.columns}) #if ($j != 0), #end #if(${column.autoIncrement} == false) $H#if(${sqlMapMarkUse}==1)${column.propertyName}#else${column.columnName}#end$H #set($j = $j + 1) #end #end )]]>
+	#if(${table.autoPrimary})
 	<selectKey resultClass="#foreach( $column in ${table.columns})#if(${column.autoIncrement})${column.javaType}#end#end" keyProperty="#foreach( $column in ${table.columns})#if(${column.autoIncrement})${column.propertyName}#end#end"> 
 		<![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>   
 	</selectKey>
+	#end
 </insert>
 
 #set($i = 0)
 #set($j = 0)
 <update id="${updateMethodPrefix}" parameterClass="${pojoFullPackageName}.${table.entityBeanName}">
-<![CDATA[update ${table.tableName} set #foreach( $column in ${table.columns}) #if ($i != 0), #end #if(${column.primary} == false) ${column.columnName} = $H#if(${sqlMapMarkUse}==1)${column.propertyName}#else${column.columnName}#end$H #set($i = $i + 1) #end #end  where #foreach( $column in ${table.columns}) #if (${column.primary}) #if ($j != 0)and #end ${column.columnName} = $H#if(${sqlMapMarkUse}==1)${column.propertyName}#else${column.columnName}#end$H #set($j = $j + 1) #end #end]]>
+<![CDATA[update ${table.tableName} set #foreach( $column in ${table.columns}) #if ($i != 0), #end #if(${column.primary} == false and ${column.notInSetUpdateSql} == false) ${column.columnName} = $H#if(${sqlMapMarkUse}==1)${column.propertyName}#else${column.columnName}#end$H #set($i = $i + 1) #end #end  where #foreach( $column in ${table.columns}) #if (${column.primary}) #if ($j != 0)and #end ${column.columnName} = $H#if(${sqlMapMarkUse}==1)${column.propertyName}#else${column.columnName}#end$H #set($j = $j + 1) #end #end]]>
 </update>
 #set($j=0)	
 <select id="${getMethodPrefix}" parameterClass="java.util.Map" resultClass="java.util.HashMap">

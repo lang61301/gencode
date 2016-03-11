@@ -236,7 +236,7 @@ $(document).ready(function(){
 	});
 	
 	/**
-	 * 记录编辑;
+	 * 编辑记录;
 	 */
 	$("#${jspDatatableId}").on("click", ".glyphicon-edit", function(){
 		//var id = $(this).closest("tr").find(".${groupCheckboxClassName}").val();
@@ -337,14 +337,32 @@ $(document).ready(function(){
 	});
 	
 	/**
-	 * 编辑保存;
+	 * 新增/编辑form验证规则;
 	 */
-	$(".${table.entityBeanName}save").on("click", function(){
+	$('.${table.entityBeanName}formEdit').bootstrapValidator({
+	     feedbackIcons: {
+	         valid: 'glyphicon glyphicon-ok',
+	         invalid: 'glyphicon glyphicon-remove',
+	         validating: 'glyphicon glyphicon-refresh'
+	     },
+	     fields: null
+	 });
+	
+	/**
+     * 点击执行编辑form验证;
+     */
+   $(".${table.entityBeanName}save").on("click", function(){
+	   $('.${table.entityBeanName}formEdit').data('bootstrapValidator').validate();
+   });
+	
+   /**
+	* 编辑form验证成功后执行;
+	*/
+   $('.${table.entityBeanName}formEdit').on("success.form.bv", function(){
 		$.blockUI({"baseZ":2001,
 			"message":"<h2>保存中...</h2>",
 			"css":{border:		'',
 				backgroundColor:''}});
-		
 		$(".${table.entityBeanName}formEdit").ajaxSubmit(
 			{	success:function(d){
 					alert(d.msg);

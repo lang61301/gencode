@@ -4,6 +4,7 @@
 package me.paddingdun.gen.code.data.table;
 
 import me.paddingdun.gen.code.data.jsp.Render;
+import me.paddingdun.gen.code.util.EditValueGenWayHelper;
 
 /**
  * @author paddingdun
@@ -43,14 +44,7 @@ public class JspColumn extends TableColumn {
 	 * add or edit;
 	 */
 	private Render editRender;
-
-
-//	public Render getQueryRender() {
-//		return queryRender;
-//	}
-//	public void setQueryRender(Render queryRender) {
-//		this.queryRender = queryRender;
-//	}
+	
 	public Render getListRender() {
 		return listRender;
 	}
@@ -62,6 +56,14 @@ public class JspColumn extends TableColumn {
 	}
 	public void setEditRender(Render editRender) {
 		this.editRender = editRender;
+	}
+	
+	public String getEditValueJavaCode(){
+		return EditValueGenWayHelper.javaCodeEdit(this);
+	}
+	
+	public String getNewValueJavaCode(){
+		return EditValueGenWayHelper.javaCodeNew(this);
 	}
 
 }

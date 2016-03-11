@@ -17,8 +17,11 @@ import org.apache.commons.lang.StringUtils;
 
 import com.google.gson.reflect.TypeToken;
 
+import me.paddingdun.gen.code.data.edit.EditValueGenWay;
+import me.paddingdun.gen.code.data.edit.EditValueGenWayType;
 import me.paddingdun.gen.code.data.option.ModelValue;
 import me.paddingdun.gen.code.data.option.ModelValueCategory;
+import me.paddingdun.gen.code.data.table.DBColumn;
 import me.paddingdun.gen.code.data.table.JspColumn;
 import me.paddingdun.gen.code.data.table.QueryColumn;
 import me.paddingdun.gen.code.data.table.TableColumn;
@@ -150,15 +153,40 @@ public class ModelHelper {
 	 * @param type
 	 * @return
 	 */
-	public static String defaultQueryColumnJson(String columnName, int type){
+	public static String defaultQueryColumnJson(DBColumn column){
 		QueryColumn qp = new QueryColumn();
-		qp.setRelColumnName(columnName);
-		qp.setPropertyName(TableHelper.col(columnName));
-		qp.setJavaType(TypesHelper.map_types.get(type));
-		qp.setLogic("{0} = {1}");
+		qp.setRelColumnName(column.getColumnName());
+		qp.setPropertyName(TableHelper.col(column.getColumnName()));
+		qp.setJavaType(TypesHelper.map_types.get(column.getType()));
+		qp.setLogic("t1.{0} = {1}");
 		List<QueryColumn> list = new ArrayList<QueryColumn>();
 		list.add(qp);
 		String result = GsonHelper.create(true, true).toJson(list);
+		return result;
+	}
+	
+	/**
+	 * 1.如果是time或者date字段,将给time或者date;
+	 * @param column
+	 * @return
+	 */
+	public static String defaultEditValueGenWayJson(DBColumn column){
+		EditValueGenWay evg = new EditValueGenWay();
+		evg.setNew1(EditValueGenWayType.input);
+		evg.setEdit(EditValueGenWayType.input);
+		if(TypesHelper.isTimestampType(column.getType())){
+			evg.setNew1(EditValueGenWayType.time);
+			evg.setEdit(EditValueGenWayType.time);
+		}else if(TypesHelper.isDateType(column.getType())){
+			evg.setNew1(EditValueGenWayType.date);
+			evg.setEdit(EditValueGenWayType.date);
+		}else if(column.isPrimary()){
+			if(column.isAutoIncrement()){
+				evg.setNew1(EditValueGenWayType.nothing);
+				evg.setEdit(EditValueGenWayType.nothing);
+			}
+		}
+		String result = GsonHelper.create(true, true).toJson(evg);
 		return result;
 	}
 	
@@ -223,6 +251,7 @@ public class ModelHelper {
 			set_propertyNames.add(jspColumn.getPropertyName());
 		}
 		for(JspColumn jspColumn : jspColumns){
+			//该列需要查询时新增查询列参数;
 			if(jspColumn.isQueryRenderShow()){
 				
 				String queryColumnJson = jspColumn.getQueryColumnJson();

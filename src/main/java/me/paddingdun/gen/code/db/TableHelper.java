@@ -15,12 +15,14 @@ import java.util.Vector;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
+import me.paddingdun.gen.code.data.table.DBColumn;
 import me.paddingdun.gen.code.data.table.TableColumn;
 import me.paddingdun.gen.code.data.tabletree.Table;
 import me.paddingdun.gen.code.util.BufferHelper;
 import me.paddingdun.gen.code.util.ConfigHelper;
 import me.paddingdun.gen.code.util.IOHelper;
 import me.paddingdun.gen.code.util.ModelHelper;
+import me.paddingdun.gen.code.util.TypesHelper;
 
 /**
  * @author paddingdun
@@ -118,15 +120,25 @@ public class TableHelper {
 				String common = rs1.getString("REMARKS");
 				String is_autoincrement = rs1.getString("IS_AUTOINCREMENT");
 				
-				TableColumn el = new TableColumn(name, type, common);
+				DBColumn dbc = new DBColumn(name, type, common);
 				if(set_primary.contains(name))
-					el.setPrimary(true);
+					dbc.setPrimary(true);
 				
 				if("YES".equals(is_autoincrement))
-					el.setAutoIncrement(true);
+					dbc.setAutoIncrement(true);
+				
+				TableColumn el = new TableColumn(dbc);
 				
 				//设置查询列的json参数;
-				el.setQueryColumnJson(ModelHelper.defaultQueryColumnJson(name, type));
+				el.setQueryColumnJson(ModelHelper.defaultQueryColumnJson(dbc));
+				
+				//设置字段在新增和编辑时的填值方式json;
+				el.setEditValueGenWayJson(ModelHelper.defaultEditValueGenWayJson(dbc));
+				
+				//如果判断字段为timestamp类型, 自动将editRenderShow = false
+				if(TypesHelper.isTimestampType(type)){
+					el.setEditRenderShow(false);		
+				}
 				
 				//缓存更新;
 				boolean hasBuffer = false;

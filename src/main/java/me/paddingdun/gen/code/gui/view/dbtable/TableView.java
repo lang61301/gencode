@@ -127,6 +127,9 @@ public class TableView extends AbstractView {
         javax.swing.JScrollPane cqpc = new javax.swing.JScrollPane(queryColumnJson); 
 //        customQueryProperty.setAutoscrolls(true);
         
+        editValueGenWayJson = new javax.swing.JTextArea(1, 10);
+        javax.swing.JScrollPane cevfw = new javax.swing.JScrollPane(editValueGenWayJson); 
+        
         p.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         pt.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         ptt.setViewportView(table);
@@ -137,7 +140,7 @@ public class TableView extends AbstractView {
         pt.setBottomComponent(ptb);
         
         pb.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        ptb.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+//        ptb.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         ptb.setViewportView(ptba);
         
         jLabel1.setText("基础包名称");
@@ -175,9 +178,9 @@ public class TableView extends AbstractView {
         jLabel16.setText("字段标题");
         
         TableLayout tableLayout_ptba = new TableLayout();
-        double border = 2;			      //0      1    2     3    4     5     6
+        double border = 2;			      		//0      1    2     3    4     5     6
         tableLayout_ptba.setColumn(new double[]{border, 50,  50,   80,  -1,  50,   70, border});
-        tableLayout_ptba.setRow(new double[]{border,30, 30, 150, 30, 30, 30, 30, 30, border});
+        tableLayout_ptba.setRow(new double[]{border,30, 30, 30, 130, 30, 30, 30, 30, 130, border});
         ptba.setLayout(tableLayout_ptba);
         
         queryRenderShow.addElement(CollectionHelper.option("是", Boolean.TRUE));
@@ -204,6 +207,10 @@ public class TableView extends AbstractView {
         jcombo_editRenderWay.setModel(editRenderWay);
         
         int row = 1;
+        ptba.add(jLabel16, MessageFormat.format("1,{0},2,{0}", row));
+        ptba.add(columnTitle, MessageFormat.format("3,{0},4,{0}", row));
+        
+        row++;
         ptba.add(jLabel10, MessageFormat.format("1,{0},2,{0}", row, row));
         ptba.add(jcombo_queryRenderShow, MessageFormat.format("3,{0},4,{0}", row));
         ptba.add(btnOk, MessageFormat.format("6,{0}", row));
@@ -211,7 +218,7 @@ public class TableView extends AbstractView {
         ptba.add(jLabel11, MessageFormat.format("1,{0},2,{0}", row));
         ptba.add(jcombo_queryRenderWay, MessageFormat.format("3,{0},4,{0}", row));
         row++;
-        ptba.add(new JLabel("查询参数"), MessageFormat.format("1,{0},2,{0}", row));
+        ptba.add(new JLabel("查询字段"), MessageFormat.format("1,{0},2,{0}", row));
         ptba.add(cqpc, MessageFormat.format("3,{0},6,{0}", row));
         
         row++;
@@ -227,10 +234,9 @@ public class TableView extends AbstractView {
         row++;
         ptba.add(jLabel15, MessageFormat.format("1,{0},2,{0}", row));
         ptba.add(jcombo_editRenderWay, MessageFormat.format("3,{0},4,{0}", row));
-        
         row++;
-        ptba.add(jLabel16, MessageFormat.format("1,{0},2,{0}", row));
-        ptba.add(columnTitle, MessageFormat.format("3,{0},4,{0}", row));
+        ptba.add(new JLabel("填值方式"), MessageFormat.format("1,{0},2,{0}", row));
+        ptba.add(cevfw, MessageFormat.format("3,{0},6,{0}", row));
 
 //        showGsonAnnotation.setModel(null);
 
@@ -516,6 +522,9 @@ public class TableView extends AbstractView {
     
     @ModelValue(category=ModelValueCategory.Column,valueGetFuncName = "getText", valueSetFuncName ="setText")
     private javax.swing.JTextArea queryColumnJson;
+    
+    @ModelValue(category=ModelValueCategory.Column,valueGetFuncName = "getText", valueSetFuncName ="setText")
+    private javax.swing.JTextArea editValueGenWayJson;
     
     
     private void initModel(Table t){

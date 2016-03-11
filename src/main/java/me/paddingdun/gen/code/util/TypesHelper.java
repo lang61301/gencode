@@ -83,6 +83,21 @@ public class TypesHelper {
 		return obj;
 	}
 	
+	public static boolean isTimestampType(int type){
+		if(type== java.sql.Types.TIMESTAMP
+				|| type == java.sql.Types.TIME)
+			return true;
+		else
+			return false;
+	}
+	
+	public static boolean isDateType(int type){
+		if(type== java.sql.Types.DATE)
+			return true;
+		else
+			return false;
+	}
+	
 	public static boolean isBooleanType(int type){
 		if(type== java.sql.Types.BOOLEAN)
 			return true;

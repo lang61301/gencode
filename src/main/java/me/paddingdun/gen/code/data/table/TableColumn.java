@@ -3,36 +3,37 @@
  */
 package me.paddingdun.gen.code.data.table;
 
-import java.io.Serializable;
 
 import me.paddingdun.gen.code.data.jsp.RenderWayType;
 import me.paddingdun.gen.code.data.option.ModelValue;
 import me.paddingdun.gen.code.data.option.ModelValueCategory;
+import me.paddingdun.gen.code.util.EditValueGenWayHelper;
 
 /**
  * @author paddingdun
  *
  * 2015年12月3日
  */
-public class TableColumn implements Serializable{
+public class TableColumn extends DBColumn{
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String columnName;
-	private int type;
-	private String columnCommon;
-	private boolean autoIncrement;
-	private boolean primary;
+	
 	@ModelValue(category=ModelValueCategory.Column, valueGetFuncName="getColumnAlias")
 	private String columnAlias;
 	
 	/**
-	 * 用来实现查询参数的json字符串;
+	 * 用来实现查询参数的json字符串, 关联对象QueryColumn
 	 * 由于没有进一步ui操作设计, 因此直接用json字符串表示多个字段;
 	 */
 	private String queryColumnJson;
+	
+	/**
+	 * 新增和编辑时,该字段值的生成方式;
+	 */
+	private String editValueGenWayJson;
 	
 	
 	/**
@@ -41,44 +42,15 @@ public class TableColumn implements Serializable{
 	 * @param columnCommon
 	 */
 	public TableColumn(String columnName, int type, String columnCommon) {
-		super();
-		this.columnName = columnName;
-		this.type = type;
-		this.columnCommon = columnCommon;
+		super(columnName, type, columnCommon);
 	}
-	public String getColumnName() {
-		return columnName;
+	
+	public TableColumn(DBColumn dbColumn){
+		this(dbColumn.getColumnName(), dbColumn.getType(), dbColumn.getColumnCommon());
+		this.setAutoIncrement(dbColumn.isAutoIncrement());
+		this.setPrimary(dbColumn.isPrimary());
 	}
-	public void setColumnName(String columnName) {
-		this.columnName = columnName;
-	}
-	public int getType() {
-		return type;
-	}
-	public void setType(int type) {
-		this.type = type;
-	}
-	public String getColumnCommon() {
-		return columnCommon;
-	}
-	public void setColumnCommon(String columnCommon) {
-		this.columnCommon = columnCommon;
-	}
-	public boolean isAutoIncrement() {
-		return autoIncrement;
-	}
-	public void setAutoIncrement(boolean autoIncrement) {
-		this.autoIncrement = autoIncrement;
-	}
-	public boolean isPrimary() {
-		return primary;
-	}
-	public void setPrimary(boolean primary) {
-		this.primary = primary;
-	}
-
-
-
+	
 	private String javaType;
 	private String propertyName;
 	private String getMethod;
@@ -112,7 +84,7 @@ public class TableColumn implements Serializable{
 	
 	public String getColumnAlias() {
 		if(columnAlias == null)
-			columnAlias = columnName;
+			columnAlias = this.getColumnName();
 		return columnAlias;
 	}
 	public void setColumnAlias(String columnAlias) {
@@ -202,7 +174,7 @@ public class TableColumn implements Serializable{
 	}
 	public String getColumnTitle() {
 		if(columnTitle == null){
-			columnTitle = columnCommon;
+			columnTitle = this.getColumnCommon();
 		}
 		return columnTitle;
 	}
@@ -217,6 +189,21 @@ public class TableColumn implements Serializable{
 		this.queryColumnJson = queryColumnJson;
 	}
 	
+	public String getEditValueGenWayJson() {
+		return editValueGenWayJson;
+	}
+	public void setEditValueGenWayJson(String editValueGenWayJson) {
+		this.editValueGenWayJson = editValueGenWayJson;
+	}
+	
+	/**
+	 * 判断该字段是否可以存在updatesql中的set语句中;
+	 * @return
+	 */
+	public boolean isNotInSetUpdateSql(){
+		return EditValueGenWayHelper.isNotInSetUpdateSql(this);
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -226,10 +213,10 @@ public class TableColumn implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		TableColumn other = (TableColumn) obj;
-		if (columnName == null) {
-			if (other.columnName != null)
+		if (this.getColumnName() == null) {
+			if (other.getColumnName() != null)
 				return false;
-		} else if (!columnName.equals(other.columnName))
+		} else if (!this.getColumnName().equals(other.getColumnName()))
 			return false;
 		return true;
 	}
