@@ -4,6 +4,8 @@
 package me.paddingdun.gen.code.data.table;
 
 
+import java.util.Date;
+
 import me.paddingdun.gen.code.data.jsp.RenderWayType;
 import me.paddingdun.gen.code.data.option.ModelValue;
 import me.paddingdun.gen.code.data.option.ModelValueCategory;
@@ -34,6 +36,13 @@ public class TableColumn extends DBColumn{
 	 * 新增和编辑时,该字段值的生成方式;
 	 */
 	private String editValueGenWayJson;
+	
+	/**
+	 * add by 2016年3月17日
+	 * 新增和编辑时, 验证规则json;
+	 * jquery.bootstrap.validate
+	 */
+	private String editValidateJson;
 	
 	
 	/**
@@ -204,6 +213,15 @@ public class TableColumn extends DBColumn{
 		return EditValueGenWayHelper.isNotInSetUpdateSql(this);
 	}
 	
+	
+	public String getEditValidateJson() {
+		return editValidateJson;
+	}
+
+	public void setEditValidateJson(String editValidateJson) {
+		this.editValidateJson = editValidateJson;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

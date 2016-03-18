@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<validates>
+	<validate name="notEmpty">
+	<![CDATA[
+		notEmpty: '{'
+            message: "{0}不能为空"
+        }
+	]]>
+	</validate>
+	<validate name="emailAddress">
+	<![CDATA[
+		emailAddress: '{'
+            message: "不是有效的邮箱地址"
+        }
+	]]>
+	</validate>
+	<validate name="stringLength">
+	<![CDATA[
+		stringLength: '{'
+		    min: {1},
+            max: {2},
+            message: "{0}必须少于等于{2}个字符"
+        }
+	]]>
+	</validate>
+	<validate name="integer">
+	<![CDATA[
+		integer: '{'
+            message: "不是整形数字"
+        }
+	]]>
+	</validate>
+	<validate name="numeric">
+	<![CDATA[
+		numeric: '{'
+			separator:".",
+            message: "不是数字"
+        }
+	]]>
+	</validate>
+	<validate name="ip">
+	<![CDATA[
+		ip: '{'
+			ipv4:true,
+			ipv6:false,
+            message: "不是有效的IP地址"
+        }
+	]]>
+	</validate>
+</validates>

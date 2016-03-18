@@ -6,8 +6,11 @@ package me.paddingdun.gen.code.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -19,6 +22,7 @@ import com.google.gson.reflect.TypeToken;
 
 import me.paddingdun.gen.code.data.edit.EditValueGenWay;
 import me.paddingdun.gen.code.data.edit.EditValueGenWayType;
+import me.paddingdun.gen.code.data.edit.ValidatorType;
 import me.paddingdun.gen.code.data.option.ModelValue;
 import me.paddingdun.gen.code.data.option.ModelValueCategory;
 import me.paddingdun.gen.code.data.table.DBColumn;
@@ -187,6 +191,53 @@ public class ModelHelper {
 			}
 		}
 		String result = GsonHelper.create(true, true).toJson(evg);
+		return result;
+	}
+	
+	/**
+	 * add by 2016年3月18日
+	 * 生成默认的验证json;
+	 * @param column
+	 * @return
+	 */
+	public static String defaultEditValidateJson(DBColumn column){
+		String columnName = column.getColumnName();
+		Map<String, Map<String, Object>> validators = new LinkedHashMap<String, Map<String, Object>>();
+		//判断是否不能为空;
+		if(!column.isNullable()){
+			validators.put(ValidatorType.notEmpty.name(), BootstrapValidateHelper.validator(ValidatorType.notEmpty));
+		}
+		
+		//如果为string;
+		if(TypesHelper.isStringType(TypesHelper.map_types.get(column.getType()))){
+			int cs = column.getColumnSize();
+			if(cs > 0){
+				validators.put(ValidatorType.stringLength.name(), BootstrapValidateHelper.validator(ValidatorType.stringLength, 0, cs));
+			}
+			
+			//添加ip验证;
+			if(columnName.toLowerCase().indexOf("ip")>-1){
+				validators.put(ValidatorType.ip.name(), BootstrapValidateHelper.validator(ValidatorType.ip));
+			}
+			
+			//添加邮箱验证;
+			if(columnName.toLowerCase().indexOf("email")>-1){
+				validators.put(ValidatorType.emailAddress.name(), BootstrapValidateHelper.validator(ValidatorType.emailAddress));
+			}
+		}
+		
+		//如果为整形数字;
+		if(TypesHelper.isIntegerType(TypesHelper.map_types.get(column.getType()))){
+			validators.put(ValidatorType.integer.name(), BootstrapValidateHelper.validator(ValidatorType.integer));
+		}
+		
+		String result = null;
+		
+		if(!validators.isEmpty()){
+			Map<String, Map<String, Map<String, Object>>> v = new LinkedHashMap<String, Map<String, Map<String, Object>>>();
+			v.put(TableHelper.col(columnName), validators);
+			result = GsonHelper.create(false, true).toJson(v);
+		}
 		return result;
 	}
 	

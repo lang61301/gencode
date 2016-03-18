@@ -119,5 +119,13 @@ public class TypesHelper {
 		else
 			return false;
 	}
+	
+	public static boolean isIntegerType(String javaType){
+		if(Integer.class.getName().equals(javaType)
+				|| Long.class.getName().equals(javaType))
+			return true;
+		else
+			return false;
+	}
 
 }

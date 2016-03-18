@@ -40,6 +40,18 @@ public class DBColumn implements Serializable {
 	private boolean primary;
 	
 	/**
+	 * add by 2016年3月17日
+	 * 是否可以为空;
+	 */
+	private boolean nullable = true;
+	
+	/**
+	 * add by 2016年3月17日
+	 * 字段长度;
+	 */
+	private int columnSize;
+	
+	/**
 	 * @param columnName
 	 * @param type
 	 * @param columnCommon
@@ -81,4 +93,20 @@ public class DBColumn implements Serializable {
 	public void setPrimary(boolean primary) {
 		this.primary = primary;
 	}
+
+	public boolean isNullable() {
+		return nullable;
+	}
+	public void setNullable(boolean nullable) {
+		this.nullable = nullable;
+	}
+
+	public int getColumnSize() {
+		return columnSize;
+	}
+
+	public void setColumnSize(int columnSize) {
+		this.columnSize = columnSize;
+	}
+	
 }

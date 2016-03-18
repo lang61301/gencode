@@ -121,6 +121,7 @@
 
 <div class="modal fade" id="${webActionEditMethodName}Modal" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
+  <form class="form-horizontal ${table.entityBeanName}formEdit" role="form" action="#[[${]]#${jspContextPathVar}#[[}]]#${webActionRequestMapping}/${webActionEditMethodName}" method="post">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -130,7 +131,6 @@
         <div class="container-fluid">
 		    <div class="row">
 				<div class="col-md-12">
-					<form class="form-horizontal ${table.entityBeanName}formEdit" role="form" action="#[[${]]#${jspContextPathVar}#[[}]]#${webActionRequestMapping}/${webActionEditMethodName}" method="post">
 					#foreach( $column in $table.jspColumns)
 						#if( ${column.editRender.show} )
 							${column.editRender.render}
@@ -153,7 +153,6 @@
 								</button>
 							</div>
 						</div>**#
-					</form>
 				</div>
 			</div>
       	</div>
@@ -163,6 +162,7 @@
         <button type="button" class="btn btn-primary ${table.entityBeanName}save">保存</button>
       </div>
     </div>
+    </form>
   </div>
 </div>
 <script src="#[[${]]#${jspContextPathVar}#[[}]]#/js/jquery-2.1.4/jquery-2.1.4.min.js"></script>
@@ -254,6 +254,10 @@ $(document).ready(function(){
 				if(d.status == 0){
 					var o = d.data;
 					me.pdd.Form.setForm($(".${table.entityBeanName}formEdit"), o);
+					
+					//清除验证错误;
+					$('.${table.entityBeanName}formEdit').data('bootstrapValidator').resetForm();
+					
 					$('#${webActionEditMethodName}Modal').modal({
 			   		  keyboard: false
 			   		});
@@ -331,29 +335,33 @@ $(document).ready(function(){
 	$(".${table.entityBeanName}new").on("click", function(){
 		//清空form;
 		me.pdd.Form.clearForm($(".${table.entityBeanName}formEdit"));
+		//清除验证错误;
+		$('.${table.entityBeanName}formEdit').data('bootstrapValidator').resetForm();
 		$('#${webActionEditMethodName}Modal').modal({
    		  keyboard: false
    		});
 	});
 	
 	/**
+	 * 编辑保存按钮绑定form验证事件;
+	 */
+	$(".${table.entityBeanName}save").on("click", function(){
+		 $(".${table.entityBeanName}formEdit").data('bootstrapValidator').validate();
+	});
+	
+	/**
 	 * 新增/编辑form验证规则;
 	 */
 	$('.${table.entityBeanName}formEdit').bootstrapValidator({
+		 excluded:[':disabled'],//默认值为[':disabled', ':hidden', ':not(:visible)'], 但是如果不配置则会发生,隐藏的form不能清除错误提示!;
 	     feedbackIcons: {
 	         valid: 'glyphicon glyphicon-ok',
 	         invalid: 'glyphicon glyphicon-remove',
 	         validating: 'glyphicon glyphicon-refresh'
 	     },
+	     submitButtons: '.${table.entityBeanName}save', //查找编辑按按钮的规则(使其可以更改编辑按钮状态让其是否可以提交);
 	     fields: null
 	 });
-	
-	/**
-     * 点击执行编辑form验证;
-     */
-   $(".${table.entityBeanName}save").on("click", function(){
-	   $('.${table.entityBeanName}formEdit').data('bootstrapValidator').validate();
-   });
 	
    /**
 	* 编辑form验证成功后执行;

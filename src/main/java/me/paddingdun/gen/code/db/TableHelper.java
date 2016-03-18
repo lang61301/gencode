@@ -119,6 +119,8 @@ public class TableHelper {
 				int type = rs1.getInt("DATA_TYPE");
 				String common = rs1.getString("REMARKS");
 				String is_autoincrement = rs1.getString("IS_AUTOINCREMENT");
+				String is_nullable = rs1.getString("IS_NULLABLE");
+				Integer column_size = rs1.getInt("COLUMN_SIZE");
 				
 				DBColumn dbc = new DBColumn(name, type, common);
 				if(set_primary.contains(name))
@@ -126,6 +128,14 @@ public class TableHelper {
 				
 				if("YES".equals(is_autoincrement))
 					dbc.setAutoIncrement(true);
+				
+				if("NO".equals(is_nullable)){
+					dbc.setNullable(false);
+				}
+				
+				if(column_size != null){
+					dbc.setColumnSize(column_size);
+				}
 				
 				TableColumn el = new TableColumn(dbc);
 				
@@ -139,6 +149,9 @@ public class TableHelper {
 				if(TypesHelper.isTimestampType(type)){
 					el.setEditRenderShow(false);		
 				}
+				
+				//设置验证json字符串;
+				el.setEditValidateJson(ModelHelper.defaultEditValidateJson(dbc));
 				
 				//缓存更新;
 				boolean hasBuffer = false;
