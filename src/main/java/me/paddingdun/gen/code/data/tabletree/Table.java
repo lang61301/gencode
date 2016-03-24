@@ -157,4 +157,17 @@ public class Table implements Serializable{
 	public void setQueryColumns(List<QueryColumn> queryColumns) {
 		this.queryColumns = queryColumns;
 	}
+	
+	/**
+	 * add by 2016年3月21日
+	 * bootstrap.validate的js验证js片断;
+	 */
+	private String editJSValidtors;
+
+	public String getEditJSValidtors() {
+		return editJSValidtors;
+	}
+	public void setEditJSValidtors(String editJSValidtors) {
+		this.editJSValidtors = editJSValidtors;
+	}
 }

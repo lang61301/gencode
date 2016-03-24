@@ -1,4 +1,3 @@
-#parse("template/velocity/jspComponent.vm")
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <% session.setAttribute("${jspContextPathVar}", request.getContextPath()); %>
 <!DOCTYPE html>
@@ -96,8 +95,8 @@
 	  <div class="panel-heading">
 	  	   <div class="row">
 	    		<div class="col-lg-2">
-	    			<a class="btn btn-primary ${table.entityBeanName}new" href="#" role="button">新增</a>
-	    			<a class="btn btn-primary ${table.entityBeanName}delete" href="#" role="button">删除</a>
+	    			<a class="btn btn-primary ${table.entityBeanName}new" role="button">新增</a>
+	    			<a class="btn btn-primary ${table.entityBeanName}delete" role="button">删除</a>
 	    		</div>
 	    	</div>
 	  </div>
@@ -360,7 +359,12 @@ $(document).ready(function(){
 	         validating: 'glyphicon glyphicon-refresh'
 	     },
 	     submitButtons: '.${table.entityBeanName}save', //查找编辑按按钮的规则(使其可以更改编辑按钮状态让其是否可以提交);
-	     fields: null
+	     fields:
+	    	 #if($table.editJSValidtors)
+	    		 ${table.editJSValidtors}
+	    	 #else
+	    		 null
+	         #end
 	 });
 	
    /**
@@ -385,6 +389,9 @@ $(document).ready(function(){
 					$.unblockUI();
 				}
 		});
+		
+		//
+		return false;
 	});
 	
 	/**
@@ -404,7 +411,7 @@ $(document).ready(function(){
 </script>
 </body>
 </html>
-
+#parse("template/velocity/jspComponent.vm")
 
 <!--	
 #foreach( $column in $table.columns)

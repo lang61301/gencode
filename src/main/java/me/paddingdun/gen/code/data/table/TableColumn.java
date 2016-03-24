@@ -4,7 +4,6 @@
 package me.paddingdun.gen.code.data.table;
 
 
-import java.util.Date;
 
 import me.paddingdun.gen.code.data.jsp.RenderWayType;
 import me.paddingdun.gen.code.data.option.ModelValue;

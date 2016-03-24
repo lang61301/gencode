@@ -43,6 +43,7 @@ public class OptionComboBoxModel<T> extends DefaultComboBoxModel<Option<T>> {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public T getValue(){
 		Object o = this.getSelectedItem();
 		if(o != null){

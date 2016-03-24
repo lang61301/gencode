@@ -5,12 +5,16 @@ package me.paddingdun.gen.code.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -18,6 +22,7 @@ import org.apache.commons.beanutils.MethodUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import me.paddingdun.gen.code.data.edit.EditValueGenWay;
@@ -121,7 +126,7 @@ public class ModelHelper {
 			for (int i = 0; i < fields.length; i++) {
 				Field field = fields[i];
 				String pName = field.getName();
-				Class<?> clazz = field.getDeclaringClass();
+				Class<?> clazz = field.getType();
 				ModelValue mv = field.getAnnotation(ModelValue.class);
 				if(mv != null
 						&& mv.category() == category){
@@ -129,6 +134,7 @@ public class ModelHelper {
 					try {
 						field.setAccessible(true);
 						Object value = PropertyUtils.getProperty(src, pName);
+						Class<?> paramClass = PropertyUtils.getPropertyType(src, pName);
 						if(BASIC_CLASS.contains(clazz)){
 							field.set(dest, value);
 						}else{
@@ -138,7 +144,11 @@ public class ModelHelper {
 								System.out.println(pName);
 							}else
 								try{
-									MethodUtils.invokeMethod(field_object, valueSetFuncName, new Object[]{value});
+									if(value == null){
+										MethodUtils.invokeMethod(field_object, valueSetFuncName, new Object[]{value}, new Class[]{paramClass});
+									}else{
+										MethodUtils.invokeMethod(field_object, valueSetFuncName, new Object[]{value});
+									}
 								}catch(Exception e4){
 									throw new RuntimeException(e4);
 								}
@@ -212,7 +222,7 @@ public class ModelHelper {
 		if(TypesHelper.isStringType(TypesHelper.map_types.get(column.getType()))){
 			int cs = column.getColumnSize();
 			if(cs > 0){
-				validators.put(ValidatorType.stringLength.name(), BootstrapValidateHelper.validator(ValidatorType.stringLength, 0, cs));
+				validators.put(ValidatorType.stringLength.name(), BootstrapValidateHelper.validator(ValidatorType.stringLength, "0", String.valueOf(cs)));
 			}
 			
 			//添加ip验证;
@@ -234,9 +244,64 @@ public class ModelHelper {
 		String result = null;
 		
 		if(!validators.isEmpty()){
+			Map<String, Map<String, Map<String, Map<String, Object>>>> p = new LinkedHashMap<String, Map<String, Map<String, Map<String, Object>>>>();
 			Map<String, Map<String, Map<String, Object>>> v = new LinkedHashMap<String, Map<String, Map<String, Object>>>();
-			v.put(TableHelper.col(columnName), validators);
-			result = GsonHelper.create(false, true).toJson(v);
+			v.put("validators", validators);
+			p.put(TableHelper.col(columnName), v);
+			result = GsonHelper.create(false, true).toJson(p);
+		}
+		return result;
+	}
+	
+	/**
+	 * add by 2016年3月21日
+	 * 新增jsp页面中js验证;
+	 * @param jspColumn
+	 * @return
+	 */
+	public static String editJSValidtors(List<JspColumn> jspColumn){
+		String result = null;
+		Map<String, Map<String, Map<String, Map<String, Object>>>> tmp  = new LinkedHashMap<String, Map<String, Map<String, Map<String, Object>>>>();
+		Gson gson = GsonHelper.create(false, true);
+		for (JspColumn jc : jspColumn) {
+			//1.必须是编辑;
+			//2.非自增长字段;
+			if(jc.isEditRenderShow()
+					&& !jc.isAutoIncrement()){
+				String str = jc.getEditValidateJson();
+				if(StringUtils.isNotBlank(str)){
+					Map<String, Map<String, Map<String, Map<String, Object>>>> p  = gson.fromJson(str, new TypeToken<Map<String, Map<String, Map<String, Map<String, Object>>>>>(){}.getType());
+					//脱掉名称;
+					if(!p.values().isEmpty()){
+						Map<String, Map<String, Map<String, Object>>> p0 = p.values().iterator().next();
+						
+						//脱掉validators
+						if(!p0.values().isEmpty()){
+							Map<String, Map<String, Object>> p1 = p0.values().iterator().next();
+							Collection<Map<String, Object>> c2 = p1.values();
+							for (Map<String, Object> m3 : c2) {
+								Set<Entry<String, Object>> s3 = m3.entrySet();
+								for (Entry<String, Object> e4 : s3) {
+									String key = e4.getKey();
+									if("message".equals(key)){
+										String value = (String)e4.getValue();
+										if(StringUtils.isNotBlank(value)){
+											String new_value = MessageFormat.format(value, jc.getColumnTitle());
+											e4.setValue(new_value);
+											break;
+										}
+									}
+								}
+							}
+						}
+					}
+					
+					tmp.putAll(p);
+				}
+			}
+		}
+		if(!tmp.isEmpty()){
+			result = gson.toJson(tmp);
 		}
 		return result;
 	}
@@ -334,7 +399,11 @@ public class ModelHelper {
 				}
 			}
 		}
+		//设置查询列;
 		tableViewModel.getTable().setQueryColumns(queryColumns);
+		
+		//设置编辑js验证;
+		tableViewModel.getTable().setEditJSValidtors(editJSValidtors(jspColumns));
 		
 		//设置formRender
 		tableViewModel.getTable().setQueryFormRender(RenderHelper.createQueryFormRender(queryColumns, tableViewModel.getJspQueryColumnCount(), tableViewModel.getSqlMapMarkUse(), true));

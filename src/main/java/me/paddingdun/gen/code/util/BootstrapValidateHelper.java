@@ -4,7 +4,10 @@
 package me.paddingdun.gen.code.util;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -64,7 +67,12 @@ private static Map<String, String> map = new HashMap<String, String>();
 		String s = map.get(key);
 		if(StringUtils.isEmpty(s))
 			throw new BusinessException("can't not get Validate[" + key +"] in bootstrap.validate.xml!");
-		String tmp = "{" + MessageFormat.format(s, "{0}", objects) + "}";
+		List<Object> o = new ArrayList<Object>();
+		o.add("{0}");
+		if(objects != null && objects.length > 0){
+			o.addAll(Arrays.asList(objects));
+		}
+		String tmp = "{" + MessageFormat.format(s, o.toArray()) + "}";
 		return tmp;
 	}
 	
