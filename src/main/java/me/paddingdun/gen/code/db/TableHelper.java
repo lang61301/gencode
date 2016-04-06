@@ -15,6 +15,7 @@ import java.util.Vector;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
+import me.paddingdun.gen.code.IConsant;
 import me.paddingdun.gen.code.data.table.DBColumn;
 import me.paddingdun.gen.code.data.table.TableColumn;
 import me.paddingdun.gen.code.data.tabletree.Table;
@@ -79,7 +80,7 @@ public class TableHelper {
 		Vector<Vector<Object>> result = new Vector<Vector<Object>>();
 		for (TableColumn r : list) {
 			String name = r.getColumnName();
-			int type = r.getType();
+//			int type = r.getType();
 			String common = r.getColumnCommon();
 			Vector<Object> el = new Vector<Object>();
 //			el.add(Boolean.FALSE);
@@ -87,7 +88,15 @@ public class TableHelper {
 			el.add(Boolean.valueOf(r.isAutoIncrement()));
 			el.add(name);
 			el.add(r.getColumnAlias());
-			el.add(type);
+			if(null == r.getSeq()){
+				if(r.isPrimary())
+					el.add(IConsant.DEF_MIN_SEQ);
+				else
+					el.add(IConsant.DEF_MAX_SEQ);
+			}else{
+				el.add(r.getSeq());
+			}
+			el.add(r.getOrder());
 			el.add(common);
 			result.add(el);
 		}

@@ -9,6 +9,7 @@ import java.util.List;
 import me.paddingdun.gen.code.data.jsp.Render;
 import me.paddingdun.gen.code.data.table.JspColumn;
 import me.paddingdun.gen.code.data.table.QueryColumn;
+import me.paddingdun.gen.code.data.table.Sort;
 import me.paddingdun.gen.code.data.table.TableColumn;
 
 /**
@@ -169,5 +170,20 @@ public class Table implements Serializable{
 	}
 	public void setEditJSValidtors(String editJSValidtors) {
 		this.editJSValidtors = editJSValidtors;
+	}
+	
+	/**
+	 * add by 2016年4月6日
+	 * 排序字段集合;
+	 */
+	private List<Sort> sorts;
+	
+	
+	public List<Sort> getSorts() {
+		return sorts;
+	}
+
+	public void setSorts(List<Sort> sorts) {
+		this.sorts = sorts;
 	}
 }

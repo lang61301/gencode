@@ -70,7 +70,7 @@ public class DesignerPerspective extends AbstractPerspective {
 		
 		//表列表view;
 		tableTreeView = new TableTreeView(this);
-		int w1 = (int)(w * 0.25);
+		int w1 = (int)(w * 0.2);
 		int h1 = (int)(h * 0.5);
 		int l1 = 0;
 		int t1 = h1;
@@ -83,7 +83,7 @@ public class DesignerPerspective extends AbstractPerspective {
 		
 		//表view;
 		tableView = new TableView(this);
-		int w2 = (int)(w * 0.3);
+		int w2 = (int)(w * 0.35);
 		int h2 = h;
 		int l2 = w - w2;
 		int t2 = 0;

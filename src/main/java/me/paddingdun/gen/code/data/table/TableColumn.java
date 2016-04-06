@@ -15,7 +15,7 @@ import me.paddingdun.gen.code.util.EditValueGenWayHelper;
  *
  * 2015年12月3日
  */
-public class TableColumn extends DBColumn{
+public class TableColumn extends DBColumn implements Comparable<TableColumn>{
 	
 	/**
 	 * 
@@ -42,6 +42,23 @@ public class TableColumn extends DBColumn{
 	 * jquery.bootstrap.validate
 	 */
 	private String editValidateJson;
+	
+	/**
+	 * add by 2016年3月31日
+	 * 新增列表字段显示排序功能, 按照从小到大的顺序排列;
+	 */
+	@ModelValue(category=ModelValueCategory.Column, valueGetFuncName="getSeq")
+	private Integer seq;
+	
+	/**
+	 * add by 2016年3月31日
+	 * 新增记录排序字段;
+	 * 大于等于0表示正序;
+	 * 小于0表示倒序;
+	 * 按照绝对值的大小排序;
+	 */
+	@ModelValue(category=ModelValueCategory.Column, valueGetFuncName="getOrder")
+	private Integer order;
 	
 	
 	/**
@@ -101,6 +118,9 @@ public class TableColumn extends DBColumn{
 
 
 
+	/**
+	 * EntityBean中是否生成gson注释;
+	 */
 	private boolean gson = true;
 
 
@@ -221,6 +241,22 @@ public class TableColumn extends DBColumn{
 		this.editValidateJson = editValidateJson;
 	}
 
+	public Integer getSeq() {
+		return seq;
+	}
+
+	public void setSeq(Integer seq) {
+		this.seq = seq;
+	}
+
+	public Integer getOrder() {
+		return order;
+	}
+
+	public void setOrder(Integer order) {
+		this.order = order;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -237,4 +273,26 @@ public class TableColumn extends DBColumn{
 			return false;
 		return true;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(TableColumn o2) {
+		if(o2 == null){
+			return -1;
+		}
+		
+		Integer s1 = getSeq();
+		Integer s2 = o2.getSeq();
+		if(s1 == null){
+			return 1;
+		}else if(s2 == null)
+			return -1;
+		
+		return s1-s2;
+	}
+
+	
 }
+

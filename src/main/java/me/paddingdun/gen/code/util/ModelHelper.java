@@ -8,9 +8,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +32,7 @@ import me.paddingdun.gen.code.data.option.ModelValueCategory;
 import me.paddingdun.gen.code.data.table.DBColumn;
 import me.paddingdun.gen.code.data.table.JspColumn;
 import me.paddingdun.gen.code.data.table.QueryColumn;
+import me.paddingdun.gen.code.data.table.Sort;
 import me.paddingdun.gen.code.data.table.TableColumn;
 import me.paddingdun.gen.code.data.tabletree.Table;
 import me.paddingdun.gen.code.gui.view.dbtable.TableViewModel;
@@ -307,6 +307,37 @@ public class ModelHelper {
 	}
 	
 	/**
+	 * 显示排序;
+	 * @param list
+	 */
+	public static void processSeq(List<TableColumn> list){
+		Collections.sort(list);
+	}
+	
+	/**
+	 * 处理排序集合;
+	 * @param list
+	 * @return
+	 */
+	private static List<Sort> processSort(List<TableColumn> list){
+		List<Sort> result = new ArrayList<Sort>();
+		for (TableColumn tc : list) {
+			Integer order = tc.getOrder();
+			if(order != null){
+				Sort sort = new Sort();
+				sort.setColumnName(tc.getColumnName());
+				if(order < 0){
+					sort.setDirect("desc");
+				}
+				sort.setSeq(Math.abs(order));
+				result.add(sort);
+			}
+		}
+		Collections.sort(result);
+		return result;
+	}
+	
+	/**
 	 * 加工model,准备数据;
 	 * @param tableViewModel
 	 */
@@ -314,6 +345,20 @@ public class ModelHelper {
 		Table table = tableViewModel.getTable();
 		table.setEntityBeanName(TableHelper.table(table.getTableId()));
 		List<TableColumn> list = table.getColumns();
+		
+		/**
+		 * add by 2016年4月1日
+		 * 增加显示排序和记录排序功能;
+		 */
+		processSeq(list);
+		
+		
+		/**
+		 * add by 2016年4月6日
+		 * 处理排序集合;
+		 */
+		table.setSorts(processSort(list));
+		
 		//补全column 属性
 		/**
 		 * pojo用;

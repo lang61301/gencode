@@ -6,6 +6,8 @@
 package me.paddingdun.gen.code.gui.view.dbtable;
 
 import java.awt.EventQueue;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -17,15 +19,19 @@ import java.util.concurrent.Callable;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
 
 import org.apache.log4j.Logger;
 
 import layout.TableLayout;
+import me.paddingdun.gen.code.IConsant;
 import me.paddingdun.gen.code.data.message.Message;
 import me.paddingdun.gen.code.data.option.ModelValue;
 import me.paddingdun.gen.code.data.option.ModelValueCategory;
 import me.paddingdun.gen.code.data.option.Option;
+import me.paddingdun.gen.code.data.table.CellEditorType;
 import me.paddingdun.gen.code.data.table.TableColumn;
 import me.paddingdun.gen.code.data.tabletree.Table;
 import me.paddingdun.gen.code.db.TableHelper;
@@ -86,7 +92,19 @@ public class TableView extends AbstractView {
         pt = new javax.swing.JSplitPane();
         ptt = new javax.swing.JScrollPane();
         ptb = new javax.swing.JScrollPane();
-        table = new javax.swing.JTable();
+        table = new javax.swing.JTable(){
+        	public void editingStopped(ChangeEvent e) {
+        		TableCellEditor editor = this.getCellEditor();
+                if (editor != null) {
+                    Object value = editor.getCellEditorValue();
+                    setTableColumnValue(value);
+                }
+//        		System.out.println(MessageFormat.format("c:{0}-r:{1}", this.getSelectedColumn(), this.getSelectedRow()));
+                super.editingStopped(e);
+            }
+        };
+        //当使用ColumnModel时将其设置成false;
+//        table.setAutoCreateColumnsFromModel(false);
         pb = new javax.swing.JScrollPane();
         pba = new javax.swing.JPanel();
         ptba = new javax.swing.JPanel();
@@ -334,31 +352,80 @@ public class TableView extends AbstractView {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
+    /**
+     * add by 2016年4月5日
+     * 改变行选择时执行;
+     */
+    private void changeRow(){
+    	if(model != null
+    			&& model.getTable() != null
+    			&& model.getTable().getColumns() != null){
+    		final int index = table.getSelectedRow();
+    		if(index < 0) return;
+    		TaskHelper.runInNonEDT(new Callable<Void>() {
+				public Void call() throws Exception {
+    	    		List<TableColumn> list = model.getTable().getColumns();
+    	    		if(index < list.size()){
+    	    			final TableColumn tc = list.get(index);
+    	    			EventQueue.invokeLater(new Runnable() {
+							public void run() {
+								ModelHelper.simpleGetAndComplexSet(tc, TableView.this, ModelValueCategory.Column);
+							}
+						});
+    	    		}
+					return null;
+				}
+    		});
+    	}
+    }
+    
     private void afterShow(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_afterShow
+//    	table.addPropertyChangeListener("tableCellEditor", new PropertyChangeListener() {
+//			
+//			@Override
+//			public void propertyChange(PropertyChangeEvent evt) {
+//				System.out.println("1[" +evt.getPropertyName());
+//				System.out.println("2[" +evt.getSource());
+//				System.out.println("3[" +(evt.getOldValue()));
+//				System.out.println("4[" +evt.getNewValue());
+//				System.out.println("5[" +table.getCellEditor());
+//			}
+//		});
+    	
+//    	table.getCellEditor().addCellEditorListener(new CellEditorListener() {
+//			
+//			@Override
+//			public void editingStopped(ChangeEvent e) {
+//				System.out.println("stop");
+//			}
+//			
+//			@Override
+//			public void editingCanceled(ChangeEvent e) {
+//				System.out.println("cancel");
+//			}
+//		});
+    	
     	table.addMouseListener(new MouseAdapter() {
     	    @Override
     	    public void mouseClicked(MouseEvent e){
-    	    	if(model != null
-    	    			&& model.getTable() != null
-    	    			&& model.getTable().getColumns() != null){
-    	    		TaskHelper.runInNonEDT(new Callable<Void>() {
-						public Void call() throws Exception {
-							int index = table.getSelectedRow();
-		    	    		List<TableColumn> list = model.getTable().getColumns();
-		    	    		if(index < list.size()){
-		    	    			final TableColumn tc = list.get(index);
-		    	    			EventQueue.invokeLater(new Runnable() {
-									public void run() {
-										ModelHelper.simpleGetAndComplexSet(tc, TableView.this, ModelValueCategory.Column);
-									}
-								});
-		    	    		}
-							return null;
-						}
-    	    		});
-    	    	}
+    	    	changeRow();
     	    }
     	});
+    	
+    	//38 up;
+		//40 down;
+		//37 left;
+		//39 right;
+		//10 enter;
+    	table.addKeyListener(new KeyAdapter() {
+    		public void keyReleased(KeyEvent e) {
+    			int keyCode = e.getKeyCode();
+    			if(keyCode == 10
+    					|| keyCode == 38
+    					|| keyCode == 40)
+    				changeRow();
+    		}
+		});
     	p.setDividerLocation(0.85);
     	
     	EventQueue.invokeLater(new Runnable() {
@@ -372,23 +439,86 @@ public class TableView extends AbstractView {
     	if(model != null
     			&& model.getTable() != null
     			&& model.getTable().getColumns() != null){
+    		final int index = table.getSelectedRow();
     		TaskHelper.runInNonEDT(new Callable<Void>() {
 				public Void call() throws Exception {
-					int index = table.getSelectedRow();
     	    		List<TableColumn> list = model.getTable().getColumns();
-    	    		if(index < list.size()){
+    	    		if(index >-1
+    	    				&& index < list.size()){
     	    			TableColumn tc = list.get(index);
     	    			ModelHelper.complexGetAndSimpleSet(TableView.this, tc, ModelValueCategory.Column);
     	    			
-    	    			//变更第4列(列别名)的值进入TableColumn
-    	    			String ca = (String)table.getModel().getValueAt(index, 3);
-    	    			TableColumn tmp_tc = new TableColumn(tc.getColumnName(), tc.getType(), tc.getColumnCommon());
-    	    			tmp_tc.setColumnAlias(ca);
-    	    			ModelHelper.complexGetAndSimpleSet(tmp_tc, tc, ModelValueCategory.Column);
+    	    			/**
+    	    			 * modify by 2016年4月6日
+    	    			 * 新增了setTableColumnValue方法后,就不需要点击ok保存表格中的属性了;
+    	    			 */
+//    	    			//变更第4列(列别名)的值进入TableColumn
+//    	    			String ca = (String)table.getModel().getValueAt(index, 3);
+//    	    			tc.setColumnAlias(ca);
+//    	    			
+//    	    			//变更第5列(显示顺序)的值进入TableColumn
+//    	    			Integer seq = (Integer)table.getModel().getValueAt(index, 4);
+//    	    			tc.setSeq(seq);
+//    	    			
+//    	    			//变更第6列(排序字段顺序)的值进入TableColumn
+//    	    			Integer order = (Integer)table.getModel().getValueAt(index, 5);
+//    	    			tc.setOrder(order);
     	    		}
 					return null;
 				}
     		});
+    	}
+    }
+    
+    /**
+     * add by 2016年4月5日
+     * 自动提交表格数据到内存;
+     */
+    private void setTableColumnValue(Object cellValue){
+    	final int r = table.getSelectedRow();
+    	final int c = table.getSelectedColumn();
+    	if(model != null
+    			&& model.getTable() != null
+    			&& model.getTable().getColumns() != null){
+    		List<TableColumn> list = model.getTable().getColumns();
+    		int size = list.size();
+    		if(r > -1 
+    				&& r < size){
+    			TableColumn tc = list.get(r);
+    			
+    			//变更第4列(列别名)的值进入TableColumn
+            	if(c == 3){
+            		String ca = (String)cellValue;
+            		tc.setColumnAlias(ca);
+            	//变更第5列(显示顺序)的值进入TableColumn
+            	}else if(c == 4){
+            		Integer seq = (Integer)cellValue;
+            		tc.setSeq(seq);
+            		
+            		//循环list,将>=seq列的值+1;
+            		for (int i = 0; i < size; i++) {
+						TableColumn tmp = list.get(i);
+						if(tmp != tc){
+							Integer s = tmp.getSeq();
+							if(s != null
+									&& s >= seq
+									&& s < IConsant.DEF_MAX_SEQ){
+								Integer newVal = s + 1;
+								//变更显示的值;
+								table.getModel().setValueAt(newVal, i, c);
+								
+								//变更内存值;
+								tmp.setSeq(newVal);
+							}
+						}
+					}
+            	//变更第6列(排序字段顺序)的值进入TableColumn
+            	}else if(c == 5){
+            		Integer order = (Integer)cellValue;
+            		tc.setOrder(order);
+            	}
+            	table.updateUI();
+    		}
     	}
     }
     
@@ -404,10 +534,16 @@ public class TableView extends AbstractView {
 						File saveFile = fileChooser.getSelectedFile();
 			        	if(!saveFile.exists())
 			        		saveFile.mkdirs();
-			        	//设置值;
+			        	//设置全局值;
 			        	ModelHelper.complexGetAndSimpleSet(TableView.this, model);
 			        	//加工model;
 			        	ModelHelper.processTableViewModel(model);
+			        	
+			        	/**
+			        	 * add by 2016年4月6日
+			        	 * 由于有显示列按照顺序重新排序,因此要更新数据表格;
+			        	 */
+			        	updateTableData(model.getTable().getColumns());
 			        	
 			        	String javaContent = VelocityHelper.entityBean(model);
 //			        	System.out.println(javaContent);
@@ -545,6 +681,75 @@ public class TableView extends AbstractView {
     }
     
     // End of variables declaration//GEN-END:variables
+    
+    private void updateTableData(final List<TableColumn> list){
+    	TaskHelper.runInNonEDT(new Callable<Void>() {
+			@Override
+			public Void call() throws Exception {
+				
+				Vector<Vector<Object>> v = TableHelper.transform1(list);
+				Vector<Object> v2 = new Vector<Object>();
+				
+//				final DefaultTableColumnModel dtcm = new DefaultTableColumnModel();
+				
+//					["列名称", "编辑类型"]
+		    	String[][] heads = new String[][]{
+		    		{"主键", 		null}, 								//0
+					{"自增长", 	null}, 								//1
+					{"列名称", 	null}, 								//2
+					{"列别名", 	CellEditorType.String.name()}, 		//3
+					{"显示顺序", 	CellEditorType.Number.name()}, 		//4
+					{"排序字段", 	CellEditorType.Number.name()}, 		//5
+					{"列描述", 	null}								//6	
+		    	};
+			    								  
+		    	for (int i = 0; i < heads.length; i++) {
+		    		String[] tmp = heads[i];
+//		    		javax.swing.table.TableColumn h = new javax.swing.table.TableColumn(i);
+//		    		h.setHeaderValue(tmp[0]);
+//					dtcm.addColumn(h);
+					v2.add(tmp[0]);
+				}
+		    	
+		    	
+				final DefaultTableModel dtm = new DefaultTableModel(v, v2){
+					private static final long serialVersionUID = 1L;
+
+					/**
+					 * 获取列的类型;用来输入时判断是否合法输入;
+					 */
+					public Class<?> getColumnClass(int col){
+						//显示排序或者是记录排序
+						if(col == 4
+								|| col == 5)return Integer.class;
+						Object value = getValueAt(0, col);
+				        if(value!=null)
+				            return value.getClass();
+				        else 
+				        	return super.getClass();
+					}
+					
+					public boolean isCellEditable(int row, int column) {
+						if(column == 3
+								|| column == 4
+								|| column == 5)
+							return true;
+				        return false;
+				    }
+				};
+				
+				EventQueue.invokeLater(new Runnable() {
+					public void run() {
+//						table.setColumnModel(dtcm);
+						table.setModel(dtm);
+				    	table.updateUI();
+					}
+				});
+				
+				return null;
+			}
+		});
+    }
 
 	/* (non-Javadoc)
 	 * @see me.paddingdun.gen.code.gui.view.AbstractView#doMessage(me.paddingdun.gen.code.data.message.Message)
@@ -563,36 +768,17 @@ public class TableView extends AbstractView {
 					List<TableColumn> list_tr = TableHelper.tableColumn(t.getCat(), t.getTableName());
 					t.setColumns(list_tr);
 					
-					Vector<Vector<Object>> v = TableHelper.transform1(list_tr);
-					Vector<Object> v2 = new Vector<Object>();
-//								DefaultTableColumnModel dtcm = new DefaultTableColumnModel();
-			    	String[] heads = new String[]{"主键", "自增长", "列名称", "列别名", "列类型", "列描述"};
-//			    	v2.add("select");
-			    	for (int i = 0; i < heads.length; i++) {
-//						    		TableColumn h = new TableColumn(i);
-//						        	h.setHeaderValue(heads[i]);
-//						        	dtcm.addColumn(h);
-			        	v2.add(heads[i]);
-					}
-//						    	table.setColumnModel(dtcm);
-					final DefaultTableModel dtm = new DefaultTableModel(v, v2){
-						private static final long serialVersionUID = 1L;
-
-						public Class<?> getColumnClass(int col){
-							Object value = getValueAt(0, col);
-					        if(value!=null)
-					            return value.getClass();
-					        else 
-					        	return super.getClass();
-						}
-					};
+					/**
+					 * add by 2016年4月6日
+					 * 新增显示排序;
+					 */
+					ModelHelper.processSeq(list_tr);
 					
-					EventQueue.invokeLater(new Runnable() {
-						public void run() {
-							table.setModel(dtm);
-					    	table.updateUI();
-						}
-					});
+					/**
+					 * 更新表格数据;
+					 */
+					updateTableData(list_tr);
+					
 					return new Integer[]{0};
 				}
 			});

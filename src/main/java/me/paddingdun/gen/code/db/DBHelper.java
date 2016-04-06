@@ -4,7 +4,6 @@
 package me.paddingdun.gen.code.db;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
