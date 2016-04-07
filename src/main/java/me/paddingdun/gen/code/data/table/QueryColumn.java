@@ -8,8 +8,6 @@ import java.text.MessageFormat;
 
 import com.google.gson.annotations.Expose;
 
-import me.paddingdun.gen.code.data.jsp.RenderWayType;
-
 /**
  * @author paddingdun
  *

@@ -4,17 +4,12 @@
 package me.paddingdun.gen.code.util;
 
 import java.io.File;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.text.MessageFormat;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-
-import org.apache.commons.io.FilenameUtils;
-import org.dom4j.Document;
-import org.dom4j.io.SAXReader;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -109,6 +104,7 @@ public class ConfigHelper {
 		return result;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static <T> T convertToObject(Class<T> clazz, File xml) {
 		T result = null;
 		try {

@@ -16,6 +16,11 @@ import me.paddingdun.gen.code.gui.IGuiConstant;
  */
 public  abstract class AbstractView extends javax.swing.JInternalFrame implements IView {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private BlockingQueue<Message> messages = new ArrayBlockingQueue<Message>(1000);
 	
 	protected boolean running = true;

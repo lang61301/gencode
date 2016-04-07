@@ -13,8 +13,6 @@ import java.util.zip.GZIPOutputStream;
 import org.apache.commons.io.input.ReaderInputStream;
 import org.apache.commons.io.output.WriterOutputStream;
 
-import me.paddingdun.gen.code.user.TableConfig;
-import me.paddingdun.gen.code.user.UserConfig;
 import sun.misc.BASE64Encoder;
 
 /**

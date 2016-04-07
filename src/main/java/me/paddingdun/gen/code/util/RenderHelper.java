@@ -148,6 +148,7 @@ public class RenderHelper {
 	 * @return
 	 * @deprecated
 	 */
+	@SuppressWarnings("unused")
 	private static Render createQueryRender(JspColumn column, Integer sqlMapMarkUse, int colWidth){
 		String keyName = keyName(column, sqlMapMarkUse);
 		RenderWayType rwt =  RenderWayType.parse(column.getQueryRenderWay());

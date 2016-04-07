@@ -3,11 +3,13 @@
  */
 package me.paddingdun.gen.code;
 
+
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import me.paddingdun.gen.code.gui.MainFrame;
 import me.paddingdun.gen.code.util.BufferHelper;
 import me.paddingdun.gen.code.util.DirectoryHelper;
+import me.paddingdun.gen.code.util.TipHelper;
 
 /**
  * @author paddingdun
@@ -25,7 +27,18 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		//启动spring;
-		ClassPathXmlApplicationContext ac = new ClassPathXmlApplicationContext(new String[]{"spring/spring.xml"});
+		final ClassPathXmlApplicationContext ac = new ClassPathXmlApplicationContext(new String[]{"spring/spring.xml"});
+		Runtime.getRuntime().addShutdownHook(new Thread(){
+			
+			@Override
+			public void run(){
+				try{
+					ac.close();
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		});
 		
 		init();
 		
@@ -51,6 +64,8 @@ public class Main {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new MainFrame().setVisible(true);
+                
+                TipHelper.configDismissTime();
             }
         });
 

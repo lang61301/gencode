@@ -29,6 +29,7 @@ public class VelocityHelper {
 	/**
 	 * VelocityHelper 日志变量;
 	 */
+	@SuppressWarnings("unused")
 	private final static Logger logger = Logger.getLogger(VelocityHelper.class);
 
 	private static VelocityHelper helper;

@@ -4,7 +4,6 @@
 package me.paddingdun.gen.code.util;
 
 import java.beans.PropertyDescriptor;
-import java.util.Collection;
 import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;

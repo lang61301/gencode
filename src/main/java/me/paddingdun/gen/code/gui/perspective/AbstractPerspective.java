@@ -3,7 +3,6 @@
  */
 package me.paddingdun.gen.code.gui.perspective;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 

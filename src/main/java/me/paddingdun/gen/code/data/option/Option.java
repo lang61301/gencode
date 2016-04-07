@@ -44,6 +44,7 @@ public class Option<T> {
 		this.value = value;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

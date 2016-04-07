@@ -26,6 +26,7 @@ public class ContentFormatHelper {
 	 * @param raw
 	 * @return
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static String formatJava(String source) {
 		try {
 			Map options = DefaultCodeFormatterConstants.getEclipseDefaultSettings();

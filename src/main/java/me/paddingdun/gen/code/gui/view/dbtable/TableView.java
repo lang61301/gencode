@@ -258,7 +258,21 @@ public class TableView extends AbstractView {
         ptba.add(jLabel15, MessageFormat.format("1,{0},2,{0}", row));
         ptba.add(jcombo_editRenderWay, MessageFormat.format("3,{0},4,{0}", row));
         row++;
-        ptba.add(new JLabel("填值方式"), MessageFormat.format("1,{0},2,{0}", row));
+        JLabel j1 = new JLabel("填值方式");
+        j1.setToolTipText("<html>\n" + 
+        		"<table border=\"1\">\n" + 
+        		"<tr>\n" + 
+        		"	<th>参数</th>\n" + 
+        		"	<th>描述</th>\n" + 
+        		"</tr>\n" + 
+        		"<tr>\n" + 
+        		"	<td>new</td>\n" + 
+        		"	<td>新增时该字段填值方式,如\"input\":输入, \"time\":获取当前时间, \"nothing\":不处理</td>\n" + 
+        		"</tr>\n" + 
+        		"</table>\n" + 
+        		"</html>");
+        
+        ptba.add(j1, MessageFormat.format("1,{0},2,{0}", row));
         ptba.add(cevfw, MessageFormat.format("3,{0},6,{0}", row));
         row++;
         ptba.add(new JLabel("JS验证"), MessageFormat.format("1,{0},2,{0}", row));

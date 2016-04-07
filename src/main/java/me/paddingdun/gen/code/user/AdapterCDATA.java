@@ -3,8 +3,6 @@
  */
 package me.paddingdun.gen.code.user;
 
-import java.util.regex.Pattern;
-
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import sun.misc.BASE64Decoder;
