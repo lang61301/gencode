@@ -18,6 +18,7 @@ import javax.swing.tree.TreeNode;
 import me.paddingdun.gen.code.IConsant;
 import me.paddingdun.gen.code.data.table.DBColumn;
 import me.paddingdun.gen.code.data.table.TableColumn;
+import me.paddingdun.gen.code.data.tabletree.DBTable;
 import me.paddingdun.gen.code.data.tabletree.Table;
 import me.paddingdun.gen.code.util.BufferHelper;
 import me.paddingdun.gen.code.util.ConfigHelper;
@@ -32,6 +33,11 @@ import me.paddingdun.gen.code.util.TypesHelper;
  */
 public class TableHelper {
 
+	/**
+	 * modify by 2016年4月8日
+	 * 树节点数据由Table变更为DBTable;
+	 * @return
+	 */
 	public static TreeNode  TableTreeNode(){
 		Connection conn = null;
 		ResultSet  rs1	= null;
@@ -58,7 +64,11 @@ public class TableHelper {
 						String remark = rs2.getString("REMARKS");
 						
 						DefaultMutableTreeNode node_table  = new DefaultMutableTreeNode();
-						Table t = new Table(cat, name, type);
+						/**
+						 * modify by 2016年4月8日
+						 * 树节点数据由Table变更为DBTable;
+						 */
+						DBTable t = new DBTable(cat, name, type);
 						t.setTableCommon(remark);
 						node_table.setUserObject(t);
 						node_db.add(node_table);

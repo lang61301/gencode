@@ -5,6 +5,10 @@ package me.paddingdun.gen.code.data.table;
 
 
 
+import java.lang.reflect.InvocationTargetException;
+
+import org.apache.commons.beanutils.BeanUtils;
+
 import me.paddingdun.gen.code.data.jsp.RenderWayType;
 import me.paddingdun.gen.code.data.option.ModelValue;
 import me.paddingdun.gen.code.data.option.ModelValueCategory;
@@ -72,8 +76,11 @@ public class TableColumn extends DBColumn implements Comparable<TableColumn>{
 	
 	public TableColumn(DBColumn dbColumn){
 		this(dbColumn.getColumnName(), dbColumn.getType(), dbColumn.getColumnCommon());
-		this.setAutoIncrement(dbColumn.isAutoIncrement());
-		this.setPrimary(dbColumn.isPrimary());
+		try {
+			BeanUtils.copyProperties(this, dbColumn);
+		} catch (IllegalAccessException | InvocationTargetException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private String javaType;

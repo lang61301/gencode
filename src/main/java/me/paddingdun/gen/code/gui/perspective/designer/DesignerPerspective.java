@@ -6,6 +6,7 @@ package me.paddingdun.gen.code.gui.perspective.designer;
 import javax.swing.JDesktopPane;
 
 import me.paddingdun.gen.code.gui.perspective.AbstractPerspective;
+import me.paddingdun.gen.code.gui.view.dbtable.EditView;
 import me.paddingdun.gen.code.gui.view.dbtable.TableTreeView;
 import me.paddingdun.gen.code.gui.view.dbtable.TableView;
 
@@ -26,6 +27,8 @@ public class DesignerPerspective extends AbstractPerspective {
 	private TableTreeView tableTreeView;
 	
 	private TableView tableView;
+	
+	private EditView editView;
 
 	/**
 	 * @param tableTree
@@ -60,6 +63,10 @@ public class DesignerPerspective extends AbstractPerspective {
 	public TableView getTableView() {
 		return tableView;
 	}
+	
+	public EditView getEditView() {
+		return editView;
+	}
 
 	/* (non-Javadoc)
 	 * @see me.paddingdun.gen.code.gui.perspective.IPerspective#init()
@@ -80,6 +87,22 @@ public class DesignerPerspective extends AbstractPerspective {
 		
 		container.add(tableTreeView);
 		this.add(tableTreeView);
+		
+		/**
+		 * add by 2016年4月7日
+		 * 增加editView
+		 */
+		editView = new EditView(this);
+		int w3 = (int)(w * 0.45);
+		int h3 = (int)(h * 1);
+		int l3 = w1;
+		int t3 = 0;
+		
+		editView.setBounds(l3, t3, w3, h3);
+		editView.setVisible(true);
+		
+		container.add(editView);
+		this.add(editView);
 		
 		//表view;
 		tableView = new TableView(this);

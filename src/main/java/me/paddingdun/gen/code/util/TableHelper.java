@@ -77,7 +77,7 @@ public class TableHelper {
 			}
 		}
 		StreamTokenizer st = new StreamTokenizer(new StringReader(s_r_prefix));
-		//风格字符;
+		//分割字符;
 		st.whitespaceChars('-', '-');
 		st.whitespaceChars('_', '_');
 		st.whitespaceChars('.', '.');

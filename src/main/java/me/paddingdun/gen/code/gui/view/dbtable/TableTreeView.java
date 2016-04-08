@@ -15,8 +15,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import me.paddingdun.gen.code.data.message.Message;
-import me.paddingdun.gen.code.data.tabletree.Table;
+import me.paddingdun.gen.code.data.tabletree.DBTable;
 import me.paddingdun.gen.code.db.TableHelper;
+import me.paddingdun.gen.code.gui.component.DragTree;
 import me.paddingdun.gen.code.gui.perspective.designer.DesignerPerspective;
 import me.paddingdun.gen.code.gui.view.AbstractView;
 import me.paddingdun.gen.code.util.TaskHelper;
@@ -52,7 +53,7 @@ public class TableTreeView extends  AbstractView {
         setTitle("数据库表");
         
         sp = new javax.swing.JScrollPane();
-        tableTree = new javax.swing.JTree();
+        tableTree = new DragTree();
         spp = new javax.swing.JSplitPane();
         pane = new javax.swing.JPanel();
         btnRefresh = new javax.swing.JButton();
@@ -102,7 +103,7 @@ public class TableTreeView extends  AbstractView {
 				DefaultMutableTreeNode node = (DefaultMutableTreeNode)objs[objs.length - 1];
 				if(node.isLeaf()){
 					Object uo = node.getUserObject();
-					if( uo instanceof Table){
+					if( uo instanceof DBTable){
 						
 						Message m = new Message();
 						m.setName(DesignerPerspective.MESSAGE_CLICK_TABLE_TREE_NODE);
@@ -137,7 +138,7 @@ public class TableTreeView extends  AbstractView {
     private javax.swing.JSplitPane spp;
     private javax.swing.JPanel pane;
     private javax.swing.JScrollPane sp;
-    private javax.swing.JTree tableTree;
+    private DragTree tableTree;
     private javax.swing.JButton btnRefresh;
     
     // End of variables declaration//GEN-END:variables

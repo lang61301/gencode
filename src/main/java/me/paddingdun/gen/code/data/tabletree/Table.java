@@ -4,7 +4,10 @@
 package me.paddingdun.gen.code.data.tabletree;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+
+import org.apache.commons.beanutils.BeanUtils;
 
 import me.paddingdun.gen.code.data.jsp.Render;
 import me.paddingdun.gen.code.data.table.JspColumn;
@@ -17,16 +20,12 @@ import me.paddingdun.gen.code.data.table.TableColumn;
  *
  * 2015年12月3日
  */
-public class Table implements Serializable{
+public class Table extends DBTable implements Serializable{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String cat;
-	private String tableName;
-	private String tableType;
-	private String tableCommon;
 	
 	/**
 	 * modify 2016-02-17 
@@ -37,7 +36,7 @@ public class Table implements Serializable{
 	
 	public String getTableId() {
 		if(tableId == null){
-			tableId = tableName;
+			tableId = this.getTableName();
 		}
 		return tableId;
 	}
@@ -70,39 +69,21 @@ public class Table implements Serializable{
 	 * @param tableType
 	 */
 	public Table(String cat, String tableName, String tableType) {
-		super();
-		this.cat = cat;
-		this.tableName = tableName;
-		this.tableType = tableType;
-	}
-	public String getTableName() {
-		return tableName;
-	}
-	public void setTableName(String tableName) {
-		this.tableName = tableName;
-	}
-	public String getTableType() {
-		return tableType;
-	}
-	public void setTableType(String tableType) {
-		this.tableType = tableType;
+		super(cat, tableName, tableType);
 	}
 	
-	public String getTableCommon() {
-		return tableCommon;
+	public Table(DBTable dbTable){
+		this(dbTable.getCat(), dbTable.getTableName(), dbTable.getTableType());
+		try {
+			BeanUtils.copyProperties(this, dbTable);
+		} catch (IllegalAccessException | InvocationTargetException e) {
+			e.printStackTrace();
+		}
 	}
-	public void setTableCommon(String tableCommon) {
-		this.tableCommon = tableCommon;
-	}
+	
 	@Override
 	public String toString() {
-		return tableName;
-	}
-	public String getCat() {
-		return cat;
-	}
-	public void setCat(String cat) {
-		this.cat = cat;
+		return this.getTableId();
 	}
 	
 	private List<TableColumn> columns;

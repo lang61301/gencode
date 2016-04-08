@@ -33,6 +33,7 @@ import me.paddingdun.gen.code.data.option.ModelValueCategory;
 import me.paddingdun.gen.code.data.option.Option;
 import me.paddingdun.gen.code.data.table.CellEditorType;
 import me.paddingdun.gen.code.data.table.TableColumn;
+import me.paddingdun.gen.code.data.tabletree.DBTable;
 import me.paddingdun.gen.code.data.tabletree.Table;
 import me.paddingdun.gen.code.db.TableHelper;
 import me.paddingdun.gen.code.gui.perspective.designer.DesignerPerspective;
@@ -772,7 +773,8 @@ public class TableView extends AbstractView {
 	public void doMessage(Message message) {
 		//表格树点击消息;
 		if(DesignerPerspective.MESSAGE_CLICK_TABLE_TREE_NODE.equals(message.getName())){
-			final Table t = (Table)message.getObject();
+			DBTable dbt = (DBTable)message.getObject();
+			final Table t = new Table(dbt);
 			
 			TaskHelper.runInNonEDT(new Callable<Integer[]>() {
 				public Integer[] call() throws Exception {
