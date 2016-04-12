@@ -52,6 +52,20 @@ public class DBColumn implements Serializable {
 	private int columnSize;
 	
 	/**
+	 * 字段别名;
+	 */
+	private String columnAlias;
+	
+	public String getColumnAlias() {
+		if(columnAlias == null)
+			columnAlias = this.getColumnName();
+		return columnAlias;
+	}
+	public void setColumnAlias(String columnAlias) {
+		this.columnAlias = columnAlias;
+	}
+	
+	/**
 	 * @param columnName
 	 * @param type
 	 * @param columnCommon

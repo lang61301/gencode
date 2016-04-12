@@ -10,8 +10,6 @@ import java.lang.reflect.InvocationTargetException;
 import org.apache.commons.beanutils.BeanUtils;
 
 import me.paddingdun.gen.code.data.jsp.RenderWayType;
-import me.paddingdun.gen.code.data.option.ModelValue;
-import me.paddingdun.gen.code.data.option.ModelValueCategory;
 import me.paddingdun.gen.code.util.EditValueGenWayHelper;
 
 /**
@@ -25,9 +23,6 @@ public class TableColumn extends DBColumn implements Comparable<TableColumn>{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	@ModelValue(category=ModelValueCategory.Column, valueGetFuncName="getColumnAlias")
-	private String columnAlias;
 	
 	/**
 	 * 用来实现查询参数的json字符串, 关联对象QueryColumn
@@ -51,7 +46,6 @@ public class TableColumn extends DBColumn implements Comparable<TableColumn>{
 	 * add by 2016年3月31日
 	 * 新增列表字段显示排序功能, 按照从小到大的顺序排列;
 	 */
-	@ModelValue(category=ModelValueCategory.Column, valueGetFuncName="getSeq")
 	private Integer seq;
 	
 	/**
@@ -61,7 +55,6 @@ public class TableColumn extends DBColumn implements Comparable<TableColumn>{
 	 * 小于0表示倒序;
 	 * 按照绝对值的大小排序;
 	 */
-	@ModelValue(category=ModelValueCategory.Column, valueGetFuncName="getOrder")
 	private Integer order;
 	
 	
@@ -114,17 +107,6 @@ public class TableColumn extends DBColumn implements Comparable<TableColumn>{
 		this.setMethod = setMethod;
 	}
 	
-	public String getColumnAlias() {
-		if(columnAlias == null)
-			columnAlias = this.getColumnName();
-		return columnAlias;
-	}
-	public void setColumnAlias(String columnAlias) {
-		this.columnAlias = columnAlias;
-	}
-
-
-
 	/**
 	 * EntityBean中是否生成gson注释;
 	 */

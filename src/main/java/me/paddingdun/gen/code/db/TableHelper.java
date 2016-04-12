@@ -5,7 +5,10 @@ package me.paddingdun.gen.code.db;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -113,6 +116,81 @@ public class TableHelper {
 		return result;
 	}
 	
+	/**
+	 * add by 2016年4月11日
+	 * 新增数据表查询语句返回;
+	 * @param dbTable
+	 * @return
+	 */
+	public static String tableName2QuerySql(DBTable dbTable, String tableAlias){
+		String result = null;
+		Connection conn = null;
+		ResultSet  rs	= null;
+		try{
+			conn = DBHelper.getConnection();
+			String catalog = dbTable.getCat();
+			String tableName = dbTable.getTableName();
+			DatabaseMetaData dmd =  conn.getMetaData();
+			rs = dmd.getColumns(catalog, null, tableName, null);
+			
+			StringBuilder sb = new StringBuilder("select ");
+			int cnt = 0;
+			while(rs.next()){
+				String columnName = rs.getString("COLUMN_NAME");
+				if(cnt > 0){
+					sb.append(", ");
+				}
+				sb.append(tableAlias + "." + columnName + " as " + columnName);
+				cnt++;
+			}
+			sb.append(" from " + tableName + " " + tableAlias);
+			sb.append("\r\n");
+			result = sb.toString();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			IOHelper.close(rs);
+			IOHelper.close(conn);
+		}
+		return result;
+	}
+	
+	public static String test(String catlog, String sql){
+		String result = null;
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try{
+			conn = DBHelper.getConnection();
+			conn.setCatalog(catlog);
+			ps = conn.prepareStatement(sql);
+			ResultSetMetaData rsmd = ps.getMetaData();
+			int count = rsmd.getColumnCount();
+			for (int i = 1; i <= count; i++) {
+				int type = rsmd.getColumnType(i);
+				String columnName = rsmd.getColumnName(i);
+				String columnAliasName = rsmd.getColumnLabel(i);
+				String tableName = rsmd.getTableName(i);
+				String _catlog = rsmd.getCatalogName(i);
+				int size = rsmd.getColumnDisplaySize(i);
+				
+				DBColumn dbColumn = BufferHelper.readDBColumn(tableName, columnName);
+				if(dbColumn == null){
+					dbColumn = new DBColumn(columnName, type, null);
+					dbColumn.setColumnSize(size);
+					dbColumn.setColumnAlias(columnAliasName);
+				}
+				
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			IOHelper.close(ps);
+			IOHelper.close(conn);
+		}
+		return result;
+	}
+	
 	public static List<TableColumn>  tableColumn(String catalog, String tableName){
 		List<TableColumn> result = new ArrayList<TableColumn>();
 		Connection conn = null;
@@ -155,6 +233,12 @@ public class TableHelper {
 				if(column_size != null){
 					dbc.setColumnSize(column_size);
 				}
+				
+				/**
+				 * add by 2016年4月11日
+				 * 将dbColumn添加入缓存, 关联查询sql时使用;
+				 */
+				BufferHelper.writeDBColumn(tableName, name, dbc);
 				
 				TableColumn el = new TableColumn(dbc);
 				

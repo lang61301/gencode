@@ -9,7 +9,8 @@ import javax.swing.JLabel;
 
 import layout.TableLayout;
 import me.paddingdun.gen.code.data.message.Message;
-import me.paddingdun.gen.code.gui.component.TargetTextArea;
+import me.paddingdun.gen.code.db.TableHelper;
+import me.paddingdun.gen.code.gui.component.TargetSqlTextArea;
 import me.paddingdun.gen.code.gui.perspective.designer.DesignerPerspective;
 import me.paddingdun.gen.code.gui.view.AbstractView;
 
@@ -32,6 +33,19 @@ public class EditView extends AbstractView {
     	this.perspective = perspective;
         initComponents();
     }
+    
+    /**
+     * 查询sql中的生成按钮;
+     * @param evt
+     */
+    private void qBtnOkActionPerformed(java.awt.event.ActionEvent evt){
+    	String querySql = queryArea.getText();
+    	TableHelper.test(queryArea.getCatlog(), querySql);
+    }
+    
+    private void qBtnClearActionPerformed(java.awt.event.ActionEvent evt){
+    	queryArea.setText("");
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -48,20 +62,41 @@ public class EditView extends AbstractView {
         rootSp = new javax.swing.JScrollPane();
         rootP = new javax.swing.JPanel();
         rootSp.setViewportView(rootP);
-        queryArea = new TargetTextArea();
-        javax.swing.JScrollPane spqa = new javax.swing.JScrollPane(queryArea); 
+        qBtnOk = new javax.swing.JButton("生成");
+        qBtnOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	qBtnOkActionPerformed(evt);
+            }
+        });
+        qBtnClear = new javax.swing.JButton("清空");
+        qBtnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	qBtnClearActionPerformed(evt);
+            }
+        });
+        
+        queryArea = new TargetSqlTextArea();
+        javax.swing.JScrollPane spqa = new javax.swing.JScrollPane(queryArea);
+        
+        tmpArea = new javax.swing.JTextArea();
         
         TableLayout tableLayout_rootSp = new TableLayout();
-        double border = 2;			      		//0      1    2     3    4     5     6
-        tableLayout_rootSp.setColumn(new double[]{border, 50,  50,   50,  -1,  50,   50, border});
-        tableLayout_rootSp.setRow(new double[]{border, 30, 150, 30, 30, 30, 30, 30, 30, 30, 30, border});
+        double border = 2;			      		
+        										//0       1    2     3    4     5   6   7   8
+        tableLayout_rootSp.setColumn(new double[]{border, 50,  50,   50,  -1,  50, 50, 50, 50, border});
+        tableLayout_rootSp.setRow(new double[]{border, 30, 150, 30, 150, 30, 30, 30, 30, 30, 30, border});
         rootP.setLayout(tableLayout_rootSp);
         
         int row = 1;
-        rootP.add(new JLabel("我"), MessageFormat.format("1,{0},2,{0}", row));
+        rootP.add(new JLabel("查询sql"), MessageFormat.format("1,{0},2,{0}", row));
+        row++;
+        rootP.add(spqa, MessageFormat.format("1,{0},8,{0}", row));
+        row++;
+        rootP.add(qBtnOk, MessageFormat.format("5,{0},6,{0}", row));
+        rootP.add(qBtnClear, MessageFormat.format("7,{0},8,{0}", row));
         
         row++;
-        rootP.add(spqa, MessageFormat.format("1,{0},6,{0}", row));
+        rootP.add(tmpArea, MessageFormat.format("1,{0},8,{0}", row));
 
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
@@ -91,7 +126,11 @@ public class EditView extends AbstractView {
     // Variables declaration - do not modify                     
     private javax.swing.JScrollPane rootSp;
     private javax.swing.JPanel rootP;
-    private TargetTextArea queryArea;
+    private TargetSqlTextArea queryArea;
+    private javax.swing.JButton qBtnOk;
+    private javax.swing.JButton qBtnClear;
+    private javax.swing.JTextArea tmpArea;
+    
     // End of variables declaration                   
 
 

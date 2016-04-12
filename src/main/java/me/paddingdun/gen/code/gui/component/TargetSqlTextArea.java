@@ -3,18 +3,25 @@
  */
 package me.paddingdun.gen.code.gui.component;
 
+import java.awt.EventQueue;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import java.util.concurrent.Callable;
 
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.TransferHandler;
 import javax.swing.text.JTextComponent;
 
+import org.apache.commons.lang.StringUtils;
+
 import me.paddingdun.gen.code.data.tabletree.DBTable;
+import me.paddingdun.gen.code.db.TableHelper;
+import me.paddingdun.gen.code.util.TaskHelper;
 
 /**
  * 可以接收拖拽的textarea;
@@ -23,21 +30,63 @@ import me.paddingdun.gen.code.data.tabletree.DBTable;
  * 2016年4月7日
  */
 @SuppressWarnings("serial")
-public class TargetTextArea extends JTextArea{
+public class TargetSqlTextArea extends JTextArea{
 	
-	public TargetTextArea() {
+	/**
+	 * 保存当前生成table的数据库名称;
+	 */
+	private String catlog;
+
+	public String getCatlog() {
+		return catlog;
+	}
+
+	public TargetSqlTextArea() {
 		super(1, 10);
+		
+		//激活自动换行功能;
+		this.setLineWrap(true);         
+		// 激活断行不断字功能;
+		this.setWrapStyleWord(true);            
 		
 		this.setTransferHandler(new TransferHandler(){
 
 			@Override
 			public boolean importData(TransferSupport support) {
 				Transferable ts = support.getTransferable();
+				
 				if(ts.isDataFlavorSupported(TranDBTable.dbtable)){
-					JTextComponent.DropLocation loc = (JTextComponent.DropLocation)support.getDropLocation();
+					/**
+					 * 输入表别名;
+					 */
+					String tas = JOptionPane.showInputDialog("请输入表别名(如:t1)", "t1");
+					if(StringUtils.isBlank(tas)){
+						tas = "t1";
+					}else{
+						tas = tas.trim();
+					}
+					final String _tas = tas;
+					
+					final JTextComponent.DropLocation loc = (JTextComponent.DropLocation)support.getDropLocation();
 					try {
-						DBTable tmp =  (DBTable)ts.getTransferData(TranDBTable.dbtable);
-						TargetTextArea.this.insert(tmp.getTableName(), loc.getIndex());
+						final DBTable tmp =  (DBTable)ts.getTransferData(TranDBTable.dbtable);
+						
+						TargetSqlTextArea.this.catlog = tmp.getCat();
+						
+						TaskHelper.runInNonEDT(new Callable<Void>() {
+							@Override
+							public Void call() throws Exception {
+								
+								final String result = TableHelper.tableName2QuerySql(tmp, _tas);
+								EventQueue.invokeLater(new Runnable() {
+									@Override
+									public void run() {
+										TargetSqlTextArea.this.insert(result, loc.getIndex());
+									}
+								});
+								return null;
+							}
+						});
 					} catch (UnsupportedFlavorException | IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -46,7 +95,7 @@ public class TargetTextArea extends JTextArea{
 				}else if(ts.isDataFlavorSupported(DataFlavor.stringFlavor)){
 					try {
 						String str = (String)ts.getTransferData(DataFlavor.stringFlavor);
-						TargetTextArea.this.insert(str, TargetTextArea.this.getSelectionStart());
+						TargetSqlTextArea.this.insert(str, TargetSqlTextArea.this.getSelectionStart());
 					} catch (UnsupportedFlavorException | IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -72,16 +121,18 @@ public class TargetTextArea extends JTextArea{
 			
 			@Override
 			protected Transferable createTransferable(JComponent c) {
-			    return new StringSelection(TargetTextArea.this.getSelectedText());
+			    return new StringSelection(TargetSqlTextArea.this.getSelectedText());
 			}
 			
 			@Override
 			protected void exportDone(JComponent c, Transferable t, int action) {
 				if(action == MOVE){
-					TargetTextArea.this.replaceSelection("");
+					TargetSqlTextArea.this.replaceSelection("");
 				}
 			}
 		});
 		
 	}
+	
+	
 }

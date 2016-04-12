@@ -11,6 +11,7 @@ import java.util.Map;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 
+import me.paddingdun.gen.code.data.table.DBColumn;
 import me.paddingdun.gen.code.data.tabletree.Table;
 
 /**
@@ -20,7 +21,15 @@ import me.paddingdun.gen.code.data.tabletree.Table;
  */
 public class BufferHelper {
 
+	/**
+	 * table缓存配置;
+	 */
 	public static Map<String, Table> BUFFER_CFG_TABLE = new HashMap<String, Table>();
+	
+	/**
+	 * 曾经点击生成过的dbcolumn的缓存;
+	 */
+	public static Map<String, DBColumn> BUFFER_DBCOLUMN = new HashMap<String, DBColumn>();
 	
 	
 	public static void writeTable(String key, Table table){
@@ -30,6 +39,19 @@ public class BufferHelper {
 	public static Table readTable(String key){
 		return BUFFER_CFG_TABLE.get(key);
 	}
+	
+	private static String dbColumnKey(String tableName, String columnName){
+		return tableName + "." + columnName;
+	}
+	
+	public static void writeDBColumn(String tableName, String columnName, DBColumn dbColumn){
+		BUFFER_DBCOLUMN.put(dbColumnKey(tableName, columnName), dbColumn);
+	}
+	
+	public static DBColumn readDBColumn(String tableName, String columnName){
+		return BUFFER_DBCOLUMN.get(dbColumnKey(tableName, columnName));
+	}
+	
 	
 	/**
 	 * 读取table内存;
