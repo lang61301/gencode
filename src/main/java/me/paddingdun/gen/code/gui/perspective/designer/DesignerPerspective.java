@@ -21,6 +21,12 @@ public class DesignerPerspective extends AbstractPerspective {
 	 * 点击表格树消息;
 	 */
 	public final static  String MESSAGE_CLICK_TABLE_TREE_NODE = "click_table_tree_node";
+	
+	/**
+	 * add by 2016年4月18日
+	 * 点击查询SQL按钮生成按钮;
+	 */
+	public final static String MESSAGE_CLICK_QUERY_SQL_BUTTON = "click_query_sql_button";
 
 	private JDesktopPane container;
 	

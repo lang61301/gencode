@@ -9,6 +9,8 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import javax.swing.JComponent;
@@ -31,6 +33,8 @@ import me.paddingdun.gen.code.util.TaskHelper;
  */
 @SuppressWarnings("serial")
 public class TargetSqlTextArea extends JTextArea{
+	
+	private List<AfterD2DAction> actions = new ArrayList<AfterD2DAction>();
 	
 	/**
 	 * 保存当前生成table的数据库名称;
@@ -82,6 +86,10 @@ public class TargetSqlTextArea extends JTextArea{
 									@Override
 									public void run() {
 										TargetSqlTextArea.this.insert(result, loc.getIndex());
+										
+										for (AfterD2DAction a : actions) {
+											a.process(tmp);
+										}
 									}
 								});
 								return null;
@@ -132,6 +140,23 @@ public class TargetSqlTextArea extends JTextArea{
 			}
 		});
 		
+	}
+	
+	/**
+	 * 拖拽完成后后续处理;
+	 */
+	public void addAfterDragDropListener(AfterD2DAction action){
+		if(action != null)
+			actions.add(action);
+	}
+	
+	public void removeAfterDragDropListener(AfterD2DAction action){
+		if(action != null)
+			actions.remove(action);
+	}
+	
+	public static interface AfterD2DAction{
+		public void process(DBTable dbTable);
 	}
 	
 	

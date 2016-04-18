@@ -38,6 +38,24 @@ public class DBTable implements Serializable{
 	 */
 	private String tableCommon;
 	
+	/**
+	 * modify 2016-02-17 
+	 * 用来唯一标识表格名称;
+	 * 暂时未使用;
+	 */
+	private String tableId;
+	
+	public String getTableId() {
+		if(tableId == null){
+			tableId = this.getTableName();
+		}
+		return tableId;
+	}
+	
+	public void setTableId(String tableId) {
+		this.tableId = tableId;
+	}
+	
 	public DBTable(String cat, String tableName, String tableType){
 		this.cat = cat;
 		this.tableName = tableName;

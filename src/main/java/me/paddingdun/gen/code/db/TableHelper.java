@@ -8,7 +8,6 @@ import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -155,8 +154,14 @@ public class TableHelper {
 		return result;
 	}
 	
-	public static String test(String catlog, String sql){
-		String result = null;
+	/**
+	 * 根据catlog和sql获取sql;
+	 * @param catlog
+	 * @param sql
+	 * @return
+	 */
+	public static List<DBColumn> parseQuerySql(String catlog, String sql){
+		List<DBColumn> result = new ArrayList<DBColumn>();
 		Connection conn = null;
 		PreparedStatement ps = null;
 		try{
@@ -170,7 +175,7 @@ public class TableHelper {
 				String columnName = rsmd.getColumnName(i);
 				String columnAliasName = rsmd.getColumnLabel(i);
 				String tableName = rsmd.getTableName(i);
-				String _catlog = rsmd.getCatalogName(i);
+//				String _catlog = rsmd.getCatalogName(i);
 				int size = rsmd.getColumnDisplaySize(i);
 				
 				DBColumn dbColumn = BufferHelper.readDBColumn(tableName, columnName);
@@ -179,7 +184,7 @@ public class TableHelper {
 					dbColumn.setColumnSize(size);
 					dbColumn.setColumnAlias(columnAliasName);
 				}
-				
+				result.add(dbColumn);
 			}
 			
 		}catch(Exception e){
@@ -279,5 +284,87 @@ public class TableHelper {
 			IOHelper.close(conn);
 		}
 		return result;
+	}
+	
+	public static List<TableColumn>  tableColumn(Table table){
+//		List<TableColumn> result = new ArrayList<TableColumn>();
+//		try{
+//			//缓存;
+//			String catlog = table.getCat();
+//			String tableName = table.getTableId();
+//			String key = ConfigHelper.tableCfgName(catlog, tableName);
+//			Table tableBuffer = BufferHelper.readTable(key);
+//			
+//			Set<String> set_primary = new HashSet<String>(); 
+//			
+//			while(true){
+//				String name = rs1.getString("COLUMN_NAME");
+//				int type = rs1.getInt("DATA_TYPE");
+//				String common = rs1.getString("REMARKS");
+//				String is_autoincrement = rs1.getString("IS_AUTOINCREMENT");
+//				String is_nullable = rs1.getString("IS_NULLABLE");
+//				Integer column_size = rs1.getInt("COLUMN_SIZE");
+//				
+//				DBColumn dbc = new DBColumn(name, type, common);
+//				if(set_primary.contains(name))
+//					dbc.setPrimary(true);
+//				
+//				if("YES".equals(is_autoincrement))
+//					dbc.setAutoIncrement(true);
+//				
+//				if("NO".equals(is_nullable)){
+//					dbc.setNullable(false);
+//				}
+//				
+//				if(column_size != null){
+//					dbc.setColumnSize(column_size);
+//				}
+//				
+//				/**
+//				 * add by 2016年4月11日
+//				 * 将dbColumn添加入缓存, 关联查询sql时使用;
+//				 */
+//				BufferHelper.writeDBColumn(tableName, name, dbc);
+//				
+//				TableColumn el = new TableColumn(dbc);
+//				
+//				//设置查询列的json参数;
+//				el.setQueryColumnJson(ModelHelper.defaultQueryColumnJson(dbc));
+//				
+//				//设置字段在新增和编辑时的填值方式json;
+//				el.setEditValueGenWayJson(ModelHelper.defaultEditValueGenWayJson(dbc));
+//				
+//				//如果判断字段为timestamp类型, 自动将editRenderShow = false
+//				if(TypesHelper.isTimestampType(type)){
+//					el.setEditRenderShow(false);		
+//				}
+//				
+//				//设置验证json字符串;
+//				el.setEditValidateJson(ModelHelper.defaultEditValidateJson(dbc));
+//				
+//				//缓存更新;
+//				boolean hasBuffer = false;
+//				if(tableBuffer != null){
+//					List<TableColumn> list_tc = tableBuffer.getColumns();
+//					for (TableColumn tc : list_tc) {
+//						if(tc.equals(el)){
+//							hasBuffer = true;
+//							result.add(tc);
+//							break;
+//						}
+//					}
+//				}
+//				
+//				if(!hasBuffer)
+//					result.add(el);
+//			}
+//		}catch(Exception e){
+//			e.printStackTrace();
+//		}finally{
+//			IOHelper.close(rs1);
+//			IOHelper.close(conn);
+//		}
+//		return result;
+		return null;
 	}
 }

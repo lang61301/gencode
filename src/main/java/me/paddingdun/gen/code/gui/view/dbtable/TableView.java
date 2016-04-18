@@ -798,6 +798,37 @@ public class TableView extends AbstractView {
 					return new Integer[]{0};
 				}
 			});
+		
+		/**
+		 * add by 2016年4月18日
+		 * 点击查询按钮sql事件接收;
+		 */
+		}else if(DesignerPerspective.MESSAGE_CLICK_QUERY_SQL_BUTTON.equals(message.getName())){
+			DBTable dbt = new DBTable(null, "table", "CUSTOM");
+			final Table t = new Table(dbt);
+			
+			TaskHelper.runInNonEDT(new Callable<Integer[]>() {
+				public Integer[] call() throws Exception {
+					
+					initModel(t);
+					
+					List<TableColumn> list_tr = TableHelper.tableColumn(t.getCat(), t.getTableName());
+					t.setColumns(list_tr);
+					
+					/**
+					 * add by 2016年4月6日
+					 * 新增显示排序;
+					 */
+					ModelHelper.processSeq(list_tr);
+					
+					/**
+					 * 更新表格数据;
+					 */
+					updateTableData(list_tr);
+					
+					return new Integer[]{0};
+				}
+			});
 		}
 	}
 }

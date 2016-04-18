@@ -27,22 +27,6 @@ public class Table extends DBTable implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	/**
-	 * modify 2016-02-17 
-	 * 用来唯一标识表格名称;
-	 * 暂时未使用;
-	 */
-	private String tableId;
-	
-	public String getTableId() {
-		if(tableId == null){
-			tableId = this.getTableName();
-		}
-		return tableId;
-	}
-	public void setTableId(String tableId) {
-		this.tableId = tableId;
-	}
 	
 	/**
 	 * modify 2016-03-10

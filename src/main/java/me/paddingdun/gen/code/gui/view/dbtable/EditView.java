@@ -4,11 +4,16 @@
 package me.paddingdun.gen.code.gui.view.dbtable;
 
 import java.text.MessageFormat;
+import java.util.List;
 
 import javax.swing.JLabel;
 
+import org.apache.commons.lang.StringUtils;
+
 import layout.TableLayout;
 import me.paddingdun.gen.code.data.message.Message;
+import me.paddingdun.gen.code.data.table.DBColumn;
+import me.paddingdun.gen.code.data.tabletree.DBTable;
 import me.paddingdun.gen.code.db.TableHelper;
 import me.paddingdun.gen.code.gui.component.TargetSqlTextArea;
 import me.paddingdun.gen.code.gui.perspective.designer.DesignerPerspective;
@@ -22,7 +27,6 @@ import me.paddingdun.gen.code.gui.view.AbstractView;
 @SuppressWarnings("serial")
 public class EditView extends AbstractView {
 	
-	@SuppressWarnings("unused")
 	private DesignerPerspective perspective;
 
     /**
@@ -40,7 +44,13 @@ public class EditView extends AbstractView {
      */
     private void qBtnOkActionPerformed(java.awt.event.ActionEvent evt){
     	String querySql = queryArea.getText();
-    	TableHelper.test(queryArea.getCatlog(), querySql);
+    	List<DBColumn> dbcolumns = TableHelper.parseQuerySql(queryArea.getCatlog(), querySql);
+    	
+    	Message m = new Message();
+		m.setName(DesignerPerspective.MESSAGE_CLICK_QUERY_SQL_BUTTON);
+		m.setSource(EditView.this);
+		m.setObject(null);
+		perspective.sendMessage(m);
     }
     
     private void qBtnClearActionPerformed(java.awt.event.ActionEvent evt){
@@ -76,27 +86,45 @@ public class EditView extends AbstractView {
         });
         
         queryArea = new TargetSqlTextArea();
+        queryArea.addAfterDragDropListener(new TargetSqlTextArea.AfterD2DAction() {
+			
+			@Override
+			public void process(DBTable dbTable) {
+				String t = tableId.getText();
+				if(StringUtils.isBlank(t)){
+					tableId.setText(dbTable.getTableName());
+				}else{
+					tableId.setText(t.trim() + "_" + dbTable.getTableName());
+				}
+			}
+		});
         javax.swing.JScrollPane spqa = new javax.swing.JScrollPane(queryArea);
+        
+        tableId = new javax.swing.JTextField();
         
         tmpArea = new javax.swing.JTextArea();
         
         TableLayout tableLayout_rootSp = new TableLayout();
         double border = 2;			      		
-        										//0       1    2     3    4     5   6   7   8
-        tableLayout_rootSp.setColumn(new double[]{border, 50,  50,   50,  -1,  50, 50, 50, 50, border});
+        					//0       1    2     3    4    5   6   7   8   9   
+        double[] col_size = {border, 50,  50,   50, 50,  -1,  50, 50, 50, 50, border};
+        tableLayout_rootSp.setColumn(col_size);
         tableLayout_rootSp.setRow(new double[]{border, 30, 150, 30, 150, 30, 30, 30, 30, 30, 30, border});
         rootP.setLayout(tableLayout_rootSp);
         
+        int lastColumn = col_size.length - 2;
         int row = 1;
         rootP.add(new JLabel("查询sql"), MessageFormat.format("1,{0},2,{0}", row));
         row++;
-        rootP.add(spqa, MessageFormat.format("1,{0},8,{0}", row));
+        rootP.add(spqa, MessageFormat.format("1,{0}," +lastColumn+ ",{0}", row));
         row++;
-        rootP.add(qBtnOk, MessageFormat.format("5,{0},6,{0}", row));
-        rootP.add(qBtnClear, MessageFormat.format("7,{0},8,{0}", row));
+        rootP.add(new JLabel("实体名称"), MessageFormat.format("1,{0},2,{0}", row));
+        rootP.add(tableId, MessageFormat.format("3,{0},5,{0}", row));
+        rootP.add(qBtnOk, MessageFormat.format("6,{0},7,{0}", row));
+        rootP.add(qBtnClear, MessageFormat.format("8,{0}," +lastColumn+ ",{0}", row));
         
         row++;
-        rootP.add(tmpArea, MessageFormat.format("1,{0},8,{0}", row));
+        rootP.add(tmpArea, MessageFormat.format("1,{0}" +lastColumn+ "{0}", row));
 
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
@@ -130,6 +158,7 @@ public class EditView extends AbstractView {
     private javax.swing.JButton qBtnOk;
     private javax.swing.JButton qBtnClear;
     private javax.swing.JTextArea tmpArea;
+    private javax.swing.JTextField tableId;
     
     // End of variables declaration                   
 
