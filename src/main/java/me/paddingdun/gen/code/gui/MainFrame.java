@@ -5,8 +5,14 @@
  */
 package me.paddingdun.gen.code.gui;
 
-import javax.swing.JDesktopPane;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
+import javax.swing.JDesktopPane;
+import javax.swing.JOptionPane;
+
+import me.paddingdun.gen.code.gui.component.ProjectListDialog;
 import me.paddingdun.gen.code.gui.perspective.IPerspective;
 import me.paddingdun.gen.code.gui.perspective.designer.DesignerPerspective;
 
@@ -48,6 +54,29 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         toolBar.setRollover(true);
+        
+        newProject = new JButton("new");
+        newProject.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String projectName = JOptionPane.showInputDialog(null, "工程名称请使用英文", "请输入工程名称", JOptionPane.QUESTION_MESSAGE);
+			}
+        });
+        openProject = new JButton("open");
+        openProject.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				ProjectListDialog dia = new ProjectListDialog(MainFrame.this, true);
+				dia.setLocationRelativeTo(MainFrame.this);
+				dia.setVisible(true);
+			}
+        });
+        
+        closeProject = new JButton("close");
+        toolBar.add(newProject);
+        toolBar.add(openProject);
+        toolBar.add(closeProject);
 
         javax.swing.GroupLayout containerLayout = new javax.swing.GroupLayout(container);
         container.setLayout(containerLayout);
@@ -103,6 +132,7 @@ public class MainFrame extends javax.swing.JFrame {
     		perspective = new DesignerPerspective(container);
     	}
     }
+    
 
     /**
      * @param args the command line arguments
@@ -145,5 +175,14 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JToolBar toolBar;
+    
+    private javax.swing.JButton newProject;
+    private javax.swing.JButton openProject;
+    private javax.swing.JButton closeProject;
+
+	public IPerspective getPerspective() {
+		return perspective;
+	}
+    
     // End of variables declaration//GEN-END:variables
 }

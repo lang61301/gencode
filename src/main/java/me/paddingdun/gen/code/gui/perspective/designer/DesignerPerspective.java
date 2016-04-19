@@ -7,6 +7,7 @@ import javax.swing.JDesktopPane;
 
 import me.paddingdun.gen.code.gui.perspective.AbstractPerspective;
 import me.paddingdun.gen.code.gui.view.dbtable.EditView;
+import me.paddingdun.gen.code.gui.view.dbtable.GeneratedTableTreeView;
 import me.paddingdun.gen.code.gui.view.dbtable.TableTreeView;
 import me.paddingdun.gen.code.gui.view.dbtable.TableView;
 
@@ -27,6 +28,30 @@ public class DesignerPerspective extends AbstractPerspective {
 	 * 点击查询SQL按钮生成按钮;
 	 */
 	public final static String MESSAGE_CLICK_QUERY_SQL_BUTTON = "click_query_sql_button";
+	
+	/**
+	 * add by 2016年4月19日
+	 * 点击工程树节点事件;
+	 */
+	public final static String MESSAGE_CLICK_PROJECT_TREE_NODE = "click_project_tree_node";
+	
+	/**
+	 * add by 2016年4月19日
+	 * 打开工程事件;
+	 */
+	public final static String MESSAGE_OPEN_PROJECT = "open_project";
+	
+	/**
+	 * add by 2016年4月19日
+	 * 新建工程事件;
+	 */
+	public final static String MESSAGE_NEW_PROJECT = "new_project";
+	
+	/**
+	 * add by 2016年4月19日
+	 * 关闭工程事件;
+	 */
+	public final static String MESSAGE_CLOSE_PROJECT = "close_project";
 
 	private JDesktopPane container;
 	
@@ -35,6 +60,12 @@ public class DesignerPerspective extends AbstractPerspective {
 	private TableView tableView;
 	
 	private EditView editView;
+	
+	/**
+	 * add by 2016年4月19日
+	 * 新增已生成实体列表;
+	 */
+	private GeneratedTableTreeView generatedTableTreeView;
 
 	/**
 	 * @param tableTree
@@ -73,6 +104,10 @@ public class DesignerPerspective extends AbstractPerspective {
 	public EditView getEditView() {
 		return editView;
 	}
+	
+	public GeneratedTableTreeView getGeneratedTableTreeView() {
+		return generatedTableTreeView;
+	}
 
 	/* (non-Javadoc)
 	 * @see me.paddingdun.gen.code.gui.perspective.IPerspective#init()
@@ -80,6 +115,17 @@ public class DesignerPerspective extends AbstractPerspective {
 	public void init() {
 		int w = container.getWidth();
 		int h = container.getHeight();
+		
+		//已生成列表;
+		generatedTableTreeView = new GeneratedTableTreeView(this);
+		int w0 = (int)(w * 0.2);
+		int h0 = (int)(h * 0.5);
+		int l0 = 0;
+		int t0 = 0;
+		generatedTableTreeView.setBounds(l0, t0, w0, h0);
+		generatedTableTreeView.setVisible(true);
+		container.add(generatedTableTreeView);
+		this.add(generatedTableTreeView);
 		
 		//表列表view;
 		tableTreeView = new TableTreeView(this);
@@ -90,7 +136,6 @@ public class DesignerPerspective extends AbstractPerspective {
 		
 		tableTreeView.setBounds(l1, t1, w1, h1);
 		tableTreeView.setVisible(true);
-		
 		container.add(tableTreeView);
 		this.add(tableTreeView);
 		
@@ -106,7 +151,6 @@ public class DesignerPerspective extends AbstractPerspective {
 		
 		editView.setBounds(l3, t3, w3, h3);
 		editView.setVisible(true);
-		
 		container.add(editView);
 		this.add(editView);
 		
@@ -119,7 +163,6 @@ public class DesignerPerspective extends AbstractPerspective {
 		
 		tableView.setBounds(l2, t2, w2, h2);
 		tableView.setVisible(true);
-		
 		container.add(tableView);
 		this.add(tableView);
 	}
