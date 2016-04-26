@@ -23,7 +23,7 @@ public class DragTree extends JTree{
 	
 	public DragTree(){
 		super();
-		this.setDragEnabled(true);
+		this.setDragEnabled(false);
 		
 		/**
 		 *	自定义导出数据; 

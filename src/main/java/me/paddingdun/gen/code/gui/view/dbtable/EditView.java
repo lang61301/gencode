@@ -3,21 +3,28 @@
  */
 package me.paddingdun.gen.code.gui.view.dbtable;
 
+import java.awt.EventQueue;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import javax.swing.JLabel;
 
 import org.apache.commons.lang.StringUtils;
 
 import layout.TableLayout;
+import me.paddingdun.gen.code.data.edit.TargetSqlType;
 import me.paddingdun.gen.code.data.message.Message;
 import me.paddingdun.gen.code.data.table.DBColumn;
+import me.paddingdun.gen.code.data.table.TableColumn;
 import me.paddingdun.gen.code.data.tabletree.DBTable;
+import me.paddingdun.gen.code.data.tabletree.Table;
 import me.paddingdun.gen.code.db.TableHelper;
 import me.paddingdun.gen.code.gui.component.TargetSqlTextArea;
 import me.paddingdun.gen.code.gui.perspective.designer.DesignerPerspective;
 import me.paddingdun.gen.code.gui.view.AbstractView;
+import me.paddingdun.gen.code.util.ModelHelper;
+import me.paddingdun.gen.code.util.TaskHelper;
 
 /**
  * @author paddingdun
@@ -49,7 +56,7 @@ public class EditView extends AbstractView {
     	Message m = new Message();
 		m.setName(DesignerPerspective.MESSAGE_CLICK_QUERY_SQL_BUTTON);
 		m.setSource(EditView.this);
-		m.setObject(null);
+		m.setObject(dbcolumns);
 		perspective.sendMessage(m);
     }
     
@@ -102,14 +109,26 @@ public class EditView extends AbstractView {
         
         tableId = new javax.swing.JTextField();
         
-        tmpArea = new javax.swing.JTextArea();
+        insertArea = new TargetSqlTextArea();
+        javax.swing.JScrollPane spia = new javax.swing.JScrollPane(insertArea);
+        
+        updateArea = new TargetSqlTextArea();
+        javax.swing.JScrollPane spua = new javax.swing.JScrollPane(updateArea);
+        
+        getArea	   = new TargetSqlTextArea();
+        javax.swing.JScrollPane spga = new javax.swing.JScrollPane(getArea);
+        
+        deleteArea = new TargetSqlTextArea();
+        javax.swing.JScrollPane spda = new javax.swing.JScrollPane(deleteArea);
         
         TableLayout tableLayout_rootSp = new TableLayout();
         double border = 2;			      		
         					//0       1    2     3    4    5   6   7   8   9   
         double[] col_size = {border, 50,  50,   50, 50,  -1,  50, 50, 50, 50, border};
         tableLayout_rootSp.setColumn(col_size);
-        tableLayout_rootSp.setRow(new double[]{border, 30, 150, 30, 150, 30, 30, 30, 30, 30, 30, border});
+        double h0 = 26;
+        double h1 = 120;
+        tableLayout_rootSp.setRow(new double[]{border, h0, h1, h0, h0, h1, h0, h1, h0, h1, h0, h1, border});
         rootP.setLayout(tableLayout_rootSp);
         
         int lastColumn = col_size.length - 2;
@@ -123,8 +142,25 @@ public class EditView extends AbstractView {
         rootP.add(qBtnOk, MessageFormat.format("6,{0},7,{0}", row));
         rootP.add(qBtnClear, MessageFormat.format("8,{0}," +lastColumn+ ",{0}", row));
         
+//        row++;
+//        rootP.add(new JLabel("新增sql"), MessageFormat.format("1,{0},2,{0}", row));
+//        row++;
+//        rootP.add(spia, MessageFormat.format("1,{0}," +lastColumn+ ",{0}", row));
+//        
+//        row++;
+//        rootP.add(new JLabel("更新sql"), MessageFormat.format("1,{0},2,{0}", row));
+//        row++;
+//        rootP.add(spua, MessageFormat.format("1,{0}," +lastColumn+ ",{0}", row));
+//        
+//        row++;
+//        rootP.add(new JLabel("获取sql"), MessageFormat.format("1,{0},2,{0}", row));
+//        row++;
+//        rootP.add(spga, MessageFormat.format("1,{0}," +lastColumn+ ",{0}", row));
+        
         row++;
-        rootP.add(tmpArea, MessageFormat.format("1,{0}" +lastColumn+ "{0}", row));
+        rootP.add(new JLabel("删除sql"), MessageFormat.format("1,{0},2,{0}", row));
+        row++;
+        rootP.add(spda, MessageFormat.format("1,{0}," +lastColumn+ ",{0}", row));
 
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
@@ -157,8 +193,11 @@ public class EditView extends AbstractView {
     private TargetSqlTextArea queryArea;
     private javax.swing.JButton qBtnOk;
     private javax.swing.JButton qBtnClear;
-    private javax.swing.JTextArea tmpArea;
     private javax.swing.JTextField tableId;
+    private TargetSqlTextArea insertArea;
+    private TargetSqlTextArea updateArea;
+    private TargetSqlTextArea deleteArea;
+    private TargetSqlTextArea getArea;
     
     // End of variables declaration                   
 
@@ -168,6 +207,34 @@ public class EditView extends AbstractView {
 	 */
 	@Override
 	public void doMessage(Message message) {
-		
+		//表格树点击消息;
+				if(DesignerPerspective.MESSAGE_CLICK_TABLE_TREE_NODE.equals(message.getName())){
+					final DBTable dbt = (DBTable)message.getObject();
+					
+					TaskHelper.runInNonEDT(new Callable<Void>() {
+						public Void call() throws Exception {
+							final String qSql = TableHelper.tableName2QuerySql(dbt, "t1");
+							
+							final String dSql = TableHelper.tableName2DeleteSql(dbt);
+							EventQueue.invokeLater(new Runnable() {
+								@Override
+								public void run() {
+									queryArea.setText(qSql);
+									queryArea.setCatlog(dbt.getCat());
+									
+									deleteArea.setText(dSql);
+									deleteArea.setCatlog(dbt.getCat());
+								}
+							});
+							
+							return null;
+						}
+					});
+				
+				/**
+				 * add by 2016年4月18日
+				 * 点击查询按钮sql事件接收;
+				 */
+				}
 	}
 }

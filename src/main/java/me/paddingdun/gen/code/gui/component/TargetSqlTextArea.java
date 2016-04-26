@@ -21,6 +21,7 @@ import javax.swing.text.JTextComponent;
 
 import org.apache.commons.lang.StringUtils;
 
+import me.paddingdun.gen.code.data.edit.TargetSqlType;
 import me.paddingdun.gen.code.data.tabletree.DBTable;
 import me.paddingdun.gen.code.db.TableHelper;
 import me.paddingdun.gen.code.util.TaskHelper;
@@ -44,9 +45,17 @@ public class TargetSqlTextArea extends JTextArea{
 	public String getCatlog() {
 		return catlog;
 	}
+	
+	private TargetSqlType type;
+	
+	public TargetSqlTextArea(){
+		this(TargetSqlType.query);
+	}
 
-	public TargetSqlTextArea() {
+	public TargetSqlTextArea(TargetSqlType type) {
 		super(1, 10);
+		
+		this.type = type;
 		
 		//激活自动换行功能;
 		this.setLineWrap(true);         
@@ -157,6 +166,18 @@ public class TargetSqlTextArea extends JTextArea{
 	
 	public static interface AfterD2DAction{
 		public void process(DBTable dbTable);
+	}
+
+	public TargetSqlType getType() {
+		return type;
+	}
+
+	public void setType(TargetSqlType type) {
+		this.type = type;
+	}
+
+	public void setCatlog(String catlog) {
+		this.catlog = catlog;
 	}
 	
 	

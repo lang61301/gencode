@@ -7,7 +7,7 @@ import javax.swing.JDesktopPane;
 
 import me.paddingdun.gen.code.gui.perspective.AbstractPerspective;
 import me.paddingdun.gen.code.gui.view.dbtable.EditView;
-import me.paddingdun.gen.code.gui.view.dbtable.GeneratedTableTreeView;
+import me.paddingdun.gen.code.gui.view.dbtable.ProjectTreeView;
 import me.paddingdun.gen.code.gui.view.dbtable.TableTreeView;
 import me.paddingdun.gen.code.gui.view.dbtable.TableView;
 
@@ -65,7 +65,7 @@ public class DesignerPerspective extends AbstractPerspective {
 	 * add by 2016年4月19日
 	 * 新增已生成实体列表;
 	 */
-	private GeneratedTableTreeView generatedTableTreeView;
+	private ProjectTreeView generatedTableTreeView;
 
 	/**
 	 * @param tableTree
@@ -105,7 +105,7 @@ public class DesignerPerspective extends AbstractPerspective {
 		return editView;
 	}
 	
-	public GeneratedTableTreeView getGeneratedTableTreeView() {
+	public ProjectTreeView getGeneratedTableTreeView() {
 		return generatedTableTreeView;
 	}
 
@@ -117,7 +117,7 @@ public class DesignerPerspective extends AbstractPerspective {
 		int h = container.getHeight();
 		
 		//已生成列表;
-		generatedTableTreeView = new GeneratedTableTreeView(this);
+		generatedTableTreeView = new ProjectTreeView(this);
 		int w0 = (int)(w * 0.2);
 		int h0 = (int)(h * 0.5);
 		int l0 = 0;

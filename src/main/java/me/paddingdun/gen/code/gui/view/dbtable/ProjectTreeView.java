@@ -29,14 +29,14 @@ import me.paddingdun.gen.code.util.TaskHelper;
  * 2016年4月18日
  */
 @SuppressWarnings("serial")
-public class GeneratedTableTreeView extends  AbstractView {
+public class ProjectTreeView extends  AbstractView {
 	
 	private DesignerPerspective perspective;
 
     /**
      * Creates new form TableTreeFrame
      */
-    public GeneratedTableTreeView(DesignerPerspective perspective) {
+    public ProjectTreeView(DesignerPerspective perspective) {
     	super();
     	this.perspective = perspective;
         initComponents();
@@ -52,7 +52,7 @@ public class GeneratedTableTreeView extends  AbstractView {
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("已生成实体列表");
+        setTitle("工程");
         
         sp = new javax.swing.JScrollPane();
         tableTree = new javax.swing.JTree(new DefaultMutableTreeNode());
@@ -108,7 +108,7 @@ public class GeneratedTableTreeView extends  AbstractView {
 					if( uo instanceof EntityInfo){
 						Message m = new Message();
 						m.setName(DesignerPerspective.MESSAGE_CLICK_PROJECT_TREE_NODE);
-						m.setSource(GeneratedTableTreeView.this);
+						m.setSource(ProjectTreeView.this);
 						m.setObject(uo);
 						perspective.sendMessage(m);
 					}
