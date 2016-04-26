@@ -5,6 +5,8 @@
  */
 package me.paddingdun.gen.code.gui.view.dbtable;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -16,9 +18,12 @@ import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.Callable;
 
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
@@ -32,6 +37,7 @@ import me.paddingdun.gen.code.data.option.ModelValue;
 import me.paddingdun.gen.code.data.option.ModelValueCategory;
 import me.paddingdun.gen.code.data.option.Option;
 import me.paddingdun.gen.code.data.table.CellEditorType;
+import me.paddingdun.gen.code.data.table.DBColumn;
 import me.paddingdun.gen.code.data.table.TableColumn;
 import me.paddingdun.gen.code.data.tabletree.DBTable;
 import me.paddingdun.gen.code.data.tabletree.Table;
@@ -87,12 +93,82 @@ public class TableView extends AbstractView {
     	setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("数据库表详细内容");
+        setTitle("数据库表/查询列表详细内容");
         fileChooser = new javax.swing.JFileChooser();
         p = new javax.swing.JSplitPane();
+        p0t = new javax.swing.JPanel();
         pt = new javax.swing.JSplitPane();
         ptt = new javax.swing.JScrollPane();
         ptb = new javax.swing.JScrollPane();
+        ptba = new javax.swing.JPanel();
+        pb = new javax.swing.JSplitPane();
+        p0b = new javax.swing.JPanel();
+        pbt = new javax.swing.JScrollPane();
+        pbb = new javax.swing.JScrollPane();
+        pbba = new javax.swing.JPanel();
+        
+        p.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+        pt.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+        pb.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+        
+        p.setTopComponent(p0t);
+        p.setBottomComponent(p0b);
+        
+        p0t.setLayout(new BorderLayout());
+        p0t.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), "数据库表", TitledBorder.LEFT, TitledBorder.DEFAULT_POSITION, null, Color.BLACK));
+        p0t.add(pt, BorderLayout.CENTER);
+        p0t.addMouseListener(new MouseAdapter() {
+        	public void mouseClicked(MouseEvent e) {
+        		p.setDividerLocation(p.getHeight()-40);
+        		EventQueue.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						pt.setDividerLocation(0.5);
+						EventQueue.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								pb.setDividerLocation(1.0d);
+							}
+						});
+					}
+				});
+        	}
+		});
+        
+        p0b.setLayout(new BorderLayout());
+        p0b.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), "查询列表", TitledBorder.LEFT, TitledBorder.DEFAULT_POSITION, null, Color.BLACK));
+        p0b.add(pb, BorderLayout.CENTER);
+        p0b.addMouseListener(new MouseAdapter() {
+        	public void mouseClicked(MouseEvent e) {
+        		p.setDividerLocation(30);
+        		EventQueue.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						pt.setDividerLocation(1.0d);
+						
+						EventQueue.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								pb.setDividerLocation(0.5);
+							}
+						});
+					}
+				});
+        	}
+		});
+        
+        pt.setTopComponent(ptt);
+        pt.setBottomComponent(ptb);
+        
+        ptb.setViewportView(ptba);
+        ptb.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        
+        pb.setTopComponent(pbt);
+        pb.setBottomComponent(pbb);
+        
+        pbb.setViewportView(pbba);
+        pbb.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        
         table = new javax.swing.JTable(){
         	public void editingStopped(ChangeEvent e) {
         		TableCellEditor editor = this.getCellEditor();
@@ -106,9 +182,21 @@ public class TableView extends AbstractView {
         };
         //当使用ColumnModel时将其设置成false;
 //        table.setAutoCreateColumnsFromModel(false);
-        pb = new javax.swing.JScrollPane();
-        pba = new javax.swing.JPanel();
-        ptba = new javax.swing.JPanel();
+        ptt.setViewportView(table);
+        
+        /**
+         * add by 2016年4月22日
+         * 新增查询列表;
+         */
+        tableList = new javax.swing.JTable(){
+        };
+        tableList.getTableHeader().addMouseListener(new MouseAdapter() {
+        	public void mouseClicked(MouseEvent e) {
+        		
+        	}
+		});
+        pbt.setViewportView(tableList);
+        
         jLabel1 = new javax.swing.JLabel();
         basePackageName = new javax.swing.JTextField();
         btnGen = new javax.swing.JButton();
@@ -153,19 +241,6 @@ public class TableView extends AbstractView {
         
         editValidateJson = new javax.swing.JTextArea(1, 10);
         javax.swing.JScrollPane evj = new javax.swing.JScrollPane(editValidateJson); 
-        
-        p.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
-        pt.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
-        ptt.setViewportView(table);
-
-        p.setLeftComponent(pt);
-        
-        pt.setTopComponent(ptt);
-        pt.setBottomComponent(ptb);
-        
-        pb.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-//        ptb.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        ptb.setViewportView(ptba);
         
         jLabel1.setText("基础包名称");
 
@@ -297,35 +372,35 @@ public class TableView extends AbstractView {
 //        double border = 2;			      //0      1    2     3    4     5     6
         tableLayout_pba.setColumn(new double[]{border, 50,  50,   80,  -1,  50,   70, border});
         tableLayout_pba.setRow(new double[]{border,30, 30, 30, 30, 30, 30, 30, 30, 30, 30, border});
-        pba.setLayout(tableLayout_pba);
-        
-        pba.add(jLabel1, "1,1,2,1");
-        pba.add(basePackageName, "3,1,5,1");
-        pba.add(btnGen, "6,1");
-        
-        pba.add(jLabel2, "1,2,2,2");
-        pba.add(jcombo_sqlMapMarkUse, "3,2,4,2");
-        
-        pba.add(jLabel9, "1,3,2,3");
-        pba.add(jcombo_showGsonAnnotation, "3,3,4,3");
-        
-        pba.add(jLabel3, "1,4,2,4");
-        pba.add(saveMethodPrefix, "3,4,4,4");
-        
-        pba.add(jLabel4, "1,5,2,5");
-        pba.add(updateMethodPrefix, "3,5,4,5");
-        
-        pba.add(jLabel5, "1,6,2,6");
-        pba.add(getMethodPrefix, "3,6,4,6");
-        
-        pba.add(jLabel6, "1,7,2,7");
-        pba.add(deleteMethodPrefix, "3,7,4,7");
-        
-        pba.add(jLabel7, "1,8,2,8");
-        pba.add(queryMethodPrefix, "3,8,4,8");
-        
-        pba.add(jLabel8, "1,9,2,9");
-        pba.add(queryPagingMethodPrefix, "3,9,4,9");
+//        pba.setLayout(tableLayout_pba);
+//        
+//        pba.add(jLabel1, "1,1,2,1");
+//        pba.add(basePackageName, "3,1,5,1");
+//        pba.add(btnGen, "6,1");
+//        
+//        pba.add(jLabel2, "1,2,2,2");
+//        pba.add(jcombo_sqlMapMarkUse, "3,2,4,2");
+//        
+//        pba.add(jLabel9, "1,3,2,3");
+//        pba.add(jcombo_showGsonAnnotation, "3,3,4,3");
+//        
+//        pba.add(jLabel3, "1,4,2,4");
+//        pba.add(saveMethodPrefix, "3,4,4,4");
+//        
+//        pba.add(jLabel4, "1,5,2,5");
+//        pba.add(updateMethodPrefix, "3,5,4,5");
+//        
+//        pba.add(jLabel5, "1,6,2,6");
+//        pba.add(getMethodPrefix, "3,6,4,6");
+//        
+//        pba.add(jLabel6, "1,7,2,7");
+//        pba.add(deleteMethodPrefix, "3,7,4,7");
+//        
+//        pba.add(jLabel7, "1,8,2,8");
+//        pba.add(queryMethodPrefix, "3,8,4,8");
+//        
+//        pba.add(jLabel8, "1,9,2,9");
+//        pba.add(queryPagingMethodPrefix, "3,9,4,9");
         
         
         sqlMapMarkUse.addElement(CollectionHelper.option("属性名称", 1));
@@ -336,12 +411,6 @@ public class TableView extends AbstractView {
        showGsonAnnotation.addElement(CollectionHelper.option("否", Boolean.FALSE));
        jcombo_showGsonAnnotation.setModel(showGsonAnnotation);
        
-       
-        
-        pb.setViewportView(pba);
-
-        p.setBottomComponent(pb);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -441,11 +510,17 @@ public class TableView extends AbstractView {
     				changeRow();
     		}
 		});
-    	p.setDividerLocation(0.85);
+    	p.setDividerLocation(0.5);
     	
     	EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				pt.setDividerLocation(0.4);
+				pt.setDividerLocation(0.5);
+				
+				EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						pb.setDividerLocation(0.5);
+					}
+				});
 			}
 		});
     }
@@ -636,15 +711,22 @@ public class TableView extends AbstractView {
     @ModelValue(valueGetFuncName = "getText", valueSetFuncName ="setText")
     private javax.swing.JTextField saveMethodPrefix;
     private javax.swing.JComboBox<Option<Boolean>> jcombo_showGsonAnnotation;
-    private javax.swing.JPanel pba;
-    private javax.swing.JScrollPane pb;
-    private javax.swing.JSplitPane p;
-    private javax.swing.JSplitPane pt;
-    private javax.swing.JScrollPane ptt;
-    private javax.swing.JScrollPane ptb;
-    private javax.swing.JPanel ptba;
+    
+    private javax.swing.JSplitPane 	p;
+    private javax.swing.JPanel 		p0t;
+    private javax.swing.JSplitPane 	 pt;
+    private javax.swing.JScrollPane    ptt;
+    private javax.swing.JScrollPane    ptb;
+    private javax.swing.JPanel 		    ptba;
+    private javax.swing.JSplitPane   pb;
+    private javax.swing.JPanel 		 p0b;
+    private javax.swing.JScrollPane    pbt;
+    private javax.swing.JScrollPane    pbb;
+    private javax.swing.JPanel		    pbba;
+    
     private javax.swing.JComboBox<Option<Integer>> jcombo_sqlMapMarkUse;
     private javax.swing.JTable table;
+    private javax.swing.JTable tableList;
     @ModelValue(valueGetFuncName = "getText", valueSetFuncName ="setText")
     private javax.swing.JTextField updateMethodPrefix;
     
@@ -804,29 +886,53 @@ public class TableView extends AbstractView {
 		 * 点击查询按钮sql事件接收;
 		 */
 		}else if(DesignerPerspective.MESSAGE_CLICK_QUERY_SQL_BUTTON.equals(message.getName())){
-			DBTable dbt = new DBTable(null, "table", "CUSTOM");
-			final Table t = new Table(dbt);
-			
-			TaskHelper.runInNonEDT(new Callable<Integer[]>() {
-				public Integer[] call() throws Exception {
+			final List<DBColumn> list = (List<DBColumn>)message.getObject();
+			TaskHelper.runInNonEDT(new Callable<Void>() {
+				public Void call() throws Exception {
+					String[] heads = {
+							"主键",								//0
+							"列名称", 								//2
+							"列别名", 								//3
+							"显示顺序", 							//4
+							"排序字段", 							//5
+							"列描述",		
+					};
+					Vector<String> v = new Vector<String>();
+					for (String h : heads) {
+						v.add(h);
+					}
+					Vector<Vector<Object>> vc = new Vector<Vector<Object>>();
+					for (DBColumn dbColumn : list) {
+						Vector<Object> t = new Vector<Object>();
+						t.add(Boolean.valueOf(dbColumn.isPrimary()));
+						t.add(dbColumn.getColumnName());
+						t.add(dbColumn.getColumnAlias());
+						t.add(Integer.valueOf(0));
+						t.add(Integer.valueOf(0));
+						t.add(dbColumn.getColumnCommon());
+						vc.add(t);
+					}
+					final DefaultTableModel dtm = new DefaultTableModel(vc, v){
+						/* (non-Javadoc)
+						 * @see javax.swing.table.AbstractTableModel#getColumnClass(int)
+						 */
+						@Override
+						public Class<?> getColumnClass(int columnIndex) {
+							Object value = getValueAt(0, columnIndex);
+					        if(value!=null)
+					            return value.getClass();
+					        else 
+					        	return super.getClass();
+						}
+					};
 					
-					initModel(t);
-					
-					List<TableColumn> list_tr = TableHelper.tableColumn(t.getCat(), t.getTableName());
-					t.setColumns(list_tr);
-					
-					/**
-					 * add by 2016年4月6日
-					 * 新增显示排序;
-					 */
-					ModelHelper.processSeq(list_tr);
-					
-					/**
-					 * 更新表格数据;
-					 */
-					updateTableData(list_tr);
-					
-					return new Integer[]{0};
+					EventQueue.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							tableList.setModel(dtm);
+						}
+					});
+					return null;
 				}
 			});
 		}

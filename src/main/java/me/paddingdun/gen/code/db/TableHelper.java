@@ -154,6 +154,14 @@ public class TableHelper {
 		return result;
 	}
 	
+	public static String tableName2DeleteSql(DBTable dbTable){
+		String result = null;
+		String tableName = dbTable.getTableName();
+		StringBuilder sb = new StringBuilder("delete from " + tableName + " {$pk}");
+		result = sb.toString();
+		return result;
+	}
+	
 	/**
 	 * 根据catlog和sql获取sql;
 	 * @param catlog
