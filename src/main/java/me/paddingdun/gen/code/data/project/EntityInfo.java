@@ -6,10 +6,12 @@ package me.paddingdun.gen.code.data.project;
 import java.io.Serializable;
 
 /**
- * 实体信息;
+ * 工程中的实体信息;
  * @author paddingdun
  *
- * 2016年4月19日
+ * 2016年4月29日
+ * @since 2.0
+ * @version 2.0
  */
 public class EntityInfo implements Serializable {
 

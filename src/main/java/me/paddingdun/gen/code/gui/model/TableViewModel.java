@@ -1,7 +1,7 @@
 /**
  * 
  */
-package me.paddingdun.gen.code.gui.view.dbtable;
+package me.paddingdun.gen.code.gui.model;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -14,9 +14,12 @@ import me.paddingdun.gen.code.util.GenFilenameHelper;
 import me.paddingdun.gen.code.util.PathHelper;
 
 /**
+ * 数据库表和查询列表视图数据结构;
  * @author paddingdun
  *
- * 2015年12月21日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)

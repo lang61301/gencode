@@ -12,10 +12,12 @@ import org.apache.commons.lang.StringUtils;
 import me.paddingdun.gen.code.IConsant;
 
 /**
+ * 路径工具类;
  * @author paddingdun
  *
- * 路径工具类;
- * 2016年1月6日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 public class PathHelper {
 

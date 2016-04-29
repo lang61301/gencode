@@ -17,21 +17,26 @@ import javax.swing.tree.DefaultTreeModel;
 import me.paddingdun.gen.code.data.message.Message;
 import me.paddingdun.gen.code.data.project.EntityInfo;
 import me.paddingdun.gen.code.data.project.ProjectInfo;
+import me.paddingdun.gen.code.gui.model.ProjectTreeViewModel;
 import me.paddingdun.gen.code.gui.perspective.designer.DesignerPerspective;
 import me.paddingdun.gen.code.gui.view.AbstractView;
 import me.paddingdun.gen.code.util.ProjectHelper;
-import me.paddingdun.gen.code.util.TaskHelper;
+import me.paddingdun.gen.code.util.gui.TaskHelper;
 
 /**
  * 已经生成过配置文件的树;
  * @author paddingdun
  *
- * 2016年4月18日
+ * 2016年4月29日
+ * @since 2.0
+ * @version 2.0
  */
 @SuppressWarnings("serial")
 public class ProjectTreeView extends  AbstractView {
 	
 	private DesignerPerspective perspective;
+	
+	private ProjectTreeViewModel model;
 
     /**
      * Creates new form TableTreeFrame
@@ -39,7 +44,12 @@ public class ProjectTreeView extends  AbstractView {
     public ProjectTreeView(DesignerPerspective perspective) {
     	super();
     	this.perspective = perspective;
+    	initModel();
         initComponents();
+    }
+    
+    private void initModel(){
+    	model = new ProjectTreeViewModel();
     }
 
     /**
@@ -135,7 +145,9 @@ public class ProjectTreeView extends  AbstractView {
     private void openProject(final String pName){
     	TaskHelper.runInNonEDT(new Callable<Void>() {
 			public Void call() throws Exception {
-				final DefaultTreeModel tm = new DefaultTreeModel(ProjectHelper.projectTreeNode(pName));
+				model.setRootNode(ProjectHelper.projectTreeNode(pName));
+				
+				final DefaultTreeModel tm = new DefaultTreeModel(model.getRootNode());
 				EventQueue.invokeLater(new Runnable() {
 					public void run() {
 						tableTree.setModel(tm);

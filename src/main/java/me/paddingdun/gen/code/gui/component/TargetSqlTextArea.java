@@ -24,13 +24,15 @@ import org.apache.commons.lang.StringUtils;
 import me.paddingdun.gen.code.data.edit.TargetSqlType;
 import me.paddingdun.gen.code.data.tabletree.DBTable;
 import me.paddingdun.gen.code.db.TableHelper;
-import me.paddingdun.gen.code.util.TaskHelper;
+import me.paddingdun.gen.code.util.gui.TaskHelper;
 
 /**
- * 可以接收拖拽的textarea;
+ * 可以接收拖拽数据的textarea;
  * @author paddingdun
  *
- * 2016年4月7日
+ * 2016年4月29日
+ * @since 2.0
+ * @version 2.0
  */
 @SuppressWarnings("serial")
 public class TargetSqlTextArea extends JTextArea{

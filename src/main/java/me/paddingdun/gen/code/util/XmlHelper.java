@@ -16,7 +16,9 @@ import org.dom4j.io.SAXReader;
  * 
  * @author paddingdun
  *
- * 2016年1月14日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 public class XmlHelper {
 	

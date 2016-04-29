@@ -9,9 +9,12 @@ import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 /**
+ * 
  * @author paddingdun
  *
- * 2016年2月4日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 public class AdapterCDATA extends XmlAdapter<String, byte[]> {
 	

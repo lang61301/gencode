@@ -18,7 +18,12 @@ import me.paddingdun.gen.code.data.tabletree.Table;
 import me.paddingdun.gen.code.user.TableConfig;
 
 /**
- * @author paddingdun 用户自定义配置文件保存; 2016年2月3日
+ * 用户自定义配置文件保存;
+ * @author paddingdun
+ *
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 public class ConfigHelper {
 

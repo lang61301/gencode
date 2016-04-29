@@ -11,9 +11,12 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 
 /**
+ * 
  * @author paddingdun
  *
- * 2015年12月8日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 public class TableHelper {
 	static String[] TABLE_PREFIX = new String[]{"tb_"};

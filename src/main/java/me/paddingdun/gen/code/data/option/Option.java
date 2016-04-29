@@ -4,9 +4,13 @@
 package me.paddingdun.gen.code.data.option;
 
 /**
+ * 
  * @author paddingdun
  *
- * 2015年12月22日
+ * @param <T>
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 public class Option<T> {
 	
@@ -44,7 +48,14 @@ public class Option<T> {
 		this.value = value;
 	}
 
-	@SuppressWarnings("rawtypes")
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		return result;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -54,19 +65,14 @@ public class Option<T> {
 		if (getClass() != obj.getClass())
 			return false;
 		Option other = (Option) obj;
-//		if (title == null) {
-//			if (other.title != null)
-//				return false;
-//		} else if (!title.equals(other.title))
-//			return false;
-		if (value == null) {
-			if (other.value != null)
+		if (title == null) {
+			if (other.title != null)
 				return false;
-		} else if (!value.equals(other.value))
+		} else if (!title.equals(other.title))
 			return false;
 		return true;
 	}
-
+	
 	@Override
 	public String toString() {
 		return title;

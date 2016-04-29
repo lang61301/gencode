@@ -12,9 +12,12 @@ import me.paddingdun.gen.code.gui.view.dbtable.TableTreeView;
 import me.paddingdun.gen.code.gui.view.dbtable.TableView;
 
 /**
+ * 
  * @author paddingdun
  *
- * 2015年12月7日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 public class DesignerPerspective extends AbstractPerspective {
 	

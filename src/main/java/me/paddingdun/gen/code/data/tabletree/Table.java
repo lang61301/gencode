@@ -16,9 +16,13 @@ import me.paddingdun.gen.code.data.table.Sort;
 import me.paddingdun.gen.code.data.table.TableColumn;
 
 /**
+ * 表;
  * @author paddingdun
  *
- * 2015年12月3日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 1.0
+ * @deprecated
  */
 public class Table extends DBTable implements Serializable{
 

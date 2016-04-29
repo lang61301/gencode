@@ -1,7 +1,7 @@
 /**
  * 
  */
-package me.paddingdun.gen.code.gui.view.dbtable;
+package me.paddingdun.gen.code.gui.model;
 
 import java.util.Vector;
 
@@ -10,9 +10,13 @@ import javax.swing.DefaultComboBoxModel;
 import me.paddingdun.gen.code.data.option.Option;
 
 /**
+ * 
  * @author paddingdun
  *
- * 2015年12月22日
+ * @param <T>
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 public class OptionComboBoxModel<T> extends DefaultComboBoxModel<Option<T>> {
 	

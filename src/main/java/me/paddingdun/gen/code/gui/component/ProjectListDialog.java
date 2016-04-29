@@ -23,13 +23,15 @@ import me.paddingdun.gen.code.gui.MainFrame;
 import me.paddingdun.gen.code.gui.perspective.IPerspective;
 import me.paddingdun.gen.code.gui.perspective.designer.DesignerPerspective;
 import me.paddingdun.gen.code.util.ProjectHelper;
-import me.paddingdun.gen.code.util.TaskHelper;
+import me.paddingdun.gen.code.util.gui.TaskHelper;
 
 /**
  * 
  * @author paddingdun
  *
- * 2016年4月19日
+ * 2016年4月29日
+ * @since 2.0
+ * @version 2.0
  */
 @SuppressWarnings("serial")
 public class ProjectListDialog extends javax.swing.JDialog {

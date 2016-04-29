@@ -7,9 +7,13 @@ import me.paddingdun.gen.code.data.jsp.Render;
 import me.paddingdun.gen.code.util.EditValueGenWayHelper;
 
 /**
+ * 
  * @author paddingdun
  *
- * 2016年1月13日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 1.0
+ * @deprecated
  */
 public class JspColumn extends TableColumn {
 
@@ -18,15 +22,6 @@ public class JspColumn extends TableColumn {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @param columnName
-	 * @param type
-	 * @param columnCommon
-	 */
-	public JspColumn(String columnName, int type, String columnCommon) {
-		super(columnName, type, columnCommon);
-	}
-	
 	/**jsp 使用************************************************************/
 	/**
 	 * query;

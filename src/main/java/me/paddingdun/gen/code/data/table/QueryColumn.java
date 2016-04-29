@@ -9,9 +9,13 @@ import java.text.MessageFormat;
 import com.google.gson.annotations.Expose;
 
 /**
+ * 
  * @author paddingdun
  *
- * 2016年3月4日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 1.0
+ * @deprecated
  */
 public class QueryColumn implements Serializable {
 

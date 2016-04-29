@@ -13,28 +13,30 @@ import javax.swing.JLabel;
 import org.apache.commons.lang.StringUtils;
 
 import layout.TableLayout;
-import me.paddingdun.gen.code.data.edit.TargetSqlType;
 import me.paddingdun.gen.code.data.message.Message;
 import me.paddingdun.gen.code.data.table.DBColumn;
-import me.paddingdun.gen.code.data.table.TableColumn;
 import me.paddingdun.gen.code.data.tabletree.DBTable;
-import me.paddingdun.gen.code.data.tabletree.Table;
 import me.paddingdun.gen.code.db.TableHelper;
 import me.paddingdun.gen.code.gui.component.TargetSqlTextArea;
+import me.paddingdun.gen.code.gui.model.EditViewModel;
 import me.paddingdun.gen.code.gui.perspective.designer.DesignerPerspective;
 import me.paddingdun.gen.code.gui.view.AbstractView;
-import me.paddingdun.gen.code.util.ModelHelper;
-import me.paddingdun.gen.code.util.TaskHelper;
+import me.paddingdun.gen.code.util.gui.TaskHelper;
 
 /**
+ * 
  * @author paddingdun
  *
- * 2016年4月7日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 @SuppressWarnings("serial")
 public class EditView extends AbstractView {
 	
 	private DesignerPerspective perspective;
+	
+	private EditViewModel model;
 
     /**
      * Creates new form EditView
@@ -42,7 +44,12 @@ public class EditView extends AbstractView {
     public EditView(DesignerPerspective perspective) {
     	super();
     	this.perspective = perspective;
+    	initModel();
         initComponents();
+    }
+    
+    private void initModel(){
+    	model = new EditViewModel();
     }
     
     /**
@@ -128,7 +135,7 @@ public class EditView extends AbstractView {
         tableLayout_rootSp.setColumn(col_size);
         double h0 = 26;
         double h1 = 120;
-        tableLayout_rootSp.setRow(new double[]{border, h0, h1, h0, h0, h1, h0, h1, h0, h1, h0, h1, border});
+        tableLayout_rootSp.setRow(new double[]{border, h0, h1, h0, h0, h1, border});
         rootP.setLayout(tableLayout_rootSp);
         
         int lastColumn = col_size.length - 2;
@@ -209,28 +216,30 @@ public class EditView extends AbstractView {
 	public void doMessage(Message message) {
 		//表格树点击消息;
 				if(DesignerPerspective.MESSAGE_CLICK_TABLE_TREE_NODE.equals(message.getName())){
-					final DBTable dbt = (DBTable)message.getObject();
-					
-					TaskHelper.runInNonEDT(new Callable<Void>() {
-						public Void call() throws Exception {
-							final String qSql = TableHelper.tableName2QuerySql(dbt, "t1");
-							
-							final String dSql = TableHelper.tableName2DeleteSql(dbt);
-							EventQueue.invokeLater(new Runnable() {
-								@Override
-								public void run() {
-									queryArea.setText(qSql);
-									queryArea.setCatlog(dbt.getCat());
-									
-									deleteArea.setText(dSql);
-									deleteArea.setCatlog(dbt.getCat());
-								}
-							});
-							
-							return null;
-						}
-					});
-				
+					if(message.getObject() != null
+							&& message.getObject().getClass() == DBTable.class){
+						final DBTable dbt = (DBTable)message.getObject();
+						
+						TaskHelper.runInNonEDT(new Callable<Void>() {
+							public Void call() throws Exception {
+								model.setQuerySql(TableHelper.tableName2QuerySql(dbt, "t1"));
+								model.setDeleteSql(TableHelper.tableName2DeleteSql(dbt));
+								
+								EventQueue.invokeLater(new Runnable() {
+									@Override
+									public void run() {
+										queryArea.setText(model.getQuerySql());
+										queryArea.setCatlog(dbt.getCat());
+										
+										deleteArea.setText(model.getDeleteSql());
+										deleteArea.setCatlog(dbt.getCat());
+									}
+								});
+								
+								return null;
+							}
+						});
+					}
 				/**
 				 * add by 2016年4月18日
 				 * 点击查询按钮sql事件接收;

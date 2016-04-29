@@ -16,7 +16,9 @@ import me.paddingdun.gen.code.data.tabletree.DBTable;
  * 可拖拽树;
  * @author paddingdun
  *
- * 2016年4月7日
+ * 2016年4月29日
+ * @since 2.0
+ * @version 2.0
  */
 @SuppressWarnings("serial")
 public class DragTree extends JTree{

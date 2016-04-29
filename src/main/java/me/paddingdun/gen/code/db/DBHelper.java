@@ -13,15 +13,18 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 /**
+ * 
  * @author paddingdun
  *
- * 2015年12月3日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 @Component
 @Lazy(false)
 public class DBHelper {
 	
-	private static DBHelper helper;
+	private static DBHelper helper = null;
 	
 	@PostConstruct
 	public void init(){

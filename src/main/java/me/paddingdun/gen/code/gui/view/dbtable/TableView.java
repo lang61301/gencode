@@ -19,7 +19,6 @@ import java.util.Vector;
 import java.util.concurrent.Callable;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -42,30 +41,34 @@ import me.paddingdun.gen.code.data.table.TableColumn;
 import me.paddingdun.gen.code.data.tabletree.DBTable;
 import me.paddingdun.gen.code.data.tabletree.Table;
 import me.paddingdun.gen.code.db.TableHelper;
+import me.paddingdun.gen.code.gui.model.OptionComboBoxModel;
+import me.paddingdun.gen.code.gui.model.TableViewModel;
 import me.paddingdun.gen.code.gui.perspective.designer.DesignerPerspective;
 import me.paddingdun.gen.code.gui.view.AbstractView;
 import me.paddingdun.gen.code.util.CollectionHelper;
 import me.paddingdun.gen.code.util.FileHelper;
 import me.paddingdun.gen.code.util.ModelHelper;
 import me.paddingdun.gen.code.util.SpringHelper;
-import me.paddingdun.gen.code.util.TaskHelper;
 import me.paddingdun.gen.code.util.VelocityHelper;
+import me.paddingdun.gen.code.util.gui.TaskHelper;
 
 /**
+ * 数据库表/查询列表详细视图;
+ * @author paddingdun
  *
- * @author admin
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
-@SuppressWarnings("serial")
+@SuppressWarnings({"serial","unused"})
 public class TableView extends AbstractView {
 	
 	/**
 	 * TableView 日志变量;
 	 */
-	@SuppressWarnings("unused")
 	private final static Logger logger = Logger.getLogger(TableView.class);
 
 
-	@SuppressWarnings("unused")
 	private DesignerPerspective perspective;
 	
 	/**
@@ -79,7 +82,12 @@ public class TableView extends AbstractView {
     public TableView(DesignerPerspective perspective) {
     	super();
     	this.perspective = perspective;
+    	initModel();
         initComponents();
+    }
+    
+    private void initModel(){
+    	model = SpringHelper.getBean(TableViewModel.class);
     }
     
     /**
@@ -123,7 +131,7 @@ public class TableView extends AbstractView {
         		EventQueue.invokeLater(new Runnable() {
 					@Override
 					public void run() {
-						pt.setDividerLocation(0.5);
+						pt.setDividerLocation(0.38);
 						EventQueue.invokeLater(new Runnable() {
 							@Override
 							public void run() {
@@ -149,7 +157,7 @@ public class TableView extends AbstractView {
 						EventQueue.invokeLater(new Runnable() {
 							@Override
 							public void run() {
-								pb.setDividerLocation(0.5);
+								pb.setDividerLocation(0.38);
 							}
 						});
 					}
@@ -279,7 +287,7 @@ public class TableView extends AbstractView {
         TableLayout tableLayout_ptba = new TableLayout();
         double border = 2;			      		//0      1    2     3    4     5     6
         tableLayout_ptba.setColumn(new double[]{border, 50,  50,   80,  -1,  50,   70, border});
-        tableLayout_ptba.setRow(new double[]{border,30, 30, 30, 130, 30, 30, 30, 30, 130, 130, border});
+        tableLayout_ptba.setRow(new double[]{border,30, 30, 130, 130, border});
         ptba.setLayout(tableLayout_ptba);
         
         queryRenderShow.addElement(CollectionHelper.option("是", Boolean.TRUE));
@@ -294,8 +302,6 @@ public class TableView extends AbstractView {
         editRenderShow.addElement(CollectionHelper.option("否", Boolean.FALSE));
         jcombo_editRenderShow.setModel(editRenderShow);
         
-        
-        
         CollectionHelper.renderWayOption(queryRenderWay,"query");
         jcombo_queryRenderWay.setModel(queryRenderWay);
 
@@ -306,30 +312,9 @@ public class TableView extends AbstractView {
         jcombo_editRenderWay.setModel(editRenderWay);
         
         int row = 1;
-        ptba.add(jLabel16, MessageFormat.format("1,{0},2,{0}", row));
-        ptba.add(columnTitle, MessageFormat.format("3,{0},4,{0}", row));
-        
-        row++;
-        ptba.add(jLabel10, MessageFormat.format("1,{0},2,{0}", row, row));
-        ptba.add(jcombo_queryRenderShow, MessageFormat.format("3,{0},4,{0}", row));
-        ptba.add(btnOk, MessageFormat.format("6,{0}", row));
-        row++;
-        ptba.add(jLabel11, MessageFormat.format("1,{0},2,{0}", row));
-        ptba.add(jcombo_queryRenderWay, MessageFormat.format("3,{0},4,{0}", row));
-        row++;
-        ptba.add(new JLabel("查询字段"), MessageFormat.format("1,{0},2,{0}", row));
-        ptba.add(cqpc, MessageFormat.format("3,{0},6,{0}", row));
-        
-        row++;
-        ptba.add(jLabel12, MessageFormat.format("1,{0},2,{0}", row));
-        ptba.add(jcombo_listRenderShow, MessageFormat.format("3,{0},4,{0}", row));
-        row++;
-        ptba.add(jLabel13, MessageFormat.format("1,{0},2,{0}", row));
-        ptba.add(jcombo_listRenderWay, MessageFormat.format("3,{0},4,{0}", row));
-        
-        row++;
         ptba.add(jLabel14, MessageFormat.format("1,{0},2,{0}", row));
         ptba.add(jcombo_editRenderShow, MessageFormat.format("3,{0},4,{0}", row));
+        ptba.add(btnOk, MessageFormat.format("6,{0}", row));
         row++;
         ptba.add(jLabel15, MessageFormat.format("1,{0},2,{0}", row));
         ptba.add(jcombo_editRenderWay, MessageFormat.format("3,{0},4,{0}", row));
@@ -368,10 +353,39 @@ public class TableView extends AbstractView {
             }
         });
         
-        TableLayout tableLayout_pba = new TableLayout();
-//        double border = 2;			      //0      1    2     3    4     5     6
-        tableLayout_pba.setColumn(new double[]{border, 50,  50,   80,  -1,  50,   70, border});
-        tableLayout_pba.setRow(new double[]{border,30, 30, 30, 30, 30, 30, 30, 30, 30, 30, border});
+        
+        TableLayout tableLayout_pbba = new TableLayout();
+//        double border = 2;			      		//0      1    2     3    4     5     6
+        tableLayout_pbba.setColumn(new double[]{border, 50,  50,   80,  -1,  50,   70, border});
+        tableLayout_pbba.setRow(new double[]{border,30, 30, 30, 30, 30, 130, border});
+        pbba.setLayout(tableLayout_pbba);
+        
+        row = 1;
+        pbba.add(jLabel16, MessageFormat.format("1,{0},2,{0}", row));
+        pbba.add(columnTitle, MessageFormat.format("3,{0},4,{0}", row));
+        pbba.add(btnOk, MessageFormat.format("6,{0}", row));
+        
+        row++;
+        pbba.add(jLabel12, MessageFormat.format("1,{0},2,{0}", row));
+        pbba.add(jcombo_listRenderShow, MessageFormat.format("3,{0},4,{0}", row));
+        row++;
+        pbba.add(jLabel13, MessageFormat.format("1,{0},2,{0}", row));
+        pbba.add(jcombo_listRenderWay, MessageFormat.format("3,{0},4,{0}", row));
+
+        row++;
+        pbba.add(jLabel10, MessageFormat.format("1,{0},2,{0}", row, row));
+        pbba.add(jcombo_queryRenderShow, MessageFormat.format("3,{0},4,{0}", row));
+        row++;
+        pbba.add(jLabel11, MessageFormat.format("1,{0},2,{0}", row));
+        pbba.add(jcombo_queryRenderWay, MessageFormat.format("3,{0},4,{0}", row));
+        row++;
+        pbba.add(new JLabel("查询字段"), MessageFormat.format("1,{0},2,{0}", row));
+        pbba.add(cqpc, MessageFormat.format("3,{0},6,{0}", row));
+
+//        TableLayout tableLayout_pba = new TableLayout();
+////        double border = 2;			      //0      1    2     3    4     5     6
+//        tableLayout_pba.setColumn(new double[]{border, 50,  50,   80,  -1,  50,   70, border});
+//        tableLayout_pba.setRow(new double[]{border,30, 30, 30, 30, 30, 30, 30, 30, 30, 30, border});
 //        pba.setLayout(tableLayout_pba);
 //        
 //        pba.add(jLabel1, "1,1,2,1");
@@ -581,7 +595,7 @@ public class TableView extends AbstractView {
             		String ca = (String)cellValue;
             		tc.setColumnAlias(ca);
             	//变更第5列(显示顺序)的值进入TableColumn
-            	}else if(c == 4){
+            	}/*else if(c == 4){
             		Integer seq = (Integer)cellValue;
             		tc.setSeq(seq);
             		
@@ -606,7 +620,7 @@ public class TableView extends AbstractView {
             	}else if(c == 5){
             		Integer order = (Integer)cellValue;
             		tc.setOrder(order);
-            	}
+            	}*/
             	table.updateUI();
     		}
     	}
@@ -672,6 +686,80 @@ public class TableView extends AbstractView {
 	        }
     	}
     }   
+    
+    private void initTable(Table t){
+    	ModelHelper.simpleGetAndComplexSet(model, TableView.this);
+    	model.setTable(t);
+    }
+    
+    private void updateTableData(final List<TableColumn> list){
+    	TaskHelper.runInNonEDT(new Callable<Void>() {
+			@Override
+			public Void call() throws Exception {
+				
+				Vector<Vector<Object>> v = TableHelper.transform1(list);
+				Vector<Object> v2 = new Vector<Object>();
+				
+//				final DefaultTableColumnModel dtcm = new DefaultTableColumnModel();
+				
+//					["列名称", "编辑类型"]
+		    	String[][] heads = new String[][]{
+		    		{"主键", 		null}, 								//0
+					{"自增长", 	null}, 								//1
+					{"列名称", 	null}, 								//2
+					{"SerializeName", 	CellEditorType.String.name()}, 		//3
+//					{"显示顺序", 	CellEditorType.Number.name()}, 		//4
+//					{"排序字段", 	CellEditorType.Number.name()}, 		//5
+					{"列描述", 	null}								//6	
+		    	};
+			    								  
+		    	for (int i = 0; i < heads.length; i++) {
+		    		String[] tmp = heads[i];
+//		    		javax.swing.table.TableColumn h = new javax.swing.table.TableColumn(i);
+//		    		h.setHeaderValue(tmp[0]);
+//					dtcm.addColumn(h);
+					v2.add(tmp[0]);
+				}
+		    	
+		    	
+				final DefaultTableModel dtm = new DefaultTableModel(v, v2){
+					private static final long serialVersionUID = 1L;
+
+					/**
+					 * 获取列的类型;用来输入时判断是否合法输入;
+					 */
+					public Class<?> getColumnClass(int col){
+//						//显示排序或者是记录排序
+//						if(col == 4
+//								|| col == 5)return Integer.class;
+						Object value = getValueAt(0, col);
+				        if(value!=null)
+				            return value.getClass();
+				        else 
+				        	return super.getClass();
+					}
+					
+					public boolean isCellEditable(int row, int column) {
+						if(column == 3
+								/*|| column == 4
+								|| column == 5*/)
+							return true;
+				        return false;
+				    }
+				};
+				
+				EventQueue.invokeLater(new Runnable() {
+					public void run() {
+//						table.setColumnModel(dtcm);
+						table.setModel(dtm);
+//				    	table.updateUI();
+					}
+				});
+				
+				return null;
+			}
+		});
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -769,84 +857,9 @@ public class TableView extends AbstractView {
     
     @ModelValue(category=ModelValueCategory.Column,valueGetFuncName = "getText", valueSetFuncName ="setText")
     private javax.swing.JTextArea editValidateJson;
-    
-    
-    private void initModel(Table t){
-    	model = SpringHelper.getBean(TableViewModel.class);
-    	ModelHelper.simpleGetAndComplexSet(model, TableView.this);
-    	model.setTable(t);
-    }
-    
     // End of variables declaration//GEN-END:variables
     
-    private void updateTableData(final List<TableColumn> list){
-    	TaskHelper.runInNonEDT(new Callable<Void>() {
-			@Override
-			public Void call() throws Exception {
-				
-				Vector<Vector<Object>> v = TableHelper.transform1(list);
-				Vector<Object> v2 = new Vector<Object>();
-				
-//				final DefaultTableColumnModel dtcm = new DefaultTableColumnModel();
-				
-//					["列名称", "编辑类型"]
-		    	String[][] heads = new String[][]{
-		    		{"主键", 		null}, 								//0
-					{"自增长", 	null}, 								//1
-					{"列名称", 	null}, 								//2
-					{"列别名", 	CellEditorType.String.name()}, 		//3
-					{"显示顺序", 	CellEditorType.Number.name()}, 		//4
-					{"排序字段", 	CellEditorType.Number.name()}, 		//5
-					{"列描述", 	null}								//6	
-		    	};
-			    								  
-		    	for (int i = 0; i < heads.length; i++) {
-		    		String[] tmp = heads[i];
-//		    		javax.swing.table.TableColumn h = new javax.swing.table.TableColumn(i);
-//		    		h.setHeaderValue(tmp[0]);
-//					dtcm.addColumn(h);
-					v2.add(tmp[0]);
-				}
-		    	
-		    	
-				final DefaultTableModel dtm = new DefaultTableModel(v, v2){
-					private static final long serialVersionUID = 1L;
-
-					/**
-					 * 获取列的类型;用来输入时判断是否合法输入;
-					 */
-					public Class<?> getColumnClass(int col){
-						//显示排序或者是记录排序
-						if(col == 4
-								|| col == 5)return Integer.class;
-						Object value = getValueAt(0, col);
-				        if(value!=null)
-				            return value.getClass();
-				        else 
-				        	return super.getClass();
-					}
-					
-					public boolean isCellEditable(int row, int column) {
-						if(column == 3
-								|| column == 4
-								|| column == 5)
-							return true;
-				        return false;
-				    }
-				};
-				
-				EventQueue.invokeLater(new Runnable() {
-					public void run() {
-//						table.setColumnModel(dtcm);
-						table.setModel(dtm);
-				    	table.updateUI();
-					}
-				});
-				
-				return null;
-			}
-		});
-    }
+    
 
 	/* (non-Javadoc)
 	 * @see me.paddingdun.gen.code.gui.view.AbstractView#doMessage(me.paddingdun.gen.code.data.message.Message)
@@ -861,16 +874,18 @@ public class TableView extends AbstractView {
 			TaskHelper.runInNonEDT(new Callable<Integer[]>() {
 				public Integer[] call() throws Exception {
 					
-					initModel(t);
+					initTable(t);
 					
 					List<TableColumn> list_tr = TableHelper.tableColumn(t.getCat(), t.getTableName());
 					t.setColumns(list_tr);
 					
-					/**
-					 * add by 2016年4月6日
-					 * 新增显示排序;
-					 */
-					ModelHelper.processSeq(list_tr);
+//					/**
+//					 * add by 2016年4月6日
+//					 * 新增显示排序;
+//					 * modify by 2016年4月26日
+//					 * 数据库表不需要显示顺序和排序;
+//					 */
+//					ModelHelper.processSeq(list_tr);
 					
 					/**
 					 * 更新表格数据;
@@ -893,6 +908,7 @@ public class TableView extends AbstractView {
 							"主键",								//0
 							"列名称", 								//2
 							"列别名", 								//3
+							"表别名",
 							"显示顺序", 							//4
 							"排序字段", 							//5
 							"列描述",		
@@ -907,6 +923,7 @@ public class TableView extends AbstractView {
 						t.add(Boolean.valueOf(dbColumn.isPrimary()));
 						t.add(dbColumn.getColumnName());
 						t.add(dbColumn.getColumnAlias());
+						t.add("t1");
 						t.add(Integer.valueOf(0));
 						t.add(Integer.valueOf(0));
 						t.add(dbColumn.getColumnCommon());

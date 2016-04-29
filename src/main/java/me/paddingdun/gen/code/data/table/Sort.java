@@ -5,11 +5,15 @@ package me.paddingdun.gen.code.data.table;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * 字段排序;
  * @author paddingdun
  *
- * 2016年4月6日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 public class Sort implements Serializable, Comparable<Sort> {
 
@@ -17,6 +21,11 @@ public class Sort implements Serializable, Comparable<Sort> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * 表别名;
+	 */
+	private String tableAlias = null;
 	
 	/**
 	 * 字段名称;
@@ -56,6 +65,14 @@ public class Sort implements Serializable, Comparable<Sort> {
 	public void setSeq(Integer seq) {
 		this.seq = seq;
 	}
+	
+	public String getTableAlias() {
+		return tableAlias;
+	}
+
+	public void setTableAlias(String tableAlias) {
+		this.tableAlias = tableAlias;
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
@@ -73,7 +90,9 @@ public class Sort implements Serializable, Comparable<Sort> {
 	
 	@Override
 	public String toString() {
-		return columnName + " " + direct;
+		if(StringUtils.isNotBlank(tableAlias))
+			return tableAlias + "." + columnName + " " + direct;
+		else
+			return columnName + " " + direct;
 	}
-
 }

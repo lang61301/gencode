@@ -9,7 +9,9 @@ import java.io.Serializable;
  * 数据库表描述实体;
  * @author paddingdun
  *
- * 2016年4月8日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 public class DBTable implements Serializable{
 
@@ -29,7 +31,7 @@ public class DBTable implements Serializable{
 	private String tableName;
 	
 	/**
-	 * 表类型, TABLE 或者 VIEW ;
+	 * 表类型: "TABLE"或者"VIEW";
 	 */
 	private String tableType;
 	
@@ -38,30 +40,6 @@ public class DBTable implements Serializable{
 	 */
 	private String tableCommon;
 	
-	/**
-	 * modify 2016-02-17 
-	 * 用来唯一标识表格名称;
-	 * 暂时未使用;
-	 */
-	private String tableId;
-	
-	public String getTableId() {
-		if(tableId == null){
-			tableId = this.getTableName();
-		}
-		return tableId;
-	}
-	
-	public void setTableId(String tableId) {
-		this.tableId = tableId;
-	}
-	
-	public DBTable(String cat, String tableName, String tableType){
-		this.cat = cat;
-		this.tableName = tableName;
-		this.tableType = tableType;
-	}
-
 	public String getCat() {
 		return cat;
 	}
@@ -98,6 +76,4 @@ public class DBTable implements Serializable{
 	public String toString() {
 		return tableName;
 	}
-	
-	
 }

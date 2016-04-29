@@ -7,7 +7,9 @@ package me.paddingdun.gen.code.util;
  * 文件名称生成工具;
  * @author paddingdun
  *
- * 2015年12月29日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 public class GenFilenameHelper {
 

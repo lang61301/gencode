@@ -10,9 +10,12 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 
 /**
+ * 重载属性注入;
  * @author paddingdun
  *
- * 2015年12月28日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 public class ExtendPropertyPlaceholderConfigurer extends PropertyPlaceholderConfigurer {
 	

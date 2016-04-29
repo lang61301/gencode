@@ -17,8 +17,12 @@ import me.paddingdun.gen.code.gui.perspective.IPerspective;
 import me.paddingdun.gen.code.gui.perspective.designer.DesignerPerspective;
 
 /**
+ * 
+ * @author paddingdun
  *
- * @author admin
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 @SuppressWarnings("serial")
 public class MainFrame extends javax.swing.JFrame {

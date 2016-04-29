@@ -35,12 +35,15 @@ import me.paddingdun.gen.code.data.table.QueryColumn;
 import me.paddingdun.gen.code.data.table.Sort;
 import me.paddingdun.gen.code.data.table.TableColumn;
 import me.paddingdun.gen.code.data.tabletree.Table;
-import me.paddingdun.gen.code.gui.view.dbtable.TableViewModel;
+import me.paddingdun.gen.code.gui.model.TableViewModel;
 
 /**
+ * 
  * @author paddingdun
  *
- * 2015年12月22日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 public class ModelHelper {
 	static Set<Class<?>> BASIC_CLASS = new HashSet<Class<?>>();

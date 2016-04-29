@@ -15,12 +15,15 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 
-import me.paddingdun.gen.code.gui.view.dbtable.TableViewModel;
+import me.paddingdun.gen.code.gui.model.TableViewModel;
 
 /**
+ * 
  * @author paddingdun
  *
- * 2015年12月8日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 @Component
 @Lazy(false)

@@ -16,9 +16,12 @@ import org.apache.commons.io.output.WriterOutputStream;
 import sun.misc.BASE64Encoder;
 
 /**
+ * 
  * @author paddingdun
  *
- * 2016年2月3日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 public class GZipHelper {
 	

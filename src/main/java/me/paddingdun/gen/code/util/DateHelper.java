@@ -10,7 +10,9 @@ import org.apache.commons.lang.time.DateUtils;
  * 
  * @author paddingdun
  *
- * 2015年10月28日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 public class DateHelper {
 

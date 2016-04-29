@@ -4,9 +4,12 @@
 package me.paddingdun.gen.code;
 
 /**
+ * 
  * @author paddingdun
  *
- * 2015年12月28日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 public interface IConsant {
 

@@ -15,9 +15,12 @@ import me.paddingdun.gen.code.data.table.DBColumn;
 import me.paddingdun.gen.code.data.tabletree.Table;
 
 /**
+ * 
  * @author paddingdun
  *
- * 2016年2月15日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 public class BufferHelper {
 
@@ -76,14 +79,15 @@ public class BufferHelper {
 				}
 			});
 			
-			for (File xml : xmls) {
-				Table tmp = ConfigHelper.readConfigXmlFile(xml);
-				if(tmp != null){
-					String name = FilenameUtils.getBaseName(xml.getName());
-					
-					writeTable(name, tmp);
+			if(xmls != null)
+				for (File xml : xmls) {
+					Table tmp = ConfigHelper.readConfigXmlFile(xml);
+					if(tmp != null){
+						String name = FilenameUtils.getBaseName(xml.getName());
+						
+						writeTable(name, tmp);
+					}
 				}
-			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();

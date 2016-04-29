@@ -10,9 +10,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
+ * 
  * @author paddingdun
  *
- * 2016年2月3日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 @XmlAccessorType(XmlAccessType.FIELD)  
 @XmlRootElement  

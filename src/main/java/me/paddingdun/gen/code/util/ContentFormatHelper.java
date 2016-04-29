@@ -14,9 +14,12 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.TextEdit;
 
 /**
+ * 
  * @author paddingdun
  *
- *         2015年12月29日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 public class ContentFormatHelper {
 

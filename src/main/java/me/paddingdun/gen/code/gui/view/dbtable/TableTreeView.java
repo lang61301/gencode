@@ -16,28 +16,43 @@ import javax.swing.tree.DefaultTreeModel;
 
 import me.paddingdun.gen.code.data.message.Message;
 import me.paddingdun.gen.code.data.tabletree.DBTable;
-import me.paddingdun.gen.code.db.TableHelper;
+import me.paddingdun.gen.code.db.TableHelper2;
 import me.paddingdun.gen.code.gui.component.DragTree;
+import me.paddingdun.gen.code.gui.model.TableTreeViewModel;
 import me.paddingdun.gen.code.gui.perspective.designer.DesignerPerspective;
 import me.paddingdun.gen.code.gui.view.AbstractView;
-import me.paddingdun.gen.code.util.TaskHelper;
+import me.paddingdun.gen.code.util.gui.TaskHelper;
 
 /**
+ * 数据库表试图;
+ * @author paddingdun
  *
- * @author admin
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 @SuppressWarnings("serial")
 public class TableTreeView extends  AbstractView {
 	
 	private DesignerPerspective perspective;
+	
+	private TableTreeViewModel model = null;
 
     /**
      * Creates new form TableTreeFrame
      */
     public TableTreeView(DesignerPerspective perspective) {
     	super();
+    	
     	this.perspective = perspective;
+    	
+    	initModel();
+    	
         initComponents();
+    }
+    
+    private void initModel(){
+    	model = new TableTreeViewModel();
     }
 
     /**
@@ -75,6 +90,12 @@ public class TableTreeView extends  AbstractView {
         spp.setLeftComponent(sp);
         sp.setViewportView(tableTree);
         
+		tableTree.addTreeSelectionListener(new TreeSelectionListener() {
+			public void valueChanged(TreeSelectionEvent e) {
+				treeValueChanged(e);
+			}
+		});
+        
         spp.setBottomComponent(pane);
         
         pane.setLayout(new BorderLayout());
@@ -96,33 +117,33 @@ public class TableTreeView extends  AbstractView {
 
     private void afterShow(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_afterShow
     	spp.setDividerLocation(0.9);
-    	tableTree.addTreeSelectionListener(new TreeSelectionListener() {
-			
-			public void valueChanged(TreeSelectionEvent e) {
-				Object[] objs = e.getPath().getPath();
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode)objs[objs.length - 1];
-				if(node.isLeaf()){
-					Object uo = node.getUserObject();
-					if( uo instanceof DBTable){
-						
-						Message m = new Message();
-						m.setName(DesignerPerspective.MESSAGE_CLICK_TABLE_TREE_NODE);
-						m.setSource(TableTreeView.this);
-						m.setObject(uo);
-						perspective.sendMessage(m);
-					}
-				}
-			}
-		});
 
     	btnRefreshActionPerformed(null);
-    	
     }//GEN-LAST:event_afterShow
+    
+    private void treeValueChanged(TreeSelectionEvent e){
+    	Object[] objs = e.getPath().getPath();
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode)objs[objs.length - 1];
+		if(node.isLeaf()){
+			Object uo = node.getUserObject();
+			if( uo instanceof DBTable){
+				
+				Message m = new Message();
+				m.setName(DesignerPerspective.MESSAGE_CLICK_TABLE_TREE_NODE);
+				m.setSource(TableTreeView.this);
+				m.setObject(uo);
+				perspective.sendMessage(m);
+			}
+		}
+    }
     
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {
     	TaskHelper.runInNonEDT(new Callable<Integer[]>() {
 			public Integer[] call() throws Exception {
-				final DefaultTreeModel tm = new DefaultTreeModel(TableHelper.TableTreeNode());
+				//设置数据;
+				model.setRootNode(TableHelper2.TableTreeNode());
+				
+				final DefaultTreeModel tm = new DefaultTreeModel(model.getRootNode());
 				EventQueue.invokeLater(new Runnable() {
 					public void run() {
 						tableTree.setModel(tm);

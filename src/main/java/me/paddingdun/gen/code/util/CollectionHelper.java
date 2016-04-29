@@ -11,12 +11,15 @@ import org.apache.commons.beanutils.PropertyUtils;
 import me.paddingdun.gen.code.data.jsp.RenderWayType;
 import me.paddingdun.gen.code.data.option.Option;
 import me.paddingdun.gen.code.exception.BusinessException;
-import me.paddingdun.gen.code.gui.view.dbtable.OptionComboBoxModel;
+import me.paddingdun.gen.code.gui.model.OptionComboBoxModel;
 
 /**
+ * 
  * @author paddingdun
  *
- * 2015年12月16日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 public class CollectionHelper {
 

@@ -13,9 +13,13 @@ import me.paddingdun.gen.code.data.jsp.RenderWayType;
 import me.paddingdun.gen.code.util.EditValueGenWayHelper;
 
 /**
+ * 
  * @author paddingdun
  *
- * 2015年12月3日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 1.0
+ * @deprecated
  */
 public class TableColumn extends DBColumn implements Comparable<TableColumn>{
 	
@@ -56,25 +60,6 @@ public class TableColumn extends DBColumn implements Comparable<TableColumn>{
 	 * 按照绝对值的大小排序;
 	 */
 	private Integer order;
-	
-	
-	/**
-	 * @param columnName
-	 * @param type
-	 * @param columnCommon
-	 */
-	public TableColumn(String columnName, int type, String columnCommon) {
-		super(columnName, type, columnCommon);
-	}
-	
-	public TableColumn(DBColumn dbColumn){
-		this(dbColumn.getColumnName(), dbColumn.getType(), dbColumn.getColumnCommon());
-		try {
-			BeanUtils.copyProperties(this, dbColumn);
-		} catch (IllegalAccessException | InvocationTargetException e) {
-			e.printStackTrace();
-		}
-	}
 	
 	private String javaType;
 	private String propertyName;
@@ -262,6 +247,8 @@ public class TableColumn extends DBColumn implements Comparable<TableColumn>{
 			return false;
 		return true;
 	}
+	
+	
 
 	/* (non-Javadoc)
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)

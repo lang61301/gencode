@@ -21,7 +21,9 @@ import me.paddingdun.gen.code.data.project.ProjectInfo;
  * 工程信息工具类;
  * @author paddingdun
  *
- * 2016年4月19日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 public class ProjectHelper {
 	
@@ -45,15 +47,16 @@ public class ProjectHelper {
 		});
 		
 		List<ProjectInfo> result = new ArrayList<ProjectInfo>();
-		for (File p : projects) {
-			ProjectInfo pi = new ProjectInfo();
-			pi.setCreateTime(p.lastModified());
-			pi.setLastModifyTime(p.lastModified());
-			String pName = FilenameUtils.getBaseName(p.getAbsolutePath());
-			pi.setProjectName(pName);
-			pi.setRootDir(p.getAbsolutePath());
-			result.add(pi);
-		}
+		if(projects != null)
+			for (File p : projects) {
+				ProjectInfo pi = new ProjectInfo();
+				pi.setCreateTime(p.lastModified());
+				pi.setLastModifyTime(p.lastModified());
+				String pName = FilenameUtils.getBaseName(p.getAbsolutePath());
+				pi.setProjectName(pName);
+				pi.setRootDir(p.getAbsolutePath());
+				result.add(pi);
+			}
 		Collections.sort(result);
 		
 		addAll(result);
@@ -130,14 +133,15 @@ public class ProjectHelper {
 				return e.isFile() && e.getName().toLowerCase().endsWith(".xml");
 			}
 		});
-		for (File f : entitys) {
-			DefaultMutableTreeNode n  = new DefaultMutableTreeNode();
-			EntityInfo e = new EntityInfo();
-			e.setName(FilenameUtils.getBaseName(f.getName()));
-			e.setPath(f.getAbsolutePath());
-			n.setUserObject(e);
-			root.add(n);
-		}
+		if(entitys != null)
+			for (File f : entitys) {
+				DefaultMutableTreeNode n  = new DefaultMutableTreeNode();
+				EntityInfo e = new EntityInfo();
+				e.setName(FilenameUtils.getBaseName(f.getName()));
+				e.setPath(f.getAbsolutePath());
+				n.setUserObject(e);
+				root.add(n);
+			}
 		return root;
 	}
 }

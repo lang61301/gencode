@@ -46,7 +46,7 @@ public class ReplaceProjectPackageName {
 		//被替换的路径名称;
 		String rpl_dir_base  = rpl_base_package.replaceAll("\\.", Matcher.quoteReplacement(File.separator));
 		
-		String dir_java   = String.format("src%smain%sjava", File.separator, File.separator, File.separator);
+		String dir_java   = String.format("src%smain%sjava", File.separator, File.separator);
 		
 		
 		File base_src =  new File(dir_src);

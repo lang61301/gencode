@@ -6,9 +6,12 @@ package me.paddingdun.gen.code.data.jsp;
 import me.paddingdun.gen.code.exception.BusinessException;
 
 /**
+ * 
  * @author paddingdun
  *
- * 2016年1月13日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 public enum RenderWayType {
 

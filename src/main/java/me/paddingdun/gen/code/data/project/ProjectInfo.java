@@ -9,7 +9,9 @@ import java.io.Serializable;
  * 工程信息;
  * @author paddingdun
  *
- * 2016年4月19日
+ * 2016年4月29日
+ * @since 2.0
+ * @version 2.0
  */
 public class ProjectInfo implements Serializable, Comparable<ProjectInfo> {
 
@@ -80,6 +82,14 @@ public class ProjectInfo implements Serializable, Comparable<ProjectInfo> {
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((projectName == null) ? 0 : projectName.hashCode());
+		return result;
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -95,4 +105,6 @@ public class ProjectInfo implements Serializable, Comparable<ProjectInfo> {
 			return false;
 		return true;
 	}
+	
+	
 }

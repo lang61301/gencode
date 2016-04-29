@@ -12,9 +12,12 @@ import me.paddingdun.gen.code.data.message.Message;
 import me.paddingdun.gen.code.gui.view.IView;
 
 /**
+ * 
  * @author paddingdun
  *
- * 2015年12月7日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 public abstract class AbstractPerspective implements IPerspective {
 	

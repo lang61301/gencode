@@ -15,13 +15,15 @@ import me.paddingdun.gen.code.data.jsp.RenderWayType;
 import me.paddingdun.gen.code.data.table.JspColumn;
 import me.paddingdun.gen.code.data.table.QueryColumn;
 import me.paddingdun.gen.code.exception.BusinessException;
-import me.paddingdun.gen.code.gui.view.dbtable.TableViewModel;
+import me.paddingdun.gen.code.gui.model.TableViewModel;
 
 /**
  * 
  * @author paddingdun
  *
- * 2016年1月13日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 public class RenderHelper {
 	

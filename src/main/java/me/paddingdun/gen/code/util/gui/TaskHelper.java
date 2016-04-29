@@ -1,16 +1,19 @@
 /**
  * 
  */
-package me.paddingdun.gen.code.util;
+package me.paddingdun.gen.code.util.gui;
 
 import java.awt.EventQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
 /**
+ * 
  * @author paddingdun
  *
- * 2015年12月7日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 public class TaskHelper {
 	

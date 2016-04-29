@@ -11,9 +11,12 @@ import java.io.IOException;
 import me.paddingdun.gen.code.data.tabletree.DBTable;
 
 /**
+ * 
  * @author paddingdun
  *
- * 2016年4月8日
+ * 2016年4月29日
+ * @since 2.0
+ * @version 2.0
  */
 public class TranDBTable implements Transferable {
 	

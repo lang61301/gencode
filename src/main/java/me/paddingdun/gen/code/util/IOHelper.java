@@ -14,9 +14,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
+ * 
  * @author paddingdun
  *
- * 2015年12月3日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 public class IOHelper {
 	

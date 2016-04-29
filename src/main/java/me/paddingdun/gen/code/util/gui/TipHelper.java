@@ -1,7 +1,7 @@
 /**
  * 
  */
-package me.paddingdun.gen.code.util;
+package me.paddingdun.gen.code.util.gui;
 
 import javax.swing.ToolTipManager;
 
@@ -9,7 +9,9 @@ import javax.swing.ToolTipManager;
  * 提示帮助类;
  * @author paddingdun
  *
- * 2016年4月7日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 1.0
  */
 public class TipHelper {
 	

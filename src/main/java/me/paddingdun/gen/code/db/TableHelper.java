@@ -17,7 +17,6 @@ import java.util.Vector;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-import me.paddingdun.gen.code.IConsant;
 import me.paddingdun.gen.code.data.table.DBColumn;
 import me.paddingdun.gen.code.data.table.TableColumn;
 import me.paddingdun.gen.code.data.tabletree.DBTable;
@@ -29,9 +28,13 @@ import me.paddingdun.gen.code.util.ModelHelper;
 import me.paddingdun.gen.code.util.TypesHelper;
 
 /**
+ * 
  * @author paddingdun
  *
- * 2015年12月3日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 1.0
+ * @deprecated
  */
 public class TableHelper {
 
@@ -100,15 +103,15 @@ public class TableHelper {
 			el.add(Boolean.valueOf(r.isAutoIncrement()));
 			el.add(name);
 			el.add(r.getColumnAlias());
-			if(null == r.getSeq()){
-				if(r.isPrimary())
-					el.add(IConsant.DEF_MIN_SEQ);
-				else
-					el.add(IConsant.DEF_MAX_SEQ);
-			}else{
-				el.add(r.getSeq());
-			}
-			el.add(r.getOrder());
+//			if(null == r.getSeq()){
+//				if(r.isPrimary())
+//					el.add(IConsant.DEF_MIN_SEQ);
+//				else
+//					el.add(IConsant.DEF_MAX_SEQ);
+//			}else{
+//				el.add(r.getSeq());
+//			}
+//			el.add(r.getOrder());
 			el.add(common);
 			result.add(el);
 		}

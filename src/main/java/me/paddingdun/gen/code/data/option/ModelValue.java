@@ -10,9 +10,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 
  * @author paddingdun
  *
- * 2015年12月22日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 @Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

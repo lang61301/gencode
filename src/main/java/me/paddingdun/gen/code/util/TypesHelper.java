@@ -9,9 +9,12 @@ import java.util.Map;
 
 
 /**
+ * 
  * @author paddingdun
  *
- * 2015年12月8日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 public class TypesHelper {
 	/**

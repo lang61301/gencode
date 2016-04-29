@@ -19,9 +19,12 @@ import me.paddingdun.gen.code.extend.spring.ExtendPropertyPlaceholderConfigurer;
 import me.paddingdun.gen.code.util.TypesHelper;
 
 /**
+ * 自动将绑定@Value1注释的属性注入资源文件中的值;
  * @author paddingdun
  *
- * 2015年12月28日
+ * 2016年4月29日
+ * @since 1.0
+ * @version 2.0
  */
 @Component
 @Lazy(false)
