@@ -36,6 +36,7 @@ import me.paddingdun.gen.code.util.TypesHelper;
  * @version 1.0
  * @deprecated
  */
+@SuppressWarnings({"unused"})
 public class TableHelper {
 
 	/**
@@ -73,7 +74,7 @@ public class TableHelper {
 						 * modify by 2016年4月8日
 						 * 树节点数据由Table变更为DBTable;
 						 */
-						DBTable t = new DBTable(cat, name, type);
+						DBTable t = new DBTable();
 						t.setTableCommon(remark);
 						node_table.setUserObject(t);
 						node_db.add(node_table);
@@ -191,7 +192,7 @@ public class TableHelper {
 				
 				DBColumn dbColumn = BufferHelper.readDBColumn(tableName, columnName);
 				if(dbColumn == null){
-					dbColumn = new DBColumn(columnName, type, null);
+					dbColumn = new DBColumn();
 					dbColumn.setColumnSize(size);
 					dbColumn.setColumnAlias(columnAliasName);
 				}
@@ -235,7 +236,7 @@ public class TableHelper {
 				String is_nullable = rs1.getString("IS_NULLABLE");
 				Integer column_size = rs1.getInt("COLUMN_SIZE");
 				
-				DBColumn dbc = new DBColumn(name, type, common);
+				DBColumn dbc = new DBColumn();
 				if(set_primary.contains(name))
 					dbc.setPrimary(true);
 				
@@ -256,7 +257,7 @@ public class TableHelper {
 				 */
 				BufferHelper.writeDBColumn(tableName, name, dbc);
 				
-				TableColumn el = new TableColumn(dbc);
+				TableColumn el = new TableColumn();
 				
 				//设置查询列的json参数;
 				el.setQueryColumnJson(ModelHelper.defaultQueryColumnJson(dbc));

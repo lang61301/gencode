@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import me.paddingdun.gen.code.IConsant;
 import me.paddingdun.gen.code.annotation.Value1;
-import me.paddingdun.gen.code.data.tabletree.Table;
+import me.paddingdun.gen.code.data.table2.Entity;
 import me.paddingdun.gen.code.util.GenFilenameHelper;
 import me.paddingdun.gen.code.util.PathHelper;
 
@@ -26,17 +26,9 @@ import me.paddingdun.gen.code.util.PathHelper;
 public class TableViewModel {
 	
 	/**
-	 * 
+	 * 实体属性;
 	 */
-	private Table table;
-	
-	/**
-	 * ibatis中SqlMap的属性占位符;
-	 * 1:属性名称;
-	 * 2:字段名称;
-	 */
-	@Value1(def="1")
-	private Integer sqlMapMarkUse;
+	private Entity entity;
 	
 	/**
 	 * 是否显示gosn注释;
@@ -364,22 +356,6 @@ public class TableViewModel {
 		this.webActionPackageName = webActionPackageName;
 	}
 
-	public Table getTable() {
-		return table;
-	}
-
-	public void setTable(Table table) {
-		this.table = table;
-	}
-
-	public Integer getSqlMapMarkUse() {
-		return sqlMapMarkUse;
-	}
-
-	public void setSqlMapMarkUse(Integer sqlMapMarkUse) {
-		this.sqlMapMarkUse = sqlMapMarkUse;
-	}
-
 	public Boolean getShowGsonAnnotation() {
 		return showGsonAnnotation;
 	}
@@ -486,23 +462,23 @@ public class TableViewModel {
 	
 	
 	public String getSqlMapIDaoJavaClassName(){
-		return GenFilenameHelper.sqlMapIDaoJavaClassName(table.getEntityBeanName());
+		return GenFilenameHelper.sqlMapIDaoJavaClassName(entity.getEntityBeanName());
 	}
 	
 	public String getSqlMapDaoImplJavaClassName(){
-		return GenFilenameHelper.sqlMapDaoImplJavaClassName(table.getEntityBeanName());
+		return GenFilenameHelper.sqlMapDaoImplJavaClassName(entity.getEntityBeanName());
 	}
 	
 	public String getSqlMapIServiceJavaClassName(){
-		return GenFilenameHelper.sqlMapIServiceJavaClassName(table.getEntityBeanName());
+		return GenFilenameHelper.sqlMapIServiceJavaClassName(entity.getEntityBeanName());
 	}
 	
 	public String getSqlMapServiceImplJavaClassName(){
-		return GenFilenameHelper.sqlMapServiceImplJavaClassName(table.getEntityBeanName());
+		return GenFilenameHelper.sqlMapServiceImplJavaClassName(entity.getEntityBeanName());
 	}
 	
 	public String getSpringWebActionJavaClassName(){
-		return GenFilenameHelper.springWebActionJavaClassName(table.getEntityBeanName());
+		return GenFilenameHelper.springWebActionJavaClassName(entity.getEntityBeanName());
 	}
 	
 	public String getPojoFullPackageName() {
@@ -556,7 +532,7 @@ public class TableViewModel {
 	
 	public String getWebActionRequestMapping() {
 		if(webActionRequestMapping == null){
-			webActionRequestMapping = PathHelper.concatMappingPath(this.getCateGoryMappingPath(), this.table.getEntityBeanName());
+			webActionRequestMapping = PathHelper.concatMappingPath(this.getCateGoryMappingPath(), entity.getEntityBeanName());
 		}
 		return webActionRequestMapping;
 	}
@@ -572,8 +548,18 @@ public class TableViewModel {
 	
 	public String getSpringJspViewResolverMiddleFullPath() {
 		if(springJspViewResolverMiddleFullPath == null){
-			springJspViewResolverMiddleFullPath = PathHelper.concatJspMiddlePath(getJspWebinfAfterDir(), this.table.getEntityBeanName());
+			springJspViewResolverMiddleFullPath = PathHelper.concatJspMiddlePath(getJspWebinfAfterDir(), entity.getEntityBeanName());
 		}
 		return springJspViewResolverMiddleFullPath;
 	}
+
+	public Entity getEntity() {
+		return entity;
+	}
+
+	public void setEntity(Entity entity) {
+		this.entity = entity;
+	}
+	
+	
 }

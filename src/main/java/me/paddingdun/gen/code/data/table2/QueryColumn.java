@@ -5,6 +5,8 @@ package me.paddingdun.gen.code.data.table2;
 
 import java.text.MessageFormat;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.google.gson.annotations.Expose;
 
 /**
@@ -21,12 +23,16 @@ public class QueryColumn implements IEntityProperty {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * 表别名;
+	 */
+	private String tableAlias;
 
 	/**
 	 * 关联字段名称;
 	 */
-//	@Expose
-	private String relColumnName;
+	private String columnName;
 	
 	/**
 	 * 作为实体bean中的属性名称;
@@ -74,15 +80,10 @@ public class QueryColumn implements IEntityProperty {
 	
 	public String getLogicDes(){
 		String tmp = this.logic.replaceAll("'", "''");
-		return MessageFormat.format(tmp, this.relColumnName, "#" + this.propertyName + "#");
-	}
-
-	public String getRelColumnName() {
-		return relColumnName;
-	}
-
-	public void setRelColumnName(String relColumnName) {
-		this.relColumnName = relColumnName;
+		String cn = columnName;
+		if(StringUtils.isNotBlank(tableAlias))
+			cn = tableAlias + "." + columnName;
+			return MessageFormat.format(tmp, cn, "#" + propertyName + "#");
 	}
 
 	public String getPropertyName() {
@@ -155,6 +156,22 @@ public class QueryColumn implements IEntityProperty {
 
 	public void setLogic(String logic) {
 		this.logic = logic;
+	}
+
+	public String getTableAlias() {
+		return tableAlias;
+	}
+
+	public void setTableAlias(String tableAlias) {
+		this.tableAlias = tableAlias;
+	}
+
+	public String getColumnName() {
+		return columnName;
+	}
+
+	public void setColumnName(String columnName) {
+		this.columnName = columnName;
 	}
 	
 }

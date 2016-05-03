@@ -4,6 +4,7 @@
 package me.paddingdun.gen.code.data.table2;
 
 import me.paddingdun.gen.code.data.jsp.RenderWayType;
+import me.paddingdun.gen.code.util.EditValueGenWayHelper;
 
 /**
  * 表字段;
@@ -13,7 +14,7 @@ import me.paddingdun.gen.code.data.jsp.RenderWayType;
  * @since 2.0
  * @version 2.0
  */
-public class TableColumn extends EntityProperty {
+public class TableColumn extends BaseTableColumn {
 
 	/**
 	 * 
@@ -39,19 +40,48 @@ public class TableColumn extends EntityProperty {
 	
 	/**
 	 * JS验证;
-	 * add by 2016年3月17日
 	 * 新增和编辑时, 验证规则json;
 	 * jquery.bootstrap.validate
 	 */
 	private String editValidateJson;
 	
-	
-	
-//	/**
-//	 * 判断该字段是否可以存在updatesql中的set语句中;
-//	 * @return
-//	 */
-//	public boolean isNotInSetUpdateSql(){
-//		return EditValueGenWayHelper.isNotInSetUpdateSql(this);
-//	}
+	/**
+	 * 判断该字段是否可以存在updatesql中的set语句中;
+	 * @return
+	 */
+	public boolean isNotInSetUpdateSql(){
+		return EditValueGenWayHelper.isNotInSetUpdateSql(editValueGenWayJson);
+	}
+
+	public boolean isEditRenderShow() {
+		return editRenderShow;
+	}
+
+	public void setEditRenderShow(boolean editRenderShow) {
+		this.editRenderShow = editRenderShow;
+	}
+
+	public int getEditRenderWay() {
+		return editRenderWay;
+	}
+
+	public void setEditRenderWay(int editRenderWay) {
+		this.editRenderWay = editRenderWay;
+	}
+
+	public String getEditValueGenWayJson() {
+		return editValueGenWayJson;
+	}
+
+	public void setEditValueGenWayJson(String editValueGenWayJson) {
+		this.editValueGenWayJson = editValueGenWayJson;
+	}
+
+	public String getEditValidateJson() {
+		return editValidateJson;
+	}
+
+	public void setEditValidateJson(String editValidateJson) {
+		this.editValidateJson = editValidateJson;
+	}
 }

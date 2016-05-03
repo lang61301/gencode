@@ -64,7 +64,7 @@ public class Option<T> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Option other = (Option) obj;
+		Option<?> other = (Option<?>) obj;
 		if (title == null) {
 			if (other.title != null)
 				return false;

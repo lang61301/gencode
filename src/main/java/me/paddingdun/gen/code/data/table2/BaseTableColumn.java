@@ -1,18 +1,22 @@
 /**
  * 
  */
-package me.paddingdun.gen.code.data.table;
+package me.paddingdun.gen.code.data.table2;
+
+import me.paddingdun.gen.code.data.table.IDBColumn;
 
 /**
- * 数据库字段;
  * @author paddingdun
  *
  * 2016年4月29日
  * @since 2.0
  * @version 2.0
  */
-public class DBColumn implements IDBColumn {
+public class BaseTableColumn extends EntityProperty implements IDBColumn {
 
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -145,36 +149,5 @@ public class DBColumn implements IDBColumn {
 
 	public void setTableAlias(String tableAlias) {
 		this.tableAlias = tableAlias;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((columnName == null) ? 0 : columnName.hashCode());
-		result = prime * result + ((tableName == null) ? 0 : tableName.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		DBColumn other = (DBColumn) obj;
-		if (columnName == null) {
-			if (other.columnName != null)
-				return false;
-		} else if (!columnName.equals(other.columnName))
-			return false;
-		if (tableName == null) {
-			if (other.tableName != null)
-				return false;
-		} else if (!tableName.equals(other.tableName))
-			return false;
-		return true;
 	}
 }

@@ -3,11 +3,11 @@
  */
 package me.paddingdun.gen.code.data.table2;
 
-import java.io.Serializable;
 import java.util.List;
 
 import me.paddingdun.gen.code.data.jsp.Render;
 import me.paddingdun.gen.code.data.table.Sort;
+import me.paddingdun.gen.code.data.tabletree.DBTable;
 
 /**
  * 实体对象;
@@ -17,7 +17,7 @@ import me.paddingdun.gen.code.data.table.Sort;
  * @since 2.0
  * @version 2.0
  */
-public class Entity implements Serializable {
+public class Entity extends DBTable {
 
 	/**
 	 * 
@@ -25,24 +25,8 @@ public class Entity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	/**
-	 * modify 2016-03-10
-	 * 是否是自动生成主键;
+	 * 实体bean类名;
 	 */
-	private boolean autoPrimary = false;
-	
-	public boolean isAutoPrimary() {
-		for (TableColumn tc : columns) {
-			if(tc.isPrimary() && tc.isAutoIncrement()){
-				autoPrimary = true;
-				break;
-			}
-		}
-		return autoPrimary;
-	}
-	public void setAutoPrimary(boolean autoPrimary) {
-		this.autoPrimary = autoPrimary;
-	}
-	
 	private String entityBeanName;
 
 	/**
@@ -51,37 +35,110 @@ public class Entity implements Serializable {
 	private Render queryFormRender;
 
 	/**
-	 * add by 2016年3月21日
 	 * bootstrap.validate的js验证js片断;
 	 */
 	private String editJSValidtors;
 
 	/**
-	 * add by 2016年4月6日
-	 * 排序字段集合;
-	 */
-	private List<Sort> sorts;
-	
-	
-	/**
 	 * 实体属性集合;
 	 */
-	private List<IEntityProperty> entityProperties = null;
+	private List<IEntityProperty> entityProperties;
 	
 	/**
 	 * 表字段集合;
 	 */
-	private List<TableColumn> tableColumns = null;
+	private List<TableColumn> tableColumns;
 	
 	/**
 	 * 列表字段集合;
 	 */
-	private List<ListColumn> listColumns = null;
+	private List<ListColumn> listColumns;
 	
 	/**
 	 * 查询字段集合;
 	 */
-	private List<QueryColumn> queryColumns = null;
+	private List<QueryColumn> queryColumns;
 	
+	/**
+	 * 排序字段集合;
+	 */
+	private List<Sort> sorts;
+	
+	/**
+	 * 是否含有自动增长且为主键的字段;
+	 * @return
+	 */
+	public boolean isAutoPrimary() {
+		if(tableColumns != null)
+			for (TableColumn tc : tableColumns) {
+				if(tc.isPrimary() && tc.isAutoIncrement()){
+					return true;
+				}
+			}
+		return false;
+	}
 
+	public String getEntityBeanName() {
+		return entityBeanName;
+	}
+
+	public void setEntityBeanName(String entityBeanName) {
+		this.entityBeanName = entityBeanName;
+	}
+
+	public Render getQueryFormRender() {
+		return queryFormRender;
+	}
+
+	public void setQueryFormRender(Render queryFormRender) {
+		this.queryFormRender = queryFormRender;
+	}
+
+	public String getEditJSValidtors() {
+		return editJSValidtors;
+	}
+
+	public void setEditJSValidtors(String editJSValidtors) {
+		this.editJSValidtors = editJSValidtors;
+	}
+
+	public List<IEntityProperty> getEntityProperties() {
+		return entityProperties;
+	}
+
+	public void setEntityProperties(List<IEntityProperty> entityProperties) {
+		this.entityProperties = entityProperties;
+	}
+
+	public List<TableColumn> getTableColumns() {
+		return tableColumns;
+	}
+
+	public void setTableColumns(List<TableColumn> tableColumns) {
+		this.tableColumns = tableColumns;
+	}
+
+	public List<ListColumn> getListColumns() {
+		return listColumns;
+	}
+
+	public void setListColumns(List<ListColumn> listColumns) {
+		this.listColumns = listColumns;
+	}
+
+	public List<QueryColumn> getQueryColumns() {
+		return queryColumns;
+	}
+
+	public void setQueryColumns(List<QueryColumn> queryColumns) {
+		this.queryColumns = queryColumns;
+	}
+
+	public List<Sort> getSorts() {
+		return sorts;
+	}
+
+	public void setSorts(List<Sort> sorts) {
+		this.sorts = sorts;
+	}
 }

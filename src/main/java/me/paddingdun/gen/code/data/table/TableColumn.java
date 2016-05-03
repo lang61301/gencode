@@ -5,10 +5,6 @@ package me.paddingdun.gen.code.data.table;
 
 
 
-import java.lang.reflect.InvocationTargetException;
-
-import org.apache.commons.beanutils.BeanUtils;
-
 import me.paddingdun.gen.code.data.jsp.RenderWayType;
 import me.paddingdun.gen.code.util.EditValueGenWayHelper;
 
@@ -203,7 +199,7 @@ public class TableColumn extends DBColumn implements Comparable<TableColumn>{
 	 * @return
 	 */
 	public boolean isNotInSetUpdateSql(){
-		return EditValueGenWayHelper.isNotInSetUpdateSql(this);
+		return EditValueGenWayHelper.isNotInSetUpdateSql(editValueGenWayJson);
 	}
 	
 	

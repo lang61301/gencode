@@ -51,27 +51,9 @@ public class Table extends DBTable implements Serializable{
 		this.autoPrimary = autoPrimary;
 	}
 	
-	/**
-	 * @param cat
-	 * @param tableName
-	 * @param tableType
-	 */
-	public Table(String cat, String tableName, String tableType) {
-		super(cat, tableName, tableType);
-	}
-	
-	public Table(DBTable dbTable){
-		this(dbTable.getCat(), dbTable.getTableName(), dbTable.getTableType());
-		try {
-			BeanUtils.copyProperties(this, dbTable);
-		} catch (IllegalAccessException | InvocationTargetException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	@Override
 	public String toString() {
-		return this.getTableId();
+		return this.getTableName();
 	}
 	
 	private List<TableColumn> columns;

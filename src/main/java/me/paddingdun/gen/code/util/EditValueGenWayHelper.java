@@ -10,7 +10,6 @@ import org.apache.commons.lang.StringUtils;
 import me.paddingdun.gen.code.data.edit.EditValueGenWay;
 import me.paddingdun.gen.code.data.edit.EditValueGenWayType;
 import me.paddingdun.gen.code.data.table.JspColumn;
-import me.paddingdun.gen.code.data.table.TableColumn;
 
 /**
  * 
@@ -20,6 +19,7 @@ import me.paddingdun.gen.code.data.table.TableColumn;
  * @since 1.0
  * @version 2.0
  */
+@SuppressWarnings("deprecation")
 public class EditValueGenWayHelper {
 	
 	public static String javaCodeEdit(JspColumn jspColumn){
@@ -30,8 +30,13 @@ public class EditValueGenWayHelper {
 		return javaCode(jspColumn, false);
 	}
 	
-	public static boolean isNotInSetUpdateSql(TableColumn column){
-		EditValueGenWay way = EditValueGenWayHelper.fromJson(column.getEditValueGenWayJson());
+	/**
+	 * 是否需要存在在update sql中;
+	 * @param editValueGenWayJson
+	 * @return
+	 */
+	public static boolean isNotInSetUpdateSql(String editValueGenWayJson){
+		EditValueGenWay way = EditValueGenWayHelper.fromJson(editValueGenWayJson);
 		if(way != null){
 			return way.getEdit() == EditValueGenWayType.nothing;
 		}
