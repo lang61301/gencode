@@ -32,7 +32,7 @@ public class QueryColumn implements IEntityProperty {
 	/**
 	 * 关联字段名称;
 	 */
-	private String columnName;
+	private String relColumnName;
 	
 	/**
 	 * 作为实体bean中的属性名称;
@@ -78,11 +78,13 @@ public class QueryColumn implements IEntityProperty {
 	@Expose
 	private String logic;
 	
+	private String propertyTitle;
+	
 	public String getLogicDes(){
 		String tmp = this.logic.replaceAll("'", "''");
-		String cn = columnName;
+		String cn = relColumnName;
 		if(StringUtils.isNotBlank(tableAlias))
-			cn = tableAlias + "." + columnName;
+			cn = tableAlias + "." + relColumnName;
 			return MessageFormat.format(tmp, cn, "#" + propertyName + "#");
 	}
 
@@ -166,12 +168,19 @@ public class QueryColumn implements IEntityProperty {
 		this.tableAlias = tableAlias;
 	}
 
-	public String getColumnName() {
-		return columnName;
+	public String getRelColumnName() {
+		return relColumnName;
 	}
 
-	public void setColumnName(String columnName) {
-		this.columnName = columnName;
+	public void setRelColumnName(String relColumnName) {
+		this.relColumnName = relColumnName;
 	}
-	
+
+	public String getPropertyTitle() {
+		return propertyTitle;
+	}
+
+	public void setPropertyTitle(String propertyTitle) {
+		this.propertyTitle = propertyTitle;
+	}
 }

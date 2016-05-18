@@ -53,6 +53,8 @@ public class TableViewModel {
 	private String queryPagingMethodPrefix;
 	@Value1(def="getPagingCount")
 	private String getPagingCountPrefix;
+	@Value1(def="1")
+	private Integer sqlMapMarkUse = 1;
 	
 
 	/**
@@ -560,6 +562,13 @@ public class TableViewModel {
 	public void setEntity(Entity entity) {
 		this.entity = entity;
 	}
-	
+
+	public Integer getSqlMapMarkUse() {
+		return sqlMapMarkUse;
+	}
+
+	public void setSqlMapMarkUse(Integer sqlMapMarkUse) {
+		this.sqlMapMarkUse = sqlMapMarkUse;
+	}
 	
 }

@@ -7,7 +7,8 @@ import java.util.List;
 
 import me.paddingdun.gen.code.data.jsp.Render;
 import me.paddingdun.gen.code.data.table.Sort;
-import me.paddingdun.gen.code.data.tabletree.DBTable;
+import me.paddingdun.gen.code.data.tabletree.IDBTable;
+import me.paddingdun.gen.code.data.tabletree.WapperDBTable;
 
 /**
  * 实体对象;
@@ -17,7 +18,7 @@ import me.paddingdun.gen.code.data.tabletree.DBTable;
  * @since 2.0
  * @version 2.0
  */
-public class Entity extends DBTable {
+public class Entity extends WapperDBTable {
 
 	/**
 	 * 
@@ -63,6 +64,10 @@ public class Entity extends DBTable {
 	 * 排序字段集合;
 	 */
 	private List<Sort> sorts;
+	
+	public Entity(IDBTable dbTable){
+		super(dbTable);
+	}
 	
 	/**
 	 * 是否含有自动增长且为主键的字段;

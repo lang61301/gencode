@@ -140,6 +140,8 @@ public class DBColumn implements IDBColumn {
 	}
 
 	public String getTableAlias() {
+		if(tableAlias == null)
+			tableAlias = tableName;
 		return tableAlias;
 	}
 

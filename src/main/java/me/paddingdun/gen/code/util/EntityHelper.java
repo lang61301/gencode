@@ -10,6 +10,12 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
+import me.paddingdun.gen.code.data.table2.EntityProperty;
+import me.paddingdun.gen.code.data.table2.IEntityProperty;
+import me.paddingdun.gen.code.data.table2.ListColumn;
+import me.paddingdun.gen.code.data.table2.QueryColumn;
+import me.paddingdun.gen.code.data.table2.TableColumn;
+
 /**
  * 
  * @author paddingdun
@@ -18,7 +24,7 @@ import org.apache.commons.lang.StringUtils;
  * @since 1.0
  * @version 2.0
  */
-public class TableHelper {
+public class EntityHelper {
 	static String[] TABLE_PREFIX = new String[]{"tb_"};
 	
 	/**
@@ -139,6 +145,36 @@ public class TableHelper {
 			throw new RuntimeException(String.format("the table name or column [%s] can not convert to valid java class name or property!", s));
 		}
 		return result;
+	}
+	
+	public static IEntityProperty from(TableColumn tc){
+		IEntityProperty ep = new EntityProperty();
+		ep.setGetMethod(tc.getGetMethod());
+		ep.setJavaType(tc.getJavaType());
+		ep.setPropertyName(tc.getPropertyName());
+		ep.setPropertyTitle(tc.getPropertyTitle());
+		ep.setSetMethod(tc.getSetMethod());
+		return ep;
+	}
+	
+	public static IEntityProperty from(ListColumn lc){
+		IEntityProperty ep = new EntityProperty();
+		ep.setGetMethod(lc.getGetMethod());
+		ep.setJavaType(lc.getJavaType());
+		ep.setPropertyName(lc.getPropertyName());
+		ep.setPropertyTitle(lc.getPropertyTitle());
+		ep.setSetMethod(lc.getSetMethod());
+		return ep;
+	}
+	
+	public static IEntityProperty from(QueryColumn qc){
+		IEntityProperty ep = new EntityProperty();
+		ep.setGetMethod(qc.getGetMethod());
+		ep.setJavaType(qc.getJavaType());
+		ep.setPropertyName(qc.getPropertyName());
+		ep.setPropertyTitle(qc.getPropertyTitle());
+		ep.setSetMethod(qc.getSetMethod());
+		return ep;
 	}
 	
 	public static void main(String[] args)throws Exception {

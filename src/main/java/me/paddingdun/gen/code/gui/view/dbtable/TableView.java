@@ -37,10 +37,11 @@ import me.paddingdun.gen.code.data.option.ModelValueCategory;
 import me.paddingdun.gen.code.data.option.Option;
 import me.paddingdun.gen.code.data.table.CellEditorType;
 import me.paddingdun.gen.code.data.table.DBColumn;
-import me.paddingdun.gen.code.data.table.TableColumn;
+import me.paddingdun.gen.code.data.table2.Entity;
+import me.paddingdun.gen.code.data.table2.TableColumn;
 import me.paddingdun.gen.code.data.tabletree.DBTable;
-import me.paddingdun.gen.code.data.tabletree.Table;
-import me.paddingdun.gen.code.db.TableHelper;
+import me.paddingdun.gen.code.data.tabletree.IDBTable;
+import me.paddingdun.gen.code.db.TableHelper2;
 import me.paddingdun.gen.code.gui.model.OptionComboBoxModel;
 import me.paddingdun.gen.code.gui.model.TableViewModel;
 import me.paddingdun.gen.code.gui.perspective.designer.DesignerPerspective;
@@ -226,6 +227,7 @@ public class TableView extends AbstractView {
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         columnTitle = new javax.swing.JTextField();
+        listTitle = new javax.swing.JTextField();
         jcombo_showGsonAnnotation = new javax.swing.JComboBox<Option<Boolean>>();
         jcombo_queryRenderShow = new javax.swing.JComboBox<Option<Boolean>>();
         jcombo_listRenderShow = new javax.swing.JComboBox<Option<Boolean>>();
@@ -287,7 +289,7 @@ public class TableView extends AbstractView {
         TableLayout tableLayout_ptba = new TableLayout();
         double border = 2;			      		//0      1    2     3    4     5     6
         tableLayout_ptba.setColumn(new double[]{border, 50,  50,   80,  -1,  50,   70, border});
-        tableLayout_ptba.setRow(new double[]{border,30, 30, 130, 130, border});
+        tableLayout_ptba.setRow(new double[]{border, 30, 30, 30, 130, 130, border});
         ptba.setLayout(tableLayout_ptba);
         
         queryRenderShow.addElement(CollectionHelper.option("是", Boolean.TRUE));
@@ -312,6 +314,9 @@ public class TableView extends AbstractView {
         jcombo_editRenderWay.setModel(editRenderWay);
         
         int row = 1;
+        ptba.add(new JLabel("字段标题"), MessageFormat.format("1,{0},2,{0}", row));
+        ptba.add(columnTitle, MessageFormat.format("3,{0},4,{0}", row));
+        row++;
         ptba.add(jLabel14, MessageFormat.format("1,{0},2,{0}", row));
         ptba.add(jcombo_editRenderShow, MessageFormat.format("3,{0},4,{0}", row));
         ptba.add(btnOk, MessageFormat.format("6,{0}", row));
@@ -362,7 +367,7 @@ public class TableView extends AbstractView {
         
         row = 1;
         pbba.add(jLabel16, MessageFormat.format("1,{0},2,{0}", row));
-        pbba.add(columnTitle, MessageFormat.format("3,{0},4,{0}", row));
+        pbba.add(listTitle, MessageFormat.format("3,{0},4,{0}", row));
         pbba.add(btnOk, MessageFormat.format("6,{0}", row));
         
         row++;
@@ -456,13 +461,13 @@ public class TableView extends AbstractView {
      */
     private void changeRow(){
     	if(model != null
-    			&& model.getTable() != null
-    			&& model.getTable().getColumns() != null){
+    			&& model.getEntity() != null
+    			&& model.getEntity().getTableColumns() != null){
     		final int index = table.getSelectedRow();
     		if(index < 0) return;
     		TaskHelper.runInNonEDT(new Callable<Void>() {
 				public Void call() throws Exception {
-    	    		List<TableColumn> list = model.getTable().getColumns();
+    	    		List<TableColumn> list = model.getEntity().getTableColumns();
     	    		if(index < list.size()){
     	    			final TableColumn tc = list.get(index);
     	    			EventQueue.invokeLater(new Runnable() {
@@ -541,32 +546,16 @@ public class TableView extends AbstractView {
     
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {
     	if(model != null
-    			&& model.getTable() != null
-    			&& model.getTable().getColumns() != null){
+    			&& model.getEntity() != null
+    			&& model.getEntity().getTableColumns() != null){
     		final int index = table.getSelectedRow();
     		TaskHelper.runInNonEDT(new Callable<Void>() {
 				public Void call() throws Exception {
-    	    		List<TableColumn> list = model.getTable().getColumns();
+    	    		List<TableColumn> list = model.getEntity().getTableColumns();
     	    		if(index >-1
     	    				&& index < list.size()){
     	    			TableColumn tc = list.get(index);
     	    			ModelHelper.complexGetAndSimpleSet(TableView.this, tc, ModelValueCategory.Column);
-    	    			
-    	    			/**
-    	    			 * modify by 2016年4月6日
-    	    			 * 新增了setTableColumnValue方法后,就不需要点击ok保存表格中的属性了;
-    	    			 */
-//    	    			//变更第4列(列别名)的值进入TableColumn
-//    	    			String ca = (String)table.getModel().getValueAt(index, 3);
-//    	    			tc.setColumnAlias(ca);
-//    	    			
-//    	    			//变更第5列(显示顺序)的值进入TableColumn
-//    	    			Integer seq = (Integer)table.getModel().getValueAt(index, 4);
-//    	    			tc.setSeq(seq);
-//    	    			
-//    	    			//变更第6列(排序字段顺序)的值进入TableColumn
-//    	    			Integer order = (Integer)table.getModel().getValueAt(index, 5);
-//    	    			tc.setOrder(order);
     	    		}
 					return null;
 				}
@@ -582,9 +571,9 @@ public class TableView extends AbstractView {
     	final int r = table.getSelectedRow();
     	final int c = table.getSelectedColumn();
     	if(model != null
-    			&& model.getTable() != null
-    			&& model.getTable().getColumns() != null){
-    		List<TableColumn> list = model.getTable().getColumns();
+    			&& model.getEntity() != null
+    			&& model.getEntity().getTableColumns() != null){
+    		List<TableColumn> list = model.getEntity().getTableColumns();
     		int size = list.size();
     		if(r > -1 
     				&& r < size){
@@ -594,13 +583,13 @@ public class TableView extends AbstractView {
             	if(c == 3){
             		String ca = (String)cellValue;
             		tc.setColumnAlias(ca);
-            	//变更第5列(显示顺序)的值进入TableColumn
-            	}/*else if(c == 4){
-            		Integer seq = (Integer)cellValue;
-            		tc.setSeq(seq);
-            		
-            		//循环list,将>=seq列的值+1;
-            		for (int i = 0; i < size; i++) {
+            	//排序
+	            }else if(c == 4){
+	        		Integer seq = (Integer)cellValue;
+	        		tc.setSeq(seq);
+	        		
+	        		//循环list,将>=seq列的值+1;
+	        		for (int i = 0; i < size; i++) {
 						TableColumn tmp = list.get(i);
 						if(tmp != tc){
 							Integer s = tmp.getSeq();
@@ -616,11 +605,7 @@ public class TableView extends AbstractView {
 							}
 						}
 					}
-            	//变更第6列(排序字段顺序)的值进入TableColumn
-            	}else if(c == 5){
-            		Integer order = (Integer)cellValue;
-            		tc.setOrder(order);
-            	}*/
+	            }
             	table.updateUI();
     		}
     	}
@@ -639,41 +624,36 @@ public class TableView extends AbstractView {
 			        	if(!saveFile.exists())
 			        		saveFile.mkdirs();
 			        	//设置全局值;
-			        	ModelHelper.complexGetAndSimpleSet(TableView.this, model);
+//			        	ModelHelper.complexGetAndSimpleSet(TableView.this, model);
+			        	
 			        	//加工model;
 			        	ModelHelper.processTableViewModel(model);
 			        	
-			        	/**
-			        	 * add by 2016年4月6日
-			        	 * 由于有显示列按照顺序重新排序,因此要更新数据表格;
-			        	 */
-			        	updateTableData(model.getTable().getColumns());
-			        	
 			        	String javaContent = VelocityHelper.entityBean(model);
 //			        	System.out.println(javaContent);
-			        	FileHelper.genPojoJavaFile(saveFile.getAbsolutePath(), model.getPojoFullPackageName(), model.getTable().getEntityBeanName(), javaContent);
+			        	FileHelper.genPojoJavaFile(saveFile.getAbsolutePath(), model.getPojoFullPackageName(), model.getEntity().getEntityBeanName(), javaContent);
 			        	
 			        	String sqlMapContent = VelocityHelper.sqlMap(model);
-			        	FileHelper.genSqlMapXmlFile(saveFile.getAbsolutePath(), model.getTable().getEntityBeanName(), sqlMapContent);
+			        	FileHelper.genSqlMapXmlFile(saveFile.getAbsolutePath(), model.getEntity().getEntityBeanName(), sqlMapContent);
 //			        	System.out.println(sqlMapContent);
 			        	
 			        	String bootstrapDataTableJspContent = VelocityHelper.bootstrapDataTableJsp(model);
-			        	FileHelper.genBootstrapDataTableJspFile(saveFile.getAbsolutePath(), model.getJspWebinfAfterDir(), model.getTable().getEntityBeanName(), bootstrapDataTableJspContent);
+			        	FileHelper.genBootstrapDataTableJspFile(saveFile.getAbsolutePath(), model.getJspWebinfAfterDir(), model.getEntity().getEntityBeanName(), bootstrapDataTableJspContent);
 			        	
 			        	String sqlMapIDaoContent = VelocityHelper.sqlMapIDao(model);
-			        	FileHelper.genSqlMapIDaoJavaFile(saveFile.getAbsolutePath(), model.getDaoFullPackageName(), model.getTable().getEntityBeanName(), sqlMapIDaoContent);
+			        	FileHelper.genSqlMapIDaoJavaFile(saveFile.getAbsolutePath(), model.getDaoFullPackageName(), model.getEntity().getEntityBeanName(), sqlMapIDaoContent);
 			        	
 			        	String sqlMapDaoImplContent = VelocityHelper.sqlMapDaoImpl(model);
-			        	FileHelper.genSqlMapDaoImplJavaFile(saveFile.getAbsolutePath(), model.getDaoImplFullPackageName(), model.getTable().getEntityBeanName(), sqlMapDaoImplContent);
+			        	FileHelper.genSqlMapDaoImplJavaFile(saveFile.getAbsolutePath(), model.getDaoImplFullPackageName(), model.getEntity().getEntityBeanName(), sqlMapDaoImplContent);
 			        	
 			        	String sqlMapIServiceContent = VelocityHelper.sqlMapIService(model);
-			        	FileHelper.genSqlMapIServiceJavaFile(saveFile.getAbsolutePath(), model.getServiceFullPackageName(), model.getTable().getEntityBeanName(), sqlMapIServiceContent);
+			        	FileHelper.genSqlMapIServiceJavaFile(saveFile.getAbsolutePath(), model.getServiceFullPackageName(), model.getEntity().getEntityBeanName(), sqlMapIServiceContent);
 			        	
 			        	String sqlMapServiceImplContent = VelocityHelper.sqlMapServiceImpl(model);
-			        	FileHelper.genSqlMapServiceImplJavaFile(saveFile.getAbsolutePath(), model.getServiceImplFullPackageName(), model.getTable().getEntityBeanName(), sqlMapServiceImplContent);
+			        	FileHelper.genSqlMapServiceImplJavaFile(saveFile.getAbsolutePath(), model.getServiceImplFullPackageName(), model.getEntity().getEntityBeanName(), sqlMapServiceImplContent);
 			        	
 			        	String springWebActionContent = VelocityHelper.springWebAction(model);
-			        	FileHelper.genSpringWebActionJavaFile(saveFile.getAbsolutePath(), model.getWebActionFullPackageName(), model.getTable().getEntityBeanName(), springWebActionContent);
+			        	FileHelper.genSpringWebActionJavaFile(saveFile.getAbsolutePath(), model.getWebActionFullPackageName(), model.getEntity().getEntityBeanName(), springWebActionContent);
 			        	
 			        	EventQueue.invokeLater(new Runnable() {
 							public void run() {
@@ -687,9 +667,9 @@ public class TableView extends AbstractView {
     	}
     }   
     
-    private void initTable(Table t){
+    private void initEntity(Entity e){
     	ModelHelper.simpleGetAndComplexSet(model, TableView.this);
-    	model.setTable(t);
+    	model.setEntity(e);
     }
     
     private void updateTableData(final List<TableColumn> list){
@@ -697,7 +677,7 @@ public class TableView extends AbstractView {
 			@Override
 			public Void call() throws Exception {
 				
-				Vector<Vector<Object>> v = TableHelper.transform1(list);
+				Vector<Vector<Object>> v = TableHelper2.transform1(list);
 				Vector<Object> v2 = new Vector<Object>();
 				
 //				final DefaultTableColumnModel dtcm = new DefaultTableColumnModel();
@@ -707,8 +687,8 @@ public class TableView extends AbstractView {
 		    		{"主键", 		null}, 								//0
 					{"自增长", 	null}, 								//1
 					{"列名称", 	null}, 								//2
-					{"SerializeName", 	CellEditorType.String.name()}, 		//3
-//					{"显示顺序", 	CellEditorType.Number.name()}, 		//4
+					{"别名", 	CellEditorType.String.name()}, 		//3
+					{"显示顺序", 	CellEditorType.Number.name()}, 		//4
 //					{"排序字段", 	CellEditorType.Number.name()}, 		//5
 					{"列描述", 	null}								//6	
 		    	};
@@ -730,8 +710,7 @@ public class TableView extends AbstractView {
 					 */
 					public Class<?> getColumnClass(int col){
 //						//显示排序或者是记录排序
-//						if(col == 4
-//								|| col == 5)return Integer.class;
+						if(col == 4)return Integer.class;
 						Object value = getValueAt(0, col);
 				        if(value!=null)
 				            return value.getClass();
@@ -741,8 +720,8 @@ public class TableView extends AbstractView {
 					
 					public boolean isCellEditable(int row, int column) {
 						if(column == 3
-								/*|| column == 4
-								|| column == 5*/)
+								|| column == 4
+								/*|| column == 5*/)
 							return true;
 				        return false;
 				    }
@@ -750,9 +729,7 @@ public class TableView extends AbstractView {
 				
 				EventQueue.invokeLater(new Runnable() {
 					public void run() {
-//						table.setColumnModel(dtcm);
 						table.setModel(dtm);
-//				    	table.updateUI();
 					}
 				});
 				
@@ -827,9 +804,9 @@ public class TableView extends AbstractView {
     private javax.swing.JComboBox<Option<Integer>> jcombo_listRenderWay;
     private javax.swing.JComboBox<Option<Integer>> jcombo_editRenderWay;
     
-    @ModelValue(category=ModelValueCategory.Column)
+    @ModelValue(category=ModelValueCategory.List)
     private OptionComboBoxModel<Integer> queryRenderWay = new OptionComboBoxModel<Integer>();
-    @ModelValue(category=ModelValueCategory.Column)
+    @ModelValue(category=ModelValueCategory.List)
     private OptionComboBoxModel<Integer> listRenderWay = new OptionComboBoxModel<Integer>();
     @ModelValue(category=ModelValueCategory.Column)
     private OptionComboBoxModel<Integer> editRenderWay = new OptionComboBoxModel<Integer>();
@@ -838,9 +815,9 @@ public class TableView extends AbstractView {
     private javax.swing.JComboBox<Option<Boolean>> jcombo_listRenderShow;
     private javax.swing.JComboBox<Option<Boolean>> jcombo_editRenderShow;
     
-    @ModelValue(category=ModelValueCategory.Column)
+    @ModelValue(category=ModelValueCategory.List)
     private OptionComboBoxModel<Boolean> queryRenderShow = new OptionComboBoxModel<Boolean>();
-    @ModelValue(category=ModelValueCategory.Column)
+    @ModelValue(category=ModelValueCategory.List)
     private OptionComboBoxModel<Boolean> listRenderShow = new OptionComboBoxModel<Boolean>();
     @ModelValue(category=ModelValueCategory.Column)
     private OptionComboBoxModel<Boolean> editRenderShow = new OptionComboBoxModel<Boolean>();
@@ -849,7 +826,10 @@ public class TableView extends AbstractView {
     @ModelValue(category=ModelValueCategory.Column, valueGetFuncName = "getText", valueSetFuncName ="setText")
     private javax.swing.JTextField columnTitle; 
     
-    @ModelValue(category=ModelValueCategory.Column,valueGetFuncName = "getText", valueSetFuncName ="setText")
+    @ModelValue(category=ModelValueCategory.List, valueGetFuncName = "getText", valueSetFuncName ="setText")
+    private javax.swing.JTextField listTitle; 
+    
+    @ModelValue(category=ModelValueCategory.List,valueGetFuncName = "getText", valueSetFuncName ="setText")
     private javax.swing.JTextArea queryColumnJson;
     
     @ModelValue(category=ModelValueCategory.Column,valueGetFuncName = "getText", valueSetFuncName ="setText")
@@ -868,24 +848,16 @@ public class TableView extends AbstractView {
 	public void doMessage(Message message) {
 		//表格树点击消息;
 		if(DesignerPerspective.MESSAGE_CLICK_TABLE_TREE_NODE.equals(message.getName())){
-			DBTable dbt = (DBTable)message.getObject();
-			final Table t = new Table(dbt);
+			IDBTable dbt = (DBTable)message.getObject();
+			final Entity entity = new Entity(dbt);
 			
 			TaskHelper.runInNonEDT(new Callable<Integer[]>() {
 				public Integer[] call() throws Exception {
 					
-					initTable(t);
+					initEntity(entity);
 					
-					List<TableColumn> list_tr = TableHelper.tableColumn(t.getCat(), t.getTableName());
-					t.setColumns(list_tr);
-					
-//					/**
-//					 * add by 2016年4月6日
-//					 * 新增显示排序;
-//					 * modify by 2016年4月26日
-//					 * 数据库表不需要显示顺序和排序;
-//					 */
-//					ModelHelper.processSeq(list_tr);
+					List<TableColumn> list_tr = TableHelper2.tableColumn(entity.getCat(), entity.getTableName());
+					entity.setTableColumns(list_tr);
 					
 					/**
 					 * 更新表格数据;

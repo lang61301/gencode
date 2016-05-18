@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.MethodUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
@@ -30,11 +29,13 @@ import me.paddingdun.gen.code.data.edit.ValidatorType;
 import me.paddingdun.gen.code.data.option.ModelValue;
 import me.paddingdun.gen.code.data.option.ModelValueCategory;
 import me.paddingdun.gen.code.data.table.DBColumn;
-import me.paddingdun.gen.code.data.table.JspColumn;
-import me.paddingdun.gen.code.data.table.QueryColumn;
+import me.paddingdun.gen.code.data.table.IDBColumn;
 import me.paddingdun.gen.code.data.table.Sort;
-import me.paddingdun.gen.code.data.table.TableColumn;
-import me.paddingdun.gen.code.data.tabletree.Table;
+import me.paddingdun.gen.code.data.table2.Entity;
+import me.paddingdun.gen.code.data.table2.IEntityProperty;
+import me.paddingdun.gen.code.data.table2.ListColumn;
+import me.paddingdun.gen.code.data.table2.QueryColumn;
+import me.paddingdun.gen.code.data.table2.TableColumn;
 import me.paddingdun.gen.code.gui.model.TableViewModel;
 
 /**
@@ -173,7 +174,7 @@ public class ModelHelper {
 	public static String defaultQueryColumnJson(DBColumn column){
 		QueryColumn qp = new QueryColumn();
 		qp.setRelColumnName(column.getColumnName());
-		qp.setPropertyName(TableHelper.col(column.getColumnName()));
+		qp.setPropertyName(EntityHelper.col(column.getColumnName()));
 		qp.setJavaType(TypesHelper.map_types.get(column.getType()));
 		qp.setLogic("t1.{0} = {1}");
 		List<QueryColumn> list = new ArrayList<QueryColumn>();
@@ -187,7 +188,7 @@ public class ModelHelper {
 	 * @param column
 	 * @return
 	 */
-	public static String defaultEditValueGenWayJson(DBColumn column){
+	public static String defaultEditValueGenWayJson(IDBColumn column){
 		EditValueGenWay evg = new EditValueGenWay();
 		evg.setNew1(EditValueGenWayType.input);
 		evg.setEdit(EditValueGenWayType.input);
@@ -213,7 +214,7 @@ public class ModelHelper {
 	 * @param column
 	 * @return
 	 */
-	public static String defaultEditValidateJson(DBColumn column){
+	public static String defaultEditValidateJson(IDBColumn column){
 		String columnName = column.getColumnName();
 		Map<String, Map<String, Object>> validators = new LinkedHashMap<String, Map<String, Object>>();
 		//判断是否不能为空;
@@ -250,7 +251,7 @@ public class ModelHelper {
 			Map<String, Map<String, Map<String, Map<String, Object>>>> p = new LinkedHashMap<String, Map<String, Map<String, Map<String, Object>>>>();
 			Map<String, Map<String, Map<String, Object>>> v = new LinkedHashMap<String, Map<String, Map<String, Object>>>();
 			v.put("validators", validators);
-			p.put(TableHelper.col(columnName), v);
+			p.put(EntityHelper.col(columnName), v);
 			result = GsonHelper.create(false, true).toJson(p);
 		}
 		return result;
@@ -259,19 +260,19 @@ public class ModelHelper {
 	/**
 	 * add by 2016年3月21日
 	 * 新增jsp页面中js验证;
-	 * @param jspColumn
+	 * @param tcs
 	 * @return
 	 */
-	public static String editJSValidtors(List<JspColumn> jspColumn){
+	public static String editJSValidtors(List<TableColumn> tcs){
 		String result = null;
 		Map<String, Map<String, Map<String, Map<String, Object>>>> tmp  = new LinkedHashMap<String, Map<String, Map<String, Map<String, Object>>>>();
 		Gson gson = GsonHelper.create(false, true);
-		for (JspColumn jc : jspColumn) {
+		for (TableColumn tc : tcs) {
 			//1.必须是编辑;
 			//2.非自增长字段;
-			if(jc.isEditRenderShow()
-					&& !jc.isAutoIncrement()){
-				String str = jc.getEditValidateJson();
+			if(tc.isEditRenderShow()
+					&& !tc.isAutoIncrement()){
+				String str = tc.getEditValidateJson();
 				if(StringUtils.isNotBlank(str)){
 					Map<String, Map<String, Map<String, Map<String, Object>>>> p  = gson.fromJson(str, new TypeToken<Map<String, Map<String, Map<String, Map<String, Object>>>>>(){}.getType());
 					//脱掉名称;
@@ -289,7 +290,7 @@ public class ModelHelper {
 									if("message".equals(key)){
 										String value = (String)e4.getValue();
 										if(StringUtils.isNotBlank(value)){
-											String new_value = MessageFormat.format(value, jc.getColumnTitle());
+											String new_value = MessageFormat.format(value, tc.getColumnTitle());
 											e4.setValue(new_value);
 											break;
 										}
@@ -310,25 +311,33 @@ public class ModelHelper {
 	}
 	
 	/**
-	 * 显示排序;
+	 * 表字段新增/编辑排序;
 	 * @param list
 	 */
-	public static void processSeq(List<TableColumn> list){
+	public static void processTableColumnSeq(List<TableColumn> list){
 		Collections.sort(list);
 	}
 	
 	/**
-	 * 处理排序集合;
+	 * 列表显示排序;
+	 * @param list
+	 */
+	public static void processListColumnSeq(List<ListColumn> list){
+		Collections.sort(list);
+	}
+	
+	/**
+	 * 列表处理排序集合;
 	 * @param list
 	 * @return
 	 */
-	private static List<Sort> processSort(List<TableColumn> list){
+	private static List<Sort> processListColumnSort(List<ListColumn> list){
 		List<Sort> result = new ArrayList<Sort>();
-		for (TableColumn tc : list) {
-			Integer order = tc.getOrder();
+		for (ListColumn lc : list) {
+			Integer order = lc.getOrder();
 			if(order != null){
 				Sort sort = new Sort();
-				sort.setColumnName(tc.getColumnName());
+				sort.setColumnName(lc.getColumnName());
 				if(order < 0){
 					sort.setDirect("desc");
 				}
@@ -345,24 +354,20 @@ public class ModelHelper {
 	 * @param tableViewModel
 	 */
 	public static void processTableViewModel(TableViewModel tableViewModel){
-		Table table = tableViewModel.getTable();
-		table.setEntityBeanName(TableHelper.table(table.getTableId()));
-		List<TableColumn> list = table.getColumns();
+		Entity entity = tableViewModel.getEntity();
+		//1:设置实体javabean名称;
+		entity.setEntityBeanName(EntityHelper.table(entity.getTableName()));
 		
-		/**
-		 * add by 2016年4月1日
-		 * 增加显示排序和记录排序功能;
-		 */
-		processSeq(list);
+		//javabean 属性集合;
+		Set<String> set_propertyNames = new HashSet<String>();
+		//属性集合;
+		List<IEntityProperty> list_eps = new ArrayList<IEntityProperty>();
 		
-		
-		/**
-		 * add by 2016年4月6日
-		 * 处理排序集合;
-		 */
-		table.setSorts(processSort(list));
-		
-		//补全column 属性
+		//2:处理表字段集合;
+		List<TableColumn> list_tc = entity.getTableColumns();
+		//2.1:字段排序;
+		processTableColumnSeq(list_tc);
+		//2.2:补全column 属性
 		/**
 		 * pojo用;
 		 * 1.设置javaType
@@ -372,53 +377,69 @@ public class ModelHelper {
 		 * 5.设置是否显示gson的annotation
 		 * 
 		**/
-		List<JspColumn> jspColumns = new ArrayList<JspColumn>();
-		for (TableColumn tc : list) {
+		for (TableColumn tc : list_tc) {
+			//set fulled java qualified name;
 			tc.setJavaType(TypesHelper.map_types.get(tc.getType()));
-			String pn = TableHelper.col(tc.getColumnName());
+			String pn = EntityHelper.col(tc.getColumnName());
+			//set field name;
 			tc.setPropertyName(pn);
-			tc.setSetMethod(TableHelper.set(pn));
-			tc.setGetMethod(TableHelper.get(pn, tc.getType()));
-			tc.setGson(tableViewModel.getShowGsonAnnotation());
+			//set set method name;
+			tc.setSetMethod(EntityHelper.set(pn));
+			//set get method name;
+			tc.setGetMethod(EntityHelper.get(pn, tc.getType()));
+			//show annotation on field
+			tc.setGson(true);
+			//set edit render in jsp
+			tc.setEditRender(RenderHelper.createEditRender(tc, tc.isEditRenderShow()));
 			
-			JspColumn jspColumn = new JspColumn(tc.getColumnName(), tc.getType(), tc.getColumnCommon());
-			try{
-				BeanUtils.copyProperties(jspColumn, tc);
-			}catch(Exception e){
-				e.printStackTrace();
-				throw new RuntimeException(e);
-			}
+			set_propertyNames.add(tc.getPropertyName());
 			
-//			jspColumn.setQueryRender(RenderHelper.createQueryRender(tableViewModel, jspColumn, tableViewModel.getSqlMapMarkUse(), tc.isQueryRenderShow()));
-			jspColumn.setEditRender(RenderHelper.createEditRender(jspColumn, tableViewModel.getSqlMapMarkUse(), tc.isEditRenderShow()));
-			jspColumn.setListRender(RenderHelper.createListRender(tableViewModel, jspColumn, tableViewModel.getSqlMapMarkUse(), tc.isListRenderShow()));
-			jspColumns.add(jspColumn);
+			list_eps.add(EntityHelper.from(tc));
 		}
 		
-		//是否生成操作列;
-		JspColumn op = new  JspColumn(null, -1, "操作");
-		op.setQueryRenderShow(false);
-//		op.setQueryRender(RenderHelper.createDisAllowShowRender());
-		op.setEditRender(RenderHelper.createDisAllowShowRender());
-		op.setEditRenderShow(false);
-		op.setListRender(RenderHelper.createListOperateRender(op, true));
-		op.setListRenderShow(true);
-		jspColumns.add(op);
-		
-		//生成JspColumn;
-		tableViewModel.getTable().setJspColumns(jspColumns);
-		
-		//生成QueryColumn;
-		List<QueryColumn> queryColumns = new ArrayList<QueryColumn>();
-		Set<String> set_propertyNames = new HashSet<String>();
-		for(JspColumn jspColumn : jspColumns){
-			set_propertyNames.add(jspColumn.getPropertyName());
-		}
-		for(JspColumn jspColumn : jspColumns){
-			//该列需要查询时新增查询列参数;
-			if(jspColumn.isQueryRenderShow()){
+		//3:处理列表字段;
+		List<ListColumn> list_lc = entity.getListColumns();
+		//3.1:显示排序;
+		processListColumnSeq(list_lc);
+		//3.2:记录排序;
+		processListColumnSort(list_lc);
+		//3.3:补充属性;
+		for (ListColumn lc : list_lc) {
+			lc.setJavaType(TypesHelper.map_types.get(lc.getType()));
+			String pn = EntityHelper.col(lc.getColumnName());
+			//set field name;
+			lc.setPropertyName(pn);
+			//set set method name;
+			lc.setSetMethod(EntityHelper.set(pn));
+			//set get method name;
+			lc.setGetMethod(EntityHelper.get(pn, lc.getType()));
+			//set list table render in jsp
+			lc.setListRender(RenderHelper.createListRender(tableViewModel, lc, lc.isListRenderShow()));
+			
+			if(set_propertyNames.contains(pn.trim())){
+				lc.setNewProperty(false);
+			}else{
+				lc.setNewProperty(true);
+				set_propertyNames.add(lc.getPropertyName());
 				
-				String queryColumnJson = jspColumn.getQueryColumnJson();
+				list_eps.add(EntityHelper.from(lc));
+			}
+		}
+		
+		//3.4:是否生成操作列;
+		ListColumn lc_op = new  ListColumn(new DBColumn());
+		lc_op.setQueryRenderShow(false);
+		lc_op.setListRender(RenderHelper.createListOperateRender(lc_op, true));
+		lc_op.setListRenderShow(true);
+		list_lc.add(lc_op);
+		
+		
+		//4:生成QueryColumn;
+		List<QueryColumn> queryColumns = new ArrayList<QueryColumn>();
+		for(ListColumn lc : list_lc){
+			//该列需要查询时新增查询列参数;
+			if(lc.isQueryRenderShow()){
+				String queryColumnJson = lc.getQueryColumnJson();
 				if(StringUtils.isNotBlank(queryColumnJson)){
 					queryColumnJson = queryColumnJson.trim();
 					List<QueryColumn> list_queryColumns = GsonHelper.create().fromJson(queryColumnJson, new TypeToken<List<QueryColumn>>(){}.getType());
@@ -428,17 +449,19 @@ public class ModelHelper {
 							qc.setNewProperty(false);
 						}else{
 							qc.setNewProperty(true);
+							
+							list_eps.add(EntityHelper.from(qc));
 						}
 						
-						qc.setRelColumnName(jspColumn.getColumnName());
+						qc.setRelColumnName(lc.getColumnName());
 						
-						qc.setRenderWayType(jspColumn.getQueryRenderWay());
-						qc.setSetMethod(TableHelper.set(pn));
-						qc.setGetMethod(TableHelper.get(pn, qc.getJavaType()));
+						qc.setRenderWayType(lc.getQueryRenderWay());
+						qc.setSetMethod(EntityHelper.set(pn));
+						qc.setGetMethod(EntityHelper.get(pn, qc.getJavaType()));
 						qc.setStringJavaType(TypesHelper.isStringType(qc.getJavaType()));
 						
 						if(qc.getTitle() == null){
-							qc.setTitle(jspColumn.getColumnTitle());
+							qc.setTitle(lc.getListTitle());
 						}
 						
 						queryColumns.add(qc);
@@ -447,17 +470,20 @@ public class ModelHelper {
 				}
 			}
 		}
-		//设置查询列;
-		tableViewModel.getTable().setQueryColumns(queryColumns);
+		//4.2:设置查询列;
+		tableViewModel.getEntity().setQueryColumns(queryColumns);
 		
-		//设置编辑js验证;
-		tableViewModel.getTable().setEditJSValidtors(editJSValidtors(jspColumns));
+		//5:设置属性列;
+		tableViewModel.getEntity().setEntityProperties(list_eps);
 		
-		//设置formRender
-		tableViewModel.getTable().setQueryFormRender(RenderHelper.createQueryFormRender(queryColumns, tableViewModel.getJspQueryColumnCount(), tableViewModel.getSqlMapMarkUse(), true));
+		//6:设置编辑js验证;
+		tableViewModel.getEntity().setEditJSValidtors(editJSValidtors(list_tc));
 		
-		//生成配置文件;
-		ConfigHelper.genConfigXmlFile(tableViewModel.getTable());
+		//7:设置formRender
+		tableViewModel.getEntity().setQueryFormRender(RenderHelper.createQueryFormRender(queryColumns, tableViewModel.getJspQueryColumnCount(), true));
+		
+		//8:生成配置文件;
+		ConfigHelper.genConfigXmlFile(tableViewModel.getEntity());
 	}
 
 }

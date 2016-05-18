@@ -52,13 +52,4 @@ public class JspColumn extends TableColumn {
 	public void setEditRender(Render editRender) {
 		this.editRender = editRender;
 	}
-	
-	public String getEditValueJavaCode(){
-		return EditValueGenWayHelper.javaCodeEdit(this);
-	}
-	
-	public String getNewValueJavaCode(){
-		return EditValueGenWayHelper.javaCodeNew(this);
-	}
-
 }

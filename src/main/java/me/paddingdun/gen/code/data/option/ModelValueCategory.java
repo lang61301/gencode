@@ -14,5 +14,6 @@ package me.paddingdun.gen.code.data.option;
 public enum ModelValueCategory {
 
 	Default,
-	Column
+	Column,
+	List
 }

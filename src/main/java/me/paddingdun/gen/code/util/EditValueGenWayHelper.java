@@ -9,7 +9,7 @@ import org.apache.commons.lang.StringUtils;
 
 import me.paddingdun.gen.code.data.edit.EditValueGenWay;
 import me.paddingdun.gen.code.data.edit.EditValueGenWayType;
-import me.paddingdun.gen.code.data.table.JspColumn;
+import me.paddingdun.gen.code.data.table2.TableColumn;
 
 /**
  * 
@@ -19,14 +19,13 @@ import me.paddingdun.gen.code.data.table.JspColumn;
  * @since 1.0
  * @version 2.0
  */
-@SuppressWarnings("deprecation")
 public class EditValueGenWayHelper {
 	
-	public static String javaCodeEdit(JspColumn jspColumn){
+	public static String javaCodeEdit(TableColumn jspColumn){
 		return javaCode(jspColumn, true);
 	}
 	
-	public static String javaCodeNew(JspColumn jspColumn){
+	public static String javaCodeNew(TableColumn jspColumn){
 		return javaCode(jspColumn, false);
 	}
 	
@@ -43,7 +42,7 @@ public class EditValueGenWayHelper {
 		return false;
 	}
 	
-	private static String javaCode(JspColumn jspColumn, boolean edit){
+	private static String javaCode(TableColumn jspColumn, boolean edit){
 		EditValueGenWay way = EditValueGenWayHelper.fromJson(jspColumn.getEditValueGenWayJson());
 		if(way != null){
 			return EditValueGenWayHelper.javaCode(edit? way.getEdit() : way.getNew1(), jspColumn.getSetMethod());

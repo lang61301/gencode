@@ -18,15 +18,11 @@ public class EntityProperty implements IEntityProperty {
 	private static final long serialVersionUID = 1L;
 
 
-	private String javaType;
-	private String propertyName;
-	private String getMethod;
-	private String setMethod;
-	
-	/**
-	 * 属性描述;
-	 */
-	private String propertyTitle;
+	private String javaType;		/** java fully qualified name **/
+	private String propertyName;	/** property name **/
+	private String getMethod;		/** get method name **/
+	private String setMethod;		/** set method name **/
+	private String propertyTitle;	/** property description **/
 
 	public String getJavaType() {
 		return javaType;

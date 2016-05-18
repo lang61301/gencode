@@ -12,8 +12,9 @@ import org.apache.commons.lang.StringUtils;
 
 import me.paddingdun.gen.code.data.jsp.Render;
 import me.paddingdun.gen.code.data.jsp.RenderWayType;
-import me.paddingdun.gen.code.data.table.JspColumn;
-import me.paddingdun.gen.code.data.table.QueryColumn;
+import me.paddingdun.gen.code.data.table2.ListColumn;
+import me.paddingdun.gen.code.data.table2.QueryColumn;
+import me.paddingdun.gen.code.data.table2.TableColumn;
 import me.paddingdun.gen.code.exception.BusinessException;
 import me.paddingdun.gen.code.gui.model.TableViewModel;
 
@@ -103,11 +104,15 @@ public class RenderHelper {
 	}
 
 	
-	private static String keyName(JspColumn column, Integer sqlMapMarkUse){
-		return Integer.valueOf("1").equals(sqlMapMarkUse) ? column.getPropertyName() : column.getColumnName();
+	private static String keyName(TableColumn column){
+		return column.getPropertyName();
 	}
 	
-	private static String keyName(QueryColumn column, Integer sqlMapMarkUse){
+	private static String keyName(ListColumn column){
+		return column.getPropertyName();
+	}
+	
+	private static String keyName(QueryColumn column){
 		return column.getPropertyName();
 	}
 	
@@ -119,11 +124,11 @@ public class RenderHelper {
 	 * @param show
 	 * @return
 	 */
-	public static Render createListRender(TableViewModel model, JspColumn column, Integer sqlMapMarkUse, boolean show){
-		String keyName = keyName(column, sqlMapMarkUse);
+	public static Render createListRender(TableViewModel model, ListColumn column, boolean show){
+		String keyName = keyName(column);
 		RenderWayType rwt =  RenderWayType.parse(column.getListRenderWay());
 		Render render = new Render();
-		render.setTitle(column.getColumnTitle());
+		render.setTitle(column.getListTitle());
 		render.setShow(show);
 		if(RenderWayType.list_default == rwt){
 			if(column.isPrimary()){
@@ -138,33 +143,6 @@ public class RenderHelper {
 	}
 	
 	/**
-	 * 2016-03-08
-	 * 已经修改不使用JspColumn作为查询参数;
-	 * 修改为QueryColumn作为查询参数;
-	 * 
-	 * 查询render入口;
-	 * @param model
-	 * @param column
-	 * @param sqlMapMarkUse
-	 * @param show
-	 * @return
-	 * @deprecated
-	 */
-	@SuppressWarnings("unused")
-	private static Render createQueryRender(JspColumn column, Integer sqlMapMarkUse, int colWidth){
-		String keyName = keyName(column, sqlMapMarkUse);
-		RenderWayType rwt =  RenderWayType.parse(column.getQueryRenderWay());
-		Render render = new Render();
-		render.setTitle(column.getColumnTitle());
-		render.setShow(true);
-		if(RenderWayType.query_default == rwt){
-			rwt = RenderWayType.query_input;
-		}
-		render.setRender(query(keyName, render.getTitle(), rwt, colWidth));
-		return render;
-	}
-	
-	/**
 	 * 2016-03-08 新增;
 	 * 查询render入口;
 	 * @param column
@@ -173,8 +151,8 @@ public class RenderHelper {
 	 * @param queryRenderWay
 	 * @return
 	 */
-	private static Render createQueryRender(QueryColumn column, Integer sqlMapMarkUse, int colWidth, int queryRenderWay){
-		String keyName = keyName(column, sqlMapMarkUse);
+	private static Render createQueryRender( QueryColumn column, int colWidth, int queryRenderWay){
+		String keyName = keyName(column);
 		RenderWayType rwt =  RenderWayType.parse(queryRenderWay);
 		Render render = new Render();
 		render.setTitle(column.getTitle());
@@ -192,9 +170,9 @@ public class RenderHelper {
 	 * @param show
 	 * @return
 	 */
-	public static Render createListOperateRender(JspColumn column, boolean show){
+	public static Render createListOperateRender(ListColumn column, boolean show){
 		Render render = new Render();
-		render.setTitle(column.getColumnTitle());
+		render.setTitle(column.getListTitle());
 		render.setShow(show);
 		render.setRender(JspSnippetHelper.getSnippet("list_snippet_operate"));
 		return render;
@@ -217,8 +195,8 @@ public class RenderHelper {
 	 * @param show
 	 * @return
 	 */
-	public static Render createEditRender(JspColumn column, Integer sqlMapMarkUse, boolean show){
-		String keyName = keyName(column, sqlMapMarkUse);
+	public static Render createEditRender(TableColumn column, boolean show){
+		String keyName = keyName(column);
 		RenderWayType rwt =  RenderWayType.parse(column.getEditRenderWay());
 		Render render = new Render();
 		render.setTitle(column.getColumnTitle());
@@ -242,7 +220,7 @@ public class RenderHelper {
 	 * @param show
 	 * @return
 	 */
-	public static Render createQueryFormRender(List<QueryColumn> queryColumns, Integer showColumnCount, Integer sqlMapMarkUse, boolean show){
+	public static Render createQueryFormRender(List<QueryColumn> queryColumns, Integer showColumnCount, boolean show){
 		Render render = new Render();
 		render.setShow(show);
 		if(!show) return render;
@@ -277,7 +255,7 @@ public class RenderHelper {
 				l = new ArrayList<String>();
 				map.put(key, l);
 			}
-			Render r = createQueryRender(qc, sqlMapMarkUse, colWidth, qc.getRenderWayType());
+			Render r = createQueryRender(qc, colWidth, qc.getRenderWayType());
 			l.add(r.getRender());
 		}
 		

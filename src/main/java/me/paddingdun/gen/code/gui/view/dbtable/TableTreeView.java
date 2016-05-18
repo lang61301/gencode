@@ -15,7 +15,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import me.paddingdun.gen.code.data.message.Message;
-import me.paddingdun.gen.code.data.tabletree.DBTable;
+import me.paddingdun.gen.code.data.tabletree.IDBTable;
 import me.paddingdun.gen.code.db.TableHelper2;
 import me.paddingdun.gen.code.gui.component.DragTree;
 import me.paddingdun.gen.code.gui.model.TableTreeViewModel;
@@ -69,6 +69,7 @@ public class TableTreeView extends  AbstractView {
         
         sp = new javax.swing.JScrollPane();
         tableTree = new DragTree();
+        tableTree.setVisible(false);
         spp = new javax.swing.JSplitPane();
         pane = new javax.swing.JPanel();
         btnRefresh = new javax.swing.JButton();
@@ -126,7 +127,7 @@ public class TableTreeView extends  AbstractView {
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode)objs[objs.length - 1];
 		if(node.isLeaf()){
 			Object uo = node.getUserObject();
-			if( uo instanceof DBTable){
+			if( uo instanceof IDBTable){
 				
 				Message m = new Message();
 				m.setName(DesignerPerspective.MESSAGE_CLICK_TABLE_TREE_NODE);
@@ -138,8 +139,8 @@ public class TableTreeView extends  AbstractView {
     }
     
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {
-    	TaskHelper.runInNonEDT(new Callable<Integer[]>() {
-			public Integer[] call() throws Exception {
+    	TaskHelper.runInNonEDT(new Callable<Void>() {
+			public Void call() throws Exception {
 				//设置数据;
 				model.setRootNode(TableHelper2.TableTreeNode());
 				
@@ -147,9 +148,10 @@ public class TableTreeView extends  AbstractView {
 				EventQueue.invokeLater(new Runnable() {
 					public void run() {
 						tableTree.setModel(tm);
+						tableTree.setVisible(true);
 					}
 				});
-				return new Integer[]{0};
+				return null;
 			}
 		});
     }

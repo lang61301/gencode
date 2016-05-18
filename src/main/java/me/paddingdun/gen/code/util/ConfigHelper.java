@@ -14,7 +14,7 @@ import javax.xml.bind.Unmarshaller;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import me.paddingdun.gen.code.data.tabletree.Table;
+import me.paddingdun.gen.code.data.table2.Entity;
 import me.paddingdun.gen.code.user.TableConfig;
 
 /**
@@ -28,28 +28,21 @@ import me.paddingdun.gen.code.user.TableConfig;
 public class ConfigHelper {
 
 	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-
-	}
-	
-	/**
 	 * 表格配置文件名称;
 	 * @param catName
 	 * @param tableName
 	 * @return
 	 */
-	public static String tableCfgName(String catName, String tableName){
+	public static String entityCfgName(String catName, String tableName){
 		return MessageFormat.format("{0}_{1}", catName, tableName);
 	}
 	
-	public static void genConfigXmlFile(Table table){
+	public static void genConfigXmlFile(Entity entity){
 		String charset = "utf-8";
 		Gson gson = GsonHelper.create();
 		try {
-			String name = tableCfgName(table.getCat(), table.getTableName());
-			byte[] gzip = GZipHelper.gzip(gson.toJson(table), charset);
+			String name = entityCfgName(entity.getCat(), entity.getTableName());
+			byte[] gzip = GZipHelper.gzip(gson.toJson(entity), charset);
 			
 			
 			TableConfig tc = new TableConfig();
@@ -61,14 +54,14 @@ public class ConfigHelper {
 			FileHelper.genConfigXmlFile(DirectoryHelper.getUserDir(), "table", name, content);
 			
 			//更新缓存;
-			BufferHelper.writeTable(name, table);
+			BufferHelper.writeTable(name, entity);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static Table readConfigXmlFile(File xml){
-		Table result = null;
+	public static Entity readConfigXmlFile(File xml){
+		Entity result = null;
 		String charset = "utf-8";
 		Gson gson = GsonHelper.create();
 		try {
@@ -76,7 +69,7 @@ public class ConfigHelper {
 			
 			String str = GZipHelper.ungzip(tc.getText(), charset);
 			
-			result = gson.fromJson(str, new TypeToken<Table>(){}.getType());
+			result = gson.fromJson(str, new TypeToken<Entity>(){}.getType());
 		} catch (Exception e) {
 			e.printStackTrace();
 			result = null;

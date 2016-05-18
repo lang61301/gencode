@@ -3,8 +3,6 @@
  */
 package me.paddingdun.gen.code.data.tabletree;
 
-import java.io.Serializable;
-
 /**
  * 数据库表描述实体;
  * @author paddingdun
@@ -13,7 +11,7 @@ import java.io.Serializable;
  * @since 1.0
  * @version 2.0
  */
-public class DBTable implements Serializable{
+public class DBTable implements IDBTable{
 
 	/**
 	 * 
@@ -40,6 +38,7 @@ public class DBTable implements Serializable{
 	 */
 	private String tableCommon;
 	
+	@Override
 	public String getCat() {
 		return cat;
 	}
@@ -48,6 +47,7 @@ public class DBTable implements Serializable{
 		this.cat = cat;
 	}
 
+	@Override
 	public String getTableName() {
 		return tableName;
 	}
@@ -56,6 +56,7 @@ public class DBTable implements Serializable{
 		this.tableName = tableName;
 	}
 
+	@Override
 	public String getTableType() {
 		return tableType;
 	}
@@ -64,6 +65,7 @@ public class DBTable implements Serializable{
 		this.tableType = tableType;
 	}
 
+	@Override
 	public String getTableCommon() {
 		return tableCommon;
 	}

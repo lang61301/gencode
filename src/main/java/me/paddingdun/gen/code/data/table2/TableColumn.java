@@ -3,7 +3,9 @@
  */
 package me.paddingdun.gen.code.data.table2;
 
+import me.paddingdun.gen.code.data.jsp.Render;
 import me.paddingdun.gen.code.data.jsp.RenderWayType;
+import me.paddingdun.gen.code.data.table.IDBColumn;
 import me.paddingdun.gen.code.util.EditValueGenWayHelper;
 
 /**
@@ -14,7 +16,14 @@ import me.paddingdun.gen.code.util.EditValueGenWayHelper;
  * @since 2.0
  * @version 2.0
  */
-public class TableColumn extends BaseTableColumn {
+public class TableColumn extends WapperDBColumn implements Comparable<TableColumn> {
+
+	/**
+	 * @param dbColumn
+	 */
+	public TableColumn(IDBColumn dbColumn) {
+		super(dbColumn);
+	}
 
 	/**
 	 * 
@@ -52,6 +61,27 @@ public class TableColumn extends BaseTableColumn {
 	public boolean isNotInSetUpdateSql(){
 		return EditValueGenWayHelper.isNotInSetUpdateSql(editValueGenWayJson);
 	}
+	
+	/**
+	 * add by 2016年5月16日
+	 * 新增/编辑列表排序,  按照从小到大的顺序排列;
+	 */
+	private Integer seq;
+	
+	/**
+	 * 是否显示gson序列化名称;
+	 */
+	private boolean gson;
+	
+	/**
+	 * 新增/编辑字段标题;
+	 */
+	private String columnTitle;
+	
+	/**
+	 * add or edit;
+	 */
+	private Render editRender;
 
 	public boolean isEditRenderShow() {
 		return editRenderShow;
@@ -83,5 +113,95 @@ public class TableColumn extends BaseTableColumn {
 
 	public void setEditValidateJson(String editValidateJson) {
 		this.editValidateJson = editValidateJson;
+	}
+	
+	public Integer getSeq() {
+		return seq;
+	}
+
+	public void setSeq(Integer seq) {
+		this.seq = seq;
+	}
+	
+	public boolean isGson() {
+		return gson;
+	}
+
+	public void setGson(boolean gson) {
+		this.gson = gson;
+	}
+	
+	public String getColumnTitle() {
+		if(columnTitle == null)
+			columnTitle = getColumnCommon();
+		return columnTitle;
+	}
+
+	public void setColumnTitle(String columnTitle) {
+		this.columnTitle = columnTitle;
+	}
+	
+	public Render getEditRender() {
+		return editRender;
+	}
+
+	public void setEditRender(Render editRender) {
+		this.editRender = editRender;
+	}
+	
+	public String getEditValueJavaCode(){
+		return EditValueGenWayHelper.javaCodeEdit(this);
+	}
+	
+	public String getNewValueJavaCode(){
+		return EditValueGenWayHelper.javaCodeNew(this);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((getTableName() == null) ? 0 : getTableName().hashCode());
+		result = prime * result + ((getColumnName() == null) ? 0 : getColumnName().hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TableColumn other = (TableColumn) obj;
+		if (getTableName() == null) {
+			if (other.getTableName() != null)
+				return false;
+		} else if (!getTableName().equals(other.getTableName()))
+			return false;
+		if (getColumnName() == null) {
+			if (other.getColumnName() != null)
+				return false;
+		} else if (!getColumnName().equals(other.getColumnName()))
+			return false;
+		return true;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(TableColumn o) {
+		if(o == null)
+			return -1;
+		Integer s1 = this.getSeq();
+		Integer s2 = o.getSeq();
+		if(null == s1)
+			return 1;
+		if(null == s2){
+			return -1;
+		}
+		return s1.compareTo(s2);
 	}
 }

@@ -11,8 +11,8 @@ import java.util.Map;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 
-import me.paddingdun.gen.code.data.table.DBColumn;
-import me.paddingdun.gen.code.data.tabletree.Table;
+import me.paddingdun.gen.code.data.table.IDBColumn;
+import me.paddingdun.gen.code.data.table2.Entity;
 
 /**
  * 
@@ -27,19 +27,19 @@ public class BufferHelper {
 	/**
 	 * table缓存配置;
 	 */
-	public static Map<String, Table> BUFFER_CFG_TABLE = new HashMap<String, Table>();
+	public static Map<String, Entity> BUFFER_CFG_TABLE = new HashMap<String, Entity>();
 	
 	/**
 	 * 曾经点击生成过的dbcolumn的缓存;
 	 */
-	public static Map<String, DBColumn> BUFFER_DBCOLUMN = new HashMap<String, DBColumn>();
+	public static Map<String, IDBColumn> BUFFER_DBCOLUMN = new HashMap<String, IDBColumn>();
 	
 	
-	public static void writeTable(String key, Table table){
-		BUFFER_CFG_TABLE.put(key, table);
+	public static void writeTable(String key, Entity e){
+		BUFFER_CFG_TABLE.put(key, e);
 	}
 	
-	public static Table readTable(String key){
+	public static Entity readEntity(String key){
 		return BUFFER_CFG_TABLE.get(key);
 	}
 	
@@ -47,11 +47,11 @@ public class BufferHelper {
 		return tableName + "." + columnName;
 	}
 	
-	public static void writeDBColumn(String tableName, String columnName, DBColumn dbColumn){
+	public static void writeDBColumn(String tableName, String columnName, IDBColumn dbColumn){
 		BUFFER_DBCOLUMN.put(dbColumnKey(tableName, columnName), dbColumn);
 	}
 	
-	public static DBColumn readDBColumn(String tableName, String columnName){
+	public static IDBColumn readDBColumn(String tableName, String columnName){
 		return BUFFER_DBCOLUMN.get(dbColumnKey(tableName, columnName));
 	}
 	
@@ -81,7 +81,7 @@ public class BufferHelper {
 			
 			if(xmls != null)
 				for (File xml : xmls) {
-					Table tmp = ConfigHelper.readConfigXmlFile(xml);
+					Entity tmp = ConfigHelper.readConfigXmlFile(xml);
 					if(tmp != null){
 						String name = FilenameUtils.getBaseName(xml.getName());
 						

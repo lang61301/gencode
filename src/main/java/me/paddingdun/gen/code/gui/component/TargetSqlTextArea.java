@@ -23,7 +23,7 @@ import org.apache.commons.lang.StringUtils;
 
 import me.paddingdun.gen.code.data.edit.TargetSqlType;
 import me.paddingdun.gen.code.data.tabletree.DBTable;
-import me.paddingdun.gen.code.db.TableHelper;
+import me.paddingdun.gen.code.db.TableHelper2;
 import me.paddingdun.gen.code.util.gui.TaskHelper;
 
 /**
@@ -92,7 +92,7 @@ public class TargetSqlTextArea extends JTextArea{
 							@Override
 							public Void call() throws Exception {
 								
-								final String result = TableHelper.tableName2QuerySql(tmp, _tas);
+								final String result = TableHelper2.tableName2QuerySql(tmp, _tas);
 								EventQueue.invokeLater(new Runnable() {
 									@Override
 									public void run() {

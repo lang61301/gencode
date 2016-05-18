@@ -14,9 +14,9 @@ import org.apache.commons.lang.StringUtils;
 
 import layout.TableLayout;
 import me.paddingdun.gen.code.data.message.Message;
-import me.paddingdun.gen.code.data.table.DBColumn;
+import me.paddingdun.gen.code.data.table.IDBColumn;
 import me.paddingdun.gen.code.data.tabletree.DBTable;
-import me.paddingdun.gen.code.db.TableHelper;
+import me.paddingdun.gen.code.db.TableHelper2;
 import me.paddingdun.gen.code.gui.component.TargetSqlTextArea;
 import me.paddingdun.gen.code.gui.model.EditViewModel;
 import me.paddingdun.gen.code.gui.perspective.designer.DesignerPerspective;
@@ -58,7 +58,7 @@ public class EditView extends AbstractView {
      */
     private void qBtnOkActionPerformed(java.awt.event.ActionEvent evt){
     	String querySql = queryArea.getText();
-    	List<DBColumn> dbcolumns = TableHelper.parseQuerySql(queryArea.getCatlog(), querySql);
+    	List<IDBColumn> dbcolumns = TableHelper2.parseQuerySql(queryArea.getCatlog(), querySql);
     	
     	Message m = new Message();
 		m.setName(DesignerPerspective.MESSAGE_CLICK_QUERY_SQL_BUTTON);
@@ -222,8 +222,8 @@ public class EditView extends AbstractView {
 						
 						TaskHelper.runInNonEDT(new Callable<Void>() {
 							public Void call() throws Exception {
-								model.setQuerySql(TableHelper.tableName2QuerySql(dbt, "t1"));
-								model.setDeleteSql(TableHelper.tableName2DeleteSql(dbt));
+								model.setQuerySql(TableHelper2.tableName2QuerySql(dbt, "t1"));
+								model.setDeleteSql(TableHelper2.tableName2DeleteSql(dbt));
 								
 								EventQueue.invokeLater(new Runnable() {
 									@Override

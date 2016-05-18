@@ -15,6 +15,7 @@ import java.io.Serializable;
  */
 public interface IEntityProperty extends Serializable {
 
+	void setJavaType(String javaType);
 	/**
 	 * java class property type string;
 	 * @return
@@ -22,6 +23,7 @@ public interface IEntityProperty extends Serializable {
 	String getJavaType();
 
 
+	void setPropertyName(String propertyName);
 	/**
 	 * java class property name;
 	 * @return
@@ -29,6 +31,7 @@ public interface IEntityProperty extends Serializable {
 	String getPropertyName();
 
 
+	void setGetMethod(String getMethod);
 	/**
 	 * java class getMethod string;
 	 * @return
@@ -36,10 +39,18 @@ public interface IEntityProperty extends Serializable {
 	String getGetMethod();
 
 
+	void setSetMethod(String setMethod);
 	/**
 	 * java class setMethod string;
 	 * @return
 	 */
 	String getSetMethod();
+	
+	void setPropertyTitle(String propertyTitle);
+	/**
+	 * java class field comment;
+	 * @return
+	 */
+	String getPropertyTitle();
 
 }
