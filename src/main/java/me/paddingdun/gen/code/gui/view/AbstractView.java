@@ -77,8 +77,7 @@ public  abstract class AbstractView extends javax.swing.JInternalFrame implement
 	 * 关闭消息队列;
 	 */
 	public void destroy(){
-		Message shutdown = new Message();
-		shutdown.setName(IGuiConstant.SHUT_DOWN_MESSAGE);
+		Message shutdown = new Message(IGuiConstant.SHUT_DOWN_MESSAGE);
 		this.receiveMessage(shutdown);
 	}
 	

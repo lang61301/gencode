@@ -116,8 +116,7 @@ public class ProjectTreeView extends  AbstractView {
 				if(node.isLeaf()){
 					Object uo = node.getUserObject();
 					if( uo instanceof EntityInfo){
-						Message m = new Message();
-						m.setName(DesignerPerspective.MESSAGE_CLICK_PROJECT_TREE_NODE);
+						Message m = new Message(DesignerPerspective.MESSAGE_CLICK_PROJECT_TREE_NODE);
 						m.setSource(ProjectTreeView.this);
 						m.setObject(uo);
 						perspective.sendMessage(m);

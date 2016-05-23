@@ -129,8 +129,7 @@ public class TableTreeView extends  AbstractView {
 			Object uo = node.getUserObject();
 			if( uo instanceof IDBTable){
 				
-				Message m = new Message();
-				m.setName(DesignerPerspective.MESSAGE_CLICK_TABLE_TREE_NODE);
+				Message m = new Message(DesignerPerspective.MESSAGE_CLICK_TABLE_TREE_NODE);
 				m.setSource(TableTreeView.this);
 				m.setObject(uo);
 				perspective.sendMessage(m);

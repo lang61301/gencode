@@ -108,8 +108,13 @@ public class RenderHelper {
 		return column.getPropertyName();
 	}
 	
+	/**
+	 * 别名为key;
+	 * @param column
+	 * @return
+	 */
 	private static String keyName(ListColumn column){
-		return column.getPropertyName();
+		return column.getColumnAlias();
 	}
 	
 	private static String keyName(QueryColumn column){

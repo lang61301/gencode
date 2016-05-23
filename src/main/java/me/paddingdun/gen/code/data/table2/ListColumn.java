@@ -23,7 +23,6 @@ public class ListColumn extends WapperDBColumn implements Comparable<ListColumn>
 	private static final long serialVersionUID = 1L;
 	
 	/**
-	 * add by 2016年3月31日
 	 * 新增列表字段显示排序功能, 按照从小到大的顺序排列;
 	 */
 	private Integer seq;
@@ -75,11 +74,6 @@ public class ListColumn extends WapperDBColumn implements Comparable<ListColumn>
 	 * 由于没有进一步ui操作设计, 因此直接用json字符串表示多个字段;
 	 */
 	private String queryColumnJson;
-	
-	/**
-	 * 是否是新属性;
-	 */
-	private boolean newProperty;
 	
 	/**
 	 * @param dbColumn
@@ -153,15 +147,9 @@ public class ListColumn extends WapperDBColumn implements Comparable<ListColumn>
 		this.listRender = listRender;
 	}
 	
-	public boolean isNewProperty() {
-		return newProperty;
-	}
-
-	public void setNewProperty(boolean newProperty) {
-		this.newProperty = newProperty;
-	}
-	
 	public String getListTitle() {
+		if(listTitle == null)
+			listTitle = this.getColumnCommon();
 		return listTitle;
 	}
 

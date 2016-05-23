@@ -22,6 +22,16 @@ public class Message {
 	private IView source;
 	
 	private IView target;
+	
+//	public Message() {
+//	}
+	
+	/**
+	 * @param name
+	 */
+	public Message(String name) {
+		this.name = name;
+	}
 
 	public String getName() {
 		return name;

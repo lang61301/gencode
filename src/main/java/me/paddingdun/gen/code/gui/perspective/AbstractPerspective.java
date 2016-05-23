@@ -46,7 +46,7 @@ public abstract class AbstractPerspective implements IPerspective {
 				for(IView v : views){
 					if(v != message.getSource()){
 						//复制消息;
-						Message newMessage = new Message();
+						Message newMessage = new Message(null);
 						try {
 							BeanUtils.copyProperties(newMessage, message);
 							newMessage.setTarget(v);

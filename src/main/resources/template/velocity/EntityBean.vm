@@ -4,14 +4,15 @@
 package ${pojoFullPackageName};
 
 /**
- * autogen
  * @author paddingdun
- * ${table.tableCommon}
+ * ${entity.tableCommon}
  * @date ${date}
+ * @since 1.0
+ * @version 1.0
  */
-public class ${table.entityBeanName} {
+public class ${entity.entityBeanName} {
 	
-	#foreach( $column in ${table.columns})
+	#foreach( $column in ${entity.tableColumns})
 	/**
 	 * ${column.columnCommon}
 	 */
@@ -22,7 +23,7 @@ public class ${table.entityBeanName} {
     	
 	#end
 	
-	#foreach( $column in ${table.columns})
+	#foreach( $column in ${tableColumns.columns})
 	public void  ${column.setMethod}(${column.javaType} ${column.propertyName}){
 		this.${column.propertyName} = ${column.propertyName};
 	}
@@ -35,7 +36,7 @@ public class ${table.entityBeanName} {
 	
 	
 	
-	#foreach( $column in ${table.queryColumns})
+	#foreach( $column in ${tableColumns.queryColumns})
 	#if($column.newProperty)
 	/**
 	 * ${column.title}
@@ -45,7 +46,7 @@ public class ${table.entityBeanName} {
     #end	
 	#end
 	
-	#foreach( $column in ${table.queryColumns})
+	#foreach( $column in ${tableColumns.queryColumns})
 	#if($column.newProperty)
 	public void  ${column.setMethod}(${column.javaType} ${column.propertyName}){
 		this.${column.propertyName} = ${column.propertyName};

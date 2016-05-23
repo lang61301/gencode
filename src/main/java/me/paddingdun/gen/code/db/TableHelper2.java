@@ -21,6 +21,7 @@ import me.paddingdun.gen.code.IConsant;
 import me.paddingdun.gen.code.data.table.DBColumn;
 import me.paddingdun.gen.code.data.table.IDBColumn;
 import me.paddingdun.gen.code.data.table2.Entity;
+import me.paddingdun.gen.code.data.table2.ListColumn;
 import me.paddingdun.gen.code.data.table2.TableColumn;
 import me.paddingdun.gen.code.data.tabletree.DBTable;
 import me.paddingdun.gen.code.data.tabletree.IDBTable;
@@ -187,6 +188,21 @@ public class TableHelper2 {
 		}finally{
 			IOHelper.close(rs1);
 			IOHelper.close(conn);
+		}
+		return result;
+	}
+	
+	public static List<ListColumn>  listColumn(List<IDBColumn> list){
+		List<ListColumn> result = new ArrayList<ListColumn>();
+		for (IDBColumn dbColumn : list) {
+			ListColumn lc = new ListColumn(dbColumn);
+			
+			if(lc.isPrimary()){
+			}else{
+				lc.setQueryColumnJson(ModelHelper.defaultQueryColumnJson(dbColumn));
+			}
+			
+			result.add(lc);
 		}
 		return result;
 	}

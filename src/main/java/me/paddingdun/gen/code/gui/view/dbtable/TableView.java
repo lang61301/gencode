@@ -37,7 +37,9 @@ import me.paddingdun.gen.code.data.option.ModelValueCategory;
 import me.paddingdun.gen.code.data.option.Option;
 import me.paddingdun.gen.code.data.table.CellEditorType;
 import me.paddingdun.gen.code.data.table.DBColumn;
+import me.paddingdun.gen.code.data.table.IDBColumn;
 import me.paddingdun.gen.code.data.table2.Entity;
+import me.paddingdun.gen.code.data.table2.ListColumn;
 import me.paddingdun.gen.code.data.table2.TableColumn;
 import me.paddingdun.gen.code.data.tabletree.DBTable;
 import me.paddingdun.gen.code.data.tabletree.IDBTable;
@@ -61,7 +63,7 @@ import me.paddingdun.gen.code.util.gui.TaskHelper;
  * @since 1.0
  * @version 2.0
  */
-@SuppressWarnings({"serial","unused"})
+@SuppressWarnings({"serial","unused","unchecked"})
 public class TableView extends AbstractView {
 	
 	/**
@@ -178,7 +180,7 @@ public class TableView extends AbstractView {
         pbb.setViewportView(pbba);
         pbb.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         
-        table = new javax.swing.JTable(){
+        tableColumnTable = new javax.swing.JTable(){
         	public void editingStopped(ChangeEvent e) {
         		TableCellEditor editor = this.getCellEditor();
                 if (editor != null) {
@@ -191,20 +193,29 @@ public class TableView extends AbstractView {
         };
         //当使用ColumnModel时将其设置成false;
 //        table.setAutoCreateColumnsFromModel(false);
-        ptt.setViewportView(table);
+        ptt.setViewportView(tableColumnTable);
         
         /**
          * add by 2016年4月22日
          * 新增查询列表;
          */
-        tableList = new javax.swing.JTable(){
+        listColumnTable = new javax.swing.JTable(){
+        	public void editingStopped(ChangeEvent e) {
+        		TableCellEditor editor = this.getCellEditor();
+                if (editor != null) {
+                    Object value = editor.getCellEditorValue();
+                    setListColumnValue(value);
+                }
+//        		System.out.println(MessageFormat.format("c:{0}-r:{1}", this.getSelectedColumn(), this.getSelectedRow()));
+                super.editingStopped(e);
+            }
         };
-        tableList.getTableHeader().addMouseListener(new MouseAdapter() {
+        listColumnTable.getTableHeader().addMouseListener(new MouseAdapter() {
         	public void mouseClicked(MouseEvent e) {
         		
         	}
 		});
-        pbt.setViewportView(tableList);
+        pbt.setViewportView(listColumnTable);
         
         jLabel1 = new javax.swing.JLabel();
         basePackageName = new javax.swing.JTextField();
@@ -459,11 +470,11 @@ public class TableView extends AbstractView {
      * add by 2016年4月5日
      * 改变行选择时执行;
      */
-    private void changeRow(){
+    private void changeTableRow(){
     	if(model != null
     			&& model.getEntity() != null
     			&& model.getEntity().getTableColumns() != null){
-    		final int index = table.getSelectedRow();
+    		final int index = tableColumnTable.getSelectedRow();
     		if(index < 0) return;
     		TaskHelper.runInNonEDT(new Callable<Void>() {
 				public Void call() throws Exception {
@@ -473,6 +484,29 @@ public class TableView extends AbstractView {
     	    			EventQueue.invokeLater(new Runnable() {
 							public void run() {
 								ModelHelper.simpleGetAndComplexSet(tc, TableView.this, ModelValueCategory.Column);
+							}
+						});
+    	    		}
+					return null;
+				}
+    		});
+    	}
+    }
+    
+    private void changeListTableRow(){
+    	if(model != null
+    			&& model.getEntity() != null
+    			&& model.getEntity().getListColumns() != null){
+    		final int index = listColumnTable.getSelectedRow();
+    		if(index < 0) return;
+    		TaskHelper.runInNonEDT(new Callable<Void>() {
+				public Void call() throws Exception {
+    	    		List<ListColumn> list = model.getEntity().getListColumns();
+    	    		if(index < list.size()){
+    	    			final ListColumn lc = list.get(index);
+    	    			EventQueue.invokeLater(new Runnable() {
+							public void run() {
+								ModelHelper.simpleGetAndComplexSet(lc, TableView.this, ModelValueCategory.List);
 							}
 						});
     	    		}
@@ -508,10 +542,10 @@ public class TableView extends AbstractView {
 //			}
 //		});
     	
-    	table.addMouseListener(new MouseAdapter() {
+    	tableColumnTable.addMouseListener(new MouseAdapter() {
     	    @Override
     	    public void mouseClicked(MouseEvent e){
-    	    	changeRow();
+    	    	changeTableRow();
     	    }
     	});
     	
@@ -520,15 +554,39 @@ public class TableView extends AbstractView {
 		//37 left;
 		//39 right;
 		//10 enter;
-    	table.addKeyListener(new KeyAdapter() {
+    	tableColumnTable.addKeyListener(new KeyAdapter() {
     		public void keyReleased(KeyEvent e) {
     			int keyCode = e.getKeyCode();
     			if(keyCode == 10
     					|| keyCode == 38
     					|| keyCode == 40)
-    				changeRow();
+    				changeTableRow();
     		}
 		});
+    	
+    	listColumnTable.addMouseListener(new MouseAdapter() {
+    	    @Override
+    	    public void mouseClicked(MouseEvent e){
+    	    	changeListTableRow();
+    	    }
+    	});
+    	
+    	//38 up;
+		//40 down;
+		//37 left;
+		//39 right;
+		//10 enter;
+    	listColumnTable.addKeyListener(new KeyAdapter() {
+    		public void keyReleased(KeyEvent e) {
+    			int keyCode = e.getKeyCode();
+    			if(keyCode == 10
+    					|| keyCode == 38
+    					|| keyCode == 40)
+    				changeListTableRow();
+    		}
+		});
+    	
+    	
     	p.setDividerLocation(0.5);
     	
     	EventQueue.invokeLater(new Runnable() {
@@ -548,7 +606,7 @@ public class TableView extends AbstractView {
     	if(model != null
     			&& model.getEntity() != null
     			&& model.getEntity().getTableColumns() != null){
-    		final int index = table.getSelectedRow();
+    		final int index = tableColumnTable.getSelectedRow();
     		TaskHelper.runInNonEDT(new Callable<Void>() {
 				public Void call() throws Exception {
     	    		List<TableColumn> list = model.getEntity().getTableColumns();
@@ -568,8 +626,8 @@ public class TableView extends AbstractView {
      * 自动提交表格数据到内存;
      */
     private void setTableColumnValue(Object cellValue){
-    	final int r = table.getSelectedRow();
-    	final int c = table.getSelectedColumn();
+    	final int r = tableColumnTable.getSelectedRow();
+    	final int c = tableColumnTable.getSelectedColumn();
     	if(model != null
     			&& model.getEntity() != null
     			&& model.getEntity().getTableColumns() != null){
@@ -598,7 +656,7 @@ public class TableView extends AbstractView {
 									&& s < IConsant.DEF_MAX_SEQ){
 								Integer newVal = s + 1;
 								//变更显示的值;
-								table.getModel().setValueAt(newVal, i, c);
+								tableColumnTable.getModel().setValueAt(newVal, i, c);
 								
 								//变更内存值;
 								tmp.setSeq(newVal);
@@ -606,7 +664,73 @@ public class TableView extends AbstractView {
 						}
 					}
 	            }
-            	table.updateUI();
+            	tableColumnTable.updateUI();
+    		}
+    	}
+    }
+    
+    /**
+     * update list table view;
+     * @param cellValue
+     */
+    private void setListColumnValue(Object cellValue){
+    	final int r = listColumnTable.getSelectedRow();
+    	final int c = listColumnTable.getSelectedColumn();
+    	if(model != null
+    			&& model.getEntity() != null
+    			&& model.getEntity().getListColumns()!= null){
+    		List<ListColumn> list = model.getEntity().getListColumns();
+    		int size = list.size();
+    		if(r > -1 
+    				&& r < size){
+    			ListColumn tc = list.get(r);
+    			
+    			//主键;
+    			if(c == 0){
+    				Boolean pk = (Boolean)cellValue;
+    				tc.setPrimary(pk);
+    				for (int i = 0; i < size; i++) {
+	        			ListColumn tmp = list.get(i);
+						if(tmp != tc){
+							//变更显示的值;
+							listColumnTable.getModel().setValueAt(false, i, c);
+							
+							//变更内存值;
+							tmp.setPrimary(false);
+						}
+					}
+    			//表列名;
+    			}else if(3 == c){
+    				String ta = (String)cellValue;
+    				tc.setTableAlias(ta);
+    			}
+    			//显示顺序;
+    			else if(c == 4){
+            		Integer seq = (Integer)cellValue;
+            		tc.setSeq(seq);
+            		//循环list,将>=seq列的值+1;
+	        		for (int i = 0; i < size; i++) {
+	        			ListColumn tmp = list.get(i);
+						if(tmp != tc){
+							Integer s = tmp.getSeq();
+							if(s != null
+									&& s >= seq
+									&& s < IConsant.DEF_MAX_SEQ){
+								Integer newVal = s + 1;
+								//变更显示的值;
+								listColumnTable.getModel().setValueAt(newVal, i, c);
+								
+								//变更内存值;
+								tmp.setSeq(newVal);
+							}
+						}
+					}
+            	//排序;
+	            }else if(c == 5){
+	        		Integer order = (Integer)cellValue;
+	        		tc.setOrder(order);
+	            }
+            	listColumnTable.updateUI();
     		}
     	}
     }
@@ -626,7 +750,7 @@ public class TableView extends AbstractView {
 			        	//设置全局值;
 //			        	ModelHelper.complexGetAndSimpleSet(TableView.this, model);
 			        	
-			        	//加工model;
+			        	//加工model;ok
 			        	ModelHelper.processTableViewModel(model);
 			        	
 			        	String javaContent = VelocityHelper.entityBean(model);
@@ -672,6 +796,10 @@ public class TableView extends AbstractView {
     	model.setEntity(e);
     }
     
+    /**
+     * 更新表字段table;
+     * @param list
+     */
     private void updateTableData(final List<TableColumn> list){
     	TaskHelper.runInNonEDT(new Callable<Void>() {
 			@Override
@@ -689,8 +817,7 @@ public class TableView extends AbstractView {
 					{"列名称", 	null}, 								//2
 					{"别名", 	CellEditorType.String.name()}, 		//3
 					{"显示顺序", 	CellEditorType.Number.name()}, 		//4
-//					{"排序字段", 	CellEditorType.Number.name()}, 		//5
-					{"列描述", 	null}								//6	
+					{"列描述", 	null}								//5
 		    	};
 			    								  
 		    	for (int i = 0; i < heads.length; i++) {
@@ -729,10 +856,84 @@ public class TableView extends AbstractView {
 				
 				EventQueue.invokeLater(new Runnable() {
 					public void run() {
-						table.setModel(dtm);
+						tableColumnTable.setModel(dtm);
 					}
 				});
 				
+				return null;
+			}
+		});
+    }
+    
+    /**
+     * 更新列表字段table;
+     * @param list
+     */
+    private void updateListData(final List<ListColumn> list){
+    	TaskHelper.runInNonEDT(new Callable<Void>() {
+			public Void call() throws Exception {
+				String[] heads = {
+						"主键",								//0
+						"列名称", 								//1
+						"列别名", 								//2
+						"表别名",								//3
+						"显示顺序", 							//4
+						"排序字段", 							//5
+						"列描述",		
+				};
+				Vector<String> v = new Vector<String>();
+				for (String h : heads) {
+					v.add(h);
+				}
+				Vector<Vector<Object>> vc = new Vector<Vector<Object>>();
+				for (ListColumn lc : list) {
+					Vector<Object> t = new Vector<Object>();
+					t.add(Boolean.valueOf(lc.isPrimary()));
+					t.add(lc.getColumnName());
+					t.add(lc.getColumnAlias());
+					t.add("t1");
+					if(lc.getSeq() == null){
+						if(lc.isPrimary())
+							t.add(IConsant.DEF_MIN_SEQ);
+						else
+							t.add(IConsant.DEF_MAX_SEQ);
+					}else{
+						t.add(lc.getSeq());
+					}
+					t.add(lc.getOrder());
+					t.add(lc.getColumnCommon());
+					vc.add(t);
+				}
+				final DefaultTableModel dtm = new DefaultTableModel(vc, v){
+					/* (non-Javadoc)
+					 * @see javax.swing.table.AbstractTableModel#getColumnClass(int)
+					 */
+					@Override
+					public Class<?> getColumnClass(int columnIndex) {
+						if(columnIndex == 5)return Integer.class;
+						Object value = getValueAt(0, columnIndex);
+				        if(value!=null)
+				            return value.getClass();
+				        else 
+				        	return super.getClass();
+					}
+					
+					public boolean isCellEditable(int row, int column) {
+						if(column == 0
+								|| column == 3
+								|| column == 4
+								|| column == 5)
+							return true;
+				        return false;
+				    }
+				};
+				
+				EventQueue.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						listColumnTable.setModel(dtm);
+					}
+				});
 				return null;
 			}
 		});
@@ -790,8 +991,8 @@ public class TableView extends AbstractView {
     private javax.swing.JPanel		    pbba;
     
     private javax.swing.JComboBox<Option<Integer>> jcombo_sqlMapMarkUse;
-    private javax.swing.JTable table;
-    private javax.swing.JTable tableList;
+    private javax.swing.JTable tableColumnTable;
+    private javax.swing.JTable listColumnTable;
     @ModelValue(valueGetFuncName = "getText", valueSetFuncName ="setText")
     private javax.swing.JTextField updateMethodPrefix;
     
@@ -851,8 +1052,8 @@ public class TableView extends AbstractView {
 			IDBTable dbt = (DBTable)message.getObject();
 			final Entity entity = new Entity(dbt);
 			
-			TaskHelper.runInNonEDT(new Callable<Integer[]>() {
-				public Integer[] call() throws Exception {
+			TaskHelper.runInNonEDT(new Callable<Void>() {
+				public Void call() throws Exception {
 					
 					initEntity(entity);
 					
@@ -864,7 +1065,7 @@ public class TableView extends AbstractView {
 					 */
 					updateTableData(list_tr);
 					
-					return new Integer[]{0};
+					return null;
 				}
 			});
 		
@@ -873,57 +1074,20 @@ public class TableView extends AbstractView {
 		 * 点击查询按钮sql事件接收;
 		 */
 		}else if(DesignerPerspective.MESSAGE_CLICK_QUERY_SQL_BUTTON.equals(message.getName())){
-			final List<DBColumn> list = (List<DBColumn>)message.getObject();
+			final List<IDBColumn> list = (List<IDBColumn>)message.getObject();
+			
 			TaskHelper.runInNonEDT(new Callable<Void>() {
 				public Void call() throws Exception {
-					String[] heads = {
-							"主键",								//0
-							"列名称", 								//2
-							"列别名", 								//3
-							"表别名",
-							"显示顺序", 							//4
-							"排序字段", 							//5
-							"列描述",		
-					};
-					Vector<String> v = new Vector<String>();
-					for (String h : heads) {
-						v.add(h);
-					}
-					Vector<Vector<Object>> vc = new Vector<Vector<Object>>();
-					for (DBColumn dbColumn : list) {
-						Vector<Object> t = new Vector<Object>();
-						t.add(Boolean.valueOf(dbColumn.isPrimary()));
-						t.add(dbColumn.getColumnName());
-						t.add(dbColumn.getColumnAlias());
-						t.add("t1");
-						t.add(Integer.valueOf(0));
-						t.add(Integer.valueOf(0));
-						t.add(dbColumn.getColumnCommon());
-						vc.add(t);
-					}
-					final DefaultTableModel dtm = new DefaultTableModel(vc, v){
-						/* (non-Javadoc)
-						 * @see javax.swing.table.AbstractTableModel#getColumnClass(int)
-						 */
-						@Override
-						public Class<?> getColumnClass(int columnIndex) {
-							Object value = getValueAt(0, columnIndex);
-					        if(value!=null)
-					            return value.getClass();
-					        else 
-					        	return super.getClass();
-						}
-					};
+					final List<ListColumn> list_lc = TableHelper2.listColumn(list);
+					model.getEntity().setListColumns(list_lc);
 					
-					EventQueue.invokeLater(new Runnable() {
-						@Override
-						public void run() {
-							tableList.setModel(dtm);
-						}
-					});
+					updateListData(list_lc);
 					return null;
 				}
 			});
+			
+		}else if(DesignerPerspective.MESSAGE_GEN_ENTITY.equals(message.getName())){
+			btnGenActionPerformed(null);
 		}
 	}
 }

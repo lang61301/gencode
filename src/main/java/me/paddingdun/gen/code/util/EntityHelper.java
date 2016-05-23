@@ -12,7 +12,6 @@ import org.apache.commons.lang.StringUtils;
 
 import me.paddingdun.gen.code.data.table2.EntityProperty;
 import me.paddingdun.gen.code.data.table2.IEntityProperty;
-import me.paddingdun.gen.code.data.table2.ListColumn;
 import me.paddingdun.gen.code.data.table2.QueryColumn;
 import me.paddingdun.gen.code.data.table2.TableColumn;
 
@@ -154,16 +153,6 @@ public class EntityHelper {
 		ep.setPropertyName(tc.getPropertyName());
 		ep.setPropertyTitle(tc.getPropertyTitle());
 		ep.setSetMethod(tc.getSetMethod());
-		return ep;
-	}
-	
-	public static IEntityProperty from(ListColumn lc){
-		IEntityProperty ep = new EntityProperty();
-		ep.setGetMethod(lc.getGetMethod());
-		ep.setJavaType(lc.getJavaType());
-		ep.setPropertyName(lc.getPropertyName());
-		ep.setPropertyTitle(lc.getPropertyTitle());
-		ep.setSetMethod(lc.getSetMethod());
 		return ep;
 	}
 	

@@ -12,7 +12,7 @@ import me.paddingdun.gen.code.data.table.IDBColumn;
  * @since 2.0
  * @version 2.0
  */
-public class WapperDBColumn extends EntityProperty implements IDBColumn {
+public class WapperDBColumn implements IDBColumn {
 
 	/**
 	 * 

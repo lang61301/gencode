@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 
+import me.paddingdun.gen.code.data.message.Message;
 import me.paddingdun.gen.code.gui.component.ProjectListDialog;
 import me.paddingdun.gen.code.gui.perspective.IPerspective;
 import me.paddingdun.gen.code.gui.perspective.designer.DesignerPerspective;
@@ -78,9 +79,20 @@ public class MainFrame extends javax.swing.JFrame {
         });
         
         closeProject = new JButton("close");
+        
+        genEntity = new JButton("Generate Entity");
+        genEntity.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Message msg = new Message(DesignerPerspective.MESSAGE_GEN_ENTITY);
+				perspective.sendMessage(msg);
+			}
+        });
+        
         toolBar.add(newProject);
         toolBar.add(openProject);
         toolBar.add(closeProject);
+        toolBar.add(genEntity);
 
         javax.swing.GroupLayout containerLayout = new javax.swing.GroupLayout(container);
         container.setLayout(containerLayout);
@@ -183,6 +195,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton newProject;
     private javax.swing.JButton openProject;
     private javax.swing.JButton closeProject;
+    
+    private javax.swing.JButton genEntity;
 
 	public IPerspective getPerspective() {
 		return perspective;

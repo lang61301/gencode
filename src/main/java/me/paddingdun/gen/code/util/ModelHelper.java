@@ -171,10 +171,10 @@ public class ModelHelper {
 	 * @param type
 	 * @return
 	 */
-	public static String defaultQueryColumnJson(DBColumn column){
+	public static String defaultQueryColumnJson(IDBColumn column){
 		QueryColumn qp = new QueryColumn();
 		qp.setRelColumnName(column.getColumnName());
-		qp.setPropertyName(EntityHelper.col(column.getColumnName()));
+		qp.setPropertyName(EntityHelper.col(column.getColumnAlias()));
 		qp.setJavaType(TypesHelper.map_types.get(column.getType()));
 		qp.setLogic("t1.{0} = {1}");
 		List<QueryColumn> list = new ArrayList<QueryColumn>();
@@ -405,25 +405,8 @@ public class ModelHelper {
 		processListColumnSort(list_lc);
 		//3.3:补充属性;
 		for (ListColumn lc : list_lc) {
-			lc.setJavaType(TypesHelper.map_types.get(lc.getType()));
-			String pn = EntityHelper.col(lc.getColumnName());
-			//set field name;
-			lc.setPropertyName(pn);
-			//set set method name;
-			lc.setSetMethod(EntityHelper.set(pn));
-			//set get method name;
-			lc.setGetMethod(EntityHelper.get(pn, lc.getType()));
 			//set list table render in jsp
 			lc.setListRender(RenderHelper.createListRender(tableViewModel, lc, lc.isListRenderShow()));
-			
-			if(set_propertyNames.contains(pn.trim())){
-				lc.setNewProperty(false);
-			}else{
-				lc.setNewProperty(true);
-				set_propertyNames.add(lc.getPropertyName());
-				
-				list_eps.add(EntityHelper.from(lc));
-			}
 		}
 		
 		//3.4:是否生成操作列;

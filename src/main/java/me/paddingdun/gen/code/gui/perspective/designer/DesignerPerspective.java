@@ -55,6 +55,11 @@ public class DesignerPerspective extends AbstractPerspective {
 	 * 关闭工程事件;
 	 */
 	public final static String MESSAGE_CLOSE_PROJECT = "close_project";
+	
+	/**
+	 * 生成实体文件;
+	 */
+	public final static String MESSAGE_GEN_ENTITY = "gen_entity";
 
 	private JDesktopPane container;
 	

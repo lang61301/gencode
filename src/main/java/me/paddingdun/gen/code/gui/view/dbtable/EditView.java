@@ -60,8 +60,7 @@ public class EditView extends AbstractView {
     	String querySql = queryArea.getText();
     	List<IDBColumn> dbcolumns = TableHelper2.parseQuerySql(queryArea.getCatlog(), querySql);
     	
-    	Message m = new Message();
-		m.setName(DesignerPerspective.MESSAGE_CLICK_QUERY_SQL_BUTTON);
+    	Message m = new Message(DesignerPerspective.MESSAGE_CLICK_QUERY_SQL_BUTTON);
 		m.setSource(EditView.this);
 		m.setObject(dbcolumns);
 		perspective.sendMessage(m);

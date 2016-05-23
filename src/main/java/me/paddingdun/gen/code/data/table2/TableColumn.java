@@ -16,19 +16,66 @@ import me.paddingdun.gen.code.util.EditValueGenWayHelper;
  * @since 2.0
  * @version 2.0
  */
-public class TableColumn extends WapperDBColumn implements Comparable<TableColumn> {
+public class TableColumn extends WapperDBColumn implements IEntityProperty, Comparable<TableColumn> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private String javaType;		/** java fully qualified name **/
+	private String propertyName;	/** property name **/
+	private String getMethod;		/** get method name **/
+	private String setMethod;		/** set method name **/
+	private String propertyTitle;	/** property description **/
+
+	public String getJavaType() {
+		return javaType;
+	}
+
+	public void setJavaType(String javaType) {
+		this.javaType = javaType;
+	}
+
+	public String getPropertyName() {
+		return propertyName;
+	}
+
+	public void setPropertyName(String propertyName) {
+		this.propertyName = propertyName;
+	}
+
+	public String getGetMethod() {
+		return getMethod;
+	}
+
+	public void setGetMethod(String getMethod) {
+		this.getMethod = getMethod;
+	}
+
+	public String getSetMethod() {
+		return setMethod;
+	}
+
+	public void setSetMethod(String setMethod) {
+		this.setMethod = setMethod;
+	}
+
+	public String getPropertyTitle() {
+		return propertyTitle;
+	}
+
+	public void setPropertyTitle(String propertyTitle) {
+		this.propertyTitle = propertyTitle;
+	}
+	
+	
 	/**
 	 * @param dbColumn
 	 */
 	public TableColumn(IDBColumn dbColumn) {
 		super(dbColumn);
 	}
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 编辑中是否显示;

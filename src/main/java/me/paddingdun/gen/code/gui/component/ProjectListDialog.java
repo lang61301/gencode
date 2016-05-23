@@ -192,8 +192,7 @@ public class ProjectListDialog extends javax.swing.JDialog {
     	MainFrame mf = (MainFrame)this.getParent();
     	IPerspective p = mf.getPerspective();
     	if(p != null){
-    		Message message = new Message();
-    		message.setName(DesignerPerspective.MESSAGE_OPEN_PROJECT);
+    		Message message = new Message(DesignerPerspective.MESSAGE_OPEN_PROJECT);
     		message.setSource(null);
     		message.setObject(projectName.trim());
     		p.sendMessage(message);
