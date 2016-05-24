@@ -22,7 +22,7 @@ import me.paddingdun.gen.code.util.gui.TipHelper;
 public class Main {
 	
 	private static void init(){
-		BufferHelper.readConfigXmlBuffer(DirectoryHelper.getUserDir(), "table");
+//		BufferHelper.readConfigXmlBuffer(DirectoryHelper.getUserDir(), "table");
 	}
 
 	/**

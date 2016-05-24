@@ -10,7 +10,9 @@ package ${pojoFullPackageName};
  * @since 1.0
  * @version 1.0
  */
-public class ${entity.entityBeanName} {
+public class ${entity.entityBeanName} implements java.io.Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	
 	#foreach( $column in ${entity.tableColumns})
 	/**
@@ -23,7 +25,7 @@ public class ${entity.entityBeanName} {
     	
 	#end
 	
-	#foreach( $column in ${tableColumns.columns})
+	#foreach( $column in ${entity.tableColumns})
 	public void  ${column.setMethod}(${column.javaType} ${column.propertyName}){
 		this.${column.propertyName} = ${column.propertyName};
 	}
@@ -36,17 +38,17 @@ public class ${entity.entityBeanName} {
 	
 	
 	
-	#foreach( $column in ${tableColumns.queryColumns})
+	#foreach( $column in ${entity.queryColumns})
 	#if($column.newProperty)
 	/**
 	 * ${column.title}
-	 * ext query property;
+	 * ext query parameter property;
 	 */
     private ${column.javaType} ${column.propertyName};
     #end	
 	#end
 	
-	#foreach( $column in ${tableColumns.queryColumns})
+	#foreach( $column in ${entity.queryColumns})
 	#if($column.newProperty)
 	public void  ${column.setMethod}(${column.javaType} ${column.propertyName}){
 		this.${column.propertyName} = ${column.propertyName};
