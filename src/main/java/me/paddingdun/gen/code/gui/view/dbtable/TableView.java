@@ -768,7 +768,7 @@ public class TableView extends AbstractView {
 						 model.getEntity().getEntityBeanName(),
 						 sqlMapContent);
 						// System.out.println(sqlMapContent);
-						//
+						
 						//String bootstrapDataTableJspContent =
 						//VelocityHelper.bootstrapDataTableJsp(model);
 						//FileHelper.genBootstrapDataTableJspFile(saveFile.getAbsolutePath(),
@@ -782,27 +782,27 @@ public class TableView extends AbstractView {
 						 model.getDaoFullPackageName(),
 						 model.getEntity().getEntityBeanName(),
 						 sqlMapIDaoContent);
-						//
-						// String sqlMapDaoImplContent =
-						// VelocityHelper.sqlMapDaoImpl(model);
-						// FileHelper.genSqlMapDaoImplJavaFile(saveFile.getAbsolutePath(),
-						// model.getDaoImplFullPackageName(),
-						// model.getEntity().getEntityBeanName(),
-						// sqlMapDaoImplContent);
-						//
-						// String sqlMapIServiceContent =
-						// VelocityHelper.sqlMapIService(model);
-						// FileHelper.genSqlMapIServiceJavaFile(saveFile.getAbsolutePath(),
-						// model.getServiceFullPackageName(),
-						// model.getEntity().getEntityBeanName(),
-						// sqlMapIServiceContent);
-						//
-						// String sqlMapServiceImplContent =
-						// VelocityHelper.sqlMapServiceImpl(model);
-						// FileHelper.genSqlMapServiceImplJavaFile(saveFile.getAbsolutePath(),
-						// model.getServiceImplFullPackageName(),
-						// model.getEntity().getEntityBeanName(),
-						// sqlMapServiceImplContent);
+						
+						 String sqlMapDaoImplContent =
+						 VelocityHelper.sqlMapDaoImpl(model);
+						 FileHelper.genSqlMapDaoImplJavaFile(saveFile.getAbsolutePath(),
+						 model.getDaoImplFullPackageName(),
+						 model.getEntity().getEntityBeanName(),
+						 sqlMapDaoImplContent);
+						
+						 String sqlMapIServiceContent =
+						 VelocityHelper.sqlMapIService(model);
+						 FileHelper.genSqlMapIServiceJavaFile(saveFile.getAbsolutePath(),
+						 model.getServiceFullPackageName(),
+						 model.getEntity().getEntityBeanName(),
+						 sqlMapIServiceContent);
+						
+						 String sqlMapServiceImplContent =
+						 VelocityHelper.sqlMapServiceImpl(model);
+						 FileHelper.genSqlMapServiceImplJavaFile(saveFile.getAbsolutePath(),
+						 model.getServiceImplFullPackageName(),
+						 model.getEntity().getEntityBeanName(),
+						 sqlMapServiceImplContent);
 						//
 						// String springWebActionContent =
 						// VelocityHelper.springWebAction(model);

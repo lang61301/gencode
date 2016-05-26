@@ -5,10 +5,11 @@ package ${daoImplFullPackageName};
 
 
 /**
- * autogen
  * @author paddingdun
- * ${table.tableCommon} dao impl;
+ * ${entity.tableCommon} dao impl;
  * @date ${date}
+ * @since 1.0
+ * @version 1.0
  */
 @org.springframework.stereotype.Repository
 public class ${sqlMapDaoImplJavaClassName} implements ${daoFullPackageName}.${sqlMapIDaoJavaClassName} {
@@ -17,37 +18,37 @@ public class ${sqlMapDaoImplJavaClassName} implements ${daoFullPackageName}.${sq
 	private com.incito.logistics.base.BaseService baseDao;
 	
 	@Override
-	public void ${saveMethodPrefix}${table.entityBeanName}(${pojoFullPackageName}.${table.entityBeanName} obj){
-		baseDao.insert("${pojoFullPackageName}.${table.entityBeanName}.${saveMethodPrefix}", obj);
+	public void ${saveMethodPrefix}${entity.entityBeanName}(${pojoFullPackageName}.${entity.entityBeanName} obj){
+		baseDao.insert("${pojoFullPackageName}.${entity.entityBeanName}.${saveMethodPrefix}", obj);
 	}
 	
 	@Override
-	public void ${updateMethodPrefix}${table.entityBeanName}(${pojoFullPackageName}.${table.entityBeanName} obj){
-		baseDao.update("${pojoFullPackageName}.${table.entityBeanName}.${updateMethodPrefix}", obj);
+	public void ${updateMethodPrefix}${entity.entityBeanName}(${pojoFullPackageName}.${entity.entityBeanName} obj){
+		baseDao.update("${pojoFullPackageName}.${entity.entityBeanName}.${updateMethodPrefix}", obj);
 	}
 	
 	@Override
-	public java.util.Map<java.lang.String, java.lang.Object> ${getMethodPrefix}${table.entityBeanName}(java.util.Map<java.lang.String, java.lang.Object> params){
-		return (java.util.Map<java.lang.String, java.lang.Object>)baseDao.findForObject("${pojoFullPackageName}.${table.entityBeanName}.${getMethodPrefix}", params);
+	public java.util.Map<java.lang.String, java.lang.Object> ${getMethodPrefix}${entity.entityBeanName}(java.util.Map<java.lang.String, java.lang.Object> params){
+		return (java.util.Map<java.lang.String, java.lang.Object>)baseDao.findForObject("${pojoFullPackageName}.${entity.entityBeanName}.${getMethodPrefix}", params);
 	}
 	
 	@Override
-	public void ${deleteMethodPrefix}${table.entityBeanName}(java.util.Map<java.lang.String, java.lang.Object> params){
-		baseDao.delete("${pojoFullPackageName}.${table.entityBeanName}.${deleteMethodPrefix}", params);
+	public void ${deleteMethodPrefix}${entity.entityBeanName}(java.util.Map<java.lang.String, java.lang.Object> params){
+		baseDao.delete("${pojoFullPackageName}.${entity.entityBeanName}.${deleteMethodPrefix}", params);
 	}
 	
 	@Override
-	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> ${queryMethodPrefix}${table.entityBeanName}(${pojoFullPackageName}.${table.entityBeanName} obj){
-		return baseDao.findForList("${pojoFullPackageName}.${table.entityBeanName}.${queryMethodPrefix}", obj);
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> ${queryMethodPrefix}${entity.entityBeanName}(${pojoFullPackageName}.${entity.entityBeanName} obj){
+		return baseDao.findForList("${pojoFullPackageName}.${entity.entityBeanName}.${queryMethodPrefix}", obj);
 	}
 	
 	@Override
-	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> ${queryPagingMethodPrefix}${table.entityBeanName}(java.util.Map<java.lang.String, java.lang.Object> params){
-		return baseDao.findForList("${pojoFullPackageName}.${table.entityBeanName}.${queryPagingMethodPrefix}", params);
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> ${queryPagingMethodPrefix}${entity.entityBeanName}(java.util.Map<java.lang.String, java.lang.Object> params){
+		return baseDao.findForList("${pojoFullPackageName}.${entity.entityBeanName}.${queryPagingMethodPrefix}", params);
 	}
 	
 	@Override
-	public java.lang.Integer ${getPagingCountPrefix}${table.entityBeanName}(java.util.Map<java.lang.String, java.lang.Object> params){
-		return (java.lang.Integer)baseDao.findForObject("${pojoFullPackageName}.${table.entityBeanName}.${getPagingCountPrefix}", params);
+	public java.lang.Integer ${getPagingCountPrefix}${entity.entityBeanName}(java.util.Map<java.lang.String, java.lang.Object> params){
+		return (java.lang.Integer)baseDao.findForObject("${pojoFullPackageName}.${entity.entityBeanName}.${getPagingCountPrefix}", params);
 	}
 }

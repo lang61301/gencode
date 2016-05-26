@@ -59,12 +59,12 @@ public class VelocityHelper {
 		return af;
 	}
 	
-	public static String sqlMapVMPath(){
-		return "template/velocity/ibatis/2.0/SqlMap.vm";
+	public static String sqlMapVMPath(String vm){
+		return "template/velocity/ibatis/2.0/" + vm;
 	}
 	
 	public static String sqlMap(TableViewModel tableViewModel){
-		String s = rawTable(tableViewModel, sqlMapVMPath());
+		String s = rawTable(tableViewModel, sqlMapVMPath("SqlMap.vm"));
 		return s;
 	}
 	
@@ -74,13 +74,13 @@ public class VelocityHelper {
 	}
 	
 	public static String sqlMapIDao(TableViewModel tableViewModel){
-		String s = rawTable(tableViewModel, "template/velocity/SqlMapIDao.vm");
+		String s = rawTable(tableViewModel, sqlMapVMPath("SqlMapIDao.vm"));
 		String af = ContentFormatHelper.formatJava(s);
     	return af;
 	}
 	
 	public static String sqlMapDaoImpl(TableViewModel tableViewModel){
-		String s = rawTable(tableViewModel, "template/velocity/SqlMapDaoImpl.vm");
+		String s = rawTable(tableViewModel, sqlMapVMPath("SqlMapDaoImpl.vm"));
 		String af = ContentFormatHelper.formatJava(s);
     	return af;
 	}
