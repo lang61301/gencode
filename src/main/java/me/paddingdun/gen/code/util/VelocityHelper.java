@@ -59,8 +59,12 @@ public class VelocityHelper {
 		return af;
 	}
 	
+	public static String sqlMapVMPath(){
+		return "template/velocity/ibatis/2.0/SqlMap.vm";
+	}
+	
 	public static String sqlMap(TableViewModel tableViewModel){
-		String s = rawTable(tableViewModel, "template/velocity/SqlMap.vm");
+		String s = rawTable(tableViewModel, sqlMapVMPath());
 		return s;
 	}
 	

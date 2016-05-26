@@ -60,9 +60,12 @@ public class EditView extends AbstractView {
     	String querySql = queryArea.getText();
     	List<IDBColumn> dbcolumns = TableHelper2.parseQuerySql(queryArea.getCatlog(), querySql);
     	
+    	model.setQuerySql(querySql);
+    	model.setQuerySqlDBColumnList(dbcolumns);
+    	
     	Message m = new Message(DesignerPerspective.MESSAGE_CLICK_QUERY_SQL_BUTTON);
 		m.setSource(EditView.this);
-		m.setObject(dbcolumns);
+		m.setObject(model);
 		perspective.sendMessage(m);
     }
     

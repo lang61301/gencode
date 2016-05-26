@@ -3,6 +3,10 @@
  */
 package me.paddingdun.gen.code.gui.model;
 
+import java.util.List;
+
+import me.paddingdun.gen.code.data.table.IDBColumn;
+
 /**
  * 
  * @author paddingdun
@@ -22,6 +26,11 @@ public class EditViewModel {
 	 * 删除sql;
 	 */
 	private String deleteSql;
+	
+	/**
+	 * 生成查询sqldbcolumn list;
+	 */
+	private List<IDBColumn> querySqlDBColumnList;
 
 	public String getQuerySql() {
 		return querySql;
@@ -37,5 +46,13 @@ public class EditViewModel {
 
 	public void setDeleteSql(String deleteSql) {
 		this.deleteSql = deleteSql;
+	}
+
+	public List<IDBColumn> getQuerySqlDBColumnList() {
+		return querySqlDBColumnList;
+	}
+
+	public void setQuerySqlDBColumnList(List<IDBColumn> querySqlDBColumnList) {
+		this.querySqlDBColumnList = querySqlDBColumnList;
 	}
 }

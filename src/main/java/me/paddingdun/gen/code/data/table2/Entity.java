@@ -65,6 +65,18 @@ public class Entity extends WapperDBTable {
 	 */
 	private List<Sort> sorts;
 	
+	/**
+	 * add by 2016年5月26日
+	 * 列表查询语句;
+	 */
+	private String querySql;
+	
+	/**
+	 * add by 2016年5月26日
+	 * 删除语句;
+	 */
+	private String deleteSql;
+	
 	public Entity(IDBTable dbTable){
 		super(dbTable);
 	}
@@ -145,5 +157,21 @@ public class Entity extends WapperDBTable {
 
 	public void setSorts(List<Sort> sorts) {
 		this.sorts = sorts;
+	}
+
+	public String getQuerySql() {
+		return querySql;
+	}
+
+	public void setQuerySql(String querySql) {
+		this.querySql = querySql;
+	}
+
+	public String getDeleteSql() {
+		return deleteSql;
+	}
+
+	public void setDeleteSql(String deleteSql) {
+		this.deleteSql = deleteSql;
 	}
 }

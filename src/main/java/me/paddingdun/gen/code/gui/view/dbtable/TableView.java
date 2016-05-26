@@ -44,6 +44,7 @@ import me.paddingdun.gen.code.data.table2.TableColumn;
 import me.paddingdun.gen.code.data.tabletree.DBTable;
 import me.paddingdun.gen.code.data.tabletree.IDBTable;
 import me.paddingdun.gen.code.db.TableHelper2;
+import me.paddingdun.gen.code.gui.model.EditViewModel;
 import me.paddingdun.gen.code.gui.model.OptionComboBoxModel;
 import me.paddingdun.gen.code.gui.model.TableViewModel;
 import me.paddingdun.gen.code.gui.perspective.designer.DesignerPerspective;
@@ -64,7 +65,7 @@ import me.paddingdun.gen.code.util.gui.TaskHelper;
  * @since 1.0
  * @version 2.0
  */
-@SuppressWarnings({ "serial", "unused", "unchecked" })
+@SuppressWarnings({ "serial", "unused"})
 public class TableView extends AbstractView {
 
 	/**
@@ -768,19 +769,19 @@ public class TableView extends AbstractView {
 						 sqlMapContent);
 						// System.out.println(sqlMapContent);
 						//
-						// String bootstrapDataTableJspContent =
-						// VelocityHelper.bootstrapDataTableJsp(model);
-						// FileHelper.genBootstrapDataTableJspFile(saveFile.getAbsolutePath(),
-						// model.getJspWebinfAfterDir(),
-						// model.getEntity().getEntityBeanName(),
-						// bootstrapDataTableJspContent);
+						//String bootstrapDataTableJspContent =
+						//VelocityHelper.bootstrapDataTableJsp(model);
+						//FileHelper.genBootstrapDataTableJspFile(saveFile.getAbsolutePath(),
+						//model.getJspWebinfAfterDir(),
+						//model.getEntity().getEntityBeanName(),
+						//bootstrapDataTableJspContent);
 						//
-						// String sqlMapIDaoContent =
-						// VelocityHelper.sqlMapIDao(model);
-						// FileHelper.genSqlMapIDaoJavaFile(saveFile.getAbsolutePath(),
-						// model.getDaoFullPackageName(),
-						// model.getEntity().getEntityBeanName(),
-						// sqlMapIDaoContent);
+						 String sqlMapIDaoContent =
+						 VelocityHelper.sqlMapIDao(model);
+						 FileHelper.genSqlMapIDaoJavaFile(saveFile.getAbsolutePath(),
+						 model.getDaoFullPackageName(),
+						 model.getEntity().getEntityBeanName(),
+						 sqlMapIDaoContent);
 						//
 						// String sqlMapDaoImplContent =
 						// VelocityHelper.sqlMapDaoImpl(model);
@@ -1107,12 +1108,13 @@ public class TableView extends AbstractView {
 			 * add by 2016年4月18日 点击查询按钮sql事件接收;
 			 */
 		} else if (DesignerPerspective.MESSAGE_CLICK_QUERY_SQL_BUTTON.equals(message.getName())) {
-			final List<IDBColumn> list = (List<IDBColumn>) message.getObject();
+			final EditViewModel evModel = (EditViewModel) message.getObject();
 
 			TaskHelper.runInNonEDT(new Callable<Void>() {
 				public Void call() throws Exception {
-					final List<ListColumn> list_lc = TableHelper2.listColumn(list);
+					final List<ListColumn> list_lc = TableHelper2.listColumn(evModel.getQuerySqlDBColumnList());
 					model.getEntity().setListColumns(list_lc);
+					model.getEntity().setQuerySql(evModel.getQuerySql());
 
 					updateListData(list_lc);
 					return null;

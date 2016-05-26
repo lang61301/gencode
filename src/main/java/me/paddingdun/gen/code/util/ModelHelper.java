@@ -401,8 +401,10 @@ public class ModelHelper {
 		List<ListColumn> list_lc = entity.getListColumns();
 		//3.1:显示排序;
 		processListColumnSeq(list_lc);
+		
 		//3.2:记录排序;
-		processListColumnSort(list_lc);
+		entity.setSorts(processListColumnSort(list_lc));
+		
 		//3.3:补充属性;
 		for (ListColumn lc : list_lc) {
 			//set list table render in jsp

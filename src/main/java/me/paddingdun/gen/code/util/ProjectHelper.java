@@ -13,9 +13,11 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
 
 import me.paddingdun.gen.code.data.project.EntityInfo;
 import me.paddingdun.gen.code.data.project.ProjectInfo;
+import me.paddingdun.gen.code.exception.BusinessException;
 
 /**
  * 工程信息工具类;
@@ -37,9 +39,13 @@ public class ProjectHelper {
 	 */
 	private static List<ProjectInfo> projects = new ArrayList<ProjectInfo>();
 	
+	/**
+	 * 工程根目录;
+	 */
+	private static File PROJECT_ROOT = new File(DirectoryHelper.getUserDir(), "project");
+	
 	static{
-		File root = new File(DirectoryHelper.getUserDir(), "project");
-		File[] projects = root.listFiles(new FileFilter() {
+		File[] projects = PROJECT_ROOT.listFiles(new FileFilter() {
 			@Override
 			public boolean accept(File pathname) {
 				return pathname.isDirectory();
@@ -49,7 +55,7 @@ public class ProjectHelper {
 		List<ProjectInfo> result = new ArrayList<ProjectInfo>();
 		if(projects != null)
 			for (File p : projects) {
-				ProjectInfo pi = new ProjectInfo();
+				ProjectInfo pi = SpringHelper.getBean(ProjectInfo.class);
 				pi.setCreateTime(p.lastModified());
 				pi.setLastModifyTime(p.lastModified());
 				String pName = FilenameUtils.getBaseName(p.getAbsolutePath());
@@ -143,5 +149,13 @@ public class ProjectHelper {
 				root.add(n);
 			}
 		return root;
+	}
+	
+	public boolean createProject(String projectName){
+		File p = new File(PROJECT_ROOT, projectName);
+		if(p.exists()){
+			throw new BusinessException("工程名称已存在");
+		}
+		return false;
 	}
 }

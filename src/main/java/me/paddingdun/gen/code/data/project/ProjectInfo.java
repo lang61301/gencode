@@ -5,6 +5,12 @@ package me.paddingdun.gen.code.data.project;
 
 import java.io.Serializable;
 
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import me.paddingdun.gen.code.annotation.Value1;
+
 /**
  * 工程信息;
  * @author paddingdun
@@ -13,6 +19,8 @@ import java.io.Serializable;
  * @since 2.0
  * @version 2.0
  */
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ProjectInfo implements Serializable, Comparable<ProjectInfo> {
 
 	/**
@@ -39,6 +47,12 @@ public class ProjectInfo implements Serializable, Comparable<ProjectInfo> {
 	 * 最近更新时间;
 	 */
 	private long lastModifyTime;
+	
+	@Value1
+	private String database;
+	
+	@Value1
+	private String daoMethod;
 
 	public String getRootDir() {
 		return rootDir;
@@ -104,6 +118,22 @@ public class ProjectInfo implements Serializable, Comparable<ProjectInfo> {
 		} else if (!projectName.equals(other.projectName))
 			return false;
 		return true;
+	}
+
+	public String getDatabase() {
+		return database;
+	}
+
+	public void setDatabase(String database) {
+		this.database = database;
+	}
+
+	public String getDaoMethod() {
+		return daoMethod;
+	}
+
+	public void setDaoMethod(String daoMethod) {
+		this.daoMethod = daoMethod;
 	}
 	
 	
