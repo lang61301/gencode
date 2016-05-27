@@ -22,12 +22,15 @@ import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 
 import org.apache.log4j.Logger;
+
+import com.sun.tools.javac.util.Name.Table;
 
 import layout.TableLayout;
 import me.paddingdun.gen.code.IConsant;
@@ -643,7 +646,9 @@ public class TableView extends AbstractView {
 	private void setTableColumnValue(Object cellValue) {
 		final int r = tableColumnTable.getSelectedRow();
 		final int c = tableColumnTable.getSelectedColumn();
-		if (model != null && model.getEntity() != null && model.getEntity().getTableColumns() != null) {
+		if (model != null 
+				&& model.getEntity() != null 
+				&& model.getEntity().getTableColumns() != null) {
 			List<TableColumn> list = model.getEntity().getTableColumns();
 			int size = list.size();
 			if (r > -1 && r < size) {
@@ -674,7 +679,6 @@ public class TableView extends AbstractView {
 						}
 					}
 				}
-				tableColumnTable.updateUI();
 			}
 		}
 	}
@@ -736,7 +740,6 @@ public class TableView extends AbstractView {
 					Integer order = (Integer) cellValue;
 					tc.setOrder(order);
 				}
-				listColumnTable.updateUI();
 			}
 		}
 	}

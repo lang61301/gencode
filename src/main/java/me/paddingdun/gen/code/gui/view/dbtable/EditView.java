@@ -31,7 +31,7 @@ import me.paddingdun.gen.code.util.gui.TaskHelper;
  * @since 1.0
  * @version 2.0
  */
-@SuppressWarnings("serial")
+@SuppressWarnings({"serial", "unused"})
 public class EditView extends AbstractView {
 	
 	private DesignerPerspective perspective;
