@@ -1,17 +1,21 @@
-#macro( datatable_columns $jspColumns )
-#set($j = 0)#foreach( $column in $jspColumns)#if( ${column.listRender.show} )#if($j > 0),#end${column.listRender.render}#set($j = $j + 1)#end#end
+#macro( datatable_columns $listColumns )
+#set($j = 0)#foreach( $column in $listColumns)#if( ${column.listRender.show} )#if($j > 0),#end${column.listRender.render}#set($j = $j + 1)#end#end
 #end
 
-#macro( ajax_pks_get_data $cols $sqlMapMarkUse )
+#macro( ajax_pks_get_data $cols)
 var objData = {};
-#foreach( $column in ${cols}) #if (${column.primary}) #if(${sqlMapMarkUse}==1) objData["${column.propertyName}"]=rowData["${column.propertyName}"]; #else objData["${column.columnName}"]=rowData["${column.columnName}"]; #end #end 
+#foreach( $column in ${cols}) #if (${column.primary}) objData["${column.propertyName}"]=rowData["${column.propertyName}"]; #end 
 #end
 #end
 
-#macro( ajax_pks_get_data_array $cols $sqlMapMarkUse $single )
-var objData = {};
-#foreach( $column in ${cols}) #if (${column.primary}) #if(${sqlMapMarkUse}==1) #if(${single})dataArr.push(rowData["${column.propertyName}"]);
-#end objData["${column.propertyName}"]=dataArr; #else #if(${single})dataArr.push(rowData["${column.columnName}"]);
-#end objData["${column.columnName}"]=dataArr; #end #end 
-#end
+#macro( ajax_pks_get_data_array $cols $single )
+	var objData = {};
+	#foreach( $column in ${cols}) 
+		#if (${column.primary}) 
+			#if(${single})
+				dataArr.push(rowData["${column.propertyName}"]);
+			#end 
+			objData["${column.propertyName}"]=dataArr; 
+		#end 
+	#end
 #end

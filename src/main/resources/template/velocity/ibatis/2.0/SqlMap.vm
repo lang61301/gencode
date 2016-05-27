@@ -69,9 +69,9 @@
 <![CDATA[${entity.querySql} ]]>
 	<include refid="${queryPagingMethodPrefix}Condition"/>
 <![CDATA[#foreach($sort in ${entity.sorts})#if ($velocityCount == 1)order by #end #if ($velocityCount != 1), #end t1.${sort} #end]]>
-	<isNotNull property="start">
-		<isNotNull property="length">
-			<![CDATA[limit #start#, #length#]]>
+	<isNotNull property="__start">
+		<isNotNull property="__length">
+			<![CDATA[limit #__start#, #__length#]]>
 		</isNotNull>
 	</isNotNull>
 </select>

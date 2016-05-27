@@ -491,13 +491,15 @@ public class TableView extends AbstractView {
 	}
 
 	private void changeListTableRow() {
-		if (model != null && model.getEntity() != null && model.getEntity().getListColumns() != null) {
+		if (model != null 
+				&& model.getEntity() != null 
+				&& model.getEntity().getRawListColumns() != null) {
 			final int index = listColumnTable.getSelectedRow();
 			if (index < 0)
 				return;
 			TaskHelper.runInNonEDT(new Callable<Void>() {
 				public Void call() throws Exception {
-					List<ListColumn> list = model.getEntity().getListColumns();
+					List<ListColumn> list = model.getEntity().getRawListColumns();
 					if (index < list.size()) {
 						final ListColumn lc = list.get(index);
 						EventQueue.invokeLater(new Runnable() {
@@ -600,11 +602,11 @@ public class TableView extends AbstractView {
 	 * @param evt
 	 */
 	private void btnListColumnOkActionPerformed(java.awt.event.ActionEvent evt) {
-		if (model != null && model.getEntity() != null && model.getEntity().getListColumns() != null) {
-			final int index = tableColumnTable.getSelectedRow();
+		if (model != null && model.getEntity() != null && model.getEntity().getRawListColumns() != null) {
+			final int index = listColumnTable.getSelectedRow();
 			TaskHelper.runInNonEDT(new Callable<Void>() {
 				public Void call() throws Exception {
-					List<ListColumn> list = model.getEntity().getListColumns();
+					List<ListColumn> list = model.getEntity().getRawListColumns();
 					if (index > -1 && index < list.size()) {
 						ListColumn lc = list.get(index);
 						ModelHelper.complexGetAndSimpleSet(TableView.this, lc, ModelValueCategory.List);
@@ -685,8 +687,8 @@ public class TableView extends AbstractView {
 	private void setListColumnValue(Object cellValue) {
 		final int r = listColumnTable.getSelectedRow();
 		final int c = listColumnTable.getSelectedColumn();
-		if (model != null && model.getEntity() != null && model.getEntity().getListColumns() != null) {
-			List<ListColumn> list = model.getEntity().getListColumns();
+		if (model != null && model.getEntity() != null && model.getEntity().getRawListColumns() != null) {
+			List<ListColumn> list = model.getEntity().getRawListColumns();
 			int size = list.size();
 			if (r > -1 && r < size) {
 				ListColumn tc = list.get(r);
@@ -769,13 +771,6 @@ public class TableView extends AbstractView {
 						 sqlMapContent);
 						// System.out.println(sqlMapContent);
 						
-						//String bootstrapDataTableJspContent =
-						//VelocityHelper.bootstrapDataTableJsp(model);
-						//FileHelper.genBootstrapDataTableJspFile(saveFile.getAbsolutePath(),
-						//model.getJspWebinfAfterDir(),
-						//model.getEntity().getEntityBeanName(),
-						//bootstrapDataTableJspContent);
-						//
 						 String sqlMapIDaoContent =
 						 VelocityHelper.sqlMapIDao(model);
 						 FileHelper.genSqlMapIDaoJavaFile(saveFile.getAbsolutePath(),
@@ -803,13 +798,20 @@ public class TableView extends AbstractView {
 						 model.getServiceImplFullPackageName(),
 						 model.getEntity().getEntityBeanName(),
 						 sqlMapServiceImplContent);
-						//
-						// String springWebActionContent =
-						// VelocityHelper.springWebAction(model);
-						// FileHelper.genSpringWebActionJavaFile(saveFile.getAbsolutePath(),
-						// model.getWebActionFullPackageName(),
-						// model.getEntity().getEntityBeanName(),
-						// springWebActionContent);
+						
+						 String springWebActionContent =
+						 VelocityHelper.springWebAction(model);
+						 FileHelper.genSpringWebActionJavaFile(saveFile.getAbsolutePath(),
+						 model.getWebActionFullPackageName(),
+						 model.getEntity().getEntityBeanName(),
+						 springWebActionContent);
+						 
+						 String bootstrapDataTableJspContent =
+						VelocityHelper.bootstrapDataTableJsp(model);
+						FileHelper.genBootstrapDataTableJspFile(saveFile.getAbsolutePath(),
+						model.getJspWebinfAfterDir(),
+						model.getEntity().getEntityBeanName(),
+						bootstrapDataTableJspContent);
 
 						EventQueue.invokeLater(new Runnable() {
 							public void run() {
@@ -1113,7 +1115,7 @@ public class TableView extends AbstractView {
 			TaskHelper.runInNonEDT(new Callable<Void>() {
 				public Void call() throws Exception {
 					final List<ListColumn> list_lc = TableHelper2.listColumn(evModel.getQuerySqlDBColumnList());
-					model.getEntity().setListColumns(list_lc);
+					model.getEntity().setRawListColumns(list_lc);
 					model.getEntity().setQuerySql(evModel.getQuerySql());
 
 					updateListData(list_lc);

@@ -6,7 +6,6 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title></title>
 
     <meta name="description" content="">
@@ -15,16 +14,13 @@
     <link href="#[[${]]#${jspContextPathVar}#[[}]]#/js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="#[[${]]#${jspContextPathVar}#[[}]]#/js/bootstrapvalidator/css/bootstrapValidator.css" rel="stylesheet">
     <link href="#[[${]]#${jspContextPathVar}#[[}]]#/js/datatable/css/dataTables.bootstrap.min.css" rel="stylesheet">
-    
-    #*
-    <link href="//cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="http://jspdd.applinzi.com/js/bootstrapvalidator/0.5.2/css/bootstrapValidator.css" rel="stylesheet">
-    <link href="http://jspdd.applinzi.com/js/datatable/1.1/css/dataTables.bootstrap.min.css" rel="stylesheet">
-    *#
+   
+   #* 
     <style>
     .show-grid{margin-bottom:15px}
     .show-grid [class^=col-]{padding-top:10px;padding-bottom:10px;background-color:#eee;background-color:rgba(86,61,124,.15);border:1px solid #ddd;border:1px solid rgba(86,61,124,.2)}
     </style>
+    *#
   </head>
   <body>
 <div class="container-fluid">
@@ -60,7 +56,7 @@
 <div class="col-xs-6 col-sm-3">.col-xs-6 .col-sm-3</div>
 </div>
 *#
-#if( ${table.queryFormRender.show} )
+#if( ${entity.queryFormRender.show} )
 <div class="row">
 	<div class="col-sm-12 col-md-12">
 		<div class="panel panel-default">
@@ -69,8 +65,8 @@
 	    	<div class="container-fluid">
 			    <div class="row">
 					<div class="col-md-12">
-						<form class="form-horizontal ${table.entityBeanName}formQuery" role="form">
-						${table.queryFormRender.render}
+						<form class="form-horizontal ${entity.entityBeanName}formQuery" role="form">
+						${entity.queryFormRender.render}
 						</form>
 					</div>
 				</div>
@@ -79,8 +75,8 @@
 		<div class="panel-heading">
 	    	<div class="row">
 	    		<div class="col-lg-offset-10 col-lg-2">
-	    			<a class="btn btn-primary ${table.entityBeanName}query" href="#" role="button">查询</a>
-	    			<a class="btn btn-default ${table.entityBeanName}reset" href="#" role="button">重置</a>
+	    			<a class="btn btn-primary ${entity.entityBeanName}query" href="#" role="button">查询</a>
+	    			<a class="btn btn-default ${entity.entityBeanName}reset" href="#" role="button">重置</a>
 	    		</div>
 	    	</div>
 		</div>
@@ -95,15 +91,15 @@
 	  <div class="panel-heading">
 	  	   <div class="row">
 	    		<div class="col-lg-2">
-	    			<a class="btn btn-primary ${table.entityBeanName}new" role="button">新增</a>
-	    			<a class="btn btn-primary ${table.entityBeanName}delete" role="button">删除</a>
+	    			<a class="btn btn-primary ${entity.entityBeanName}new" role="button">新增</a>
+	    			<a class="btn btn-primary ${entity.entityBeanName}delete" role="button">删除</a>
 	    		</div>
 	    	</div>
 	  </div>
         <table id="${jspDatatableId}" class="table table-striped table-bordered" style="margin-top:0px !important" width="100%" cellspacing="0">
 		 <thead>
 				 <tr>
-				 #foreach( $column in $table.jspColumns)
+				 #foreach( $column in $entity.listColumns)
 					#if( ${column.listRender.show} )
 						<th>${column.listRender.title}</th>
 					#end
@@ -120,7 +116,7 @@
 
 <div class="modal fade" id="${webActionEditMethodName}Modal" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
-  <form class="form-horizontal ${table.entityBeanName}formEdit" role="form" action="#[[${]]#${jspContextPathVar}#[[}]]#${webActionRequestMapping}/${webActionEditMethodName}" method="post">
+  <form class="form-horizontal ${entity.entityBeanName}formEdit" role="form" action="#[[${]]#${jspContextPathVar}#[[}]]#${webActionRequestMapping}/${webActionEditMethodName}" method="post">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -130,7 +126,7 @@
         <div class="container-fluid">
 		    <div class="row">
 				<div class="col-md-12">
-					#foreach( $column in $table.jspColumns)
+					#foreach( $column in $entity.tableColumns)
 						#if( ${column.editRender.show} )
 							${column.editRender.render}
 						#end
@@ -158,7 +154,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-        <button type="button" class="btn btn-primary ${table.entityBeanName}save">保存</button>
+        <button type="button" class="btn btn-primary ${entity.entityBeanName}save">保存</button>
       </div>
     </div>
     </form>
@@ -174,17 +170,6 @@
 <script src="#[[${]]#${jspContextPathVar}#[[}]]#/js/util2.js"></script>
 <script src="#[[${]]#${jspContextPathVar}#[[}]]#/js/tables.js"></script>
 
-#*
-<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
-<script src="http://jspdd.applinzi.com/js/jquery/jquery.form.js"></script>
-<script src="//cdn.bootcss.com/jquery.blockUI/2.70.0-2014.11.23/jquery.blockUI.min.js"></script>
-<script src="//cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<script src="http://jspdd.applinzi.com/js/bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>
-<script src="http://jspdd.applinzi.com/js/datatable/1.1/js/jquery.dataTables.min.js"></script>
-<script src="http://jspdd.applinzi.com/js/datatable/1.1/js/dataTables.bootstrap.min.js"></script>
-<script src="http://jspdd.applinzi.com/js/util.js"></script>
-<script src="http://jspdd.applinzi.com/js/tables.js"></script>
-*#
 <script type="text/javascript">
 $(document).ready(function(){
 	/**
@@ -196,7 +181,7 @@ $(document).ready(function(){
 		"createdRow": function ( row, data, index ) {
         },
         columns:[
-        #datatable_columns($table.jspColumns)
+        #datatable_columns($entity.listColumns)
         ]
         ,"ajax":{
 			"url":"#[[${]]#${jspContextPathVar}#[[}]]#${webActionRequestMapping}/${queryPagingMethodPrefix}",
@@ -211,10 +196,10 @@ $(document).ready(function(){
 			},
 			"data":function(d){
 				//修正传入后台的数据, 使其可以对应java对象;
-				me.pdd.DataTable.plainfy_datatables(d);
+				me.pdd.Dataentity.plainfy_datatables(d);
 				
-				#if(${table.queryColumns.size()} > 0)
-				var f = me.pdd.Form.getForm($(".${table.entityBeanName}formQuery"));
+				#if(${entity.queryColumns.size()} > 0)
+				var f = me.pdd.Form.getForm($(".${entity.entityBeanName}formQuery"));
 				$.extend(d, f);
 				#end
 			},
@@ -241,7 +226,7 @@ $(document).ready(function(){
 		//var id = $(this).closest("tr").find(".${groupCheckboxClassName}").val();
 		var row = $(this).closest("tr");
 		var rowData = table.row(row).data();
-		#ajax_pks_get_data(${table.columns} ${sqlMapMarkUse})
+		#ajax_pks_get_data(${entity.tableColumns})
 		
 		$.blockUI({"baseZ":2001,
 			"message":"",
@@ -252,15 +237,15 @@ $(document).ready(function(){
 			dataType:"json", success:function(d){
 				if(d.status == 0){
 					var o = d.data;
-					me.pdd.Form.setForm($(".${table.entityBeanName}formEdit"), o);
+					me.pdd.Form.setForm($(".${entity.entityBeanName}formEdit"), o);
 					
 					//清除验证错误;
-					$('.${table.entityBeanName}formEdit').data('bootstrapValidator').resetForm();
+					$('.${entity.entityBeanName}formEdit').data('bootstrapValidator').resetForm();
 					
 					$('#${webActionEditMethodName}Modal').modal({
 			   		  keyboard: false
 			   		});
-				}else{
+				}else if(d.status < 0){
 					alert(d.msg);
 				}
 			}, complete:function(){$.unblockUI();}});
@@ -274,7 +259,7 @@ $(document).ready(function(){
 			var row = $(this).closest("tr");
 			var rowData = table.row(row).data();
 			var dataArr = [];
-			#ajax_pks_get_data_array(${table.columns} ${sqlMapMarkUse} true)
+			#ajax_pks_get_data_array(${entity.tableColumns} true)
 			
 			$.blockUI({"baseZ":2001,
 				"message":"<h2>删除中...</h2>",
@@ -283,9 +268,11 @@ $(document).ready(function(){
 			$.ajax("#[[${]]#${jspContextPathVar}#[[}]]#${webActionRequestMapping}/${deleteMethodPrefix}", 
 				{"data":objData, type:"post",
 					dataType:"json", success:function(d){
-						alert(d.msg);
 						if(d.status == 0){
+							alert(d.msg);
 							table.ajax.reload();
+						}else if(d.status <0){
+							alert(d.msg);
 						}
 					}, complete:function(){   
 						$.unblockUI();
@@ -297,7 +284,7 @@ $(document).ready(function(){
 	/**
 	 * 选择删除;
 	 */
-	$(".${table.entityBeanName}delete").on("click", function(){
+	$(".${entity.entityBeanName}delete").on("click", function(){
 		  var dataArr = [];
 		  $("#${jspDatatableId} .${groupCheckboxClassName}").each(function(){
 			  if(this.checked)
@@ -312,14 +299,16 @@ $(document).ready(function(){
 						"message":"<h2>删除中...</h2>",
 						"css":{border:		'',
 							backgroundColor:''}});
-				#ajax_pks_get_data_array(${table.columns} ${sqlMapMarkUse} false)
+				#ajax_pks_get_data_array(${entity.tableColumns} false)
 				
 				$.ajax("#[[${]]#${jspContextPathVar}#[[}]]#${webActionRequestMapping}/${deleteMethodPrefix}", 
 					{"data":objData, type:"post",
 						dataType:"json", success:function(d){
-							alert(d.msg);
 							if(d.status == 0){
+								alert(d.msg);
 								table.ajax.reload();
+							}else if(d.status < 0){
+								alert(d.msg);
 							}
 						}, complete:function(){   
 							$.unblockUI();
@@ -331,11 +320,11 @@ $(document).ready(function(){
 	/**
 	 * 打开新增;
 	 */
-	$(".${table.entityBeanName}new").on("click", function(){
+	$(".${entity.entityBeanName}new").on("click", function(){
 		//清空form;
-		me.pdd.Form.clearForm($(".${table.entityBeanName}formEdit"));
+		me.pdd.Form.clearForm($(".${entity.entityBeanName}formEdit"));
 		//清除验证错误;
-		$('.${table.entityBeanName}formEdit').data('bootstrapValidator').resetForm();
+		$('.${entity.entityBeanName}formEdit').data('bootstrapValidator').resetForm();
 		$('#${webActionEditMethodName}Modal').modal({
    		  keyboard: false
    		});
@@ -344,24 +333,24 @@ $(document).ready(function(){
 	/**
 	 * 编辑保存按钮绑定form验证事件;
 	 */
-	$(".${table.entityBeanName}save").on("click", function(){
-		 $(".${table.entityBeanName}formEdit").data('bootstrapValidator').validate();
+	$(".${entity.entityBeanName}save").on("click", function(){
+		 $(".${entity.entityBeanName}formEdit").data('bootstrapValidator').validate();
 	});
 	
 	/**
 	 * 新增/编辑form验证规则;
 	 */
-	$('.${table.entityBeanName}formEdit').bootstrapValidator({
+	$('.${entity.entityBeanName}formEdit').bootstrapValidator({
 		 excluded:[':disabled'],//默认值为[':disabled', ':hidden', ':not(:visible)'], 但是如果不配置则会发生,隐藏的form不能清除错误提示!;
 	     feedbackIcons: {
 	         valid: 'glyphicon glyphicon-ok',
 	         invalid: 'glyphicon glyphicon-remove',
 	         validating: 'glyphicon glyphicon-refresh'
 	     },
-	     submitButtons: '.${table.entityBeanName}save', //查找编辑按按钮的规则(使其可以更改编辑按钮状态让其是否可以提交);
+	     submitButtons: '.${entity.entityBeanName}save', //查找编辑按按钮的规则(使其可以更改编辑按钮状态让其是否可以提交);
 	     fields:
-	    	 #if($table.editJSValidtors)
-	    		 ${table.editJSValidtors}
+	    	 #if($entity.editJSValidtors)
+	    		 ${entity.editJSValidtors}
 	    	 #else
 	    		 null
 	         #end
@@ -370,16 +359,18 @@ $(document).ready(function(){
    /**
 	* 编辑form验证成功后执行;
 	*/
-   $('.${table.entityBeanName}formEdit').on("success.form.bv", function(){
+   $('.${entity.entityBeanName}formEdit').on("success.form.bv", function(){
 		$.blockUI({"baseZ":2001,
 			"message":"<h2>保存中...</h2>",
 			"css":{border:		'',
 				backgroundColor:''}});
-		$(".${table.entityBeanName}formEdit").ajaxSubmit(
+		$(".${entity.entityBeanName}formEdit").ajaxSubmit(
 			{	success:function(d){
-					alert(d.msg);
 					if(d.status == 0){
+						alert(d.msg);
 						table.ajax.reload();
+					}else if(d.status < 0){
+						alert(d.msg);
 					}
 				},
 				error:function(e){
@@ -397,14 +388,14 @@ $(document).ready(function(){
 	/**
 	 * 查询重置;
 	 */
-	$(".${table.entityBeanName}reset").on("click", function(){
-		me.pdd.Form.clearForm($(".${table.entityBeanName}formQuery"));
+	$(".${entity.entityBeanName}reset").on("click", function(){
+		me.pdd.Form.clearForm($(".${entity.entityBeanName}formQuery"));
 	});
 	
 	/**
 	 * 查询;
 	 */
-	$(".${table.entityBeanName}query").on("click", function(){
+	$(".${entity.entityBeanName}query").on("click", function(){
 		table.ajax.reload();
 	});
 });
@@ -412,9 +403,3 @@ $(document).ready(function(){
 </body>
 </html>
 #parse("template/velocity/jspComponent.vm")
-
-<!--	
-#foreach( $column in $table.columns)
-#if(${foreach.count} != 1),#end new ReportColumn("${column.propertyName}","",new ReportType[0],ReportColumn.RANGE_TYPE)
-#end
--->

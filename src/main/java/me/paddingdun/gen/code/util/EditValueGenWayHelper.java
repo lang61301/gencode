@@ -21,12 +21,12 @@ import me.paddingdun.gen.code.data.table2.TableColumn;
  */
 public class EditValueGenWayHelper {
 	
-	public static String javaCodeEdit(TableColumn jspColumn){
-		return javaCode(jspColumn, true);
+	public static String javaCodeEdit(TableColumn tableColumn){
+		return javaCode(tableColumn, true);
 	}
 	
-	public static String javaCodeNew(TableColumn jspColumn){
-		return javaCode(jspColumn, false);
+	public static String javaCodeNew(TableColumn tableColumn){
+		return javaCode(tableColumn, false);
 	}
 	
 	/**

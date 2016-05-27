@@ -68,8 +68,12 @@ public class VelocityHelper {
 		return s;
 	}
 	
+	public static String jspVMPath(String vm){
+		return "template/velocity/bootstrap/datatables/" + vm;
+	}
+	
 	public static String bootstrapDataTableJsp(TableViewModel tableViewModel){
-		String s = rawTable(tableViewModel, "template/velocity/BootstrapDataTableJsp.vm");
+		String s = rawTable(tableViewModel, jspVMPath("BootstrapDataTableJsp.vm"));
     	return s;
 	}
 	

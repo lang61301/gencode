@@ -51,6 +51,11 @@ public class Entity extends WapperDBTable {
 	private List<TableColumn> tableColumns;
 	
 	/**
+	 * 原始列表字段集合;
+	 */
+	private List<ListColumn> rawListColumns;
+	
+	/**
 	 * 列表字段集合;
 	 */
 	private List<ListColumn> listColumns;
@@ -173,5 +178,13 @@ public class Entity extends WapperDBTable {
 
 	public void setDeleteSql(String deleteSql) {
 		this.deleteSql = deleteSql;
+	}
+
+	public List<ListColumn> getRawListColumns() {
+		return rawListColumns;
+	}
+
+	public void setRawListColumns(List<ListColumn> rawListColumns) {
+		this.rawListColumns = rawListColumns;
 	}
 }

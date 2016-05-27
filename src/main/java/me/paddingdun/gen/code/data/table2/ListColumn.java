@@ -57,7 +57,6 @@ public class ListColumn extends WapperDBColumn implements Comparable<ListColumn>
 	 */
 	private Render listRender;
 	
-	
 	/**
 	 * 查询中是否显示;
 	 */

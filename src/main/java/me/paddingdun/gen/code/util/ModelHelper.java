@@ -398,30 +398,39 @@ public class ModelHelper {
 		}
 		
 		//3:处理列表字段;
-		List<ListColumn> list_lc = entity.getListColumns();
+		List<ListColumn> list_raw_lc = entity.getRawListColumns();
 		//3.1:显示排序;
-		processListColumnSeq(list_lc);
+		processListColumnSeq(list_raw_lc);
 		
 		//3.2:记录排序;
-		entity.setSorts(processListColumnSort(list_lc));
+		entity.setSorts(processListColumnSort(list_raw_lc));
 		
+		
+		List<ListColumn> listColumns = new ArrayList<ListColumn>();
 		//3.3:补充属性;
-		for (ListColumn lc : list_lc) {
+		for (ListColumn lc : list_raw_lc) {
 			//set list table render in jsp
 			lc.setListRender(RenderHelper.createListRender(tableViewModel, lc, lc.isListRenderShow()));
+			
+			listColumns.add(lc);
 		}
 		
 		//3.4:是否生成操作列;
 		ListColumn lc_op = new  ListColumn(new DBColumn());
+		lc_op.setColumnAlias("__op");
+		lc_op.setListTitle("操作");
 		lc_op.setQueryRenderShow(false);
 		lc_op.setListRender(RenderHelper.createListOperateRender(lc_op, true));
 		lc_op.setListRenderShow(true);
-		list_lc.add(lc_op);
+		listColumns.add(lc_op);
+		
+		//3.5:设置列表字段;
+		entity.setListColumns(listColumns);
 		
 		
 		//4:生成QueryColumn;
 		List<QueryColumn> queryColumns = new ArrayList<QueryColumn>();
-		for(ListColumn lc : list_lc){
+		for(ListColumn lc : list_raw_lc){
 			//该列需要查询时新增查询列参数;
 			if(lc.isQueryRenderShow()){
 				String queryColumnJson = lc.getQueryColumnJson();
@@ -456,16 +465,16 @@ public class ModelHelper {
 			}
 		}
 		//4.2:设置查询列;
-		tableViewModel.getEntity().setQueryColumns(queryColumns);
+		entity.setQueryColumns(queryColumns);
 		
 		//5:设置属性列;
-		tableViewModel.getEntity().setEntityProperties(list_eps);
+		entity.setEntityProperties(list_eps);
 		
 		//6:设置编辑js验证;
-		tableViewModel.getEntity().setEditJSValidtors(editJSValidtors(list_tc));
+		entity.setEditJSValidtors(editJSValidtors(list_tc));
 		
 		//7:设置formRender
-		tableViewModel.getEntity().setQueryFormRender(RenderHelper.createQueryFormRender(queryColumns, tableViewModel.getJspQueryColumnCount(), true));
+		entity.setQueryFormRender(RenderHelper.createQueryFormRender(queryColumns, tableViewModel.getJspQueryColumnCount(), true));
 		
 		//8:生成配置文件;
 		ConfigHelper.genConfigXmlFile(tableViewModel.getEntity());

@@ -1,11 +1,13 @@
-#parse("template/velocity/fun.vm")
+/**
+ * 
+ */
 package ${webActionFullPackageName};
 
 
 /**
  * autogen
  * @author paddingdun
- * ${table.tableCommon} spring web controller;
+ * ${entity.tableCommon} spring web controller;
  * @date ${date}
  */
 @org.springframework.stereotype.Controller
@@ -32,10 +34,10 @@ public class ${springWebActionJavaClassName} {
 	 */
 	@org.springframework.web.bind.annotation.RequestMapping(value="/${queryPagingMethodPrefix}", method = org.springframework.web.bind.annotation.RequestMethod.POST)
 	@org.springframework.web.bind.annotation.ResponseBody
-	public ${jsonResultPackageName}.JsonResult2<${idataCollectionPackageName}.IDataCollection<${pojoFullPackageName}.${table.entityBeanName}>> ${queryPagingMethodPrefix}(${pojoFullPackageName}.${table.entityBeanName} obj, ${pagingPackageName}.Paging paging) {
-		${jsonResultPackageName}.JsonResult2<${idataCollectionPackageName}.IDataCollection<${pojoFullPackageName}.${table.entityBeanName}>> jr = new ${jsonResultPackageName}.JsonResult2<${idataCollectionPackageName}.IDataCollection<${pojoFullPackageName}.${table.entityBeanName}>>();
+	public ${jsonResultPackageName}.JsonResult2<${idataCollectionPackageName}.IDataCollection<java.util.Map<java.lang.String, java.lang.Object>>> ${queryPagingMethodPrefix}(${pojoFullPackageName}.${entity.entityBeanName} obj, ${pagingPackageName}.Paging paging) {
+		${jsonResultPackageName}.JsonResult2<${idataCollectionPackageName}.IDataCollection<java.util.Map<java.lang.String, java.lang.Object>>> jr = new ${jsonResultPackageName}.JsonResult2<${idataCollectionPackageName}.IDataCollection<java.util.Map<java.lang.String, java.lang.Object>>>();
 		try{
-			${idataCollectionPackageName}.IDataCollection<${pojoFullPackageName}.${table.entityBeanName}> data = service.${queryPagingMethodPrefix}${table.entityBeanName}(obj, paging);
+			${idataCollectionPackageName}.IDataCollection<java.util.Map<java.lang.String, java.lang.Object>> data = service.${queryPagingMethodPrefix}${entity.entityBeanName}(obj, paging);
 			jr.setData(data);
 		}catch(${businessExceptionPackageName}.BusinessException e){
 			jr.setStatus(${ierrorCodePackageName}.IErrorCode.UNKNOW_EXCEPTION);
@@ -55,15 +57,15 @@ public class ${springWebActionJavaClassName} {
 	 */
 	@org.springframework.web.bind.annotation.RequestMapping(value="/${webActionEditMethodName}", method = org.springframework.web.bind.annotation.RequestMethod.POST)
 	@org.springframework.web.bind.annotation.ResponseBody
-	public ${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${table.entityBeanName}> ${webActionEditMethodName}(${pojoFullPackageName}.${table.entityBeanName} obj) {
-		${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${table.entityBeanName}> jr = new ${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${table.entityBeanName}>();
+	public ${jsonResultPackageName}.JsonResult2<java.lang.Void> ${webActionEditMethodName}(${pojoFullPackageName}.${entity.entityBeanName} obj) {
+		${jsonResultPackageName}.JsonResult2<java.lang.Void> jr = new ${jsonResultPackageName}.JsonResult2<java.lang.Void>();
 		try{
 			#set($objName="obj")
-			boolean save = #pks_isnull(${table.columns} ${objName})
+			boolean save = #pks_isnull(${entity.tableColumns} ${objName})
 			if(save){
-				service.${saveMethodPrefix}${table.entityBeanName}(obj);
+				service.${saveMethodPrefix}${entity.entityBeanName}(obj);
 			}else{
-				service.${updateMethodPrefix}${table.entityBeanName}(obj);
+				service.${updateMethodPrefix}${entity.entityBeanName}(obj);
 			}
 			jr.setMsg("保存成功!");
 		}catch(${businessExceptionPackageName}.BusinessException e){
@@ -82,10 +84,10 @@ public class ${springWebActionJavaClassName} {
 	 */
 	@org.springframework.web.bind.annotation.RequestMapping(value="/${getMethodPrefix}")
 	@org.springframework.web.bind.annotation.ResponseBody
-	public ${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${table.entityBeanName}> ${getMethodPrefix}(#pks_web_argument(${table.columns} ${sqlMapMarkUse})) {
-		${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${table.entityBeanName}> jr = new ${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${table.entityBeanName}>();
+	public ${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${entity.entityBeanName}> ${getMethodPrefix}(#pks_web_argument(${entity.tableColumns})) {
+		${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${entity.entityBeanName}> jr = new ${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${entity.entityBeanName}>();
 		try{
-			${pojoFullPackageName}.${table.entityBeanName} obj = service.${getMethodPrefix}${table.entityBeanName}(#pks_call_argument(${table.columns} ${sqlMapMarkUse}));
+			${pojoFullPackageName}.${entity.entityBeanName} obj = service.${getMethodPrefix}${entity.entityBeanName}(#pks_call_argument(${entity.tableColumns}));
 			jr.setData(obj);
 		}catch(${businessExceptionPackageName}.BusinessException e){
 			jr.setStatus(${ierrorCodePackageName}.IErrorCode.UNKNOW_EXCEPTION);
@@ -103,10 +105,10 @@ public class ${springWebActionJavaClassName} {
 	 */
 	@org.springframework.web.bind.annotation.RequestMapping(value="/${deleteMethodPrefix}")
 	@org.springframework.web.bind.annotation.ResponseBody
-	public ${jsonResultPackageName}.JsonResult2<java.lang.Void> ${deleteMethodPrefix}(#pks_web_argument_array(${table.columns} ${sqlMapMarkUse})) {
+	public ${jsonResultPackageName}.JsonResult2<java.lang.Void> ${deleteMethodPrefix}(#pks_web_argument_array(${entity.tableColumns})) {
 		${jsonResultPackageName}.JsonResult2<java.lang.Void> jr = new ${jsonResultPackageName}.JsonResult2<java.lang.Void>();
 		try{
-			service.${deleteMethodPrefix}${table.entityBeanName}(#pks_call_argument(${table.columns} ${sqlMapMarkUse}));
+			service.${deleteMethodPrefix}${entity.entityBeanName}(#pks_call_argument(${entity.tableColumns}));
 			jr.setMsg("删除成功!");
 		}catch(${businessExceptionPackageName}.BusinessException e){
 			jr.setStatus(${ierrorCodePackageName}.IErrorCode.UNKNOW_EXCEPTION);
@@ -120,3 +122,4 @@ public class ${springWebActionJavaClassName} {
 	}
 
 }
+#parse("template/velocity/fun.vm")
