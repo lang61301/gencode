@@ -8,6 +8,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import me.paddingdun.gen.code.gui.MainFrame;
 import me.paddingdun.gen.code.util.BufferHelper;
+import me.paddingdun.gen.code.util.ConfigHelper;
 import me.paddingdun.gen.code.util.DirectoryHelper;
 import me.paddingdun.gen.code.util.gui.TipHelper;
 
@@ -22,7 +23,7 @@ import me.paddingdun.gen.code.util.gui.TipHelper;
 public class Main {
 	
 	private static void init(){
-//		BufferHelper.readConfigXmlBuffer(DirectoryHelper.getUserDir(), "table");
+		BufferHelper.readConfigXmlBuffer(DirectoryHelper.getUserDir(), ConfigHelper.cfgDir());
 	}
 
 	/**

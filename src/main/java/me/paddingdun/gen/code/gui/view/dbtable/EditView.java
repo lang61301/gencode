@@ -15,12 +15,15 @@ import org.apache.commons.lang.StringUtils;
 import layout.TableLayout;
 import me.paddingdun.gen.code.data.message.Message;
 import me.paddingdun.gen.code.data.table.IDBColumn;
+import me.paddingdun.gen.code.data.table2.Entity;
 import me.paddingdun.gen.code.data.tabletree.DBTable;
 import me.paddingdun.gen.code.db.TableHelper2;
 import me.paddingdun.gen.code.gui.component.TargetSqlTextArea;
 import me.paddingdun.gen.code.gui.model.EditViewModel;
 import me.paddingdun.gen.code.gui.perspective.designer.DesignerPerspective;
 import me.paddingdun.gen.code.gui.view.AbstractView;
+import me.paddingdun.gen.code.util.BufferHelper;
+import me.paddingdun.gen.code.util.ConfigHelper;
 import me.paddingdun.gen.code.util.gui.TaskHelper;
 
 /**
@@ -58,7 +61,7 @@ public class EditView extends AbstractView {
      */
     private void qBtnOkActionPerformed(java.awt.event.ActionEvent evt){
     	String querySql = queryArea.getText();
-    	List<IDBColumn> dbcolumns = TableHelper2.parseQuerySql(queryArea.getCatlog(), querySql);
+    	List<IDBColumn> dbcolumns = TableHelper2.parseQuerySql(model.getDbTable().getCat(), querySql);
     	
     	model.setQuerySql(querySql);
     	model.setQuerySqlDBColumnList(dbcolumns);
@@ -224,17 +227,25 @@ public class EditView extends AbstractView {
 						
 						TaskHelper.runInNonEDT(new Callable<Void>() {
 							public Void call() throws Exception {
-								model.setQuerySql(TableHelper2.tableName2QuerySql(dbt, "t1"));
-								model.setDeleteSql(TableHelper2.tableName2DeleteSql(dbt));
+								
+								model.setDbTable(dbt);
+								//缓存;
+								String key = ConfigHelper.entityCfgName(dbt.getCat(), dbt.getTableName());
+								Entity entityBuffer = BufferHelper.readEntity(key);
+								
+								if(entityBuffer == null){
+									model.setQuerySql(TableHelper2.tableName2QuerySql(dbt, "t1"));
+									model.setDeleteSql(TableHelper2.tableName2DeleteSql(dbt));
+								}else{
+									model.setQuerySql(entityBuffer.getQuerySql());
+								}
 								
 								EventQueue.invokeLater(new Runnable() {
 									@Override
 									public void run() {
 										queryArea.setText(model.getQuerySql());
-										queryArea.setCatlog(dbt.getCat());
 										
 										deleteArea.setText(model.getDeleteSql());
-										deleteArea.setCatlog(dbt.getCat());
 									}
 								});
 								

@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.MethodUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
@@ -377,6 +378,7 @@ public class ModelHelper {
 		 * 5.设置是否显示gson的annotation
 		 * 
 		**/
+		TableColumn primary = null;
 		for (TableColumn tc : list_tc) {
 			//set fulled java qualified name;
 			tc.setJavaType(TypesHelper.map_types.get(tc.getType()));
@@ -394,7 +396,13 @@ public class ModelHelper {
 			
 			set_propertyNames.add(tc.getPropertyName());
 			
-			list_eps.add(EntityHelper.from(tc));
+			IEntityProperty ep = EntityHelper.from(tc);
+			list_eps.add(ep);
+			
+			if(primary == null
+					&& tc.isPrimary()){
+				primary = tc;
+			}
 		}
 		
 		//3:处理列表字段;
@@ -407,12 +415,36 @@ public class ModelHelper {
 		
 		
 		List<ListColumn> listColumns = new ArrayList<ListColumn>();
+		
+		//
+		TableColumn key = null;
 		//3.3:补充属性;
 		for (ListColumn lc : list_raw_lc) {
 			//set list table render in jsp
 			lc.setListRender(RenderHelper.createListRender(tableViewModel, lc, lc.isListRenderShow()));
 			
 			listColumns.add(lc);
+			
+			//3.31:设置主键;
+			//表名,字段名一样且是主键;
+			if(key == null
+					&& lc.isPrimary()
+					&& primary != null
+					&& primary.getTableName()
+					.equals(lc.getTableName())){
+				try {
+					IDBColumn tmp_db = new DBColumn();
+					BeanUtils.copyProperties(tmp_db, primary.getDbColumn());
+					TableColumn tmp_tc = new TableColumn(tmp_db);
+					BeanUtils.copyProperties(tmp_tc, primary);
+					tmp_tc.setColumnAlias(lc.getColumnAlias());
+					key = tmp_tc;
+					entity.setKey(key);
+				} catch (Exception e) {
+					key = null;
+					e.printStackTrace();
+				}
+			}
 		}
 		
 		//3.4:是否生成操作列;

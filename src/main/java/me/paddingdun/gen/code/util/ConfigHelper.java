@@ -29,12 +29,16 @@ public class ConfigHelper {
 
 	/**
 	 * 表格配置文件名称;
-	 * @param catName
+	 * @param cataName
 	 * @param tableName
 	 * @return
 	 */
-	public static String entityCfgName(String catName, String tableName){
-		return MessageFormat.format("{0}_{1}", catName, tableName);
+	public static String entityCfgName(String cataName, String tableName){
+		return MessageFormat.format("{0}_{1}", cataName, tableName);
+	}
+	
+	public static String cfgDir(){
+		return "project/pms";
 	}
 	
 	public static void genConfigXmlFile(Entity entity){
@@ -51,7 +55,7 @@ public class ConfigHelper {
 			
 			String content = convertToXml(tc, charset);
 			
-			FileHelper.genConfigXmlFile(DirectoryHelper.getUserDir(), "table", name, content);
+			FileHelper.genConfigXmlFile(DirectoryHelper.getUserDir(), cfgDir(), name, content);
 			
 			//更新缓存;
 			BufferHelper.writeTable(name, entity);
@@ -68,7 +72,6 @@ public class ConfigHelper {
 			TableConfig tc = convertToObject(TableConfig.class, xml);
 			
 			String str = GZipHelper.ungzip(tc.getText(), charset);
-			
 			result = gson.fromJson(str, new TypeToken<Entity>(){}.getType());
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -55,4 +55,12 @@ public class WapperDBTable implements IDBTable {
 	public String getTableCommon() {
 		return table.getTableCommon();
 	}
+
+	public IDBTable getTable() {
+		return table;
+	}
+
+	public void setTable(IDBTable table) {
+		this.table = table;
+	}
 }

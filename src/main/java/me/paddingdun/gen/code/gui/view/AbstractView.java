@@ -3,6 +3,7 @@
  */
 package me.paddingdun.gen.code.gui.view;
 
+import java.awt.EventQueue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -61,11 +62,24 @@ public  abstract class AbstractView extends javax.swing.JInternalFrame implement
 					running = false;
 					break;
 				}
-				doMessage(message);
+				consumeMessage(message);
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * 
+	 * @param message
+	 */
+	public void consumeMessage(final Message message){
+		EventQueue.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				doMessage(message);
+			}
+		});
 	}
 
 	/* (non-Javadoc)

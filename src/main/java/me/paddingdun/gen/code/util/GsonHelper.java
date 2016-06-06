@@ -18,6 +18,13 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+import me.paddingdun.gen.code.data.table.IDBColumn;
+import me.paddingdun.gen.code.data.table2.IEntityProperty;
+import me.paddingdun.gen.code.data.tabletree.IDBTable;
+import me.paddingdun.gen.code.util.gson.IDBColumnTypeAdapter;
+import me.paddingdun.gen.code.util.gson.IDBTableTypeAdapter;
+import me.paddingdun.gen.code.util.gson.IEntityPropertyTypeAdapter;
+
 /**
  * 
  * @author paddingdun
@@ -37,7 +44,11 @@ public class GsonHelper {
 		gb.registerTypeAdapter(java.util.Date.class, new Date1TypeAdapter())
 		.registerTypeAdapter(java.sql.Date.class, new Date2TypeAdapter())
 		.registerTypeAdapter(java.sql.Timestamp.class, new Date3TypeAdapter())
-		.registerTypeAdapter(BigDecimal.class, new BigDecimalDeserializer());
+		.registerTypeAdapter(BigDecimal.class, new BigDecimalDeserializer())
+		.registerTypeAdapter(IEntityProperty.class, new IEntityPropertyTypeAdapter())
+		.registerTypeAdapter(IDBColumn.class, new IDBColumnTypeAdapter())
+//		.registerTypeAdapter(IDBTable.class, new IDBTableInstanceCreator())
+		.registerTypeAdapter(IDBTable.class, new IDBTableTypeAdapter());
 		if(excludeFieldsWithoutExposeAnnotation){
 			gb.excludeFieldsWithoutExposeAnnotation();
 		}

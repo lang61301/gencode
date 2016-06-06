@@ -39,15 +39,6 @@ public class TargetSqlTextArea extends JTextArea{
 	
 	private List<AfterD2DAction> actions = new ArrayList<AfterD2DAction>();
 	
-	/**
-	 * 保存当前生成table的数据库名称;
-	 */
-	private String catlog;
-
-	public String getCatlog() {
-		return catlog;
-	}
-	
 	private TargetSqlType type;
 	
 	public TargetSqlTextArea(){
@@ -85,8 +76,6 @@ public class TargetSqlTextArea extends JTextArea{
 					final JTextComponent.DropLocation loc = (JTextComponent.DropLocation)support.getDropLocation();
 					try {
 						final DBTable tmp =  (DBTable)ts.getTransferData(TranDBTable.dbtable);
-						
-						TargetSqlTextArea.this.catlog = tmp.getCat();
 						
 						TaskHelper.runInNonEDT(new Callable<Void>() {
 							@Override
@@ -177,10 +166,5 @@ public class TargetSqlTextArea extends JTextArea{
 	public void setType(TargetSqlType type) {
 		this.type = type;
 	}
-
-	public void setCatlog(String catlog) {
-		this.catlog = catlog;
-	}
-	
 	
 }

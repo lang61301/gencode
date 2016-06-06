@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title></title>
-
+#parse("template/velocity/jspComponent.vm")
     <meta name="description" content="">
     <meta name="author" content="">
 
@@ -259,7 +259,7 @@ $(document).ready(function(){
 			var row = $(this).closest("tr");
 			var rowData = table.row(row).data();
 			var dataArr = [];
-			#ajax_pks_get_data_array(${entity.tableColumns} true)
+			#ajax_pks_get_data_array(${entity.key} true)
 			
 			$.blockUI({"baseZ":2001,
 				"message":"<h2>删除中...</h2>",
@@ -299,7 +299,7 @@ $(document).ready(function(){
 						"message":"<h2>删除中...</h2>",
 						"css":{border:		'',
 							backgroundColor:''}});
-				#ajax_pks_get_data_array(${entity.tableColumns} false)
+				#ajax_pks_get_data_array(${entity.key} false)
 				
 				$.ajax("#[[${]]#${jspContextPathVar}#[[}]]#${webActionRequestMapping}/${deleteMethodPrefix}", 
 					{"data":objData, type:"post",
@@ -402,4 +402,3 @@ $(document).ready(function(){
 </script>
 </body>
 </html>
-#parse("template/velocity/jspComponent.vm")

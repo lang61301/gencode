@@ -82,6 +82,11 @@ public class Entity extends WapperDBTable {
 	 */
 	private String deleteSql;
 	
+	/**
+	 * 列表记录key属性名称, 通过ListColumns中的主键获得;
+	 */
+	private TableColumn key;
+	
 	public Entity(IDBTable dbTable){
 		super(dbTable);
 	}
@@ -186,5 +191,13 @@ public class Entity extends WapperDBTable {
 
 	public void setRawListColumns(List<ListColumn> rawListColumns) {
 		this.rawListColumns = rawListColumns;
+	}
+
+	public TableColumn getKey() {
+		return key;
+	}
+
+	public void setKey(TableColumn key) {
+		this.key = key;
 	}
 }

@@ -2,8 +2,7 @@
  * 
  */
 package ${webActionFullPackageName};
-
-
+#parse("template/velocity/fun.vm")
 /**
  * autogen
  * @author paddingdun
@@ -122,4 +121,3 @@ public class ${springWebActionJavaClassName} {
 	}
 
 }
-#parse("template/velocity/fun.vm")

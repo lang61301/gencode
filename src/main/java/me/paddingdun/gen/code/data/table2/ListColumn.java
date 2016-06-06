@@ -173,4 +173,36 @@ public class ListColumn extends WapperDBColumn implements Comparable<ListColumn>
 		}
 		return s1.compareTo(s2);
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((getTableName() == null) ? 0 : getTableName().hashCode());
+		result = prime * result + ((getColumnName() == null) ? 0 : getColumnName().hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ListColumn other = (ListColumn) obj;
+		if (getTableName() == null) {
+			if (other.getTableName() != null)
+				return false;
+		} else if (!getTableName().equals(other.getTableName()))
+			return false;
+		if (getColumnName() == null) {
+			if (other.getColumnName() != null)
+				return false;
+		} else if (!getColumnName().equals(other.getColumnName()))
+			return false;
+		return true;
+	}
+
 }

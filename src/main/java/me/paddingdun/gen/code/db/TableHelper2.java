@@ -25,6 +25,7 @@ import me.paddingdun.gen.code.data.table2.ListColumn;
 import me.paddingdun.gen.code.data.table2.TableColumn;
 import me.paddingdun.gen.code.data.tabletree.DBTable;
 import me.paddingdun.gen.code.data.tabletree.IDBTable;
+import me.paddingdun.gen.code.gui.model.EditViewModel;
 import me.paddingdun.gen.code.util.BufferHelper;
 import me.paddingdun.gen.code.util.ConfigHelper;
 import me.paddingdun.gen.code.util.IOHelper;
@@ -172,7 +173,7 @@ public class TableHelper2 {
 				if(entityBuffer != null){
 					List<TableColumn> list_tc = entityBuffer.getTableColumns();
 					for (TableColumn tmp_tc : list_tc) {
-						if(tmp_tc.equals(tmp_tc)){
+						if(tc.equals(tmp_tc)){
 							hasBuffer = true;
 							result.add(tmp_tc);
 							break;
@@ -192,9 +193,14 @@ public class TableHelper2 {
 		return result;
 	}
 	
-	public static List<ListColumn>  listColumn(List<IDBColumn> list){
+	public static List<ListColumn>  listColumn(EditViewModel model){
 		List<ListColumn> result = new ArrayList<ListColumn>();
-		for (IDBColumn dbColumn : list) {
+		
+		//缓存;
+		String key = ConfigHelper.entityCfgName(model.getDbTable().getCat(), model.getDbTable().getTableName());
+		Entity entityBuffer = BufferHelper.readEntity(key);
+		
+		for (IDBColumn dbColumn : model.getQuerySqlDBColumnList()) {
 			ListColumn lc = new ListColumn(dbColumn);
 			
 			if(lc.isPrimary()){
@@ -202,7 +208,22 @@ public class TableHelper2 {
 				lc.setQueryColumnJson(ModelHelper.defaultQueryColumnJson(dbColumn));
 			}
 			
-			result.add(lc);
+			boolean cache = false;
+			if(entityBuffer != null){
+				List<ListColumn> tmp_list_lc = entityBuffer.getListColumns();
+				if(tmp_list_lc != null
+						&& !tmp_list_lc.isEmpty()){
+					for (ListColumn tmp_lc : tmp_list_lc) {
+						if(tmp_lc.equals(lc)){
+							result.add(tmp_lc);
+							cache = true;
+							break;
+						}
+					}
+				}
+			}
+			if(!cache)
+				result.add(lc);
 		}
 		return result;
 	}

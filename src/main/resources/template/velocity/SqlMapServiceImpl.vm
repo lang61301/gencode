@@ -2,7 +2,7 @@
  * 
  */
 package ${serviceImplFullPackageName};
-
+#parse("template/velocity/fun.vm")
 /**
  * autogen
  * @author paddingdun
@@ -103,4 +103,3 @@ public class ${sqlMapServiceImplJavaClassName} implements ${serviceFullPackageNa
 		return result;
 	}
 }
-#parse("template/velocity/fun.vm")

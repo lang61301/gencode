@@ -6,6 +6,7 @@ package me.paddingdun.gen.code.gui.model;
 import java.util.List;
 
 import me.paddingdun.gen.code.data.table.IDBColumn;
+import me.paddingdun.gen.code.data.tabletree.IDBTable;
 
 /**
  * 
@@ -31,6 +32,11 @@ public class EditViewModel {
 	 * 生成查询sqldbcolumn list;
 	 */
 	private List<IDBColumn> querySqlDBColumnList;
+	
+	/**
+	 * 表格生成的dbtable;
+	 */
+	private IDBTable dbTable;
 
 	public String getQuerySql() {
 		return querySql;
@@ -54,5 +60,13 @@ public class EditViewModel {
 
 	public void setQuerySqlDBColumnList(List<IDBColumn> querySqlDBColumnList) {
 		this.querySqlDBColumnList = querySqlDBColumnList;
+	}
+
+	public IDBTable getDbTable() {
+		return dbTable;
+	}
+
+	public void setDbTable(IDBTable dbTable) {
+		this.dbTable = dbTable;
 	}
 }

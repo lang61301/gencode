@@ -1117,7 +1117,7 @@ public class TableView extends AbstractView {
 
 			TaskHelper.runInNonEDT(new Callable<Void>() {
 				public Void call() throws Exception {
-					final List<ListColumn> list_lc = TableHelper2.listColumn(evModel.getQuerySqlDBColumnList());
+					final List<ListColumn> list_lc = TableHelper2.listColumn(evModel);
 					model.getEntity().setRawListColumns(list_lc);
 					model.getEntity().setQuerySql(evModel.getQuerySql());
 

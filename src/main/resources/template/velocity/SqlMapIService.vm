@@ -2,6 +2,7 @@
  * 
  */
 package ${serviceFullPackageName};
+#parse("template/velocity/fun.vm")
 
 /**
  * autogen
@@ -43,4 +44,3 @@ public interface ${sqlMapIServiceJavaClassName} {
 	 */
 	public ${idataCollectionPackageName}.IDataCollection<java.util.Map<java.lang.String, java.lang.Object>> ${queryPagingMethodPrefix}${entity.entityBeanName}(${pojoFullPackageName}.${entity.entityBeanName} obj, ${pagingPackageName}.Paging paging);
 }
-#parse("template/velocity/fun.vm")

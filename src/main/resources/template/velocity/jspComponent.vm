@@ -8,14 +8,12 @@ var objData = {};
 #end
 #end
 
-#macro( ajax_pks_get_data_array $cols $single )
+#macro( ajax_pks_get_data_array $key $single )
 	var objData = {};
-	#foreach( $column in ${cols}) 
-		#if (${column.primary}) 
-			#if(${single})
-				dataArr.push(rowData["${column.propertyName}"]);
-			#end 
-			objData["${column.propertyName}"]=dataArr; 
+	#if ($key) 
+		#if(${single})
+			dataArr.push(rowData["${key.columnAlias}"]);
 		#end 
-	#end
+		objData["${key.propertyName}"]=dataArr; 
+	#end 
 #end

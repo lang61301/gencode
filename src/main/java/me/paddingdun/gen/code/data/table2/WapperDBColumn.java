@@ -107,4 +107,12 @@ public class WapperDBColumn implements IDBColumn {
 	public int getColumnSize() {
 		return dbColumn.getColumnSize();
 	}
+
+	public IDBColumn getDbColumn() {
+		return dbColumn;
+	}
+
+	public void setDbColumn(IDBColumn dbColumn) {
+		this.dbColumn = dbColumn;
+	}
 }
