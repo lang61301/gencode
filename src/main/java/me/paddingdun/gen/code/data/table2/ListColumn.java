@@ -179,7 +179,7 @@ public class ListColumn extends WapperDBColumn implements Comparable<ListColumn>
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((getTableName() == null) ? 0 : getTableName().hashCode());
-		result = prime * result + ((getColumnName() == null) ? 0 : getColumnName().hashCode());
+		result = prime * result + ((getColumnAlias() == null) ? 0 : getColumnAlias().hashCode());
 		return result;
 	}
 
@@ -197,10 +197,10 @@ public class ListColumn extends WapperDBColumn implements Comparable<ListColumn>
 				return false;
 		} else if (!getTableName().equals(other.getTableName()))
 			return false;
-		if (getColumnName() == null) {
-			if (other.getColumnName() != null)
+		if (getColumnAlias() == null) {
+			if (other.getColumnAlias() != null)
 				return false;
-		} else if (!getColumnName().equals(other.getColumnName()))
+		} else if (!getColumnAlias().equals(other.getColumnAlias()))
 			return false;
 		return true;
 	}

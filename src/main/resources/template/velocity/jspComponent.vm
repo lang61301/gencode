@@ -2,10 +2,9 @@
 #set($j = 0)#foreach( $column in $listColumns)#if( ${column.listRender.show} )#if($j > 0),#end${column.listRender.render}#set($j = $j + 1)#end#end
 #end
 
-#macro( ajax_pks_get_data $cols)
+#macro( ajax_pks_get_data $key)
 var objData = {};
-#foreach( $column in ${cols}) #if (${column.primary}) objData["${column.propertyName}"]=rowData["${column.propertyName}"]; #end 
-#end
+objData["${key.propertyName}"]=rowData["${key.columnAlias}"];
 #end
 
 #macro( ajax_pks_get_data_array $key $single )

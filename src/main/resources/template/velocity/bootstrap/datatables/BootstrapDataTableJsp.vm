@@ -196,7 +196,7 @@ $(document).ready(function(){
 			},
 			"data":function(d){
 				//修正传入后台的数据, 使其可以对应java对象;
-				me.pdd.Dataentity.plainfy_datatables(d);
+				me.pdd.DataTable.plainfy_datatables(d);
 				
 				#if(${entity.queryColumns.size()} > 0)
 				var f = me.pdd.Form.getForm($(".${entity.entityBeanName}formQuery"));
@@ -226,7 +226,7 @@ $(document).ready(function(){
 		//var id = $(this).closest("tr").find(".${groupCheckboxClassName}").val();
 		var row = $(this).closest("tr");
 		var rowData = table.row(row).data();
-		#ajax_pks_get_data(${entity.tableColumns})
+		#ajax_pks_get_data(${entity.key})
 		
 		$.blockUI({"baseZ":2001,
 			"message":"",
