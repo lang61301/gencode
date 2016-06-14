@@ -5,8 +5,10 @@
  */
 package me.paddingdun.gen.code.gui;
 
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.Callable;
 
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
@@ -16,6 +18,7 @@ import me.paddingdun.gen.code.data.message.Message;
 import me.paddingdun.gen.code.gui.component.ProjectListDialog;
 import me.paddingdun.gen.code.gui.perspective.IPerspective;
 import me.paddingdun.gen.code.gui.perspective.designer.DesignerPerspective;
+import me.paddingdun.gen.code.util.gui.TaskHelper;
 
 /**
  * 
@@ -133,8 +136,23 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void afterShow(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_afterShow
-      
-    	init_perspective();
+    	/**
+    	 * modify by 2016-06-17
+    	 * 增加修正在linux下无法完全展现窗体;
+    	 */
+    	TaskHelper.runInNonEDT(new Callable<Void>() {
+    		@Override
+    		public Void call() throws Exception {
+    			Thread.sleep(200);
+    			EventQueue.invokeLater(new Runnable() {
+    				@Override
+    				public void run() {
+    					init_perspective();
+    				}
+    			});
+    			return null;
+    		}
+    	});
     }//GEN-LAST:event_afterShow
     
     private IPerspective perspective = null;
