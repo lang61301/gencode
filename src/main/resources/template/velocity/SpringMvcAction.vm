@@ -11,7 +11,7 @@ package ${webActionFullPackageName};
  */
 @org.springframework.stereotype.Controller
 @org.springframework.web.bind.annotation.RequestMapping("${webActionRequestMapping}")
-public class ${springWebActionJavaClassName} {
+public class ${springWebActionJavaClassName} extends ${baseCtrlPackageName}.BaseCtrl {
 	
 	@org.springframework.beans.factory.annotation.Autowired
 	private ${serviceFullPackageName}.${sqlMapIServiceJavaClassName} service;

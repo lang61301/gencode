@@ -68,6 +68,15 @@ public class VelocityHelper {
 		return IConsant.MYBATIS_VM.equals(ConfigHelper.persistentVMDir());
 	}
 	
+	/**
+	 * 查询参数标记;
+	 * @param property
+	 * @return
+	 */
+	public static String queryParamMark(String property){
+		return isMybtis() ? "#{" + property +"}" : "#" + property + "#";
+	}
+	
 	public static String sqlMap(TableViewModel tableViewModel){
 		String s = rawTable(tableViewModel, sqlMapVMPath("SqlMap.vm"));
 		return s;

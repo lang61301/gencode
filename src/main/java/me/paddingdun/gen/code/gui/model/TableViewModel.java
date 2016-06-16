@@ -163,6 +163,9 @@ public class TableViewModel {
 	@Value1
 	private String ierrorCodePackageName;
 	
+	@Value1
+	private String baseCtrlPackageName;
+	
 	/**
 	 * jsp中datatables表格id;
 	 */
@@ -569,6 +572,14 @@ public class TableViewModel {
 
 	public void setSqlMapMarkUse(Integer sqlMapMarkUse) {
 		this.sqlMapMarkUse = sqlMapMarkUse;
+	}
+
+	public String getBaseCtrlPackageName() {
+		return baseCtrlPackageName;
+	}
+
+	public void setBaseCtrlPackageName(String baseCtrlPackageName) {
+		this.baseCtrlPackageName = baseCtrlPackageName;
 	}
 	
 }

@@ -2,76 +2,65 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="${daoFullPackageName}.${sqlMapIDaoJavaClassName}">
 #set($i = 0)#set($j = 0)#set($H='#')
-#**
-<!-- iterate 表示迭代, 迭代必须是集合list -->
-		<isNotNull property="citys" prepend="and">
-			(
-				<iterate conjunction="or" open="(" close=")" property="citys">
-					a.area_name like CONCAT(#citys[]# ,'%')
-                </iterate>
-             )                                                                                             
-		</isNotNull>
-**#
-
 <sql id="${queryPagingMethodPrefix}Condition">
-	<dynamic prepend="WHERE">
+	<trim prefix="WHERE" prefixOverrides="AND|OR">
 		#foreach( $column in ${entity.queryColumns})
 		#if($column.stringJavaType)
-		<isNotEmpty property="${column.propertyName}" prepend="and">
-		<![CDATA[ ${column.logicDes} ]]>
-		</isNotEmpty>
+		<if test="${column.propertyName} != null and '' neq ${column.propertyName}">
+		<![CDATA[ and ${column.logicDes} ]]>
+		</if>
 		#else
-		<isNotNull property="${column.propertyName}" prepend="and">
-		<![CDATA[ ${column.logicDes} ]]>
-		</isNotNull>
+		<if test="${column.propertyName} != null">
+		<![CDATA[ and ${column.logicDes} ]]>
+		</if>
 		#end
 		#end
-	</dynamic>
+	</trim>
 </sql>
 	
-<insert id="${saveMethodPrefix}" parameterType="${pojoFullPackageName}.${entity.entityBeanName}" #if(${entity.autoPrimary}) useGeneratedKeys="true" keyProperty="#foreach( $column in ${entity.tableColumns})#if(${column.autoIncrement})${column.propertyName}#end#end" #end>
+<insert id="${saveMethodPrefix}${entity.entityBeanName}" parameterType="${pojoFullPackageName}.${entity.entityBeanName}" #if(${entity.autoPrimary}) useGeneratedKeys="true" keyProperty="#foreach( $column in ${entity.tableColumns})#if(${column.autoIncrement})${column.propertyName}#end#end" #end>
 	<![CDATA[insert into ${entity.tableName}(#foreach( $column in ${entity.tableColumns}) #if(${column.autoIncrement} == false) #if ($i != 0), #end ${column.columnName} #set($i = $i + 1) #end #end ) values( #foreach( $column in ${entity.tableColumns}) #if ($j != 0), #end #if(${column.autoIncrement} == false) $H{${column.propertyName}} #set($j = $j + 1) #end #end )]]>
 </insert>
 
 #set($i = 0)
 #set($j = 0)
-<update id="${updateMethodPrefix}" parameterType="${pojoFullPackageName}.${entity.entityBeanName}">
+<update id="${updateMethodPrefix}${entity.entityBeanName}" parameterType="${pojoFullPackageName}.${entity.entityBeanName}">
 <![CDATA[update ${entity.tableName} set #foreach( $column in ${entity.tableColumns}) #if(${column.primary} == false and ${column.notInSetUpdateSql} == false) #if ($i != 0), #end ${column.columnName} = $H{${column.propertyName}} #set($i = $i + 1) #end #end  where #foreach( $column in ${entity.tableColumns}) #if (${column.primary}) #if ($j != 0)and #end ${column.columnName} = $H{${column.propertyName}} #set($j = $j + 1) #end #end]]>
 </update>
 
 #set($j=0)	
-<select id="${getMethodPrefix}" parameterType="java.util.Map" resultType="java.util.HashMap">
+<select id="${getMethodPrefix}${entity.entityBeanName}" parameterType="java.util.Map" resultType="java.util.HashMap">
 <![CDATA[select #foreach( $column in ${entity.tableColumns}) #if ($velocityCount != 1), #end ${column.columnName} as ${column.columnAlias} #end from ${entity.tableName} where #foreach( $column in ${entity.tableColumns}) #if (${column.primary}) #if ($j != 0)and #end ${column.columnName} = $H{${column.propertyName}} #set($j = $j + 1) #end #end]]> 
 </select>
 
 #set($j=0)
-<delete id="${deleteMethodPrefix}" parameterType="java.util.Map">
+<delete id="${deleteMethodPrefix}${entity.entityBeanName}" parameterType="java.util.Map">
 <![CDATA[delete from ${entity.tableName} where #foreach( $column in ${entity.tableColumns}) #if (${column.primary}) #if ($j != 0)and #end ${column.columnName} in ]]> 
-<iterate open="(" close=")" conjunction="," property="${column.propertyName}" >
-<![CDATA[$H{${column.propertyName}[]}]]>
-</iterate> #set($j = $j + 1) #end #end
+<foreach item="${column.propertyName}" collection="${column.propertyName}" open="(" close=")" separator=",">
+<![CDATA[$H{${column.propertyName}}]]>
+</foreach> #set($j = $j + 1) #end #end
 
 </delete>
 	
-<select id="${queryMethodPrefix}" parameterType="${pojoFullPackageName}.${entity.entityBeanName}" resultType="java.util.HashMap">
+<select id="${queryMethodPrefix}${entity.entityBeanName}" parameterType="${pojoFullPackageName}.${entity.entityBeanName}" resultType="java.util.HashMap">
 <![CDATA[${entity.querySql} ]]>
 <include refid="${queryPagingMethodPrefix}Condition"/>
 <![CDATA[ #foreach($sort in ${entity.sorts})#if ($velocityCount == 1)order by #end #if ($velocityCount != 1), #end t1.${sort} #end
 ]]>
 </select>
 
-<select id="${queryPagingMethodPrefix}" parameterType="java.util.Map" resultType="java.util.HashMap">
+<select id="${queryPagingMethodPrefix}${entity.entityBeanName}" parameterType="java.util.Map" resultType="java.util.HashMap">
 <![CDATA[${entity.querySql} ]]>
 	<include refid="${queryPagingMethodPrefix}Condition"/>
 <![CDATA[#foreach($sort in ${entity.sorts})#if ($velocityCount == 1)order by #end #if ($velocityCount != 1), #end t1.${sort} #end]]>
-	<isNotNull property="__start">
-		<isNotNull property="__length">
+	<if test = "__start !=null">
+		<if test = "__length !=null">
 			<![CDATA[limit #{__start}, #{__length}]]>
-		</isNotNull>
-	</isNotNull>
+		</if>
+	</if>
 </select>
 
-<select id="${getPagingCountPrefix}" parameterType="java.util.Map" resultType="java.lang.Integer">
+<select id="${getPagingCountPrefix}${entity.entityBeanName}" parameterType="java.util.Map" resultType="java.lang.Integer">
 <![CDATA[select count(1) from ( ${entity.querySql} ]]>
 <include refid="${queryPagingMethodPrefix}Condition"/>
 <![CDATA[ ) __t0 ]]>

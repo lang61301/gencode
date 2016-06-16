@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
-<% session.setAttribute("${jspContextPathVar}", request.getContextPath()); %>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -188,11 +189,16 @@ $(document).ready(function(){
 			"dataType": "json",
 			"type":"post",
 			"dataSrc":function(json){
-				json.recordsTotal = json.data.total;
-				json.recordsFiltered = json.data.total;
+				if(json.status == 0){
+					json.recordsTotal = json.data.total;
+					json.recordsFiltered = json.data.total;
 				
-				var data = json["data"]["data"];
-				return data;
+					var data = json["data"]["data"];
+					return data;
+				}else if(json.status < 0){
+					alert(json.msg);
+				}
+				return [];
 			},
 			"data":function(d){
 				//修正传入后台的数据, 使其可以对应java对象;

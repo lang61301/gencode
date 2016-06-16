@@ -9,6 +9,8 @@ import org.apache.commons.lang.StringUtils;
 
 import com.google.gson.annotations.Expose;
 
+import me.paddingdun.gen.code.util.VelocityHelper;
+
 /**
  * 查询字段;
  * @author paddingdun
@@ -85,7 +87,7 @@ public class QueryColumn implements IEntityProperty {
 		String cn = relColumnName;
 		if(StringUtils.isNotBlank(tableAlias))
 			cn = tableAlias + "." + relColumnName;
-			return MessageFormat.format(tmp, cn, "#" + propertyName + "#");
+			return MessageFormat.format(tmp, cn, VelocityHelper.queryParamMark(propertyName));
 	}
 
 	public String getPropertyName() {

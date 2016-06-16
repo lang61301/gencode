@@ -35,13 +35,13 @@ public class ReplaceProjectPackageName {
 		String dir_src	  = "D:\\home\\doc\\frame\\ssh2";
 //		String dir_src	  = "D:\\home\\doc\\frame\\ssh2";
 		
-		String dir_target = "D:\\home\\doc\\frame\\jiaobang";
+		String dir_target = "D:\\home\\doc\\frame\\DwyaneTest";
 		String charset 	  = "UTF-8";
 		
 		//需要替换的包名;
 		String mark_base_package	  = "me.paddingdun";
 		//替换后的包名;
-		String rpl_base_package 	  = "com.jiaobang";
+		String rpl_base_package 	  = "me.dwyane";
 		
 		//可以被替换的包名;
 		String rpl_mark_base_package  = mark_base_package.replaceAll(Pattern.quote("."), Matcher.quoteReplacement("\\") + Matcher.quoteReplacement("."));
