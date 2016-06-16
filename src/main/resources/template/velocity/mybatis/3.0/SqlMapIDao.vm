@@ -1,0 +1,50 @@
+/**
+ * 
+ */
+package ${daoFullPackageName};
+
+/**
+ * @author paddingdun
+ * ${entity.tableCommon} dao interface;
+ * @date ${date}
+ * @since 1.0
+ * @version 1.0
+ */
+@org.springframework.stereotype.Repository
+public interface ${sqlMapIDaoJavaClassName} {
+
+	/**
+	 * save pojo;
+	 */
+	public void ${saveMethodPrefix}${entity.entityBeanName}(${pojoFullPackageName}.${entity.entityBeanName} obj);
+	
+	/**
+	 * update pojo;
+	 */
+	public void ${updateMethodPrefix}${entity.entityBeanName}(${pojoFullPackageName}.${entity.entityBeanName} obj);
+	
+	/**
+	 * get pojo by pk;
+	 */
+	public java.util.Map<java.lang.String, java.lang.Object> ${getMethodPrefix}${entity.entityBeanName}(java.util.Map<java.lang.String, java.lang.Object> params);
+	
+	/**
+	 * delete pojo by pk;
+	 */
+	public void ${deleteMethodPrefix}${entity.entityBeanName}(java.util.Map<java.lang.String, java.lang.Object> params);
+	
+	/**
+	 * query pojo list;
+	 */
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> ${queryMethodPrefix}${entity.entityBeanName}(${pojoFullPackageName}.${entity.entityBeanName} obj);
+	
+	/**
+	 * query paging pojo list;
+	 */
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> ${queryPagingMethodPrefix}${entity.entityBeanName}(java.util.Map<java.lang.String, java.lang.Object> params);
+	
+	/**
+	 * get paging total rows;
+	 */
+	public java.lang.Integer ${getPagingCountPrefix}${entity.entityBeanName}(java.util.Map<java.lang.String, java.lang.Object> params);
+}

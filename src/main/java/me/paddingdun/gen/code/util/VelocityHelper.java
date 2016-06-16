@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 
+import me.paddingdun.gen.code.IConsant;
 import me.paddingdun.gen.code.gui.model.TableViewModel;
 
 /**
@@ -60,7 +61,11 @@ public class VelocityHelper {
 	}
 	
 	public static String sqlMapVMPath(String vm){
-		return "template/velocity/ibatis/2.0/" + vm;
+		return "template/velocity/" + ConfigHelper.persistentVMDir() + "/" + vm;
+	}
+	
+	public static boolean isMybtis(){
+		return IConsant.MYBATIS_VM.equals(ConfigHelper.persistentVMDir());
 	}
 	
 	public static String sqlMap(TableViewModel tableViewModel){

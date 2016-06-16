@@ -14,6 +14,7 @@ import javax.xml.bind.Unmarshaller;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import me.paddingdun.gen.code.IConsant;
 import me.paddingdun.gen.code.data.table2.Entity;
 import me.paddingdun.gen.code.user.TableConfig;
 
@@ -39,6 +40,16 @@ public class ConfigHelper {
 	
 	public static String cfgDir(){
 		return "project/pms";
+	}
+	
+	/**
+	 * 持久化模板参数;
+	 * ibatis/2.0
+	 * mybatis/3.0
+	 * @return
+	 */
+	public static String persistentVMDir(){
+		return IConsant.MYBATIS_VM;
 	}
 	
 	public static void genConfigXmlFile(Entity entity){

@@ -38,4 +38,8 @@ public interface IConsant {
 	 * 主键默认排序为最小
 	 */
 	Integer DEF_MIN_SEQ = 0;
+	
+	
+	String IBATIS_VM = "ibatis/2.0";
+	String MYBATIS_VM = "mybatis/3.0";
 }

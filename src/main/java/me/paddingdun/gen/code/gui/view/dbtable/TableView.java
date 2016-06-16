@@ -781,12 +781,14 @@ public class TableView extends AbstractView {
 						 model.getEntity().getEntityBeanName(),
 						 sqlMapIDaoContent);
 						
-						 String sqlMapDaoImplContent =
-						 VelocityHelper.sqlMapDaoImpl(model);
-						 FileHelper.genSqlMapDaoImplJavaFile(saveFile.getAbsolutePath(),
-						 model.getDaoImplFullPackageName(),
-						 model.getEntity().getEntityBeanName(),
-						 sqlMapDaoImplContent);
+						 if(!VelocityHelper.isMybtis()){
+							 String sqlMapDaoImplContent =
+							 VelocityHelper.sqlMapDaoImpl(model);
+							 FileHelper.genSqlMapDaoImplJavaFile(saveFile.getAbsolutePath(),
+							 model.getDaoImplFullPackageName(),
+							 model.getEntity().getEntityBeanName(),
+							 sqlMapDaoImplContent);
+						 }
 						
 						 String sqlMapIServiceContent =
 						 VelocityHelper.sqlMapIService(model);
