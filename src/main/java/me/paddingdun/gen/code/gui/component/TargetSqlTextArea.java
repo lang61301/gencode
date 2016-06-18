@@ -65,9 +65,9 @@ public class TargetSqlTextArea extends JTextArea{
 					/**
 					 * 输入表别名;
 					 */
-					String tas = JOptionPane.showInputDialog("请输入表别名(如:t1)", "t1");
+					String tas = JOptionPane.showInputDialog("请输入表别名(如:" + TableHelper2.TABLE_ALIAS_T1 + ")", TableHelper2.TABLE_ALIAS_T1);
 					if(StringUtils.isBlank(tas)){
-						tas = "t1";
+						tas = TableHelper2.TABLE_ALIAS_T1;
 					}else{
 						tas = tas.trim();
 					}

@@ -217,8 +217,6 @@ public class TableColumn extends WapperDBColumn implements IEntityProperty, Comp
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (!super.equals(obj))
-			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		TableColumn other = (TableColumn) obj;

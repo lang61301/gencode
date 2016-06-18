@@ -41,6 +41,11 @@ import me.paddingdun.gen.code.util.TypesHelper;
  * @version 2.0
  */
 public class TableHelper2 {
+	
+	/**
+	 * 表别名t1;
+	 */
+	public final static String TABLE_ALIAS_T1 = "t1";
 
 	/**
 	 * modify by 2016年4月8日

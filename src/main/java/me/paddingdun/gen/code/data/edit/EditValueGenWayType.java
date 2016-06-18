@@ -17,5 +17,6 @@ public enum EditValueGenWayType {
 	input,	 //用户输入;
 	time,	 //获取当前时间;
 	date,	 //获取当前日期;
+	uuid,	 //填入UUID值;
 	custom	 //自定义; 当为该属性时,获取"newCustom"或者"editCustom"的值;
 }

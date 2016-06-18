@@ -37,6 +37,7 @@ import me.paddingdun.gen.code.data.table2.IEntityProperty;
 import me.paddingdun.gen.code.data.table2.ListColumn;
 import me.paddingdun.gen.code.data.table2.QueryColumn;
 import me.paddingdun.gen.code.data.table2.TableColumn;
+import me.paddingdun.gen.code.db.TableHelper2;
 import me.paddingdun.gen.code.gui.model.TableViewModel;
 
 /**
@@ -174,10 +175,9 @@ public class ModelHelper {
 	 */
 	public static String defaultQueryColumnJson(IDBColumn column){
 		QueryColumn qp = new QueryColumn();
-		qp.setRelColumnName(column.getColumnName());
 		qp.setPropertyName(EntityHelper.col(column.getColumnAlias()));
 		qp.setJavaType(TypesHelper.map_types.get(column.getType()));
-		qp.setLogic("t1.{0} = {1}");
+		qp.setLogic(TableHelper2.TABLE_ALIAS_T1 + "." + column.getColumnName() + " = {0}");
 		List<QueryColumn> list = new ArrayList<QueryColumn>();
 		list.add(qp);
 		String result = GsonHelper.create(true, true).toJson(list);
@@ -200,9 +200,9 @@ public class ModelHelper {
 			evg.setNew1(EditValueGenWayType.date);
 			evg.setEdit(EditValueGenWayType.date);
 		}else if(column.isPrimary()){
+			evg.setEdit(EditValueGenWayType.nothing);
 			if(column.isAutoIncrement()){
 				evg.setNew1(EditValueGenWayType.nothing);
-				evg.setEdit(EditValueGenWayType.nothing);
 			}
 		}
 		String result = GsonHelper.create(true, true).toJson(evg);
@@ -479,7 +479,7 @@ public class ModelHelper {
 							list_eps.add(EntityHelper.from(qc));
 						}
 						
-						qc.setRelColumnName(lc.getColumnName());
+//						qc.setRelColumnName(lc.getColumnName());
 						
 						qc.setRenderWayType(lc.getQueryRenderWay());
 						qc.setSetMethod(EntityHelper.set(pn));

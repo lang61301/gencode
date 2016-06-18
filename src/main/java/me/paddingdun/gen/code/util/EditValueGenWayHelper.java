@@ -4,6 +4,7 @@
 package me.paddingdun.gen.code.util;
 
 import java.text.MessageFormat;
+import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -42,10 +43,10 @@ public class EditValueGenWayHelper {
 		return false;
 	}
 	
-	private static String javaCode(TableColumn jspColumn, boolean edit){
-		EditValueGenWay way = EditValueGenWayHelper.fromJson(jspColumn.getEditValueGenWayJson());
+	private static String javaCode(TableColumn tc, boolean edit){
+		EditValueGenWay way = EditValueGenWayHelper.fromJson(tc.getEditValueGenWayJson());
 		if(way != null){
-			return EditValueGenWayHelper.javaCode(edit? way.getEdit() : way.getNew1(), jspColumn.getSetMethod());
+			return EditValueGenWayHelper.javaCode(edit? way.getEdit() : way.getNew1(), tc.getSetMethod());
 		}
 		return null;
 	}
@@ -62,6 +63,8 @@ public class EditValueGenWayHelper {
 			return MessageFormat.format("{0}.{1}({2});", "obj", setMethod, "new java.sql.Timestamp(new java.util.Date().getTime())");
 		}else if( way == EditValueGenWayType.date ){
 			return MessageFormat.format("{0}.{1}({2});", "obj", setMethod, "new java.sql.Date(new java.util.Date().getTime())");
+		}else if( way == EditValueGenWayType.uuid ){
+			return MessageFormat.format("{0}.{1}({2});", "obj", setMethod, "java.util.UUID.randomUUID().toString()");
 		}else{
 			return null;
 		}

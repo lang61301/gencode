@@ -57,6 +57,7 @@ public class ConfigHelper {
 		Gson gson = GsonHelper.create();
 		try {
 			String name = entityCfgName(entity.getCat(), entity.getTableName());
+			System.out.println(gson.toJson(entity));
 			byte[] gzip = GZipHelper.gzip(gson.toJson(entity), charset);
 			
 			

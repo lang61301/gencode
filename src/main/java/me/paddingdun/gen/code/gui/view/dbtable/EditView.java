@@ -234,7 +234,7 @@ public class EditView extends AbstractView {
 								Entity entityBuffer = BufferHelper.readEntity(key);
 								
 								if(entityBuffer == null){
-									model.setQuerySql(TableHelper2.tableName2QuerySql(dbt, "t1"));
+									model.setQuerySql(TableHelper2.tableName2QuerySql(dbt, TableHelper2.TABLE_ALIAS_T1));
 									model.setDeleteSql(TableHelper2.tableName2DeleteSql(dbt));
 								}else{
 									model.setQuerySql(entityBuffer.getQuerySql());

@@ -28,6 +28,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.sun.tools.javac.util.Name.Table;
@@ -713,11 +714,11 @@ public class TableView extends AbstractView {
 					}
 					// 表列名;
 				} else if (3 == c) {
-					String ta = (String) cellValue;
-					tc.setTableAlias(ta);
+//					String ta = (String) cellValue;
+//					tc.setTableAlias(ta);
 				}
 				// 显示顺序;
-				else if (c == 4) {
+				else if (c == 3) {
 					Integer seq = (Integer) cellValue;
 					tc.setSeq(seq);
 					// 循环list,将>=seq列的值+1;
@@ -736,7 +737,7 @@ public class TableView extends AbstractView {
 						}
 					}
 					// 排序;
-				} else if (c == 5) {
+				} else if (c == 4) {
 					Integer order = (Integer) cellValue;
 					tc.setOrder(order);
 				}
@@ -855,7 +856,7 @@ public class TableView extends AbstractView {
 				String[][] heads = new String[][] { { "主键", null }, // 0
 						{ "自增长", null }, // 1
 						{ "列名称", null }, // 2
-						{ "别名", CellEditorType.String.name() }, // 3
+						{ "列别名", CellEditorType.String.name() }, // 3
 						{ "显示顺序", CellEditorType.Number.name() }, // 4
 						{ "列描述", null } // 5
 				};
@@ -907,7 +908,8 @@ public class TableView extends AbstractView {
 
 	/**
 	 * 更新列表字段table;
-	 * 
+	 * modify by 2016年6月18日
+	 * 取消"表别名", 由于无法解析表别名, 因此不让用户修改, 放在查询json字符串中用户自定义;
 	 * @param list
 	 */
 	private void updateListData(final List<ListColumn> list) {
@@ -916,9 +918,9 @@ public class TableView extends AbstractView {
 				String[] heads = { "主键", // 0
 						"列名称", // 1
 						"列别名", // 2
-						"表别名", // 3
-						"显示顺序", // 4
-						"排序字段", // 5
+//						"表别名", // 
+						"显示顺序", // 3
+						"排序字段", // 4
 						"列描述", };
 				Vector<String> v = new Vector<String>();
 				for (String h : heads) {
@@ -930,7 +932,12 @@ public class TableView extends AbstractView {
 					t.add(Boolean.valueOf(lc.isPrimary()));
 					t.add(lc.getColumnName());
 					t.add(lc.getColumnAlias());
-					t.add("t1");
+//					String ta = lc.getTableAlias();
+//					if(StringUtils.isNotBlank(ta)){
+//						t.add(ta);
+//					}else{
+//						t.add("t1");
+//					}
 					if (lc.getSeq() == null) {
 						if (lc.isPrimary())
 							t.add(IConsant.DEF_MIN_SEQ);
@@ -952,7 +959,8 @@ public class TableView extends AbstractView {
 					 */
 					@Override
 					public Class<?> getColumnClass(int columnIndex) {
-						if (columnIndex == 5)
+						if (columnIndex == 3
+								||columnIndex == 4)
 							return Integer.class;
 						Object value = getValueAt(0, columnIndex);
 						if (value != null)
@@ -962,7 +970,7 @@ public class TableView extends AbstractView {
 					}
 
 					public boolean isCellEditable(int row, int column) {
-						if (column == 0 || column == 3 || column == 4 || column == 5)
+						if (column == 0 || column == 3 || column == 4 )
 							return true;
 						return false;
 					}
