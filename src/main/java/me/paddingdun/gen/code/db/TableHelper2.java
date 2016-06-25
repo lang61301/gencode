@@ -170,6 +170,10 @@ public class TableHelper2 {
 					tc.setEditRenderShow(false);		
 				}
 				
+				if(tc.isPrimary()){
+					tc.setEditRenderShow(false);
+				}
+				
 				//设置验证json字符串;
 				tc.setEditValidateJson(ModelHelper.defaultEditValidateJson(dbc));
 				

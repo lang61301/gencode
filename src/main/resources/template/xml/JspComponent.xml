@@ -7,7 +7,7 @@
 	<snippet name="list_checkbox">
 	<![CDATA['{'"data":"{0}", "defaultContent":"",
 				 "render":function( data, type, row, meta )'{'
-				 	return ''<input type="checkbox" class="{1}" value="'' + data + ''">'';
+				 	return ''<div class="input_middle"><input type="checkbox" class="{1}" value="'' + data + ''"></div>'';
 				 }
 				}]]> 
 	</snippet>
@@ -22,7 +22,7 @@
 		}]]> 
 	</snippet>
 	<snippet name="list_snippet_checkbox_title">
-	<![CDATA[<input type="checkbox" class="{0}">]]> 
+	<![CDATA[<div class="input_middle"><input type="checkbox" class="{0}"></div>]]> 
 	</snippet>
 	<snippet name="list_snippet_operate">
 	<![CDATA['{'"data":null, "defaultContent":"",
