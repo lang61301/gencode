@@ -57,7 +57,7 @@ public class ${sqlMapServiceImplJavaClassName} implements ${serviceFullPackageNa
 		#pks_params(${table.columns} ${sqlMapMarkUse})
 		java.util.Map<java.lang.String, java.lang.Object> tmp = dao.${getMethodPrefix}${table.entityBeanName}(params);
 		if(tmp == null) return null;
-		com.google.gson.Gson gson = com.incito.zhcs.util.GsonHelper.create();
+		com.google.gson.Gson gson = ${gsonHelperPackageName}.GsonHelper.create();
 		${pojoFullPackageName}.${table.entityBeanName} result = gson.fromJson(gson.toJson(tmp), ${pojoFullPackageName}.${table.entityBeanName}.class);
 		return result;
 	}
