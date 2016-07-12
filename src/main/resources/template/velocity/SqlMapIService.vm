@@ -5,10 +5,11 @@
 package ${serviceFullPackageName};
 
 /**
- * autogen
  * @author paddingdun
  * ${table.tableCommon} service interface;
  * @date ${date}
+ * @version 1.0
+ * @since 1.0
  */
 public interface ${sqlMapIServiceJavaClassName} {
 	

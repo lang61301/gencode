@@ -5,10 +5,11 @@
 package ${serviceImplFullPackageName};
 
 /**
- * autogen
  * @author paddingdun
  * ${table.tableCommon} service impl;
  * @date ${date}
+ * @version 1.0
+ * @since 1.0
  */
 @org.springframework.stereotype.Service
 public class ${sqlMapServiceImplJavaClassName} implements ${serviceFullPackageName}.${sqlMapIServiceJavaClassName} {

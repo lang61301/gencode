@@ -4,10 +4,11 @@
 package ${pojoFullPackageName};
 
 /**
- * autogen
  * @author paddingdun
  * ${table.tableCommon}
  * @date ${date}
+ * @version 1.0
+ * @since 1.0
  */
 public class ${table.entityBeanName} {
 	

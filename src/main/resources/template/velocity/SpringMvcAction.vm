@@ -3,10 +3,11 @@ package ${webActionFullPackageName};
 
 
 /**
- * autogen
  * @author paddingdun
  * ${table.tableCommon} spring web controller;
  * @date ${date}
+ * @version 1.0
+ * @since 1.0
  */
 @org.springframework.stereotype.Controller
 @org.springframework.web.bind.annotation.RequestMapping("${webActionRequestMapping}")

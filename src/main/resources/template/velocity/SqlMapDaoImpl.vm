@@ -5,10 +5,11 @@ package ${daoImplFullPackageName};
 
 
 /**
- * autogen
  * @author paddingdun
  * ${table.tableCommon} dao impl;
  * @date ${date}
+ * @version 1.0
+ * @since 1.0
  */
 @org.springframework.stereotype.Repository
 public class ${sqlMapDaoImplJavaClassName} implements ${daoFullPackageName}.${sqlMapIDaoJavaClassName} {

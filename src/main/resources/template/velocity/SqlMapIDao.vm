@@ -4,10 +4,11 @@
 package ${daoFullPackageName};
 
 /**
- * autogen
  * @author paddingdun
  * ${table.tableCommon} dao interface;
  * @date ${date}
+ * @version 1.0
+ * @since 1.0
  */
 public interface ${sqlMapIDaoJavaClassName} {
 
