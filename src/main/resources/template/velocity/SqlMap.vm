@@ -15,7 +15,7 @@
              )                                                                                             
 		</isNotNull>
 **#
-<resultMap class="${pojoFullPackageName}.${table.entityBeanName}">
+<resultMap class="${pojoFullPackageName}.${table.entityBeanName}" id="${table.entityBeanName}">
 #foreach( $column in ${table.columns})
 	<result property="${column.propertyName}" column="${column.columnName}"/>
 #end
