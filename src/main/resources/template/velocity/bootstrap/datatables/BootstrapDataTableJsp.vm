@@ -218,7 +218,7 @@ $(document).ready(function(){
 	/**
 	 * 编辑记录;
 	 */
-	$("#${jspDatatableId}").on("click", ".glyphicon-edit", function(){
+	$("#${jspDatatableId}").on("click", ".icon_btn_edit", function(){
 		//var id = $(this).closest("tr").find(".${groupCheckboxClassName}").val();
 		var row = $(this).closest("tr");
 		var rowData = table.row(row).data();
@@ -250,7 +250,7 @@ $(document).ready(function(){
 	/**
 	 * 单个删除;
 	 */
-	$("#${jspDatatableId}").on("click", ".glyphicon-remove-circle", function(){
+	$("#${jspDatatableId}").on("click", ".icon_btn_del", function(){
 		if(confirm("确定要删除吗?")){
 			var row = $(this).closest("tr");
 			var rowData = table.row(row).data();
@@ -364,7 +364,8 @@ $(document).ready(function(){
 			{	success:function(d){
 					if(d.status == 0){
 						alert(d.msg);
-						table.ajax.reload();
+						$('#${webActionEditMethodName}Modal').modal("hide");
+						table.ajax.reload(null, false);
 					}else if(d.status < 0){
 						alert(d.msg);
 					}
@@ -372,7 +373,7 @@ $(document).ready(function(){
 				error:function(e){
 				},
 				complete:function(e){
-					$('#${webActionEditMethodName}Modal').modal("hide");
+					$('.${entity.entityBeanName}formEdit').data('bootstrapValidator').resetForm();
 					$.unblockUI();
 				}
 		});

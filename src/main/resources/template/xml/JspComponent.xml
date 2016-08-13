@@ -27,10 +27,10 @@
 	<snippet name="list_snippet_operate">
 	<![CDATA['{'"data":null, "defaultContent":"",
 		 "render":function( data, type, row, meta )'{'
-			return ''<button type="button" class="btn btn-default">''+
+			return ''<button type="button" class="btn btn-default icon_btn_edit">''+
 			  ''<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>''+
 			''</button>''+
-			''<button type="button" class="btn btn-default">''+
+			''<button type="button" class="btn btn-default icon_btn_del">''+
 			  ''<span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>''+
 			''</button>'';
 		 }
