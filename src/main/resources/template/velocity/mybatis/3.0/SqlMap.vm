@@ -31,11 +31,11 @@ update ${entity.tableName}
 #foreach( $column in ${entity.tableColumns}) #if(${column.primary} == false and ${column.notInSetUpdateSql} == false) 
 #if($column.stringJavaType) 
 <if test="${column.propertyName} != null and '' neq ${column.propertyName}">
-#if ($i != 0), #end ${column.columnName} = $H{${column.propertyName}} #set($i = $i + 1)
+${column.columnName} = $H{${column.propertyName}},
 </if>
 #else
 <if test="${column.propertyName} != null">
-#if ($i != 0), #end ${column.columnName} = $H{${column.propertyName}} #set($i = $i + 1)
+${column.columnName} = $H{${column.propertyName}},
 </if>
 #end
 #end
@@ -76,8 +76,8 @@ where #foreach( $column in ${entity.tableColumns}) #if (${column.primary}) #if (
 </select>
 
 <select id="${getPagingCountPrefix}${entity.entityBeanName}" parameterType="java.util.Map" resultType="java.lang.Integer">
-<![CDATA[select count(1) from ( ${entity.querySql} ]]>
+select count(1) from ( 
 <include refid="${queryPagingMethodPrefix}Condition"/>
-<![CDATA[ ) __t0 ]]>
+) __t0
 </select>
 </mapper>
