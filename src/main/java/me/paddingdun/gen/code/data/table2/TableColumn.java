@@ -28,6 +28,11 @@ public class TableColumn extends WapperDBColumn implements IEntityProperty, Comp
 	private String getMethod;		/** get method name **/
 	private String setMethod;		/** set method name **/
 	private String propertyTitle;	/** property description **/
+	
+	/**
+	 * 是否是字符串属性;
+	 */
+	private boolean stringJavaType;
 
 	public String getJavaType() {
 		return javaType;
@@ -202,6 +207,14 @@ public class TableColumn extends WapperDBColumn implements IEntityProperty, Comp
 	
 	public String getNewValueJavaCode(){
 		return EditValueGenWayHelper.javaCodeNew(this);
+	}
+	
+	public boolean isStringJavaType() {
+		return stringJavaType;
+	}
+
+	public void setStringJavaType(boolean stringJavaType) {
+		this.stringJavaType = stringJavaType;
 	}
 
 	@Override

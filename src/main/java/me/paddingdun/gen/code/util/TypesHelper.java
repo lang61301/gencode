@@ -118,6 +118,8 @@ public class TypesHelper {
 	public static boolean isStringType(String javaType){
 		if(String.class.getName().equals(javaType))
 			return true;
+		else if(Character.class.getName().equals(javaType))
+			return true;
 		else
 			return false;
 	}

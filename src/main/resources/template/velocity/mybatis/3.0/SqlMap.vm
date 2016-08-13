@@ -3,6 +3,7 @@
 <mapper namespace="${daoFullPackageName}.${sqlMapIDaoJavaClassName}">
 #set($i = 0)#set($j = 0)#set($H='#')
 <sql id="${queryPagingMethodPrefix}Condition">
+	${entity.querySql}
 	<trim prefix="WHERE" prefixOverrides="AND|OR">
 		#foreach( $column in ${entity.queryColumns})
 		#if($column.stringJavaType)
@@ -25,7 +26,23 @@
 #set($i = 0)
 #set($j = 0)
 <update id="${updateMethodPrefix}${entity.entityBeanName}" parameterType="${pojoFullPackageName}.${entity.entityBeanName}">
-<![CDATA[update ${entity.tableName} set #foreach( $column in ${entity.tableColumns}) #if(${column.primary} == false and ${column.notInSetUpdateSql} == false) #if ($i != 0), #end ${column.columnName} = $H{${column.propertyName}} #set($i = $i + 1) #end #end  where #foreach( $column in ${entity.tableColumns}) #if (${column.primary}) #if ($j != 0)and #end ${column.columnName} = $H{${column.propertyName}} #set($j = $j + 1) #end #end]]>
+update ${entity.tableName} 
+<set>
+#foreach( $column in ${entity.tableColumns}) #if(${column.primary} == false and ${column.notInSetUpdateSql} == false) 
+#if($column.stringJavaType) 
+<if test="${column.propertyName} != null and '' neq ${column.propertyName}">
+#if ($i != 0), #end ${column.columnName} = $H{${column.propertyName}} #set($i = $i + 1)
+</if>
+#else
+<if test="${column.propertyName} != null">
+#if ($i != 0), #end ${column.columnName} = $H{${column.propertyName}} #set($i = $i + 1)
+</if>
+#end
+#end
+#end
+</set> 
+where #foreach( $column in ${entity.tableColumns}) #if (${column.primary}) #if ($j != 0)and #end ${column.columnName} = $H{${column.propertyName}} #set($j = $j + 1) #end #end
+
 </update>
 
 #set($j=0)	
@@ -43,14 +60,12 @@
 </delete>
 	
 <select id="${queryMethodPrefix}${entity.entityBeanName}" parameterType="${pojoFullPackageName}.${entity.entityBeanName}" resultType="java.util.HashMap">
-<![CDATA[${entity.querySql} ]]>
 <include refid="${queryPagingMethodPrefix}Condition"/>
 <![CDATA[ #foreach($sort in ${entity.sorts})#if ($velocityCount == 1)order by #end #if ($velocityCount != 1), #end t1.${sort} #end
 ]]>
 </select>
 
 <select id="${queryPagingMethodPrefix}${entity.entityBeanName}" parameterType="java.util.Map" resultType="java.util.HashMap">
-<![CDATA[${entity.querySql} ]]>
 	<include refid="${queryPagingMethodPrefix}Condition"/>
 <![CDATA[#foreach($sort in ${entity.sorts})#if ($velocityCount == 1)order by #end #if ($velocityCount != 1), #end t1.${sort} #end]]>
 	<if test = "__start !=null">

@@ -393,6 +393,9 @@ public class ModelHelper {
 			tc.setGson(true);
 			//set edit render in jsp
 			tc.setEditRender(RenderHelper.createEditRender(tc, tc.isEditRenderShow()));
+
+			//set java type
+			tc.setStringJavaType(TypesHelper.isStringType(tc.getJavaType()));
 			
 			set_propertyNames.add(tc.getPropertyName());
 			
