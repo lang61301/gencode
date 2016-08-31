@@ -87,19 +87,26 @@ public class TableViewModel {
 	@Value1
 	private String pojoFullPackageName;
 	
+	
 	/**
 	 * 需要针对每个实体进行个性化设置;
+	 * 
+	 * modify by 2016-08-31
+	 * 删除该属性,由于该属性是和实体类对应的, 因此即使要配置也应该放在Entity中去进行配置;
 	 */
-	@Value1
-	private String cateGoryPackageName;
+//	@Value1
+//	private String categoryPackageName;
 	
 	/**
 	 * 需要针对每个实体页面进行个性化设置; 用于页面存放和页面映射路径位置;
-	 * 如果为null,将cateGoryPackageName获取最后一个包名称作为路径path;
-	 * 如果cateGoryPackageName为null或者空串表明放在根目录下;
+	 * 如果为null,将categoryPackageName获取最后一个包名称作为路径path;
+	 * 如果categoryPackageName为null或者空串表明放在根目录下;
+	 * 
+	 * modify by 2016-08-31
+	 * 删除该属性,由于该属性是和实体类对应的, 因此即使要配置也应该放在Entity中去进行配置;
 	 */
-	@Value1
-	private String cateGoryMappingPath;
+//	@Value1
+//	private String categoryMappingPath;
 
 	/**start dao**/
 	@Value1
@@ -118,17 +125,34 @@ public class TableViewModel {
 	private String webActionFullPackageName;
 	
 	/**
-	 * 如果该值为null,则使用 cateGoryMappingPath  + entityBeanName
-	 * @return
+	 * jsp存放的路径.
+	 * spring-mvc中
+	 * "org.springframework.web.servlet.view.InternalResourceViewResolver"
+	 * 的prefix属性之后,jsp文件之前中间的目录;
 	 */
 	@Value1
-	private String webActionRequestMapping;
+	private String jspWebinfAfterDir;
+	
+	/**
+	 * 如果该值为null,则使用 categoryMappingPath  + entityBeanName
+	 * @return
+	 * 
+	 * modify by 2016-08-31
+	 * 删除该属性,由于该属性是和实体类对应的, 因此即使要配置也应该放在Entity中去进行配置;
+	 * 由于在vm文件中被使用因此,提供getWebActionRequestMapping方法;
+	 */
+//	@Value1
+//	private String webActionRequestMapping;
 	
 	/**
 	 * 如果该值为null,则使用
+	 * 
+	 * modify by 2016-08-31
+	 * 删除该属性,由于该属性是和实体类对应的, 因此即使要配置也应该放在Entity中去进行配置;
+	 * 由于在vm文件中被使用因此,提供getSpringJspViewResolverMiddleFullPath方法;
 	 */
-	@Value1
-	private String springJspViewResolverMiddleFullPath;
+//	@Value1
+//	private String springJspViewResolverMiddleFullPath;
 	
 	@Value1(def="edit")
 	private String webActionEditMethodName;
@@ -245,17 +269,17 @@ public class TableViewModel {
 		this.groupCheckboxClassName = groupCheckboxClassName;
 	}
 
-	public String getCateGoryPackageName() {
-		return cateGoryPackageName;
-	}
+//	public String getCategoryPackageName() {
+//		return categoryPackageName;
+//	}
 
-	public void setCateGoryPackageName(String cateGoryPackageName) {
-		this.cateGoryPackageName = cateGoryPackageName;
-	}
+//	public void setCategoryPackageName(String categoryPackageName) {
+//		this.categoryPackageName = categoryPackageName;
+//	}
 
-	public void setCateGoryMappingPath(String cateGoryMappingPath) {
-		this.cateGoryMappingPath = cateGoryMappingPath;
-	}
+//	public void setCategoryMappingPath(String categoryMappingPath) {
+//		this.categoryMappingPath = categoryMappingPath;
+//	}
 
 	public String getWebActionEditMethodName() {
 		return webActionEditMethodName;
@@ -265,13 +289,13 @@ public class TableViewModel {
 		this.webActionEditMethodName = webActionEditMethodName;
 	}
 
-	public void setSpringJspViewResolverMiddleFullPath(String springJspViewResolverMiddleFullPath) {
-		this.springJspViewResolverMiddleFullPath = springJspViewResolverMiddleFullPath;
-	}
+//	public void setSpringJspViewResolverMiddleFullPath(String springJspViewResolverMiddleFullPath) {
+//		this.springJspViewResolverMiddleFullPath = springJspViewResolverMiddleFullPath;
+//	}
 
-	public void setWebActionRequestMapping(String webActionRequestMapping) {
-		this.webActionRequestMapping = webActionRequestMapping;
-	}
+//	public void setWebActionRequestMapping(String webActionRequestMapping) {
+//		this.webActionRequestMapping = webActionRequestMapping;
+//	}
 
 	public String getBusinessExceptionPackageName() {
 		return businessExceptionPackageName;
@@ -488,28 +512,28 @@ public class TableViewModel {
 	
 	public String getPojoFullPackageName() {
 		if(pojoFullPackageName == null){
-			pojoFullPackageName = PathHelper.concatPackageName(basePackageName, pojoPackageName, getCateGoryPackageName());
+			pojoFullPackageName = PathHelper.concatPackageName(basePackageName, pojoPackageName, null);
 		}
 		return pojoFullPackageName;
 	}
 	
 	public String getDaoFullPackageName() {
 		if(daoFullPackageName == null){
-			daoFullPackageName = PathHelper.concatPackageName(basePackageName, daoPackageName, getCateGoryPackageName());
+			daoFullPackageName = PathHelper.concatPackageName(basePackageName, daoPackageName, null);
 		}
 		return daoFullPackageName;
 	}
 	
 	public String getServiceFullPackageName() {
 		if(serviceFullPackageName == null){
-			serviceFullPackageName = PathHelper.concatPackageName(basePackageName, servicePackageName, getCateGoryPackageName());
+			serviceFullPackageName = PathHelper.concatPackageName(basePackageName, servicePackageName, null);
 		}
 		return serviceFullPackageName;
 	}
 	
 	public String getWebActionFullPackageName() {
 		if(webActionFullPackageName == null){
-			webActionFullPackageName = PathHelper.concatPackageName(basePackageName, webActionPackageName, getCateGoryPackageName());
+			webActionFullPackageName = PathHelper.concatPackageName(basePackageName, webActionPackageName, null);
 		}
 		return webActionFullPackageName;
 	}
@@ -528,18 +552,15 @@ public class TableViewModel {
 		return serviceImplFullPackageName;
 	}
 	
-	public String getCateGoryMappingPath() {
-		if(cateGoryMappingPath == null){
-			cateGoryMappingPath = PathHelper.lastPackageName(this.getCateGoryPackageName());
-		}
-		return cateGoryMappingPath;
-	}
+//	public String getCategoryMappingPath() {
+//		if(categoryMappingPath == null){
+//			categoryMappingPath = PathHelper.lastPackageName(this.getCategoryPackageName());
+//		}
+//		return categoryMappingPath;
+//	}
 	
 	public String getWebActionRequestMapping() {
-		if(webActionRequestMapping == null){
-			webActionRequestMapping = PathHelper.concatMappingPath(this.getCateGoryMappingPath(), entity.getEntityBeanName());
-		}
-		return webActionRequestMapping;
+		return PathHelper.concatMappingPath(null, entity.getEntityBeanName());
 	}
 	
 	/**
@@ -548,14 +569,15 @@ public class TableViewModel {
 	 * @return
 	 */
 	public String getJspWebinfAfterDir() {
-		return this.getCateGoryMappingPath();
+		return jspWebinfAfterDir;
 	}
 	
+	public void setJspWebinfAfterDir(String jspWebinfAfterDir) {
+		this.jspWebinfAfterDir = jspWebinfAfterDir;
+	}
+
 	public String getSpringJspViewResolverMiddleFullPath() {
-		if(springJspViewResolverMiddleFullPath == null){
-			springJspViewResolverMiddleFullPath = PathHelper.concatJspMiddlePath(getJspWebinfAfterDir(), entity.getEntityBeanName());
-		}
-		return springJspViewResolverMiddleFullPath;
+		return PathHelper.concatJspMiddlePath(getJspWebinfAfterDir(), entity.getEntityBeanName());
 	}
 
 	public Entity getEntity() {

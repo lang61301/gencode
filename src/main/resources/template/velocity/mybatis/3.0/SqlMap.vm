@@ -5,22 +5,23 @@
 <sql id="${queryPagingMethodPrefix}Condition">
 	${entity.querySql}
 	<trim prefix="WHERE" prefixOverrides="AND|OR">
-		#foreach( $column in ${entity.queryColumns})
-		#if($column.stringJavaType)
-		<if test="${column.propertyName} != null and '' neq ${column.propertyName}">
+		#foreach( $column in ${entity.queryColumns})#if($column.stringJavaType)<if test="${column.propertyName} != null and '' neq ${column.propertyName}">
 		<![CDATA[ and ${column.logicDes} ]]>
 		</if>
-		#else
-		<if test="${column.propertyName} != null">
+		#else<if test="${column.propertyName} != null">
 		<![CDATA[ and ${column.logicDes} ]]>
 		</if>
 		#end
-		#end
-	</trim>
+		#end</trim>
 </sql>
 	
 <insert id="${saveMethodPrefix}${entity.entityBeanName}" parameterType="${pojoFullPackageName}.${entity.entityBeanName}" #if(${entity.autoPrimary}) useGeneratedKeys="true" keyProperty="#foreach( $column in ${entity.tableColumns})#if(${column.autoIncrement})${column.propertyName}#end#end" #end>
-	<![CDATA[insert into ${entity.tableName}(#foreach( $column in ${entity.tableColumns}) #if(${column.autoIncrement} == false) #if ($i != 0), #end ${column.columnName} #set($i = $i + 1) #end #end ) values( #foreach( $column in ${entity.tableColumns}) #if ($j != 0), #end #if(${column.autoIncrement} == false) $H{${column.propertyName}} #set($j = $j + 1) #end #end )]]>
+	<![CDATA[insert into ${entity.tableName}(#foreach( $column in ${entity.tableColumns}) #if(${column.autoIncrement} == false) 
+	
+	#if ($i != 0), #end ${column.columnName} #set($i = $i + 1) #end #end ) 
+	 values( #foreach( $column in ${entity.tableColumns})
+	 
+	#if ($j != 0), #end #if(${column.autoIncrement} == false) $H{${column.propertyName}} #set($j = $j + 1) #end #end )]]>
 </insert>
 
 #set($i = 0)
@@ -47,7 +48,12 @@ where #foreach( $column in ${entity.tableColumns}) #if (${column.primary}) #if (
 
 #set($j=0)	
 <select id="${getMethodPrefix}${entity.entityBeanName}" parameterType="java.util.Map" resultType="java.util.HashMap">
-<![CDATA[select #foreach( $column in ${entity.tableColumns}) #if ($velocityCount != 1), #end ${column.columnName} as ${column.columnAlias} #end from ${entity.tableName} where #foreach( $column in ${entity.tableColumns}) #if (${column.primary}) #if ($j != 0)and #end ${column.columnName} = $H{${column.propertyName}} #set($j = $j + 1) #end #end]]> 
+<![CDATA[select #foreach( $column in ${entity.tableColumns}) 
+
+#if ($velocityCount != 1), #end ${column.columnName} as ${column.columnAlias} #end 
+ 
+ from ${entity.tableName} 
+  where #foreach( $column in ${entity.tableColumns}) #if (${column.primary}) #if ($j != 0)and #end ${column.columnName} = $H{${column.propertyName}} #set($j = $j + 1) #end #end]]> 
 </select>
 
 #set($j=0)

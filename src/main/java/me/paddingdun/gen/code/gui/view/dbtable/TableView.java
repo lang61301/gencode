@@ -56,6 +56,7 @@ import me.paddingdun.gen.code.gui.view.AbstractView;
 import me.paddingdun.gen.code.util.CollectionHelper;
 import me.paddingdun.gen.code.util.FileHelper;
 import me.paddingdun.gen.code.util.ModelHelper;
+import me.paddingdun.gen.code.util.SQLHelper;
 import me.paddingdun.gen.code.util.SpringHelper;
 import me.paddingdun.gen.code.util.VelocityHelper;
 import me.paddingdun.gen.code.util.gui.TaskHelper;
@@ -748,7 +749,7 @@ public class TableView extends AbstractView {
 	private void btnGenActionPerformed(java.awt.event.ActionEvent evt) {
 		if (model != null) {
 			fileChooser.setFileSelectionMode(JFileChooser.SAVE_DIALOG | JFileChooser.DIRECTORIES_ONLY);
-			fileChooser.setCurrentDirectory(new File("d:\\Home\\Desktop"));
+			fileChooser.setCurrentDirectory(new File("/home/company-pc/桌面"));
 			int opt = fileChooser.showSaveDialog(null);
 			// 保存;
 			if (JFileChooser.APPROVE_OPTION == opt) {
@@ -1129,7 +1130,7 @@ public class TableView extends AbstractView {
 				public Void call() throws Exception {
 					final List<ListColumn> list_lc = TableHelper2.listColumn(evModel);
 					model.getEntity().setRawListColumns(list_lc);
-					model.getEntity().setQuerySql(evModel.getQuerySql());
+					model.getEntity().setQuerySql(SQLHelper.format(evModel.getQuerySql()));
 
 					updateListData(list_lc);
 					return null;
