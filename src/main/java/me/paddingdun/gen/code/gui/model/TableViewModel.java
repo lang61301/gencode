@@ -221,6 +221,15 @@ public class TableViewModel {
 	@Value1(def="_ctx")
 	private String jspContextPathVar;
 	
+	/**
+	 * add by 2016-09-01
+	 * 全局配置是否生成完整的jsp页面;
+	 * true:完整的jsp页面;
+	 * false:没有<html>和<body>和css和javascript引用;
+	 */
+	@Value1(def="true")
+	private Boolean jspFulled;
+	
 	public String getDefaultCollectionHelperPackageName() {
 		return defaultCollectionHelperPackageName;
 	}
@@ -602,6 +611,14 @@ public class TableViewModel {
 
 	public void setBaseCtrlPackageName(String baseCtrlPackageName) {
 		this.baseCtrlPackageName = baseCtrlPackageName;
+	}
+
+	public Boolean getJspFulled() {
+		return jspFulled;
+	}
+
+	public void setJspFulled(Boolean jspFulled) {
+		this.jspFulled = jspFulled;
 	}
 	
 }
