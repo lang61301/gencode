@@ -109,7 +109,10 @@ public class TableColumn extends WapperDBColumn implements IEntityProperty, Comp
 	/**
 	 * 判断该字段是否可以存在updatesql中的set语句中;
 	 * @return
+	 * 备注:
+	 * 在mybatis3.0中,由于先判断update属性是否为null或者空字符串,因此不需要改判断;
 	 */
+	@Deprecated
 	public boolean isNotInSetUpdateSql(){
 		return EditValueGenWayHelper.isNotInSetUpdateSql(editValueGenWayJson);
 	}

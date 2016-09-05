@@ -29,7 +29,7 @@
 <update id="${updateMethodPrefix}${entity.entityBeanName}" parameterType="${pojoFullPackageName}.${entity.entityBeanName}">
 update ${entity.tableName} 
 <set>
-#foreach( $column in ${entity.tableColumns}) #if(${column.primary} == false and ${column.notInSetUpdateSql} == false) 
+#foreach( $column in ${entity.tableColumns}) #if(${column.primary} == false) 
 #if($column.stringJavaType) 
 <if test="${column.propertyName} != null and '' neq ${column.propertyName}">
 ${column.columnName} = $H{${column.propertyName}},
