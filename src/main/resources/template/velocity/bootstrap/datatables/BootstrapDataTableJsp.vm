@@ -57,6 +57,9 @@
 <div class="col-xs-6 col-sm-3">.col-xs-6 .col-sm-3</div>
 </div>
 *#
+<ol class="breadcrumb">
+  <li class="active">${entity.tableCommon}</li>
+</ol>
 #if( ${entity.queryFormRender.show} )
 <div class="row">
 	<div class="col-sm-12 col-md-12">
@@ -86,7 +89,7 @@
 </div>
 #end
   <div class="row">
-    <div class="col-sm-12 col-md-12 main">
+    <div class="col-sm-12 col-md-12">
     <div class="panel panel-default">
 	  <!-- Default panel contents -->
 	  <shiro:hasPermission name="">
