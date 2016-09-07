@@ -89,6 +89,7 @@
     <div class="col-sm-12 col-md-12 main">
     <div class="panel panel-default">
 	  <!-- Default panel contents -->
+	  <shiro:hasPermission name="">
 	  <div class="panel-heading">
 	  	   <div class="row">
 	    		<div class="col-lg-2">
@@ -97,6 +98,7 @@
 	    		</div>
 	    	</div>
 	  </div>
+	  </shiro:hasPermission>
         <table id="${jspDatatableId}" class="table table-striped table-bordered" style="margin-top:0px !important" width="100%" cellspacing="0">
 		 <thead>
 				 <tr>
@@ -155,7 +157,9 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <shiro:hasPermission name="">
         <button type="button" class="btn btn-primary ${entity.entityBeanName}save">保存</button>
+        </shiro:hasPermission>
       </div>
     </div>
     </form>
@@ -167,6 +171,11 @@
 #end
 <script type="text/javascript">
 $(document).ready(function(){
+	var edit = false;
+	<shiro:hasPermission name="">
+	edit = true;
+	</shiro:hasPermission>
+	
 	/**
 	 * datatables表格数据;
 	 */
@@ -196,10 +205,10 @@ $(document).ready(function(){
 			},
 			"data":function(d){
 				//修正传入后台的数据, 使其可以对应java对象;
-				me.pdd.DataTable.plainfy_datatables(d);
+				me.DataTable.plainfy_datatables(d);
 				
 				#if(${entity.queryColumns.size()} > 0)
-				var f = me.pdd.Form.getForm($(".${entity.entityBeanName}formQuery"));
+				var f = me.Form.getForm($(".${entity.entityBeanName}formQuery"));
 				$.extend(d, f);
 				#end
 			},
@@ -237,7 +246,7 @@ $(document).ready(function(){
 			dataType:"json", success:function(d){
 				if(d.status == 0){
 					var o = d.data;
-					me.pdd.Form.setForm($(".${entity.entityBeanName}formEdit"), o);
+					me.Form.setForm($(".${entity.entityBeanName}formEdit"), o);
 					
 					//清除验证错误;
 					$('.${entity.entityBeanName}formEdit').data('bootstrapValidator').resetForm();
@@ -322,7 +331,7 @@ $(document).ready(function(){
 	 */
 	$(".${entity.entityBeanName}new").on("click", function(){
 		//清空form;
-		me.pdd.Form.clearForm($(".${entity.entityBeanName}formEdit"));
+		me.Form.clearForm($(".${entity.entityBeanName}formEdit"));
 		//清除验证错误;
 		$('.${entity.entityBeanName}formEdit').data('bootstrapValidator').resetForm();
 		$('#${webActionEditMethodName}Modal').modal({
@@ -390,7 +399,7 @@ $(document).ready(function(){
 	 * 查询重置;
 	 */
 	$(".${entity.entityBeanName}reset").on("click", function(){
-		me.pdd.Form.clearForm($(".${entity.entityBeanName}formQuery"));
+		me.Form.clearForm($(".${entity.entityBeanName}formQuery"));
 	});
 	
 	/**
