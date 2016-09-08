@@ -15,5 +15,6 @@ public enum ModelValueCategory {
 
 	Default,
 	Column,
-	List
+	List,
+	Entity;
 }

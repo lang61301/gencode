@@ -20,6 +20,9 @@ public class ${springWebActionJavaClassName} extends ${baseCtrlPackageName}.Base
 	 * 主页;
 	 * @return
 	 */
+	#if(${entity.showPermission})
+	@org.apache.shiro.authz.annotation.RequiresPermissions("${entity.queryPermission}")
+	#end
 	@org.springframework.web.bind.annotation.RequestMapping
 	public String index() {
 		return "${springJspViewResolverMiddleFullPath}";
@@ -54,6 +57,9 @@ public class ${springWebActionJavaClassName} extends ${baseCtrlPackageName}.Base
 	 * @param obj
 	 * @return
 	 */
+	#if(${entity.showPermission})
+	@org.apache.shiro.authz.annotation.RequiresPermissions("${entity.editPermission}")
+	#end
 	@org.springframework.web.bind.annotation.RequestMapping(value="/${webActionEditMethodName}", method = org.springframework.web.bind.annotation.RequestMethod.POST)
 	@org.springframework.web.bind.annotation.ResponseBody
 	public ${jsonResultPackageName}.JsonResult2<java.lang.Void> ${webActionEditMethodName}(${pojoFullPackageName}.${entity.entityBeanName} obj) {
@@ -102,6 +108,9 @@ public class ${springWebActionJavaClassName} extends ${baseCtrlPackageName}.Base
 	/**
 	 * delete object
 	 */
+	#if(${entity.showPermission})
+	@org.apache.shiro.authz.annotation.RequiresPermissions("${entity.editPermission}")
+	#end
 	@org.springframework.web.bind.annotation.RequestMapping(value="/${deleteMethodPrefix}")
 	@org.springframework.web.bind.annotation.ResponseBody
 	public ${jsonResultPackageName}.JsonResult2<java.lang.Void> ${deleteMethodPrefix}(#pks_web_argument_array(${entity.tableColumns})) {

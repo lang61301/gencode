@@ -5,6 +5,10 @@ package me.paddingdun.gen.code.gui.model;
 
 import java.util.List;
 
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import me.paddingdun.gen.code.data.table.IDBColumn;
 import me.paddingdun.gen.code.data.tabletree.IDBTable;
 
@@ -16,6 +20,8 @@ import me.paddingdun.gen.code.data.tabletree.IDBTable;
  * @since 2.0
  * @version 2.0
  */
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class EditViewModel {
 
 	/**
@@ -37,6 +43,24 @@ public class EditViewModel {
 	 * 表格生成的dbtable;
 	 */
 	private IDBTable dbTable;
+	
+	/**
+	 * 是否生成权限语句;
+	 * add by 2016年9月8日
+	 */
+	private boolean showPermission;
+	
+	/**
+	 * 查询权限常量;
+	 * add by 2016年9月8日
+	 */
+	private String queryPermission;
+	
+	/**
+	 * 编辑权限常量;
+	 * add by 2016年9月8日
+	 */
+	private String editPermission;
 
 	public String getQuerySql() {
 		return querySql;
@@ -68,5 +92,29 @@ public class EditViewModel {
 
 	public void setDbTable(IDBTable dbTable) {
 		this.dbTable = dbTable;
+	}
+
+	public boolean isShowPermission() {
+		return showPermission;
+	}
+
+	public void setShowPermission(boolean showPermission) {
+		this.showPermission = showPermission;
+	}
+
+	public String getQueryPermission() {
+		return queryPermission;
+	}
+
+	public void setQueryPermission(String queryPermission) {
+		this.queryPermission = queryPermission;
+	}
+
+	public String getEditPermission() {
+		return editPermission;
+	}
+
+	public void setEditPermission(String editPermission) {
+		this.editPermission = editPermission;
 	}
 }

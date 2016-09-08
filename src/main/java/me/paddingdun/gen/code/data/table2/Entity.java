@@ -87,6 +87,29 @@ public class Entity extends WapperDBTable {
 	 */
 	private TableColumn key;
 	
+	
+	/** start 配置参数 start **/
+	
+	/**
+	 * 是否生成权限语句;
+	 * add by 2016年9月8日
+	 */
+	private boolean showPermission;
+	
+	/**
+	 * 查询权限常量;
+	 * add by 2016年9月8日
+	 */
+	private String queryPermission;
+	
+	/**
+	 * 编辑权限常量;
+	 * add by 2016年9月8日
+	 */
+	private String editPermission;
+	
+	/** end 配置参数 end **/
+	
 	public Entity(IDBTable dbTable){
 		super(dbTable);
 	}
@@ -199,5 +222,29 @@ public class Entity extends WapperDBTable {
 
 	public void setKey(TableColumn key) {
 		this.key = key;
+	}
+
+	public boolean isShowPermission() {
+		return showPermission;
+	}
+
+	public void setShowPermission(boolean showPermission) {
+		this.showPermission = showPermission;
+	}
+
+	public String getQueryPermission() {
+		return queryPermission;
+	}
+
+	public void setQueryPermission(String queryPermission) {
+		this.queryPermission = queryPermission;
+	}
+
+	public String getEditPermission() {
+		return editPermission;
+	}
+
+	public void setEditPermission(String editPermission) {
+		this.editPermission = editPermission;
 	}
 }

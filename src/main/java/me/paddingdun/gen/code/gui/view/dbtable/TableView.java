@@ -762,8 +762,13 @@ public class TableView extends AbstractView {
 						// ModelHelper.complexGetAndSimpleSet(TableView.this,
 						// model);
 
+						//获取EditViewModel;
+						EditView ev = perspective.getEditView(); 
+						ev.setModelValue();
+						EditViewModel evm = ev.getModel();
+						
 						// 加工model;ok
-						ModelHelper.processTableViewModel(model);
+						ModelHelper.processTableViewModel(model, evm);
 
 						String javaContent = VelocityHelper.entityBean(model);
 						// System.out.println(javaContent);

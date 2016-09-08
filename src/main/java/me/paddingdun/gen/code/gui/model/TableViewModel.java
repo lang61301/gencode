@@ -18,6 +18,11 @@ import me.paddingdun.gen.code.util.PathHelper;
  * @author paddingdun
  *
  * 2016年4月29日
+ * 
+ * 备注:
+ * 2016-09-08
+ * 由于这里是配置参数入口, 因此将很多Entity参数配置也放在此类中,
+ * 但是并不表示该参数就是公共配置, 而是Entity配置.
  * @since 1.0
  * @version 2.0
  */

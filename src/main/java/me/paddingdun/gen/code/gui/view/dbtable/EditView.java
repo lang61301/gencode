@@ -6,24 +6,35 @@ package me.paddingdun.gen.code.gui.view.dbtable;
 import java.awt.EventQueue;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Locale.Category;
 import java.util.concurrent.Callable;
 
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 import org.apache.commons.lang.StringUtils;
 
 import layout.TableLayout;
 import me.paddingdun.gen.code.data.message.Message;
+import me.paddingdun.gen.code.data.option.ModelValue;
+import me.paddingdun.gen.code.data.option.ModelValueCategory;
+import me.paddingdun.gen.code.data.option.Option;
 import me.paddingdun.gen.code.data.table.IDBColumn;
 import me.paddingdun.gen.code.data.table2.Entity;
 import me.paddingdun.gen.code.data.tabletree.DBTable;
 import me.paddingdun.gen.code.db.TableHelper2;
 import me.paddingdun.gen.code.gui.component.TargetSqlTextArea;
 import me.paddingdun.gen.code.gui.model.EditViewModel;
+import me.paddingdun.gen.code.gui.model.OptionComboBoxModel;
+import me.paddingdun.gen.code.gui.model.TableViewModel;
 import me.paddingdun.gen.code.gui.perspective.designer.DesignerPerspective;
 import me.paddingdun.gen.code.gui.view.AbstractView;
 import me.paddingdun.gen.code.util.BufferHelper;
+import me.paddingdun.gen.code.util.CollectionHelper;
 import me.paddingdun.gen.code.util.ConfigHelper;
+import me.paddingdun.gen.code.util.ModelHelper;
+import me.paddingdun.gen.code.util.SpringHelper;
 import me.paddingdun.gen.code.util.gui.TaskHelper;
 
 /**
@@ -52,7 +63,7 @@ public class EditView extends AbstractView {
     }
     
     private void initModel(){
-    	model = new EditViewModel();
+    	model = SpringHelper.getBean(EditViewModel.class);
     }
     
     /**
@@ -60,10 +71,10 @@ public class EditView extends AbstractView {
      * @param evt
      */
     private void qBtnOkActionPerformed(java.awt.event.ActionEvent evt){
-    	String querySql = queryArea.getText();
-    	List<IDBColumn> dbcolumns = TableHelper2.parseQuerySql(model.getDbTable().getCat(), querySql);
+    	String querySql1 = querySql.getText();
+    	List<IDBColumn> dbcolumns = TableHelper2.parseQuerySql(model.getDbTable().getCat(), querySql1);
     	
-    	model.setQuerySql(querySql);
+    	model.setQuerySql(querySql1);
     	model.setQuerySqlDBColumnList(dbcolumns);
     	
     	Message m = new Message(DesignerPerspective.MESSAGE_CLICK_QUERY_SQL_BUTTON);
@@ -73,7 +84,7 @@ public class EditView extends AbstractView {
     }
     
     private void qBtnClearActionPerformed(java.awt.event.ActionEvent evt){
-    	queryArea.setText("");
+    	querySql.setText("");
     }
 
     /**
@@ -104,8 +115,8 @@ public class EditView extends AbstractView {
             }
         });
         
-        queryArea = new TargetSqlTextArea();
-        queryArea.addAfterDragDropListener(new TargetSqlTextArea.AfterD2DAction() {
+        querySql = new TargetSqlTextArea();
+        querySql.addAfterDragDropListener(new TargetSqlTextArea.AfterD2DAction() {
 			
 			@Override
 			public void process(DBTable dbTable) {
@@ -117,7 +128,7 @@ public class EditView extends AbstractView {
 				}
 			}
 		});
-        javax.swing.JScrollPane spqa = new javax.swing.JScrollPane(queryArea);
+        javax.swing.JScrollPane spqa = new javax.swing.JScrollPane(querySql);
         
         tableId = new javax.swing.JTextField();
         
@@ -130,8 +141,16 @@ public class EditView extends AbstractView {
         getArea	   = new TargetSqlTextArea();
         javax.swing.JScrollPane spga = new javax.swing.JScrollPane(getArea);
         
-        deleteArea = new TargetSqlTextArea();
-        javax.swing.JScrollPane spda = new javax.swing.JScrollPane(deleteArea);
+        deleteSql = new TargetSqlTextArea();
+        javax.swing.JScrollPane spda = new javax.swing.JScrollPane(deleteSql);
+        
+        showPermission.addElement(CollectionHelper.option("是", Boolean.TRUE));
+        showPermission.addElement(CollectionHelper.option("否", Boolean.FALSE));
+        jcombo_showPermission = new JComboBox<Option<Boolean>>();
+        jcombo_showPermission.setModel(showPermission);
+        
+        queryPermission = new JTextField();
+        editPermission = new JTextField();
         
         TableLayout tableLayout_rootSp = new TableLayout();
         double border = 2;			      		
@@ -140,7 +159,7 @@ public class EditView extends AbstractView {
         tableLayout_rootSp.setColumn(col_size);
         double h0 = 26;
         double h1 = 120;
-        tableLayout_rootSp.setRow(new double[]{border, h0, h1, h0, h0, h1, border});
+        tableLayout_rootSp.setRow(new double[]{border, h0, h1, h0, h0, h1, h0, h0, border});
         rootP.setLayout(tableLayout_rootSp);
         
         int lastColumn = col_size.length - 2;
@@ -173,6 +192,16 @@ public class EditView extends AbstractView {
         rootP.add(new JLabel("删除sql"), MessageFormat.format("1,{0},2,{0}", row));
         row++;
         rootP.add(spda, MessageFormat.format("1,{0}," +lastColumn+ ",{0}", row));
+        
+        row++;
+        rootP.add(new JLabel("权限常量配置"), MessageFormat.format("1,{0},2,{0}", row));
+        row++;
+        rootP.add(new JLabel("是否生成权限代码"), MessageFormat.format("1,{0},2,{0}", row));
+        rootP.add(jcombo_showPermission, MessageFormat.format("3,{0},3,{0}", row));
+        rootP.add(new JLabel("查询"), MessageFormat.format("4,{0},4,{0}", row));
+        rootP.add(queryPermission, MessageFormat.format("5,{0},6,{0}", row));
+        rootP.add(new JLabel("编辑"), MessageFormat.format("7,{0},7,{0}", row));
+        rootP.add(editPermission, MessageFormat.format("8,{0}," + lastColumn+ ",{0}", row));
 
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
@@ -202,14 +231,29 @@ public class EditView extends AbstractView {
     // Variables declaration - do not modify                     
     private javax.swing.JScrollPane rootSp;
     private javax.swing.JPanel rootP;
-    private TargetSqlTextArea queryArea;
+    
+    @ModelValue(category = ModelValueCategory.Entity, valueGetFuncName = "getText", valueSetFuncName = "setText")
+    private TargetSqlTextArea querySql;
+    @ModelValue(category = ModelValueCategory.Entity, valueGetFuncName = "getText", valueSetFuncName = "setText")
+    private TargetSqlTextArea deleteSql;
     private javax.swing.JButton qBtnOk;
     private javax.swing.JButton qBtnClear;
     private javax.swing.JTextField tableId;
     private TargetSqlTextArea insertArea;
     private TargetSqlTextArea updateArea;
-    private TargetSqlTextArea deleteArea;
     private TargetSqlTextArea getArea;
+    
+    /**
+     * 是否写入权限;
+     */
+    private javax.swing.JComboBox<Option<Boolean>> jcombo_showPermission;
+    @ModelValue(category= ModelValueCategory.Entity)
+    private OptionComboBoxModel<Boolean> showPermission = new OptionComboBoxModel<Boolean>();
+    
+    @ModelValue(category = ModelValueCategory.Entity, valueGetFuncName = "getText", valueSetFuncName = "setText")
+    private javax.swing.JTextField queryPermission;
+    @ModelValue(category = ModelValueCategory.Entity, valueGetFuncName = "getText", valueSetFuncName = "setText")
+    private javax.swing.JTextField editPermission;
     
     // End of variables declaration                   
 
@@ -231,21 +275,26 @@ public class EditView extends AbstractView {
 								model.setDbTable(dbt);
 								//缓存;
 								String key = ConfigHelper.entityCfgName(dbt.getCat(), dbt.getTableName());
-								Entity entityBuffer = BufferHelper.readEntity(key);
+								Entity eb = BufferHelper.readEntity(key);
 								
-								if(entityBuffer == null){
+								if(eb == null){
 									model.setQuerySql(TableHelper2.tableName2QuerySql(dbt, TableHelper2.TABLE_ALIAS_T1));
 									model.setDeleteSql(TableHelper2.tableName2DeleteSql(dbt));
+									model.setShowPermission(false);
+									model.setQueryPermission("");
+									model.setEditPermission("");
 								}else{
-									model.setQuerySql(entityBuffer.getQuerySql());
+									model.setQuerySql(eb.getQuerySql());
+									model.setDeleteSql(eb.getDeleteSql());
+									model.setShowPermission(eb.isShowPermission());
+									model.setQueryPermission(eb.getQueryPermission());
+									model.setEditPermission(eb.getEditPermission());
 								}
 								
 								EventQueue.invokeLater(new Runnable() {
 									@Override
 									public void run() {
-										queryArea.setText(model.getQuerySql());
-										
-										deleteArea.setText(model.getDeleteSql());
+										setUIValue();
 									}
 								});
 								
@@ -258,5 +307,17 @@ public class EditView extends AbstractView {
 				 * 点击查询按钮sql事件接收;
 				 */
 				}
+	}
+	
+	public void setModelValue(){
+		ModelHelper.complexGetAndSimpleSet(this, model, ModelValueCategory.Entity);
+	}
+	
+	public void setUIValue(){
+		ModelHelper.simpleGetAndComplexSet(model, this, ModelValueCategory.Entity);
+	}
+
+	public EditViewModel getModel() {
+		return model;
 	}
 }

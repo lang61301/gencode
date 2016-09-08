@@ -38,6 +38,7 @@ import me.paddingdun.gen.code.data.table2.ListColumn;
 import me.paddingdun.gen.code.data.table2.QueryColumn;
 import me.paddingdun.gen.code.data.table2.TableColumn;
 import me.paddingdun.gen.code.db.TableHelper2;
+import me.paddingdun.gen.code.gui.model.EditViewModel;
 import me.paddingdun.gen.code.gui.model.TableViewModel;
 
 /**
@@ -354,10 +355,16 @@ public class ModelHelper {
 	 * 加工model,准备数据;
 	 * @param tableViewModel
 	 */
-	public static void processTableViewModel(TableViewModel tableViewModel){
+	public static void processTableViewModel(TableViewModel tableViewModel, EditViewModel editViewModel){
 		Entity entity = tableViewModel.getEntity();
 		//1:设置实体javabean名称;
 		entity.setEntityBeanName(EntityHelper.table(entity.getTableName()));
+		
+		//设置Entity参数;
+		entity.setShowPermission(editViewModel.isShowPermission());
+		entity.setQueryPermission(editViewModel.getQueryPermission());
+		entity.setEditPermission(editViewModel.getEditPermission());
+		
 		
 		//javabean 属性集合;
 		Set<String> set_propertyNames = new HashSet<String>();
