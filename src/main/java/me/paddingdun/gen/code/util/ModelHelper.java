@@ -181,7 +181,7 @@ public class ModelHelper {
 		qp.setLogic(TableHelper2.TABLE_ALIAS_T1 + "." + column.getColumnName() + " = {0}");
 		List<QueryColumn> list = new ArrayList<QueryColumn>();
 		list.add(qp);
-		String result = GsonHelper.create(true, true).toJson(list);
+		String result = GsonHelper.create(true, true, true).toJson(list);
 		return result;
 	}
 	

@@ -69,6 +69,30 @@
 			</div>
 		</div>]]> 
 	</snippet>
+	<snippet name="edit_dropdownlist">
+	<![CDATA[<div class="form-group">
+			<label for="{0}" class="col-sm-2 control-label">
+			{1}
+			</label>
+			<div class="col-sm-10">
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="{0}" name="{0}"> 
+					</label>
+				</div>
+			</div>
+		</div>]]> 
+	</snippet>
+	<snippet name="edit_datepicker">
+	<![CDATA[<div class="form-group">
+			<label for="{0}" class="col-sm-2 control-label">
+			{1}
+			</label>
+			<div class="col-sm-10">
+				<input type="text" reayOnly class="form-control" id="{0}" name="{0}" onClick="WdatePicker('{'maxDate:''#F'{'$dp.$D(\''{0}\'')}''})">
+			</div>
+		</div>]]> 
+	</snippet>
 	
 	
 	<snippet name="query_input">

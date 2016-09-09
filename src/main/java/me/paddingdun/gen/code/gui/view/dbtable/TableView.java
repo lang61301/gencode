@@ -8,6 +8,8 @@ package me.paddingdun.gen.code.gui.view.dbtable;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -54,6 +56,7 @@ import me.paddingdun.gen.code.gui.model.TableViewModel;
 import me.paddingdun.gen.code.gui.perspective.designer.DesignerPerspective;
 import me.paddingdun.gen.code.gui.view.AbstractView;
 import me.paddingdun.gen.code.util.CollectionHelper;
+import me.paddingdun.gen.code.util.EditValueGenWayHelper;
 import me.paddingdun.gen.code.util.FileHelper;
 import me.paddingdun.gen.code.util.ModelHelper;
 import me.paddingdun.gen.code.util.SQLHelper;
@@ -312,7 +315,7 @@ public class TableView extends AbstractView {
 		TableLayout tableLayout_ptba = new TableLayout();
 		double border = 2; // 0 1 2 3 4 5 6
 		tableLayout_ptba.setColumn(new double[] { border, 50, 50, 80, -1, 50, 70, border });
-		tableLayout_ptba.setRow(new double[] { border, 30, 30, 30, 130, 130, border });
+		tableLayout_ptba.setRow(new double[] { border, 30, 30, 30, 130, 130, 130, border });
 		ptba.setLayout(tableLayout_ptba);
 
 		queryRenderShow.addElement(CollectionHelper.option("是", Boolean.TRUE));
@@ -335,6 +338,18 @@ public class TableView extends AbstractView {
 
 		CollectionHelper.renderWayOption(editRenderWay, "edit");
 		jcombo_editRenderWay.setModel(editRenderWay);
+		jcombo_editRenderWay.addItemListener(new ItemListener() {
+			
+			@SuppressWarnings("unchecked")
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) { //这里控制为只处理一次   
+					Option<Integer> o = (Option<Integer>)e.getItem();
+					String s = EditValueGenWayHelper.toEditValueShowWayJson(o.getValue());
+					editRenderWayJson.setText(s);
+				}   
+			}
+		});
 
 		int row = 1;
 		ptba.add(new JLabel("字段标题"), MessageFormat.format("1,{0},2,{0}", row));
@@ -347,6 +362,13 @@ public class TableView extends AbstractView {
 		row++;
 		ptba.add(jLabel15, MessageFormat.format("1,{0},2,{0}", row));
 		ptba.add(jcombo_editRenderWay, MessageFormat.format("3,{0},4,{0}", row));
+		row++;
+		ptba.add(new JLabel("编辑中显示方式"), MessageFormat.format("1,{0},2,{0}", row));
+		editRenderWayJson = new javax.swing.JTextArea(1, 10);
+		editRenderWayJson.setLineWrap(true);
+		editRenderWayJson.setWrapStyleWord(true);
+		javax.swing.JScrollPane erwjj = new javax.swing.JScrollPane(editRenderWayJson);
+		ptba.add(erwjj, MessageFormat.format("3,{0},6,{0}", row));
 		row++;
 		JLabel j1 = new JLabel("填值方式");
 		j1.setToolTipText("<html>\n" + "<table border=\"1\">\n" + "<tr>\n" + "	<th>参数</th>\n" + "	<th>描述</th>\n"
@@ -1093,6 +1115,8 @@ public class TableView extends AbstractView {
 	@ModelValue(category = ModelValueCategory.Column, valueGetFuncName = "getText", valueSetFuncName = "setText")
 	private javax.swing.JTextArea editValidateJson;
 	// End of variables declaration//GEN-END:variables
+	
+	private javax.swing.JTextArea editRenderWayJson;
 
 	/*
 	 * (non-Javadoc)

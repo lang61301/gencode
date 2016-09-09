@@ -36,10 +36,14 @@ import me.paddingdun.gen.code.util.gson.IEntityPropertyTypeAdapter;
 public class GsonHelper {
 	
 	public static Gson create(){
-		return create(false, false);
+		return create(false, false, false);
+	}
+	
+	public static Gson create(boolean excludeFieldsWithoutExposeAnnotation, boolean prettyShow){
+		return create(excludeFieldsWithoutExposeAnnotation, prettyShow, false);
 	}
 
-	public static Gson create(boolean excludeFieldsWithoutExposeAnnotation, boolean prettyShow){
+	public static Gson create(boolean excludeFieldsWithoutExposeAnnotation, boolean prettyShow, boolean disableHtmlEscaping){
 		GsonBuilder gb = new GsonBuilder();
 		gb.registerTypeAdapter(java.util.Date.class, new Date1TypeAdapter())
 		.registerTypeAdapter(java.sql.Date.class, new Date2TypeAdapter())
@@ -51,6 +55,9 @@ public class GsonHelper {
 		.registerTypeAdapter(IDBTable.class, new IDBTableTypeAdapter());
 		if(excludeFieldsWithoutExposeAnnotation){
 			gb.excludeFieldsWithoutExposeAnnotation();
+		}
+		if(disableHtmlEscaping){
+			gb.disableHtmlEscaping();
 		}
 		if(prettyShow){
 			gb.setPrettyPrinting();
