@@ -63,7 +63,7 @@
 #if( ${entity.queryFormRender.show} )
 <div class="row">
 	<div class="col-sm-12 col-md-12">
-		<div class="panel1 panel-default">
+		<div class="panel panel-default">
 		<div class="panel-heading">查询</div>
 		<div class="panel-body">
 	    	<div class="container-fluid">
@@ -90,7 +90,7 @@
 #end
   <div class="row">
     <div class="col-sm-12 col-md-12">
-    <div class="panel panel-default">
+    <div class="panel1 panel-default">
 	  <!-- Default panel contents -->
 	  #if(${entity.showPermission})<shiro:hasPermission name="${entity.editPermission}">#end
 	  
