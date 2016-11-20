@@ -516,7 +516,7 @@ public class ModelHelper {
 		entity.setEditJSValidtors(editJSValidtors(list_tc));
 		
 		//7:设置formRender
-		entity.setQueryFormRender(RenderHelper.createQueryFormRender(queryColumns, tableViewModel.getJspQueryColumnCount(), true));
+		entity.setQueryFormRender(RenderHelper.createQueryFormRender(entity.getEntityBeanName(), queryColumns, tableViewModel.getJspQueryColumnCount(), true));
 		
 		//8:生成配置文件;
 		ConfigHelper.genConfigXmlFile(tableViewModel.getEntity());

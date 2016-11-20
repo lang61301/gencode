@@ -44,10 +44,10 @@
 	
 	<snippet name="edit_input">
 	<![CDATA[<div class="form-group">
-			<label for="{0}" class="col-sm-2 control-label">
+			<label for="{0}" class="col-sm-3 control-label">
 			{1}
 			</label>
-			<div class="col-sm-10">
+			<div class="col-sm-9">
 				<input type="text" class="form-control input-sm" id="{0}" name="{0}">
 			</div>
 		</div>]]> 
@@ -125,7 +125,15 @@
 			</div>
 		</div>]]> 
 	</snippet>
-	
+	<snippet name="query_button">
+	<![CDATA[
+	<div class="col-sm-2"></div>
+	<div class="col-sm-2">
+			<a class="btn btn-primary {0}query btn-sm" href="javascript:;" role="button">查询</a>
+			<a class="btn btn-default {0}reset btn-sm" href="javascript:;" role="button">重置</a>
+		</div>
+	]]> 
+	</snippet>
 	
 	<snippet name="query_form">
 	<![CDATA[<div class="form-group">

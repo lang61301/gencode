@@ -225,7 +225,7 @@ public class RenderHelper {
 	 * @param show
 	 * @return
 	 */
-	public static Render createQueryFormRender(List<QueryColumn> queryColumns, Integer showColumnCount, boolean show){
+	public static Render createQueryFormRender(String entityName, List<QueryColumn> queryColumns, Integer showColumnCount, boolean show){
 		Render render = new Render();
 		render.setShow(show);
 		if(!show) return render;
@@ -262,6 +262,11 @@ public class RenderHelper {
 			}
 			Render r = createQueryRender(qc, colWidth, qc.getRenderWayType());
 			l.add(r.getRender());
+			
+			if(i == (size -1)){
+				//添加查询按钮;
+				l.add(JspSnippetHelper.getSnippet("query_button", entityName));
+			}
 		}
 		
 		StringBuilder sb = new StringBuilder();

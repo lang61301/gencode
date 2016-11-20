@@ -63,9 +63,9 @@
 #if( ${entity.queryFormRender.show} )
 <div class="row">
 	<div class="col-sm-12 col-md-12">
-		<div class="panel panel-default">
-		<div class="panel-heading">查询</div>
-		<div class="panel-body">
+		<div class="panel1 panel-default">
+		#**<div class="panel-heading">查询</div>*#
+		<div class="panel-body" style="padding-bottom:0">
 	    	<div class="container-fluid">
 			    <div class="row">
 					<div class="col-md-12">
@@ -76,6 +76,7 @@
 				</div>
 	      	</div>
 		</div>
+		#**
 		<div class="panel-footer">
 	    	<div class="row">
 	    		<div class="col-lg-offset-10 col-lg-2">
@@ -83,7 +84,7 @@
 	    			<a class="btn btn-default btn-sm ${entity.entityBeanName}reset" href="#" role="button">重置</a>
 	    		</div>
 	    	</div>
-		</div>
+		</div>*#
 		</div>
 	</div>
 </div>
@@ -130,7 +131,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title">编辑</h4>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" style="padding-bottom:0">
         <div class="container-fluid">
 		    <div class="row">
 				<div class="col-md-12">
