@@ -33,7 +33,7 @@
 			if(!!!edit) 
 				return _s;
 			
-			_s += ''<button type="button" title="删除" class="btn btn-default btn-sm icon_btn_del">''+
+			_s += ''<button type="button" title="删除" class="btn btn-default btn-xs icon_btn_del">''+
 			  ''<span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>''+
 			''</button>'';
 			return _s;
