@@ -79,8 +79,8 @@
 		<div class="panel-footer">
 	    	<div class="row">
 	    		<div class="col-lg-offset-10 col-lg-2">
-	    			<a class="btn btn-primary ${entity.entityBeanName}query" href="#" role="button">查询</a>
-	    			<a class="btn btn-default ${entity.entityBeanName}reset" href="#" role="button">重置</a>
+	    			<a class="btn btn-primary btn-sm ${entity.entityBeanName}query" href="#" role="button">查询</a>
+	    			<a class="btn btn-default btn-sm ${entity.entityBeanName}reset" href="#" role="button">重置</a>
 	    		</div>
 	    	</div>
 		</div>
@@ -97,8 +97,8 @@
 	  <div class="panel-heading">
 	  	   <div class="row">
 	    		<div class="col-lg-2">
-	    			<a class="btn btn-primary ${entity.entityBeanName}new" role="button">新增</a>
-	    			<a class="btn btn-primary ${entity.entityBeanName}delete" role="button">删除</a>
+	    			<a class="btn btn-primary btn-sm ${entity.entityBeanName}new" role="button">新增</a>
+	    			<a class="btn btn-primary btn-sm ${entity.entityBeanName}delete" role="button">删除</a>
 	    		</div>
 	    	</div>
 	  </div>
@@ -161,10 +161,10 @@
       	</div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">取消</button>
         #if(${entity.showPermission})<shiro:hasPermission name="${entity.editPermission}">#end
         
-        <button type="button" class="btn btn-primary ${entity.entityBeanName}save">保存</button>
+        <button type="button" class="btn btn-primary ${entity.entityBeanName}save btn-sm">保存</button>
         #if(${entity.showPermission})</shiro:hasPermission>#end
         
       </div>
