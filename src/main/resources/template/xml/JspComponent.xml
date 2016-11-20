@@ -48,7 +48,7 @@
 			{1}
 			</label>
 			<div class="col-sm-10">
-				<input type="text" class="form-control" id="{0}" name="{0}">
+				<input type="text" class="form-control input-sm" id="{0}" name="{0}">
 			</div>
 		</div>]]> 
 	</snippet>
@@ -100,7 +100,7 @@
 		{0}
 		</label>
 		<div class="col-sm-{1}">
-			<input type="text" class="form-control" name="{2}">
+			<input type="text" class="form-control input-sm" name="{2}">
 		</div>]]> 
 	</snippet>
 	<snippet name="query_dropdownlist">
