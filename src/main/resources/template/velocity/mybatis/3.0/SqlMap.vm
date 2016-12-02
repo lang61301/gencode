@@ -16,12 +16,29 @@
 </sql>
 	
 <insert id="${saveMethodPrefix}${entity.entityBeanName}" parameterType="${pojoFullPackageName}.${entity.entityBeanName}" #if(${entity.autoPrimary}) useGeneratedKeys="true" keyProperty="#foreach( $column in ${entity.tableColumns})#if(${column.autoIncrement})${column.propertyName}#end#end" #end>
-	<![CDATA[insert into ${entity.tableName}(#foreach( $column in ${entity.tableColumns}) #if(${column.autoIncrement} == false) 
-	
-	#if ($i != 0), #end ${column.columnName} #set($i = $i + 1) #end #end ) 
-	 values( #foreach( $column in ${entity.tableColumns})
-	 
-	#if ($j != 0), #end #if(${column.autoIncrement} == false) $H{${column.propertyName}} #set($j = $j + 1) #end #end )]]>
+	insert into ${entity.tableName}(
+	<trim suffix="" suffixOverrides=","> 
+	#foreach( $column in ${entity.tableColumns}) #if(${column.autoIncrement} == false) 
+#if($column.stringJavaType)   <if test="${column.propertyName} != null and '' neq ${column.propertyName}">
+	${column.columnName},
+	</if>
+#else   <if test="${column.propertyName} != null">
+	${column.columnName},
+	</if>
+	#end #end #end </trim> 
+	)
+	 values( 
+	 <trim suffix="" suffixOverrides=",">
+	 #foreach( $column in ${entity.tableColumns})
+	#if(${column.autoIncrement} == false) #if($column.stringJavaType) 
+<if test="${column.propertyName} != null and '' neq ${column.propertyName}">
+	$H{${column.propertyName}},
+	</if> 
+#else <if test="${column.propertyName} != null">
+	$H{${column.propertyName}},
+	</if>
+#end #end #end </trim>
+	)
 </insert>
 
 #set($i = 0)
