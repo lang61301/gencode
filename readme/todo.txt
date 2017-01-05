@@ -1,4 +1,7 @@
 备忘
+2017-01-05
+dao中新增一个find方法, 比如: select * from t where <if> a = ? </if> <if> and b = ? </if>
+
 2016-09-07
 参数配置问题,现在不管是实体参数还是全局参数都放在TableViewModel中,这样是不好的.因为Entity个性化参数配置是跟随Entity的,全局统一;
 要将Entity的参数放在实体中;
