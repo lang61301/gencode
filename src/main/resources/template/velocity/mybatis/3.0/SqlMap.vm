@@ -88,6 +88,28 @@ where #foreach( $column in ${entity.tableColumns}) #if (${column.primary}) #if (
 ]]>
 </select>
 
+<select id="find${entity.entityBeanName}" parameterType="${pojoFullPackageName}.${entity.entityBeanName}" resultType="java.util.HashMap">
+select 
+<trim suffix="" suffixOverrides=",">
+#foreach( $column in ${entity.tableColumns}) #if(${column.autoIncrement} == false) 
+	t1.${column.columnName} as ${column.columnAlias},
+#end #end
+</trim>
+from t1.${entity.tableName}
+<trim prefix="where" prefixOverrides="and|or">
+#foreach( $column in ${entity.tableColumns}) #if(${column.primary} == false) 
+#if($column.stringJavaType) 
+<if test="${column.propertyName} != null and '' neq ${column.propertyName}">
+and t1.${column.columnName} = $H{${column.propertyName}}
+</if>
+#else
+<if test="${column.propertyName} != null">
+and t1.${column.columnName} = $H{${column.propertyName}}
+</if>
+#end #end #end
+</trim>
+</select>
+
 <select id="${queryPagingMethodPrefix}${entity.entityBeanName}" parameterType="java.util.Map" resultType="java.util.HashMap">
 	<include refid="${queryPagingMethodPrefix}Condition"/>
 <![CDATA[#foreach($sort in ${entity.sorts})#if ($velocityCount == 1)order by #end #if ($velocityCount != 1), #end t1.${sort} #end]]>
