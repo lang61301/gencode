@@ -73,6 +73,15 @@ public class ${sqlMapServiceImplJavaClassName} implements ${serviceFullPackageNa
 	}
 	
 	/**
+	 * find pojo list;
+	 */
+	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> find${entity.entityBeanName}(${pojoFullPackageName}.${entity.entityBeanName} obj){
+		java.util.List<java.util.Map<String, Object>> result = this.dao.find${entity.entityBeanName}(obj);
+		return result;
+	}
+	
+	/**
 	 * query pojo list;
 	 */
 	@Override

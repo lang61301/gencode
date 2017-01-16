@@ -35,6 +35,11 @@ public interface ${sqlMapIServiceJavaClassName} {
 	public void ${deleteMethodPrefix}${entity.entityBeanName}(#pks_argument_array(${entity.tableColumns}));
 	
 	/**
+	 * find pojo list;
+	 */
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> find${entity.entityBeanName}(${pojoFullPackageName}.${entity.entityBeanName} obj);
+	
+	/**
 	 * query pojo list;
 	 */
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> ${queryMethodPrefix}${entity.entityBeanName}(${pojoFullPackageName}.${entity.entityBeanName} obj);
