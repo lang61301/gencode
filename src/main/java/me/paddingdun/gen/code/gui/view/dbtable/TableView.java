@@ -771,7 +771,7 @@ public class TableView extends AbstractView {
 	private void btnGenActionPerformed(java.awt.event.ActionEvent evt) {
 		if (model != null) {
 			fileChooser.setFileSelectionMode(JFileChooser.SAVE_DIALOG | JFileChooser.DIRECTORIES_ONLY);
-			fileChooser.setCurrentDirectory(new File("/home/company-pc/桌面"));
+			fileChooser.setCurrentDirectory(new File("D:\\home\\Desktop"));
 			int opt = fileChooser.showSaveDialog(null);
 			// 保存;
 			if (JFileChooser.APPROVE_OPTION == opt) {
@@ -792,6 +792,11 @@ public class TableView extends AbstractView {
 						// 加工model;ok
 						ModelHelper.processTableViewModel(model, evm);
 
+						String baseJavaContent = VelocityHelper.baseEntityBean(model);
+						// System.out.println(javaContent);
+						FileHelper.genBasePojoJavaFile(saveFile.getAbsolutePath(), model.getPojoFullPackageName(),
+								model.getEntity().getEntityBeanName(), baseJavaContent);
+						
 						String javaContent = VelocityHelper.entityBean(model);
 						// System.out.println(javaContent);
 						FileHelper.genPojoJavaFile(saveFile.getAbsolutePath(), model.getPojoFullPackageName(),
@@ -803,9 +808,16 @@ public class TableView extends AbstractView {
 						 sqlMapContent);
 						// System.out.println(sqlMapContent);
 						
+						 String sqlMapBaseIDaoContent =
+								 VelocityHelper.sqlMapIDao(model);
+								 FileHelper.genSqlMapIDaoJavaFile(saveFile.getAbsolutePath(),
+								 model.getDaoFullPackageName(),
+								 model.getEntity().getEntityBeanName(),
+								 sqlMapBaseIDaoContent);
+								 
 						 String sqlMapIDaoContent =
-						 VelocityHelper.sqlMapIDao(model);
-						 FileHelper.genSqlMapIDaoJavaFile(saveFile.getAbsolutePath(),
+						 VelocityHelper.sqlMapBaseDao(model);
+						 FileHelper.genSqlMapBaseDaoJavaFile(saveFile.getAbsolutePath(),
 						 model.getDaoFullPackageName(),
 						 model.getEntity().getEntityBeanName(),
 						 sqlMapIDaoContent);
@@ -818,6 +830,13 @@ public class TableView extends AbstractView {
 							 model.getEntity().getEntityBeanName(),
 							 sqlMapDaoImplContent);
 						 }
+						 
+						 String sqlMapBaseServiceContent =
+								 VelocityHelper.sqlMapBaseService(model);
+								 FileHelper.genSqlMapBaseServiceJavaFile(saveFile.getAbsolutePath(),
+								 model.getServiceFullPackageName(),
+								 model.getEntity().getEntityBeanName(),
+								 sqlMapBaseServiceContent);
 						
 						 String sqlMapIServiceContent =
 						 VelocityHelper.sqlMapIService(model);
@@ -826,6 +845,14 @@ public class TableView extends AbstractView {
 						 model.getEntity().getEntityBeanName(),
 						 sqlMapIServiceContent);
 						
+						 
+						 String sqlMapBaseServiceImplContent =
+								 VelocityHelper.sqlMapBaseServiceImpl(model);
+								 FileHelper.genSqlMapBaseServiceImplJavaFile(saveFile.getAbsolutePath(),
+								 model.getServiceImplFullPackageName(),
+								 model.getEntity().getEntityBeanName(),
+								 sqlMapBaseServiceImplContent);
+								 
 						 String sqlMapServiceImplContent =
 						 VelocityHelper.sqlMapServiceImpl(model);
 						 FileHelper.genSqlMapServiceImplJavaFile(saveFile.getAbsolutePath(),

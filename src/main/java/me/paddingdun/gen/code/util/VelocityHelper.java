@@ -60,6 +60,12 @@ public class VelocityHelper {
 		return af;
 	}
 	
+	public static String baseEntityBean(TableViewModel tableViewModel){
+		String s = rawTable(tableViewModel, "template/velocity/BaseEntityBean.vm");
+		String af = ContentFormatHelper.formatJava(s);
+		return af;
+	}
+	
 	public static String sqlMapVMPath(String vm){
 		return "template/velocity/" + ConfigHelper.persistentVMDir() + "/" + vm;
 	}
@@ -97,6 +103,12 @@ public class VelocityHelper {
     	return af;
 	}
 	
+	public static String sqlMapBaseDao(TableViewModel tableViewModel){
+		String s = rawTable(tableViewModel, sqlMapVMPath("SqlMapBaseIDao.vm"));
+		String af = ContentFormatHelper.formatJava(s);
+    	return af;
+	}
+	
 	public static String sqlMapDaoImpl(TableViewModel tableViewModel){
 		String s = rawTable(tableViewModel, sqlMapVMPath("SqlMapDaoImpl.vm"));
 		String af = ContentFormatHelper.formatJava(s);
@@ -109,8 +121,26 @@ public class VelocityHelper {
     	return af;
 	}
 	
+	public static String sqlMapBaseService(TableViewModel tableViewModel){
+		String s = rawTable(tableViewModel, "template/velocity/SqlMapBaseIService.vm");
+		String af = ContentFormatHelper.formatJava(s);
+    	return af;
+	}
+	
+	public static String sqlMapBaseIService(TableViewModel tableViewModel){
+		String s = rawTable(tableViewModel, "template/velocity/SqlMapBaseIService.vm");
+		String af = ContentFormatHelper.formatJava(s);
+    	return af;
+	}
+	
 	public static String sqlMapServiceImpl(TableViewModel tableViewModel){
 		String s = rawTable(tableViewModel, "template/velocity/SqlMapServiceImpl.vm");
+		String af = ContentFormatHelper.formatJava(s);
+    	return af;
+	}
+	
+	public static String sqlMapBaseServiceImpl(TableViewModel tableViewModel){
+		String s = rawTable(tableViewModel, "template/velocity/SqlMapBaseServiceImpl.vm");
 		String af = ContentFormatHelper.formatJava(s);
     	return af;
 	}

@@ -45,6 +45,11 @@ public class FileHelper {
 		genJavaFile(baseDir, pkgName, fileName, fileContent);
 	}
 	
+	public static void genBasePojoJavaFile(String baseDir, String pkgName, String entityName, String fileContent){
+		String fileName = GenFilenameHelper.javaBaseEntityFileName(entityName);
+		genJavaFile(baseDir, pkgName + ".base", fileName, fileContent);
+	}
+	
 	public static void genSqlMapXmlFile(String baseDir, String entityName, String fileContent){
 
 		String fn = GenFilenameHelper.sqlMapXmlFileName(entityName);
@@ -64,6 +69,11 @@ public class FileHelper {
 		genJavaFile(baseDir, pkgName, fileName, fileContent);
 	}
 	
+	public static void genSqlMapBaseDaoJavaFile(String baseDir, String pkgName, String entityName, String fileContent){
+		String fileName = GenFilenameHelper.sqlMapBaseDaoJavaFileName(entityName);
+		genJavaFile(baseDir, pkgName + ".base", fileName, fileContent);
+	}
+	
 	public static void genSqlMapDaoImplJavaFile(String baseDir, String pkgName, String entityName, String fileContent){
 		String fileName = GenFilenameHelper.sqlMapDaoImplJavaFileName(entityName);
 		genJavaFile(baseDir, pkgName, fileName, fileContent);
@@ -74,9 +84,19 @@ public class FileHelper {
 		genJavaFile(baseDir, pkgName, fileName, fileContent);
 	}
 	
+	public static void genSqlMapBaseServiceJavaFile(String baseDir, String pkgName, String entityName, String fileContent){
+		String fileName = GenFilenameHelper.sqlMapBaseServiceJavaFileName(entityName);
+		genJavaFile(baseDir, pkgName +".base", fileName, fileContent);
+	}
+	
 	public static void genSqlMapServiceImplJavaFile(String baseDir, String pkgName, String entityName, String fileContent){
 		String fileName = GenFilenameHelper.sqlMapServiceImplJavaFileName(entityName);
 		genJavaFile(baseDir, pkgName, fileName, fileContent);
+	}
+	
+	public static void genSqlMapBaseServiceImplJavaFile(String baseDir, String pkgName, String entityName, String fileContent){
+		String fileName = GenFilenameHelper.sqlMapBaseServiceImplJavaFileName(entityName);
+		genJavaFile(baseDir, pkgName + ".base", fileName, fileContent);
 	}
 	
 	public static void genSpringWebActionJavaFile(String baseDir, String pkgName, String entityName, String fileContent){

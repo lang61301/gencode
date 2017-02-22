@@ -4,7 +4,7 @@
 #set($i = 0)#set($j = 0)#set($H='#')
 <sql id="${queryPagingMethodPrefix}Condition">
 	${entity.querySql}
-	<trim prefix="WHERE" prefixOverrides="AND|OR">
+	<trim prefix="WHERE" prefixOverrides="AND |OR ">
 		#foreach( $column in ${entity.queryColumns})#if($column.stringJavaType)<if test="${column.propertyName} != null and '' neq ${column.propertyName}">
 		<![CDATA[ and ${column.logicDes} ]]>
 		</if>
@@ -96,7 +96,7 @@ select
 #end #end
 </trim>
 from t1.${entity.tableName}
-<trim prefix="where" prefixOverrides="and|or">
+<trim prefix="where" prefixOverrides="and |or ">
 #foreach( $column in ${entity.tableColumns}) #if(${column.primary} == false) 
 #if($column.stringJavaType) 
 <if test="${column.propertyName} != null and '' neq ${column.propertyName}">

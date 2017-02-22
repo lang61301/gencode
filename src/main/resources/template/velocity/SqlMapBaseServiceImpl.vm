@@ -1,0 +1,113 @@
+/**
+ * 
+ */
+package ${serviceImplFullPackageName}.base;
+#parse("template/velocity/fun.vm")
+/**
+ * autogen
+ * @author paddingdun
+ * ${entity.tableCommon} base service impl;
+ * @date ${date}
+ */
+public abstract class ${sqlMapBaseServiceImplJavaClassName} implements ${serviceFullPackageName}.base.${sqlMapBaseServiceJavaClassName} {
+	
+	@org.springframework.beans.factory.annotation.Autowired
+	protected ${daoFullPackageName}.${sqlMapIDaoJavaClassName} dao;
+	
+	/**
+	 * save pojo;
+	 */
+	@org.springframework.transaction.annotation.Transactional
+	@Override
+	public void ${saveMethodPrefix}${entity.entityBeanName}(${pojoFullPackageName}.${entity.entityBeanName} obj){
+		#foreach( $column in ${entity.tableColumns})
+		#if(${column.editRenderShow} == false)
+		#if(${column.newValueJavaCode})
+			${column.newValueJavaCode}
+		#end
+		#end
+		#end
+		dao.${saveMethodPrefix}${entity.entityBeanName}(obj);
+	}
+	
+	/**
+	 * update pojo;
+	 */
+	@org.springframework.transaction.annotation.Transactional
+	@Override
+	public void ${updateMethodPrefix}${entity.entityBeanName}(${pojoFullPackageName}.${entity.entityBeanName} obj){
+		#foreach( $column in ${entity.tableColumns})
+		#if(${column.editRenderShow} == false)
+		#if(${column.editValueJavaCode})
+			${column.editValueJavaCode}
+		#end
+		#end
+		#end
+		dao.${updateMethodPrefix}${entity.entityBeanName}(obj);
+	}
+	
+	/**
+	 * get pojo by pk;
+	 */
+	@Override
+	public ${pojoFullPackageName}.${entity.entityBeanName} ${getMethodPrefix}${entity.entityBeanName}(#pks_argument(${entity.tableColumns})){
+		java.util.Map<String, Object> params = new java.util.HashMap<String, Object>();
+		#pks_params(${entity.tableColumns})
+		java.util.Map<java.lang.String, java.lang.Object> tmp = this.dao.${getMethodPrefix}${entity.entityBeanName}(params);
+		if(tmp == null) return null;
+		com.google.gson.Gson gson = ${gsonHelperPackageName}.GsonHelper.create();
+		${pojoFullPackageName}.${entity.entityBeanName} result = gson.fromJson(gson.toJson(tmp), ${pojoFullPackageName}.${entity.entityBeanName}.class);
+		return result;
+	}
+	
+	/**
+	 * delete pojo by pk;
+	 */
+	@org.springframework.transaction.annotation.Transactional
+	@Override
+	public void ${deleteMethodPrefix}${entity.entityBeanName}(#pks_argument_array(${entity.tableColumns})){
+		java.util.Map<String, Object> params = new java.util.HashMap<String, Object>();
+		#pks_params(${entity.tableColumns})
+		this.dao.${deleteMethodPrefix}${entity.entityBeanName}(params);
+	}
+	
+	/**
+	 * find pojo list;
+	 */
+	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> find${entity.entityBeanName}(${pojoFullPackageName}.${entity.entityBeanName} obj){
+		java.util.List<java.util.Map<String, Object>> result = this.dao.find${entity.entityBeanName}(obj);
+		return result;
+	}
+	
+	/**
+	 * query pojo list;
+	 */
+	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> ${queryMethodPrefix}${entity.entityBeanName}(${pojoFullPackageName}.${entity.entityBeanName} obj){
+		java.util.List<java.util.Map<String, Object>> result = this.dao.${queryMethodPrefix}${entity.entityBeanName}(obj);
+		return result;
+	}
+	
+	/**
+	 * query paging pojo list;
+	 */
+	@Override
+	public ${idataCollectionPackageName}.IDataCollection<java.util.Map<java.lang.String, java.lang.Object>> ${queryPagingMethodPrefix}${entity.entityBeanName}(${pojoFullPackageName}.${entity.entityBeanName} obj, ${pagingPackageName}.Paging paging){
+		${defaultListDataCollectionPackageName}.DefaultListDataCollection<java.util.Map<java.lang.String, java.lang.Object>> result = new ${defaultListDataCollectionPackageName}.DefaultListDataCollection<java.util.Map<java.lang.String, java.lang.Object>>();
+		java.util.List<java.util.Map<java.lang.String, java.lang.Object>> empty = java.util.Collections.emptyList();
+		result.setData(empty);
+		java.util.Map<java.lang.String, java.lang.Object> params = new java.util.HashMap<java.lang.String, java.lang.Object>();
+		${defaultCollectionHelperPackageName}.CollectionHelper.object2Map(obj, params);
+		Integer totalRows = this.dao.${getPagingCountPrefix}${entity.entityBeanName}(params);
+		result.setTotal(totalRows);
+		if(Integer.valueOf("0").equals(totalRows)){
+			return result;
+		}
+		params.put("__start", paging.getStart());
+		params.put("__length", paging.getLength());
+		java.util.List<java.util.Map<String, java.lang.Object>> list = this.dao.${queryPagingMethodPrefix}${entity.entityBeanName}(params);
+		result.setData(list);
+		return result;
+	}
+}

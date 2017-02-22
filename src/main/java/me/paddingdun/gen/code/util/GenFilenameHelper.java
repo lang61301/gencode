@@ -23,6 +23,15 @@ public class GenFilenameHelper {
 	}
 	
 	/**
+	 * 实体文件基类;
+	 * @param entityName
+	 * @return
+	 */
+	public static String javaBaseEntityFileName(String entityName){
+		return "Base" + entityName + ".java";
+	}
+	
+	/**
 	 * sqlmap xml 文件名称;
 	 * @param entityName
 	 * @return
@@ -40,6 +49,10 @@ public class GenFilenameHelper {
 		return sqlMapIDaoJavaClassName(entityName) + ".java";
 	}
 	
+	public static String sqlMapBaseDaoJavaFileName(String entityName){
+		return sqlMapBaseDaoJavaClassName(entityName) + ".java";
+	}
+	
 	/**
 	 * java dao interface class name;
 	 * @param entityName
@@ -47,6 +60,15 @@ public class GenFilenameHelper {
 	 */
 	public static String sqlMapIDaoJavaClassName(String entityName){
 		return "I" + entityName + "Dao";
+	}
+	
+	/**
+	 * java base dao interface class name;
+	 * @param entityName
+	 * @return
+	 */
+	public static String sqlMapBaseDaoJavaClassName(String entityName){
+		return "Base" + entityName + "Dao";
 	}
 	
 	/**
@@ -76,6 +98,10 @@ public class GenFilenameHelper {
 		return sqlMapIServiceJavaClassName(entityName) + ".java";
 	}
 	
+	public static String sqlMapBaseServiceJavaFileName(String entityName){
+		return sqlMapBaseServiceJavaClassName(entityName) + ".java";
+	}
+	
 	/**
 	 * java service interface class name;
 	 * @param entityName
@@ -83,6 +109,15 @@ public class GenFilenameHelper {
 	 */
 	public static String sqlMapIServiceJavaClassName(String entityName){
 		return "I" + entityName + "Service";
+	}
+	
+	/**
+	 * java base service interface class name;
+	 * @param entityName
+	 * @return
+	 */
+	public static String sqlMapBaseServiceJavaClassName(String entityName){
+		return "Base" + entityName + "Service";
 	}
 	
 	/**
@@ -95,12 +130,30 @@ public class GenFilenameHelper {
 	}
 	
 	/**
+	 * java base service impl filename;
+	 * @param entityName
+	 * @return
+	 */
+	public static String sqlMapBaseServiceImplJavaFileName(String entityName){
+		return "Base" + sqlMapServiceImplJavaClassName(entityName) + ".java";
+	}
+	
+	/**
 	 * java service impl class name;
 	 * @param entityName
 	 * @return
 	 */
 	public static String sqlMapServiceImplJavaClassName(String entityName){
 		return entityName + "ServiceImpl";
+	}
+	
+	/**
+	 * java base service impl class name;
+	 * @param entityName
+	 * @return
+	 */
+	public static String sqlMapBaseServiceImplJavaClassName(String entityName){
+		return "Base" + entityName + "ServiceImpl";
 	}
 	
 	/**

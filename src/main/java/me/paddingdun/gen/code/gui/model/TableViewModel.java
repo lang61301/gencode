@@ -508,6 +508,10 @@ public class TableViewModel {
 		return GenFilenameHelper.sqlMapIDaoJavaClassName(entity.getEntityBeanName());
 	}
 	
+	public String getSqlMapBaseDaoJavaClassName(){
+		return GenFilenameHelper.sqlMapBaseDaoJavaClassName(entity.getEntityBeanName());
+	}
+	
 	public String getSqlMapDaoImplJavaClassName(){
 		return GenFilenameHelper.sqlMapDaoImplJavaClassName(entity.getEntityBeanName());
 	}
@@ -516,8 +520,16 @@ public class TableViewModel {
 		return GenFilenameHelper.sqlMapIServiceJavaClassName(entity.getEntityBeanName());
 	}
 	
+	public String getSqlMapBaseServiceJavaClassName(){
+		return GenFilenameHelper.sqlMapBaseServiceJavaClassName(entity.getEntityBeanName());
+	}
+	
 	public String getSqlMapServiceImplJavaClassName(){
 		return GenFilenameHelper.sqlMapServiceImplJavaClassName(entity.getEntityBeanName());
+	}
+	
+	public String getSqlMapBaseServiceImplJavaClassName(){
+		return GenFilenameHelper.sqlMapBaseServiceImplJavaClassName(entity.getEntityBeanName());
 	}
 	
 	public String getSpringWebActionJavaClassName(){

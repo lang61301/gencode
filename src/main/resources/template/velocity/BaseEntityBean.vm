@@ -1,31 +1,31 @@
 /**
  * 
  */
-package ${pojoFullPackageName};
+package ${pojoFullPackageName}.base;
 
 /**
  * @author paddingdun
- * ${entity.tableCommon} dto
+ * ${entity.tableCommon} do
  * @date ${date}
  * @since 1.0
  * @version 1.0
  */
-public class ${entity.entityBeanName} extends ${pojoFullPackageName}.base.Base${entity.entityBeanName} implements java.io.Serializable {
+public abstract class Base${entity.entityBeanName} implements java.io.Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	#foreach( $column in ${entity.queryColumns})
-	#if($column.newProperty)
+	#foreach( $column in ${entity.tableColumns})
 	/**
-	 * ${column.title}
-	 * ext query parameter property;
+	 * ${column.columnCommon}
 	 */
+	#if($column.gson)
+	@com.google.gson.annotations.SerializedName("${column.columnAlias}")
+	#end
     private ${column.javaType} ${column.propertyName};
-    #end	
+    	
 	#end
 	
-	#foreach( $column in ${entity.queryColumns})
-	#if($column.newProperty)
+	#foreach( $column in ${entity.tableColumns})
 	public void  ${column.setMethod}(${column.javaType} ${column.propertyName}){
 		this.${column.propertyName} = ${column.propertyName};
 	}
@@ -34,6 +34,9 @@ public class ${entity.entityBeanName} extends ${pojoFullPackageName}.base.Base${
 		return this.${column.propertyName};
 	}
 	#end
-	#end
+	
+	
+	
+	
 }
 
