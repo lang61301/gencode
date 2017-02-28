@@ -802,6 +802,11 @@ public class TableView extends AbstractView {
 						FileHelper.genPojoJavaFile(saveFile.getAbsolutePath(), model.getPojoFullPackageName(),
 								model.getEntity().getEntityBeanName(), javaContent);
 
+						String sqlMapBaseContent = VelocityHelper.sqlBaseMap(model);
+						 FileHelper.genSqlMapBaseXmlFile(saveFile.getAbsolutePath(),
+						 model.getEntity().getEntityBeanName(),
+						 sqlMapBaseContent);
+						 
 						 String sqlMapContent = VelocityHelper.sqlMap(model);
 						 FileHelper.genSqlMapXmlFile(saveFile.getAbsolutePath(),
 						 model.getEntity().getEntityBeanName(),

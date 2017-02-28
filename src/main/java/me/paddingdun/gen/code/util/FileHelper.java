@@ -64,6 +64,25 @@ public class FileHelper {
 		}
 	}
 	
+	public static void genSqlMapBaseXmlFile(String baseDir, String entityName, String fileContent){
+
+		String fn = GenFilenameHelper.sqlMapBaseXmlFileName(entityName);
+		BufferedWriter bw = null;
+		try {
+			File dir = new File(baseDir, "base");
+			if(!dir.exists() 
+					&& !dir.isDirectory()){
+				dir.mkdirs();
+			}
+			bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(dir, fn)), Charset.forName("UTF-8")));
+			bw.write(fileContent);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			IOHelper.close(bw);
+		}
+	}
+	
 	public static void genSqlMapIDaoJavaFile(String baseDir, String pkgName, String entityName, String fileContent){
 		String fileName = GenFilenameHelper.sqlMapIDaoJavaFileName(entityName);
 		genJavaFile(baseDir, pkgName, fileName, fileContent);

@@ -41,6 +41,15 @@ public class GenFilenameHelper {
 	}
 	
 	/**
+	 * sqlmap base xml 文件名称;
+	 * @param entityName
+	 * @return
+	 */
+	public static String sqlMapBaseXmlFileName(String entityName){
+		return entityName + "_base_sql.xml";
+	}
+	
+	/**
 	 * java dao interface filename;
 	 * @param entityName
 	 * @return

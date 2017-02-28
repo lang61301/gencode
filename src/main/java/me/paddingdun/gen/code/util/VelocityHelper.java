@@ -88,6 +88,11 @@ public class VelocityHelper {
 		return s;
 	}
 	
+	public static String sqlBaseMap(TableViewModel tableViewModel){
+		String s = rawTable(tableViewModel, sqlMapVMPath("SqlMapBase.vm"));
+		return s;
+	}
+	
 	public static String jspVMPath(String vm){
 		return "template/velocity/bootstrap/datatables/" + vm;
 	}
