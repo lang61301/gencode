@@ -264,7 +264,8 @@ $(document).ready(function(){
 					$('.${entity.entityBeanName}formEdit').data('bootstrapValidator').resetForm();
 					
 					$('#${webActionEditMethodName}Modal').modal({
-			   		  keyboard: false
+			   		  keyboard: false,
+			   		  backdrop:"static"
 			   		});
 				}else if(d.status < 0){
 					alert(d.msg);
@@ -347,7 +348,8 @@ $(document).ready(function(){
 		//清除验证错误;
 		$('.${entity.entityBeanName}formEdit').data('bootstrapValidator').resetForm();
 		$('#${webActionEditMethodName}Modal').modal({
-   		  keyboard: false
+   		  keyboard: false,
+   		  backdrop:"static"
    		});
 	});
 	

@@ -60,6 +60,11 @@ public class DesignerPerspective extends AbstractPerspective {
 	 * 生成实体文件;
 	 */
 	public final static String MESSAGE_GEN_ENTITY = "gen_entity";
+	
+	/**
+	 * 模板临时生成文件;
+	 */
+	public final static String MESSAGE_GEN_WORK_ENTITY = "gen_work_entity";
 
 	private JDesktopPane container;
 	

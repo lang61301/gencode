@@ -890,6 +890,52 @@ public class TableView extends AbstractView {
 			}
 		}
 	}
+	
+	/**
+	 * 临时生成;
+	 * @param evt
+	 */
+	private void btnWorkGenActionPerformed(java.awt.event.ActionEvent evt) {
+		if (model != null) {
+			fileChooser.setFileSelectionMode(JFileChooser.SAVE_DIALOG | JFileChooser.DIRECTORIES_ONLY);
+			fileChooser.setCurrentDirectory(new File("D:\\home\\Desktop"));
+			int opt = fileChooser.showSaveDialog(null);
+			// 保存;
+			if (JFileChooser.APPROVE_OPTION == opt) {
+				TaskHelper.runInNonEDT(new Callable<Integer[]>() {
+					public Integer[] call() throws Exception {
+						File saveFile = fileChooser.getSelectedFile();
+						if (!saveFile.exists())
+							saveFile.mkdirs();
+						// 设置全局值;
+						// ModelHelper.complexGetAndSimpleSet(TableView.this,
+						// model);
+
+						//获取EditViewModel;
+						EditView ev = perspective.getEditView(); 
+						ev.setModelValue();
+						EditViewModel evm = ev.getModel();
+						
+						// 加工model;ok
+						ModelHelper.processTableViewModel(model, evm);
+
+						String java1 = VelocityHelper.commonJava(model, "template/velocity/work20170301/pojo.vm");
+						// System.out.println(javaContent);
+						FileHelper.genCommonJavaFile(saveFile.getAbsolutePath(), model.getPojoFullPackageName(),
+								model.getEntity().getEntityBeanName(), java1);
+						
+
+						EventQueue.invokeLater(new Runnable() {
+							public void run() {
+								JOptionPane.showMessageDialog(null, "生成文件完成!");
+							}
+						});
+						return null;
+					}
+				});
+			}
+		}
+	}
 
 	private void initEntity(Entity e) {
 		ModelHelper.simpleGetAndComplexSet(model, TableView.this);
@@ -1200,6 +1246,10 @@ public class TableView extends AbstractView {
 
 		} else if (DesignerPerspective.MESSAGE_GEN_ENTITY.equals(message.getName())) {
 			btnGenActionPerformed(null);
+		
+		//临时工作生成;
+		}else if (DesignerPerspective.MESSAGE_GEN_WORK_ENTITY.equals(message.getName())) {
+			btnWorkGenActionPerformed(null);
 		}
 	}
 }

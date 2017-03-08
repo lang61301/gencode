@@ -92,10 +92,22 @@ public class MainFrame extends javax.swing.JFrame {
 			}
         });
         
+        genWork = new JButton("Generate Work");
+        genWork.setToolTipText("便于工作临时生成");
+        genWork.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Message msg = new Message(DesignerPerspective.MESSAGE_GEN_WORK_ENTITY);
+				perspective.sendMessage(msg);
+			}
+        });
+        
         toolBar.add(newProject);
         toolBar.add(openProject);
         toolBar.add(closeProject);
         toolBar.add(genEntity);
+        
+        toolBar.add(genWork);
 
         javax.swing.GroupLayout containerLayout = new javax.swing.GroupLayout(container);
         container.setLayout(containerLayout);
@@ -215,6 +227,11 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton closeProject;
     
     private javax.swing.JButton genEntity;
+    
+    /**
+     * 工作生成代码控制;
+     */
+    private javax.swing.JButton genWork;
 
 	public IPerspective getPerspective() {
 		return perspective;

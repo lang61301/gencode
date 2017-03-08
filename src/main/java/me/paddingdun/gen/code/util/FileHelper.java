@@ -168,6 +168,11 @@ public class FileHelper {
 		}
 	}
 	
+	public static void genCommonJavaFile(String baseDir, String pkgName, String entityName, String fileContent){
+		String fileName = GenFilenameHelper.javaEntityFileName(entityName);
+		genJavaFile(baseDir, pkgName, fileName, fileContent);
+	}
+	
 	/**
 	 * @param args
 	 */

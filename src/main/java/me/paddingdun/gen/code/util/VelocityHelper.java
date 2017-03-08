@@ -155,5 +155,11 @@ public class VelocityHelper {
 		String af = ContentFormatHelper.formatJava(s);
     	return af;
 	}
+	
+	public static String commonJava(TableViewModel tableViewModel, String vmPath){
+		String s = rawTable(tableViewModel, vmPath);
+		String af = ContentFormatHelper.formatJava(s);
+		return af;
+	}
 
 }

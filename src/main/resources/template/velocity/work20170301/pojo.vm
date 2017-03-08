@@ -1,0 +1,38 @@
+/**
+ * 
+ */
+package ${pojoFullPackageName};
+
+/**
+ * @author paddingdun
+ * ${entity.tableCommon} do
+ * @date ${date}
+ * @since 1.0
+ * @version 1.0
+ */
+@com.baomidou.mybatisplus.annotations.TableName(value="${entity.tableName}")
+public class ${entity.entityBeanName} implements java.io.Serializable {
+	
+	@com.baomidou.mybatisplus.annotations.TableField(exist = false)
+	private static final long serialVersionUID = 1L;
+	
+	#foreach( $column in ${entity.tableColumns})
+	/**
+	 * ${column.columnCommon}
+	 */
+	@com.baomidou.mybatisplus.annotations.TableField(value = "${column.columnAlias}")
+    private ${column.javaType} ${column.propertyName};
+    	
+	#end
+	
+	#foreach( $column in ${entity.tableColumns})
+	public void  ${column.setMethod}(${column.javaType} ${column.propertyName}){
+		this.${column.propertyName} = ${column.propertyName};
+	}
+	
+	public ${column.javaType}  ${column.getMethod}(){
+		return this.${column.propertyName};
+	}
+	#end
+}
+

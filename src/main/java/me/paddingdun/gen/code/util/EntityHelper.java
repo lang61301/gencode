@@ -24,7 +24,7 @@ import me.paddingdun.gen.code.data.table2.TableColumn;
  * @version 2.0
  */
 public class EntityHelper {
-	static String[] TABLE_PREFIX = new String[]{"tb_"};
+	static String[] TABLE_PREFIX = new String[]{"tb_", "t_"};
 	
 	/**
 	 * 数字开头的字符串的正则;
