@@ -919,7 +919,7 @@ public class TableView extends AbstractView {
 						// 加工model;ok
 						ModelHelper.processTableViewModel(model, evm);
 
-						String java1 = VelocityHelper.commonJava(model, "template/velocity/work20170301/pojo.vm");
+						String java1 = VelocityHelper.commonJava(model, "template/velocity/work20170417/pojo.vm");
 						// System.out.println(javaContent);
 						FileHelper.genCommonJavaFile(saveFile.getAbsolutePath(), model.getPojoFullPackageName(),
 								model.getEntity().getEntityBeanName(), java1);

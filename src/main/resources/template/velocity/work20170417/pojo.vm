@@ -10,17 +10,17 @@ package ${pojoFullPackageName};
  * @since 1.0
  * @version 1.0
  */
-@com.baomidou.mybatisplus.annotations.TableName(value="${entity.tableName}")
+@javax.persistence.Entity
+@javax.persistence.Table(name="${entity.tableName}")
 public class ${entity.entityBeanName} implements java.io.Serializable {
 	
-	@com.baomidou.mybatisplus.annotations.TableField(exist = false)
 	private static final long serialVersionUID = 1L;
 	
 	#foreach( $column in ${entity.tableColumns})
 	/**
 	 * ${column.columnCommon}
 	 */
-	@com.baomidou.mybatisplus.annotations.TableField(value = "${column.columnAlias}")
+	@javax.persistence.Column(name = "${column.columnAlias}")
     private ${column.javaType} ${column.propertyName};
     	
 	#end

@@ -14,8 +14,10 @@ import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+
 
 /**
  * @author paddingdun
@@ -32,16 +34,16 @@ public class ReplaceProjectPackageName {
 	 * @param args
 	 */
 	public static void rpl(String[] args) throws Exception{
-		String dir_src	  = "D:\\home\\doc\\frame\\ssh2";
+		String dir_src	  = "D:\\home\\doc\\frame\\YJBackend";
 //		String dir_src	  = "D:\\home\\doc\\frame\\ssh2";
 		
-		String dir_target = "D:\\home\\doc\\frame\\YjBackend";
+		String dir_target = "D:\\home\\doc\\frame\\a1";
 		String charset 	  = "UTF-8";
 		
 		//需要替换的包名;
-		String mark_base_package	  = "me.paddingdun";
+		String mark_base_package	  = "com.yj";
 		//替换后的包名;
-		String rpl_base_package 	  = "com.yj";
+		String rpl_base_package 	  = "com.xjyl";
 		
 		//可以被替换的包名;
 		String rpl_mark_base_package  = mark_base_package.replaceAll(Pattern.quote("."), Matcher.quoteReplacement("\\") + Matcher.quoteReplacement("."));
