@@ -83,7 +83,7 @@ select
 	t1.${column.columnName} as ${column.columnAlias},
 #end #end
 </trim>
-from t1.${entity.tableName}
+from ${entity.tableName} t1
 <trim prefix="where" prefixOverrides="and |or ">
 #foreach( $column in ${entity.tableColumns}) #if(${column.primary} == false) 
 #if($column.stringJavaType) 
