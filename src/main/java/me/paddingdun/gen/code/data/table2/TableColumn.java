@@ -107,6 +107,12 @@ public class TableColumn extends WapperDBColumn implements IEntityProperty, Comp
 	private String editValidateJson;
 	
 	/**
+	 * add by 2017-07-23
+	 * 新增easy校验字符串;
+	 */
+	private String editValidateEasyuiString;
+	
+	/**
 	 * 判断该字段是否可以存在updatesql中的set语句中;
 	 * @return
 	 * 备注:
@@ -264,5 +270,13 @@ public class TableColumn extends WapperDBColumn implements IEntityProperty, Comp
 			return -1;
 		}
 		return s1.compareTo(s2);
+	}
+
+	public String getEditValidateEasyuiString() {
+		return editValidateEasyuiString;
+	}
+
+	public void setEditValidateEasyuiString(String editValidateEasyuiString) {
+		this.editValidateEasyuiString = editValidateEasyuiString;
 	}
 }

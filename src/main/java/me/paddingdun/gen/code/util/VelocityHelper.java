@@ -97,6 +97,24 @@ public class VelocityHelper {
 		return "template/velocity/bootstrap/datatables/" + vm;
 	}
 	
+	public static String jspEasyuiListVMPath(String vm){
+		return "template/velocity/bootstrap/easyui/" + vm;
+	}
+	
+	public static String jspEasyuiEditVMPath(String vm){
+		return "template/velocity/bootstrap/easyui/" + vm;
+	}
+	
+	public static String easyuiListJsp(TableViewModel tableViewModel){
+		String s = rawTable(tableViewModel, jspEasyuiListVMPath("EasyuiListJsp.vm"));
+    	return s;
+	}
+	
+	public static String easyuiEditJsp(TableViewModel tableViewModel){
+		String s = rawTable(tableViewModel, jspEasyuiEditVMPath("EasyuiEditJsp.vm"));
+    	return s;
+	}
+	
 	public static String bootstrapDataTableJsp(TableViewModel tableViewModel){
 		String s = rawTable(tableViewModel, jspVMPath("BootstrapDataTableJsp.vm"));
     	return s;

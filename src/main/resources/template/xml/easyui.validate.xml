@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<validates>
+	<validate name="notEmpty">
+	<![CDATA[required:true]]>
+	</validate>
+	<validate name="emailAddress">
+	<![CDATA[''email'']]>
+	</validate>
+	<validate name="stringLength">
+	<![CDATA[''length[{0}, {1}]'']]>
+	</validate>
+	<validate name="integer">
+	<![CDATA[''integer'']]>
+	</validate>
+	<validate name="numeric">
+	<![CDATA[''intOrFloat'']]>
+	</validate>
+	<validate name="ip">
+	<![CDATA[''ip'']]>
+	</validate>
+</validates>

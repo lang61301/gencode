@@ -22,6 +22,8 @@ public class Render implements Serializable{
 
 	private String render;
 	
+	private int height;
+	
 	public Render(){
 		
 	}
@@ -56,5 +58,13 @@ public class Render implements Serializable{
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
 	}
 }

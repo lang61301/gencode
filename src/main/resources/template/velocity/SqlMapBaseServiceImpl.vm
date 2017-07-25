@@ -96,7 +96,7 @@ public abstract class ${sqlMapBaseServiceImplJavaClassName} implements ${service
 	public ${idataCollectionPackageName}.IDataCollection<java.util.Map<java.lang.String, java.lang.Object>> ${queryPagingMethodPrefix}${entity.entityBeanName}(${pojoFullPackageName}.${entity.entityBeanName} obj, ${pagingPackageName}.Paging paging){
 		${defaultListDataCollectionPackageName}.DefaultListDataCollection<java.util.Map<java.lang.String, java.lang.Object>> result = new ${defaultListDataCollectionPackageName}.DefaultListDataCollection<java.util.Map<java.lang.String, java.lang.Object>>();
 		java.util.List<java.util.Map<java.lang.String, java.lang.Object>> empty = java.util.Collections.emptyList();
-		result.setData(empty);
+		result.setRows(empty);
 		java.util.Map<java.lang.String, java.lang.Object> params = new java.util.HashMap<java.lang.String, java.lang.Object>();
 		${defaultCollectionHelperPackageName}.CollectionHelper.object2Map(obj, params);
 		Integer totalRows = this.dao.${getPagingCountPrefix}${entity.entityBeanName}(params);
@@ -107,7 +107,7 @@ public abstract class ${sqlMapBaseServiceImplJavaClassName} implements ${service
 		params.put("__start", paging.getStart());
 		params.put("__length", paging.getLength());
 		java.util.List<java.util.Map<String, java.lang.Object>> list = this.dao.${queryPagingMethodPrefix}${entity.entityBeanName}(params);
-		result.setData(list);
+		result.setRows(list);
 		return result;
 	}
 }

@@ -24,7 +24,9 @@ import me.paddingdun.gen.code.data.table2.TableColumn;
  * @version 2.0
  */
 public class EntityHelper {
-	static String[] TABLE_PREFIX = new String[]{"tb_", "t_"};
+	static String[] TABLE_PREFIX = new String[]{"t_busi_", 
+												"tb_", 
+												"t_"};
 	
 	/**
 	 * 数字开头的字符串的正则;
@@ -167,6 +169,6 @@ public class EntityHelper {
 	}
 	
 	public static void main(String[] args)throws Exception {
-		System.out.println(table("tb_ss__uio"));
+		System.out.println(table("t_busi__uio"));
 	}
 }

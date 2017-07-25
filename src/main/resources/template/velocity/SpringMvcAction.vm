@@ -17,7 +17,7 @@ public class ${springWebActionJavaClassName} extends ${baseCtrlPackageName}.Base
 	private ${serviceFullPackageName}.${sqlMapIServiceJavaClassName} service;
 	
 	/**
-	 * 主页;
+	 * index;
 	 * @return
 	 */
 	#if(${entity.showPermission})
@@ -25,7 +25,7 @@ public class ${springWebActionJavaClassName} extends ${baseCtrlPackageName}.Base
 	#end
 	@org.springframework.web.bind.annotation.RequestMapping
 	public String index() {
-		return "${springJspViewResolverMiddleFullPath}";
+		return "${springListJspViewResolverMiddleFullPath}";
 	}
 
 	/**
@@ -50,6 +50,27 @@ public class ${springWebActionJavaClassName} extends ${baseCtrlPackageName}.Base
 			e.printStackTrace();
 		}
 		return jr;
+	}
+	
+	/**
+	 * to new or edit;
+	 * @return
+	 */
+	#if(${entity.showPermission})
+	@org.apache.shiro.authz.annotation.RequiresPermissions("${entity.editPermission}")
+	#end
+	@org.springframework.web.bind.annotation.RequestMapping(value = "/${webActionToEditMethodName}", method = org.springframework.web.bind.annotation.RequestMethod.GET)
+	public String ${webActionToEditMethodName}(javax.servlet.http.HttpServletRequest request, #pks_web_argument1(${entity.tableColumns})) {
+		${pojoFullPackageName}.${entity.entityBeanName} obj = new ${pojoFullPackageName}.${entity.entityBeanName}();
+		boolean add_flag = #pks_argus_isnull(${entity.key})
+		//to new;
+		if(add_flag){
+		//to edit;
+		}else{
+			obj = service.${getMethodPrefix}${entity.entityBeanName}(${entity.key.propertyName});
+		}
+		request.setAttribute("obj", obj);
+		return "${springJspViewResolverMiddleFullPath}";
 	}
 	
 	/**

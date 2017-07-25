@@ -27,6 +27,8 @@ import com.google.gson.reflect.TypeToken;
 import me.paddingdun.gen.code.data.edit.EditValueGenWay;
 import me.paddingdun.gen.code.data.edit.EditValueGenWayType;
 import me.paddingdun.gen.code.data.edit.ValidatorType;
+import me.paddingdun.gen.code.data.jsp.Render;
+import me.paddingdun.gen.code.data.jsp.RenderWayType;
 import me.paddingdun.gen.code.data.option.ModelValue;
 import me.paddingdun.gen.code.data.option.ModelValueCategory;
 import me.paddingdun.gen.code.data.table.DBColumn;
@@ -260,6 +262,65 @@ public class ModelHelper {
 	}
 	
 	/**
+	 * add by 2017-07-22
+	 * 为列默认增加校验;
+	 * @param column
+	 * @return
+	 */
+	public static String defaultEditEasyuiValidateString(IDBColumn column){
+		String columnName = column.getColumnName();
+		//判断是否不能为空;
+		List<String> required = new ArrayList<String>(1);
+		if(!column.isNullable()){
+			required.add(EasyuiValidateHelper.getValidate(ValidatorType.notEmpty.name()));
+		}
+		
+		List<String> validType = new ArrayList<String>();
+		//如果为string;
+		if(TypesHelper.isStringType(TypesHelper.map_types.get(column.getType()))){
+			int cs = column.getColumnSize();
+			if(cs > 0){
+				validType.add(EasyuiValidateHelper.getValidate(ValidatorType.stringLength.name(), "0", cs + ""));
+			}
+			
+			//添加ip验证;
+			if(columnName.toLowerCase().indexOf("ip")>-1){
+				validType.add(EasyuiValidateHelper.getValidate(ValidatorType.ip.name()));
+			}
+			
+			//添加邮箱验证;
+			if(columnName.toLowerCase().indexOf("email")>-1){
+				validType.add(EasyuiValidateHelper.getValidate(ValidatorType.emailAddress.name()));
+			}
+		}
+		
+		//如果为整形数字;
+		if(TypesHelper.isIntegerType(TypesHelper.map_types.get(column.getType()))){
+			validType.add(EasyuiValidateHelper.getValidate(ValidatorType.integer.name()));
+		}
+		
+		String result = null;
+		if(!required.isEmpty()){
+			result = required.get(0);
+		}
+		if(!validType.isEmpty()){
+			if(result != null){
+				result += ",";
+			}else{
+				result = "";
+			}
+			result += "validType:[" + StringUtils.join(validType, ",")+"]";
+		}
+		if(result != null){
+			result = "data-options=\"" + result +"\"";
+			result = result.replaceAll("\t", "");
+			result = result.replaceAll("\r", "");
+			result = result.replaceAll("\n", "");
+		}
+		return result;
+	}
+	
+	/**
 	 * add by 2016年3月21日
 	 * 新增jsp页面中js验证;
 	 * @param tcs
@@ -313,6 +374,29 @@ public class ModelHelper {
 	}
 	
 	/**
+	 * 处理编辑字段的easyui validatebox 验证字符串;
+	 * @param tcs
+	 */
+	public static void opEditEasyuiValidatebox(List<TableColumn> tcs){
+		for (TableColumn tc : tcs) {
+			//1.必须是编辑;
+			//2.非自增长字段;
+			if(tc.isEditRenderShow()
+					&& !tc.isAutoIncrement()){
+				String str = tc.getEditValidateEasyuiString();
+				if(StringUtils.isNotBlank(str)){
+				}else{
+					str = "";
+				}
+				Render r = tc.getEditRender();
+				String s = r.getRender();
+				String s1 = MessageFormat.format(s, str);
+				r.setRender(s1);
+			}
+		}
+	}
+	
+	/**
 	 * 表字段新增/编辑排序;
 	 * @param list
 	 */
@@ -349,6 +433,19 @@ public class ModelHelper {
 		}
 		Collections.sort(result);
 		return result;
+	}
+	
+	private static void setTableColumnsHeight(List<TableColumn> list, Entity entity){
+		//初始高度103,每行45;
+		int height = 103;
+		
+		for (TableColumn tc : list) {
+			if(tc.isEditRenderShow()
+					&& !tc.isPrimary()){
+				height += 45;
+			}
+		}
+		entity.setTableColumnsHeight(height);
 	}
 	
 	/**
@@ -398,9 +495,7 @@ public class ModelHelper {
 			tc.setGetMethod(EntityHelper.get(pn, tc.getType()));
 			//show annotation on field
 			tc.setGson(true);
-			//set edit render in jsp
-			tc.setEditRender(RenderHelper.createEditRender(tc, tc.isEditRenderShow()));
-
+			
 			//set java type
 			tc.setStringJavaType(TypesHelper.isStringType(tc.getJavaType()));
 			
@@ -413,7 +508,13 @@ public class ModelHelper {
 					&& tc.isPrimary()){
 				primary = tc;
 			}
+			
+			//set edit render in jsp
+			tc.setEditRender(RenderHelper.createEditRender(tc, tc.isEditRenderShow()));
 		}
+		
+		//add 2017-07-25, 新增easyui编辑页面高度;
+		setTableColumnsHeight(list_tc, entity);
 		
 		//3:处理列表字段;
 		List<ListColumn> list_raw_lc = entity.getRawListColumns();
@@ -459,10 +560,10 @@ public class ModelHelper {
 		
 		//3.4:是否生成操作列;
 		ListColumn lc_op = new  ListColumn(new DBColumn());
-		lc_op.setColumnAlias("__op");
+		lc_op.setColumnAlias("pdd_op");
 		lc_op.setListTitle("操作");
 		lc_op.setQueryRenderShow(false);
-		lc_op.setListRender(RenderHelper.createListOperateRender(lc_op, true));
+		lc_op.setListRender(RenderHelper.createListOperateRender(lc_op, true, key));
 		lc_op.setListRenderShow(true);
 		listColumns.add(lc_op);
 		
@@ -513,7 +614,9 @@ public class ModelHelper {
 		entity.setEntityProperties(list_eps);
 		
 		//6:设置编辑js验证;
-		entity.setEditJSValidtors(editJSValidtors(list_tc));
+		//modify by 2017-07-22 easyui中的表单验证需要直接放在列生成中;
+//		entity.setEditJSValidtors(editJSValidtors(list_tc));
+		opEditEasyuiValidatebox(list_tc);
 		
 		//7:设置formRender
 		entity.setQueryFormRender(RenderHelper.createQueryFormRender(entity.getEntityBeanName(), queryColumns, tableViewModel.getJspQueryColumnCount(), true));
@@ -521,5 +624,4 @@ public class ModelHelper {
 		//8:生成配置文件;
 		ConfigHelper.genConfigXmlFile(tableViewModel.getEntity());
 	}
-
 }

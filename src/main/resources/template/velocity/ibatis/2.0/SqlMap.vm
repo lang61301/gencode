@@ -79,6 +79,6 @@
 <select id="${getPagingCountPrefix}" parameterClass="java.util.Map" resultClass="java.lang.Integer">
 <![CDATA[select count(1) from ( ${entity.querySql} ]]>
 <include refid="${queryPagingMethodPrefix}Condition"/>
-<![CDATA[ ) __t0 ]]>
+<![CDATA[ ) cn_xy_pdd_t0 ]]>
 </select>
 </sqlMap>

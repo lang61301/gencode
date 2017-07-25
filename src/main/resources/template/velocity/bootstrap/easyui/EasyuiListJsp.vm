@@ -1,0 +1,190 @@
+<%@page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
+<%@taglib tagdir="/WEB-INF/tags" prefix="cus" %>
+#if(${jspFulled})
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+	<cus:Css/>
+   #* 
+    <style>
+    .show-grid{margin-bottom:15px}
+    .show-grid [class^=col-]{padding-top:10px;padding-bottom:10px;background-color:#eee;background-color:rgba(86,61,124,.15);border:1px solid #ddd;border:1px solid rgba(86,61,124,.2)}
+    </style>
+    *#
+  </head>
+  <body>
+#end
+#parse("template/velocity/jspComponent.vm")
+#**
+<div class="row show-grid">
+<div class="col-xs-1 col-sm-1">.col-xs-1 .col-sm-1</div>
+<div class="col-xs-1 col-sm-1">.col-xs-1 .col-sm-1</div>
+<div class="col-xs-1 col-sm-1">.col-xs-1 .col-sm-1</div>
+<div class="col-xs-1 col-sm-1">.col-xs-1 .col-sm-1</div>
+<div class="col-xs-1 col-sm-1">.col-xs-1 .col-sm-1</div>
+<div class="col-xs-1 col-sm-1">.col-xs-1 .col-sm-1</div>
+<div class="col-xs-1 col-sm-1">.col-xs-1 .col-sm-1</div>
+<div class="col-xs-1 col-sm-1">.col-xs-1 .col-sm-1</div>
+<div class="col-xs-1 col-sm-1">.col-xs-1 .col-sm-1</div>
+<div class="col-xs-1 col-sm-1">.col-xs-1 .col-sm-1</div>
+<div class="col-xs-1 col-sm-1">.col-xs-1 .col-sm-1</div>
+<div class="col-xs-1 col-sm-1">.col-xs-1 .col-sm-1</div>
+</div>
+
+<div class="row show-grid">
+<div class="col-xs-1 col-sm-1">.col-xs-1 .col-sm-1</div>
+<div class="col-xs-1 col-sm-1 col-sm-offset-1">.col-xs-2 .col-sm-2</div>
+
+</div>
+<div class="row show-grid">
+<div class="col-xs-6 col-sm-3">.col-xs-6 .col-sm-3<br> i don't say a hello world! you are not a young boy! i am a young boy!</div>
+<div class="col-xs-6 col-sm-3">.col-xs-6 .col-sm-3</div>
+
+<!-- Add the extra clearfix for only the required viewport -->
+<div class="clearfix visible-lg-block"></div>
+
+<div class="col-xs-6 col-sm-3">.col-xs-6 .col-sm-3</div>
+<div class="col-xs-6 col-sm-3">.col-xs-6 .col-sm-3</div>
+</div>
+*#
+<div class="easyui-layout" fit="true">
+#if( ${entity.queryFormRender.show} )
+	<%--初始高度42px, 每增加一行增加高度45px --%>
+<div data-options="region:'north',title:'#if("$!{entity.tableCommon}" == "" )&nbsp;#else${entity.tableCommon}#end',border:false,split:false,collapsible:false" style="height:${entity.queryFormRender.height}px;">
+	<div class="col-xs-12" style="margin-top:15px">
+		<form class="form-horizontal ${entity.entityBeanName}formQuery" role="form">
+			${entity.queryFormRender.render}
+		</form>
+	</div>
+</div>
+#end
+<div data-options="region:'center',border:false">
+	<table id="table_id">
+	</table>
+</div>
+</div>
+
+#if(${jspFulled})
+<cus:JavaScript/>
+#end
+<script type="text/javascript">
+var query_param = {};
+var table_id = "#table_id";
+$(document).ready(function(){
+	#if(${entity.showPermission})
+	var edit = false;
+	<shiro:hasPermission name="${entity.editPermission}">
+	edit = true;
+	</shiro:hasPermission>
+	#else
+	var edit = true;
+	#end
+	
+	me.Table.init({
+			tableId:table_id,
+			url:"#[[${]]#${jspContextPathVar}#[[}]]#${webActionRequestMapping}/${queryPagingMethodPrefix}",
+		    idField:"${entity.key.columnAlias}",
+			queryParams:query_param,
+			toolbar:"#${entity.entityBeanName}Toolbar",
+			columns:[[
+		        #datatable_columns($entity.listColumns)
+		    ]]
+		});
+	
+	/**
+	 * 查询重置;
+	 */
+	$(".${entity.entityBeanName}reset").on("click", function(){
+		me.Form.clearForm($(".${entity.entityBeanName}formQuery"));
+	});
+	
+	/**
+	 * 查询;
+	 */
+	$(".${entity.entityBeanName}query").on("click", function(){
+		var o = me.Form.getForm($(".${entity.entityBeanName}formQuery"));
+		$.extend(query_param, o);
+		me.Table.clear(table_id);
+		me.Table.load(table_id);
+	});
+	
+	$("#add${entity.entityBeanName}").on("click", function(){
+		 edit2( "", "新增" );
+	 });
+	 
+	 $("#delete${entity.entityBeanName}").on("click", function(){
+		 delete2();
+	 });
+});
+
+function edit2(id, title) {
+	 var url = "#[[${]]#${jspContextPathVar}#[[}]]#${webActionRequestMapping}/${webActionToEditMethodName}";
+    if (!!id) {
+    	me.Table.clear(table_id);
+        url+="?${entity.key.propertyName}="+id;
+    } else {
+    	me.Table.clear(table_id);
+    }
+    var idx = me.Util.open(url, title, null, ${entity.tableColumnsHeight});
+}
+
+function delete2(id) {
+	var dataArr = [];
+    if (!!id) {
+    	me.Table.clear(table_id);
+    	dataArr.push(id);
+    } else {
+    	var rows = me.Table.get(table_id);
+    	$.each(rows, function(i, e){
+    		dataArr.push(e["${entity.key.columnAlias}"]);
+    	});
+    }
+    
+	if(dataArr.length == 0){
+		me.Util.msg("请至少选择一项");
+		  return;
+	}
+	
+	me.Util.confirm("确定要删除吗?", function(){
+		var objData = {};
+		objData["${entity.key.propertyName}"]=dataArr;
+		me.Util.ajax({
+			url:"#[[${]]#${jspContextPathVar}#[[}]]#${webActionRequestMapping}/${deleteMethodPrefix}",
+			data:objData,
+			ok:function(data){
+					me.Table.clear(table_id);
+					me.Table.load(table_id);
+					me.Util.msg(data.msg);
+			}
+		});
+	});
+}
+</script>
+#if(${jspFulled})
+</body>
+<div id="${entity.entityBeanName}Toolbar" style="display: none;">
+#if(${entity.showPermission})<shiro:hasPermission name="${entity.editPermission}">#end
+	<table cellpadding="0" cellspacing="0">  
+        <tr>  
+            <td>  
+                <a id="add${entity.entityBeanName}" href="javascript:;" class="easyui-linkbutton" data-options="plain:true,iconCls:'me-icon me-blue fa fa-lg fa-plus'">新增</a>
+            </td>  
+            <td><div class="datagrid-btn-separator"></div></td>  
+            <td>  
+                <a id="delete${entity.entityBeanName}" href="javascript:;" class="easyui-linkbutton" data-options="plain:true,iconCls:'me-icon fa fa-lg fa-remove'">删除</a>
+            </td>  
+        </tr>  
+    </table> 
+#if(${entity.showPermission})</shiro:hasPermission>#end
+</div>
+</html>
+#end

@@ -124,8 +124,21 @@ public class FileHelper {
 	}
 	
 	public static void genBootstrapDataTableJspFile(String baseDir, String categoryDir, String entityName, String fileContent){
-
 		String fn = GenFilenameHelper.bootstrapDataTableJspFileName(entityName);
+		genJspFile(baseDir, categoryDir, fn, fileContent);
+	}
+	
+	public static void genEasyuiListJspFile(String baseDir, String categoryDir, String entityName, String fileContent){
+		String fn = GenFilenameHelper.easyuiListJspFileName(entityName);
+		genJspFile(baseDir, categoryDir, fn, fileContent);
+	}
+	
+	public static void genEasyuiEditJspFile(String baseDir, String categoryDir, String entityName, String fileContent){
+		String fn = GenFilenameHelper.easyuiEditJspFileName(entityName);
+		genJspFile(baseDir, categoryDir, fn, fileContent);
+	}
+	
+	private static void genJspFile(String baseDir, String categoryDir, String fileName, String fileContent){
 		BufferedWriter bw = null;
 		try {
 			File dir = null;
@@ -137,7 +150,7 @@ public class FileHelper {
 			if(!dir.exists())
 				dir.mkdirs();
 			
-			bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(dir, fn)), Charset.forName("UTF-8")));
+			bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(dir, fileName)), Charset.forName("UTF-8")));
 			bw.write(fileContent);
 		} catch (Exception e) {
 			e.printStackTrace();

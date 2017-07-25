@@ -51,6 +51,12 @@ public class Entity extends WapperDBTable {
 	private List<TableColumn> tableColumns;
 	
 	/**
+	 * add by 2017-07-25
+	 * easyui 中编辑页面的高度;
+	 */
+	private int tableColumnsHeight;
+	
+	/**
 	 * 原始列表字段集合;
 	 */
 	private List<ListColumn> rawListColumns;
@@ -247,4 +253,13 @@ public class Entity extends WapperDBTable {
 	public void setEditPermission(String editPermission) {
 		this.editPermission = editPermission;
 	}
+
+	public int getTableColumnsHeight() {
+		return tableColumnsHeight;
+	}
+
+	public void setTableColumnsHeight(int tableColumnsHeight) {
+		this.tableColumnsHeight = tableColumnsHeight;
+	}
+
 }

@@ -28,12 +28,12 @@ import me.paddingdun.gen.code.gui.model.TableViewModel;
  */
 public class RenderHelper {
 	
-	public static String list(String keyName, String defaultContent, RenderWayType rwt, String customer, String groupCheckboxClassName){
-		String dc = "";
-		if(StringUtils.isNotBlank(defaultContent)){
-			dc = defaultContent.trim();
+	public static String list(String keyName, String title, RenderWayType rwt, String customer, String groupCheckboxClassName){
+		String t = "";
+		if(StringUtils.isNotBlank(title)){
+			t = title.trim();
 		}
-		String render = JspSnippetHelper.getSnippet("list_text", keyName, dc);
+		String render = JspSnippetHelper.getSnippet("list_text", keyName, t);
 		switch (rwt) {
 		case list_text:
 
@@ -50,7 +50,7 @@ public class RenderHelper {
 				cu = customer.trim();
 			}
 			cu = "," + cu;
-			render = JspSnippetHelper.getSnippet("list_customer", keyName, dc, cu);
+			render = JspSnippetHelper.getSnippet("list_customer", keyName, t, cu);
 			break;
 		default:
 			throw new BusinessException("list:do not have implement RenderWayType:" + rwt);
@@ -59,7 +59,9 @@ public class RenderHelper {
 	}
 	
 	public static String edit(String keyName, String title, RenderWayType rwt){
-		String render = JspSnippetHelper.getSnippet(RenderWayType.edit_input.name(), keyName, title);
+		//增加一个占位符,为以后增加easyui validatebox 验证字符串;
+		String mark = "{0}";
+		String render = JspSnippetHelper.getSnippet(RenderWayType.edit_input.name(), keyName, title, mark);
 		
 		switch (rwt) {
 		case edit_input:
@@ -68,7 +70,7 @@ public class RenderHelper {
 			render = JspSnippetHelper.getSnippet(RenderWayType.edit_hidden.name(), keyName);
 			break;
 		case edit_checkbox:
-			render = JspSnippetHelper.getSnippet(RenderWayType.edit_checkbox.name(), keyName, title);
+			render = JspSnippetHelper.getSnippet(RenderWayType.edit_checkbox.name(), keyName, title, mark);
 			break;
 		case edit_datepicker:
 
@@ -136,14 +138,15 @@ public class RenderHelper {
 		render.setTitle(column.getListTitle());
 		render.setShow(show);
 		if(RenderWayType.list_default == rwt){
-			if(column.isPrimary()){
-				rwt = RenderWayType.list_checkbox;
-				render.setTitle(JspSnippetHelper.getSnippet("list_snippet_checkbox_title", model.getHeadGroupCheckboxClassName()));
-			}else{
-				rwt = RenderWayType.list_text;
-			}
+//			if(column.isPrimary()){
+//				rwt = RenderWayType.list_checkbox;
+//				render.setTitle(JspSnippetHelper.getSnippet("list_snippet_checkbox_title", model.getHeadGroupCheckboxClassName()));
+//			}else{
+//				rwt = RenderWayType.list_text;
+//			}
+			rwt = RenderWayType.list_text;
 		}
-		render.setRender(list(keyName, "", rwt, "", model.getGroupCheckboxClassName()));
+		render.setRender(list(keyName, column.getListTitle(), rwt, "", model.getGroupCheckboxClassName()));
 		return render;
 	}
 	
@@ -175,11 +178,11 @@ public class RenderHelper {
 	 * @param show
 	 * @return
 	 */
-	public static Render createListOperateRender(ListColumn column, boolean show){
+	public static Render createListOperateRender(ListColumn column, boolean show, TableColumn key){
 		Render render = new Render();
 		render.setTitle(column.getListTitle());
 		render.setShow(show);
-		render.setRender(JspSnippetHelper.getSnippet("list_snippet_operate"));
+		render.setRender(JspSnippetHelper.getSnippet("list_snippet_operate", key.getColumnAlias()));
 		return render;
 	}
 	
@@ -238,7 +241,7 @@ public class RenderHelper {
 		
 		int size = queryColumns.size();
 		
-		Integer[] validColumnCount = new Integer[]{2, 3};
+		Integer[] validColumnCount = new Integer[]{3, 4};
 		boolean valid = false;
 		for (Integer v : validColumnCount) {
 			if(v.equals(showColumnCount)){
@@ -247,7 +250,7 @@ public class RenderHelper {
 			}
 		}
 		if(!valid){
-			showColumnCount = Integer.valueOf("3");
+			showColumnCount = Integer.valueOf("4");
 		}
 		int colWidth = (12 - showColumnCount.intValue() * 2) / showColumnCount.intValue();
 		
@@ -269,10 +272,14 @@ public class RenderHelper {
 			}
 		}
 		
+		//<%--单行高度87px, 增加一行增加高度45px --%>
 		StringBuilder sb = new StringBuilder();
+		int height = 42;
 		for (List<String> l : map.values()) {
 			sb.append(JspSnippetHelper.getSnippet("query_form", StringUtils.join(l, "")));
+			height += 45;
 		}
+		render.setHeight(height);
 		render.setRender(sb.toString());
 		return render;
 	}

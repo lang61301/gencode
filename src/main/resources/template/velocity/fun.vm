@@ -13,6 +13,11 @@
 #foreach( $column in ${cols}) #if (${column.primary}) #if ($j != 0), #end @org.springframework.web.bind.annotation.RequestParam(value="${column.propertyName}")${column.javaType} ${column.propertyName} #set($j = $j + 1) #end #end
 #end
 
+#macro( pks_web_argument1 $cols )
+#set( $j = 0 )
+#foreach( $column in ${cols}) #if (${column.primary}) #if ($j != 0), #end ${column.javaType} ${column.propertyName} #set($j = $j + 1) #end #end
+#end
+
 #macro( pks_web_argument_array $cols )
 #set( $j = 0 )
 #foreach( $column in ${cols}) #if (${column.primary}) #if ($j != 0), #end @org.springframework.web.bind.annotation.RequestParam(value="${column.propertyName}[]")${column.javaType}[] ${column.propertyName} #set($j = $j + 1) #end #end
@@ -40,4 +45,14 @@
 		#set($j = $j + 1) 
 	#end 
 #end);
+#end
+
+#macro( pks_argus_isnull $key )
+(
+	#if(${key.javaType} == "java.lang.String")
+		org.apache.commons.lang.StringUtils.isBlank(${key.propertyName})
+	#else
+		(${key.propertyName} == null)
+	#end
+);
 #end

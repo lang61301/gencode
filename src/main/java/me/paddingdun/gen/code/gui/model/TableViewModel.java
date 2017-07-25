@@ -162,6 +162,13 @@ public class TableViewModel {
 	@Value1(def="edit")
 	private String webActionEditMethodName;
 	
+	/**
+	 * add modify by 2017-07-20
+	 * 增加进入新增或编辑页面的方action方法名称;
+	 */
+	@Value1(def="toEdit")
+	private String webActionToEditMethodName;
+	
 	
 	@Value1
 	private boolean genStringDate;
@@ -602,8 +609,20 @@ public class TableViewModel {
 		this.jspWebinfAfterDir = jspWebinfAfterDir;
 	}
 
+	/**
+	 * 编辑页面
+	 * @return
+	 */
 	public String getSpringJspViewResolverMiddleFullPath() {
 		return PathHelper.concatJspMiddlePath(getJspWebinfAfterDir(), entity.getEntityBeanName());
+	}
+	
+	/**
+	 * list页面;
+	 * @return
+	 */
+	public String getSpringListJspViewResolverMiddleFullPath() {
+		return PathHelper.concatJspMiddlePath(getJspWebinfAfterDir(), GenFilenameHelper.easyuiListFN(entity.getEntityBeanName()) );
 	}
 
 	public Entity getEntity() {
@@ -636,6 +655,14 @@ public class TableViewModel {
 
 	public void setJspFulled(Boolean jspFulled) {
 		this.jspFulled = jspFulled;
+	}
+
+	public String getWebActionToEditMethodName() {
+		return webActionToEditMethodName;
+	}
+
+	public void setWebActionToEditMethodName(String webActionToEditMethodName) {
+		this.webActionToEditMethodName = webActionToEditMethodName;
 	}
 	
 }

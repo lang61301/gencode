@@ -192,6 +192,30 @@ public class GenFilenameHelper {
 	}
 	
 	/**
+	 * add by 2017-07-21
+	 * easyui list jsp page file name;
+	 * @param entityName
+	 * @return
+	 */
+	public static String easyuiListJspFileName(String entityName){
+		return easyuiListFN(entityName) + ".jsp";
+	}
+	
+	public static String easyuiListFN(String entityName){
+		return entityName + "List";
+	}
+	
+	/**
+	 * add by 2017-07-21
+	 * easyui edit jsp page file name;
+	 * @param entityName
+	 * @return
+	 */
+	public static String easyuiEditJspFileName(String entityName){
+		return entityName + ".jsp";
+	}
+	
+	/**
 	 * the user config file name;
 	 * @param name
 	 * @return

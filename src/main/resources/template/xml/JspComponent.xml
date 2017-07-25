@@ -2,7 +2,7 @@
 <!-- MessageFormat使用时,用'表示转义,''表示',对于非占位符{要用'{';-->
 <snippets>
 	<snippet name="list_text">
-	<![CDATA['{'"data":"{0}", "defaultContent":"{1}"}]]> 
+	<![CDATA['{'"field":"{0}", "title":"{1}", "width":100}]]> 
 	</snippet>
 	<snippet name="list_checkbox">
 	<![CDATA['{'"data":"{0}", "defaultContent":"",
@@ -12,30 +12,26 @@
 				}]]> 
 	</snippet>
 	<snippet name="list_customer">
-	<![CDATA['{'"data":"{0}", "defaultContent":"{1}",
+	<![CDATA['{'"field":"{0}", "title":"{1}", "width":100, 
 		 {2}
 		}]]> 
 	</snippet>
 	<snippet name="list_snippet_default_customer">
-	<![CDATA["render":function( data, type, row, meta )'{' 
-				return data; 
+	<![CDATA["formatter":function( value,row,index )'{' 
+				return value; 
 		}]]> 
 	</snippet>
 	<snippet name="list_snippet_checkbox_title">
 	<![CDATA[<div class="input_middle"><input type="checkbox" class="{0}"></div>]]> 
 	</snippet>
 	<snippet name="list_snippet_operate">
-	<![CDATA['{'"data":null, "defaultContent":"",
-		 "render":function( data, type, row, meta )'{'
-		 	var _s = ''<button type="button" title="编辑/查看" class="btn btn-default btn-xs icon_btn_edit">''+
-			  ''<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>''+
-			''</button>'';
+	<![CDATA['{'"field":"pdd_op", "title":"操作", "width":100,
+		 "formatter":function( value, row, index )'{'
+		 	var _s = ''<a href="javascript:;" class="easyui-linkbutton" onclick="edit2(\''''+row["{0}"]+''\'', \''编辑\'')" data-options="plain:true,iconCls:\''me-icon fa fa-lg fa-edit\''">编辑</a>'';
 			if(!!!edit) 
 				return _s;
 			
-			_s += ''<button type="button" title="删除" class="btn btn-default btn-xs icon_btn_del">''+
-			  ''<span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>''+
-			''</button>'';
+			_s += ''<a href="javascript:;" class="easyui-linkbutton" onclick="delete2(\''''+row["{0}"]+''\'')" data-options="plain:true,iconCls:\''me-icon fa fa-lg fa-remove\''">删除</a>'';
 			return _s;
 		 }
 		}]]> 
@@ -44,26 +40,26 @@
 	
 	<snippet name="edit_input">
 	<![CDATA[<div class="form-group">
-			<label for="{0}" class="col-sm-3 control-label">
+			<label for="{0}" class="col-xs-3 control-label me-label">
 			{1}
 			</label>
-			<div class="col-sm-9">
-				<input type="text" class="form-control input-sm" id="{0}" name="{0}">
+			<div class="col-xs-9">
+				<input type="text" class="form-control input-sm easyui-validatebox" id="{0}" name="{0}" value="$'''{'''obj.{0}}" {2}>
 			</div>
 		</div>]]> 
 	</snippet>
 	<snippet name="edit_hidden">
-	<![CDATA[<input type="hidden" id="{0}" name="{0}">]]> 
+	<![CDATA[<input type="hidden" id="{0}" name="{0}" value="$'{'obj.{0}}">]]> 
 	</snippet>
 	<snippet name="edit_checkbox">
 	<![CDATA[<div class="form-group">
-			<label for="{0}" class="col-sm-2 control-label">
+			<label for="{0}" class="col-xs-3 control-label me-label">
 			{1}
 			</label>
-			<div class="col-sm-10">
+			<div class="col-xs-9">
 				<div class="checkbox">
 					<label>
-						<input type="checkbox" id="{0}" name="{0}"> 
+						<input type="checkbox" id="{0}" name="{0}" {2}> 
 					</label>
 				</div>
 			</div>
@@ -71,13 +67,13 @@
 	</snippet>
 	<snippet name="edit_dropdownlist">
 	<![CDATA[<div class="form-group">
-			<label for="{0}" class="col-sm-2 control-label">
+			<label for="{0}" class="col-xs-3 control-label me-label">
 			{1}
 			</label>
-			<div class="col-sm-10">
+			<div class="col-xs-9">
 				<div class="checkbox">
 					<label>
-						<input type="checkbox" id="{0}" name="{0}"> 
+						<input type="checkbox" id="{0}" name="{0}" {2}> 
 					</label>
 				</div>
 			</div>
@@ -85,39 +81,39 @@
 	</snippet>
 	<snippet name="edit_datepicker">
 	<![CDATA[<div class="form-group">
-			<label for="{0}" class="col-sm-2 control-label">
+			<label for="{0}" class="col-xs-3 control-label me-label">
 			{1}
 			</label>
-			<div class="col-sm-10">
-				<input type="text" reayOnly class="form-control" id="{0}" name="{0}" onClick="WdatePicker('{'maxDate:''#F'{'$dp.$D(\''{0}\'')}''})">
+			<div class="col-xs-9">
+				<input type="text" reayOnly class="form-control input-sm easyui-validatebox" id="{0}" name="{0}" value="$'''{'''obj.{0}}" onClick="WdatePicker('{'maxDate:''#F'{'$dp.$D(\''{0}\'')}''})" {2}>
 			</div>
 		</div>]]> 
 	</snippet>
 	
 	
 	<snippet name="query_input">
-	<![CDATA[<label class="col-sm-2 control-label">
+	<![CDATA[<label class="col-xs-1 control-label">
 		{0}
 		</label>
-		<div class="col-sm-{1}">
+		<div class="col-xs-{1}">
 			<input type="text" class="form-control input-sm" name="{2}">
 		</div>]]> 
 	</snippet>
 	<snippet name="query_dropdownlist">
-	<![CDATA[<label class="col-sm-2 control-label">
+	<![CDATA[<label class="col-xs-1 control-label">
 		{0}
 		</label>
-		<div class="col-sm-{1}">
+		<div class="col-xs-{1}">
 			<select class="form-control" name="{2}">
 			
 			</select>
 		</div>]]> 
 	</snippet>
 	<snippet name="query_checkbox">
-	<![CDATA[<label class="col-sm-2 control-label">
+	<![CDATA[<label class="col-xs-1 control-label">
 		{0}
 		</label>
-		<div class="col-sm-{1}">
+		<div class="col-xs-{1}">
 			<div class="checkbox">
 				<label>
 					<input type="checkbox" name="{2}"> 
@@ -127,8 +123,8 @@
 	</snippet>
 	<snippet name="query_button">
 	<![CDATA[
-	<div class="col-sm-2"></div>
-	<div class="col-sm-2">
+	<div class="col-xs-1"></div>
+	<div class="col-xs-2">
 			<a class="btn btn-primary {0}query btn-sm" href="javascript:;" role="button">查询</a>
 			<a class="btn btn-default {0}reset btn-sm" href="javascript:;" role="button">重置</a>
 		</div>

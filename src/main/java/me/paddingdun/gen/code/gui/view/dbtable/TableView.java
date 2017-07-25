@@ -274,8 +274,11 @@ public class TableView extends AbstractView {
 		editValueGenWayJson = new javax.swing.JTextArea(1, 10);
 		javax.swing.JScrollPane cevfw = new javax.swing.JScrollPane(editValueGenWayJson);
 
-		editValidateJson = new javax.swing.JTextArea(1, 10);
-		javax.swing.JScrollPane evj = new javax.swing.JScrollPane(editValidateJson);
+//		editValidateJson = new javax.swing.JTextArea(1, 10);
+//		javax.swing.JScrollPane evj = new javax.swing.JScrollPane(editValidateJson);
+		
+		editValidateEasyuiString = new javax.swing.JTextArea(1, 10);
+		javax.swing.JScrollPane evj = new javax.swing.JScrollPane(editValidateEasyuiString);
 
 		jLabel1.setText("基础包名称");
 
@@ -872,12 +875,26 @@ public class TableView extends AbstractView {
 						 model.getEntity().getEntityBeanName(),
 						 springWebActionContent);
 						 
-						 String bootstrapDataTableJspContent =
-						VelocityHelper.bootstrapDataTableJsp(model);
-						FileHelper.genBootstrapDataTableJspFile(saveFile.getAbsolutePath(),
-						model.getJspWebinfAfterDir(),
-						model.getEntity().getEntityBeanName(),
-						bootstrapDataTableJspContent);
+//						 String bootstrapDataTableJspContent =
+//						VelocityHelper.bootstrapDataTableJsp(model);
+//						FileHelper.genBootstrapDataTableJspFile(saveFile.getAbsolutePath(),
+//						model.getJspWebinfAfterDir(),
+//						model.getEntity().getEntityBeanName(),
+//						bootstrapDataTableJspContent);
+						
+						String easyuiListJspContent = 
+								VelocityHelper.easyuiListJsp(model);
+						FileHelper.genEasyuiListJspFile(saveFile.getAbsolutePath(),
+								model.getJspWebinfAfterDir(),
+								model.getEntity().getEntityBeanName(),
+								easyuiListJspContent);
+						
+						String easyuiEditJspContent = 
+								VelocityHelper.easyuiEditJsp(model);
+						FileHelper.genEasyuiEditJspFile(saveFile.getAbsolutePath(),
+								model.getJspWebinfAfterDir(),
+								model.getEntity().getEntityBeanName(),
+								easyuiEditJspContent);
 
 						EventQueue.invokeLater(new Runnable() {
 							public void run() {
@@ -1190,8 +1207,16 @@ public class TableView extends AbstractView {
 	@ModelValue(category = ModelValueCategory.Column, valueGetFuncName = "getText", valueSetFuncName = "setText")
 	private javax.swing.JTextArea editValueGenWayJson;
 
-	@ModelValue(category = ModelValueCategory.Column, valueGetFuncName = "getText", valueSetFuncName = "setText")
+	/**
+	 * modify by 2017-07-24
+	 * 由editValidateEasyuiString字段代替;
+	 */
+	@Deprecated
+//	@ModelValue(category = ModelValueCategory.Column, valueGetFuncName = "getText", valueSetFuncName = "setText")
 	private javax.swing.JTextArea editValidateJson;
+	
+	@ModelValue(category = ModelValueCategory.Column, valueGetFuncName = "getText", valueSetFuncName = "setText")
+	private javax.swing.JTextArea editValidateEasyuiString;
 	// End of variables declaration//GEN-END:variables
 	
 	private javax.swing.JTextArea editRenderWayJson;

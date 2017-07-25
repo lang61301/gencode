@@ -111,6 +111,6 @@ and t1.${column.columnName} = $H{${column.propertyName}}
 <select id="${getPagingCountPrefix}${entity.entityBeanName}" parameterType="java.util.Map" resultType="java.lang.Integer">
 select count(1) from ( 
 <include refid="${queryPagingMethodPrefix}Condition"/>
-) __t0
+) cn_xy_pdd_t0
 </select>
 </mapper>

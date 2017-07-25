@@ -175,7 +175,10 @@ public class TableHelper2 {
 				}
 				
 				//设置验证json字符串;
-				tc.setEditValidateJson(ModelHelper.defaultEditValidateJson(dbc));
+//				tc.setEditValidateJson(ModelHelper.defaultEditValidateJson(dbc));
+				
+				//设置校验easyui validate 字符串;
+				tc.setEditValidateEasyuiString(ModelHelper.defaultEditEasyuiValidateString(dbc));
 				
 				//缓存更新;
 				boolean hasBuffer = false;

@@ -1,0 +1,64 @@
+<%@page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
+<%@taglib tagdir="/WEB-INF/tags" prefix="cus" %>
+#if(${jspFulled})
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+	<cus:Css/>
+  </head>
+  <body>
+#end
+#parse("template/velocity/jspComponent.vm")
+<form class="form-horizontal ${entity.entityBeanName}formEdit" action="#[[${]]#${jspContextPathVar}#[[}]]#${webActionRequestMapping}/${webActionEditMethodName}" method="post">
+		<%--初始高度103px, 每增加一行增加45px--%>
+			<div class="col-xs-12" style="margin-top:15px">
+				#foreach( $column in $entity.tableColumns)
+						#if( ${column.editRender.show} || ${column.primary} )
+							${column.editRender.render}
+						#end
+					#end
+			</div>
+  <div class="modal-footer">
+        #if(${entity.showPermission})<shiro:hasPermission name="${entity.editPermission}">#end
+        
+        <button type="button" class="btn btn-primary ${entity.entityBeanName}save btn-sm">保存</button>
+        #if(${entity.showPermission})</shiro:hasPermission>#end
+        <button type="button" class="btn btn-default btn-sm ${entity.entityBeanName}close" data-dismiss="modal">关闭</button>
+  </div>
+</form>
+#if(${jspFulled})
+<cus:JavaScript/>
+#end
+<script type="text/javascript">
+var formId = ".${entity.entityBeanName}formEdit";
+var table_id = "#table_id";
+$(document).ready(function(){
+	$(".${entity.entityBeanName}close").on("click", function(){
+			me.Util.closeParent();
+	});
+	
+	$(formId).on("click", ".${entity.entityBeanName}save", function(){
+			me.Form.ajaxSubmit({
+				formId:formId,
+				ok:function(data){
+					me.Table.pload(table_id);
+					me.Util.msg(data.msg);
+					me.Util.closeParent();
+				}
+			});
+	});
+});
+</script>
+#if(${jspFulled})
+</body>
+</html>
+#end
