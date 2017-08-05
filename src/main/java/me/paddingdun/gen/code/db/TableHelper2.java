@@ -8,6 +8,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -16,6 +17,8 @@ import java.util.Vector;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
+
+import org.apache.commons.lang.StringUtils;
 
 import me.paddingdun.gen.code.IConsant;
 import me.paddingdun.gen.code.data.table.DBColumn;
@@ -46,6 +49,36 @@ public class TableHelper2 {
 	 * 表别名t1;
 	 */
 	public final static String TABLE_ALIAS_T1 = "t1";
+	
+	private static String cata(DBType dbType, String catalog, String schema){
+		if(DBType.oracle == dbType){
+			return schema;
+		}else if(DBType.mysql == dbType){
+			return catalog;
+		}else{
+			throw new RuntimeException("coming soon!");
+		}
+	}
+	
+	private static String catalog(DBType dbType, String dbName){
+		if(DBType.oracle == dbType){
+			return null;
+		}else if(DBType.mysql == dbType){
+			return dbName;
+		}else{
+			throw new RuntimeException("coming soon!");
+		}
+	}
+	
+	private static String schema(DBType dbType, String dbName){
+		if(DBType.oracle == dbType){
+			return dbName;
+		}else if(DBType.mysql == dbType){
+			return null;
+		}else{
+			throw new RuntimeException("coming soon!");
+		}
+	}
 
 	/**
 	 * modify by 2016年4月8日
@@ -59,20 +92,34 @@ public class TableHelper2 {
 		DefaultMutableTreeNode root  = new DefaultMutableTreeNode();
 		try{
 			conn = DBHelper.getConnection();
+			
+			DBType dbType = ConfigHelper.database();
+			
 			DatabaseMetaData dmd =  conn.getMetaData();
 			
 			//获取数据库名称;
-			rs1 = dmd.getCatalogs();
+			String columnName = null;
+			if(DBType.oracle == dbType){
+				rs1 = dmd.getSchemas();
+				columnName = "TABLE_SCHEM";
+			}else if(DBType.mysql == dbType){
+				rs1 = dmd.getCatalogs();
+				columnName = "TABLE_CAT";
+			}else{
+				throw new RuntimeException("coming soon!");
+			}
+			
 			while(rs1.next()){
-				String dbName = rs1.getString("TABLE_CAT");
+				String dbName = rs1.getString(columnName);
 				DefaultMutableTreeNode node_db  = new DefaultMutableTreeNode();
 				node_db.setUserObject(dbName);
 				root.add(node_db);
 				
 				try{
-					rs2 = dmd.getTables(dbName, null, null, new String[]{"TABLE", "VIEW"});
+					rs2 = dmd.getTables(catalog(dbType, dbName), schema(dbType, dbName), null, new String[]{"TABLE", "VIEW"});
 					while(rs2.next()){
 						String cat  = rs2.getString("TABLE_CAT");
+						String schema = rs2.getString("TABLE_SCHEM");
 						String name = rs2.getString("TABLE_NAME");
 						String type = rs2.getString("TABLE_TYPE");
 						String remark = rs2.getString("REMARKS");
@@ -80,7 +127,7 @@ public class TableHelper2 {
 						DefaultMutableTreeNode node_table  = new DefaultMutableTreeNode();
 						
 						IDBTable t = new DBTable();
-						t.setCat(cat);
+						t.setCat(cata(dbType, cat, schema));
 						t.setTableName(name);
 						t.setTableType(type);
 						t.setTableCommon(remark);
@@ -100,37 +147,50 @@ public class TableHelper2 {
 		return root;
 	}
 	
+	
+	private static String IS_AUTOINCREMENT(DBType dbType, ResultSet rs) throws SQLException{
+		String result = "NO";
+		if(DBType.oracle == dbType){
+			
+		}else if(DBType.mysql == dbType){
+			result = rs.getString("IS_AUTOINCREMENT");
+		}else{
+			throw new RuntimeException("coming soon!");
+		}
+		return result;
+	}
+	
 	/**
 	 * 根据数据库和表名称, 获取表字段列表;
-	 * @param catalog
+	 * @param dbName
 	 * @param tableName
 	 * @return
 	 */
-	public static List<TableColumn>  tableColumn(String catalog, String tableName){
+	public static List<TableColumn>  tableColumn(String dbName, String tableName){
 		List<TableColumn> result = new ArrayList<TableColumn>();
 		Connection conn = null;
 		ResultSet  rs1	= null;
 		try{
+			DBType dbType = ConfigHelper.database();
 			//缓存;
-			String key = ConfigHelper.entityCfgName(catalog, tableName);
+			String key = ConfigHelper.entityCfgName(dbName, tableName);
 			Entity entityBuffer = BufferHelper.readEntity(key);
 			
 			conn = DBHelper.getConnection();
 			DatabaseMetaData dmd =  conn.getMetaData();
 			
-			rs1 = dmd.getPrimaryKeys(catalog, null, tableName);
+			rs1 = dmd.getPrimaryKeys(catalog(dbType, dbName), schema(dbType, dbName), tableName);
 			Set<String> set_primary = new HashSet<String>(); 
 			while(rs1.next()){
 				set_primary.add(rs1.getString("COLUMN_NAME"));
 			}
 			rs1.close();
-			
-			rs1 = dmd.getColumns(catalog, null, tableName, null);
+			rs1 = dmd.getColumns(catalog(dbType, dbName), schema(dbType, dbName), tableName, null);
 			while(rs1.next()){
 				String name = rs1.getString("COLUMN_NAME");
 				int type = rs1.getInt("DATA_TYPE");
 				String common = rs1.getString("REMARKS");
-				String is_autoincrement = rs1.getString("IS_AUTOINCREMENT");
+				String is_autoincrement = IS_AUTOINCREMENT(dbType, rs1);
 				String is_nullable = rs1.getString("IS_NULLABLE");
 				Integer column_size = rs1.getInt("COLUMN_SIZE");
 				
@@ -314,19 +374,30 @@ public class TableHelper2 {
 		return result;
 	}
 	
+	
+	private static void connectionSet(Connection conn, String dbName) throws SQLException{
+		DBType dbType = ConfigHelper.database();
+		if(DBType.oracle == dbType){
+//			conn.setSchema(dbName);
+		}else if(DBType.mysql == dbType){
+			conn.setCatalog(dbName);
+		}else{
+			throw new RuntimeException("coming soon!");
+		}
+	}
 	/**
 	 * 根据catlog和sql获取sql;
 	 * @param catlog
 	 * @param sql
 	 * @return
 	 */
-	public static List<IDBColumn> parseQuerySql(String catlog, String sql){
+	public static List<IDBColumn> parseQuerySql(String catlog, String sql, String tName){
 		List<IDBColumn> result = new ArrayList<IDBColumn>();
 		Connection conn = null;
 		PreparedStatement ps = null;
 		try{
 			conn = DBHelper.getConnection();
-			conn.setCatalog(catlog);
+			connectionSet(conn, catlog);
 			ps = conn.prepareStatement(sql);
 			ResultSetMetaData rsmd = ps.getMetaData();
 			int count = rsmd.getColumnCount();
@@ -335,6 +406,9 @@ public class TableHelper2 {
 				String columnName = rsmd.getColumnName(i);
 				String columnAliasName = rsmd.getColumnLabel(i);
 				String tableName = rsmd.getTableName(i);
+				if(StringUtils.isBlank(tableName)){
+					tableName = tName;
+				}
 //				String _catlog = rsmd.getCatalogName(i);
 				int size = rsmd.getColumnDisplaySize(i);
 				

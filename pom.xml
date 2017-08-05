@@ -79,6 +79,13 @@
             <version>5.1.21</version>
         </dependency>
         
+        <!-- oracle 驱动包 -->
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>11.2.0.3</version>
+        </dependency>
+        
         <dependency>
             <groupId>com.mxgraph</groupId>
             <artifactId>jgraphx</artifactId>

@@ -11,4 +11,9 @@ package ${serviceImplFullPackageName};
 @org.springframework.stereotype.Service
 public class ${sqlMapServiceImplJavaClassName} extends ${serviceImplFullPackageName}.base.${sqlMapBaseServiceImplJavaClassName} implements ${serviceFullPackageName}.${sqlMapIServiceJavaClassName} {
 	
+	/**
+	 * ${sqlMapServiceImplJavaClassName} log variant;
+	 */
+	private final static ${logHelperPackageName}.LogHelper logger = ${logHelperPackageName}.LogHelper.getLogger(${sqlMapServiceImplJavaClassName}.class);
+	
 }

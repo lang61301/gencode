@@ -12,6 +12,11 @@ package ${webActionFullPackageName};
 @org.springframework.stereotype.Controller
 @org.springframework.web.bind.annotation.RequestMapping("${webActionRequestMapping}")
 public class ${springWebActionJavaClassName} extends ${baseCtrlPackageName}.BaseCtrl {
+
+	/**
+	 * ${springWebActionJavaClassName} log variant;
+	 */
+	private final static ${logHelperPackageName}.LogHelper logger = ${logHelperPackageName}.LogHelper.getLogger(${springWebActionJavaClassName}.class);
 	
 	@org.springframework.beans.factory.annotation.Autowired
 	private ${serviceFullPackageName}.${sqlMapIServiceJavaClassName} service;

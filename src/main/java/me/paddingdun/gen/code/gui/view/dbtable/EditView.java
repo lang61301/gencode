@@ -72,7 +72,7 @@ public class EditView extends AbstractView {
      */
     private void qBtnOkActionPerformed(java.awt.event.ActionEvent evt){
     	String querySql1 = querySql.getText();
-    	List<IDBColumn> dbcolumns = TableHelper2.parseQuerySql(model.getDbTable().getCat(), querySql1);
+    	List<IDBColumn> dbcolumns = TableHelper2.parseQuerySql(model.getDbTable().getCat(), querySql1, model.getDbTable().getTableName());
     	
     	model.setQuerySql(querySql1);
     	model.setQuerySqlDBColumnList(dbcolumns);

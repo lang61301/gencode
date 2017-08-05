@@ -99,13 +99,20 @@ and t1.${column.columnName} = $H{${column.propertyName}}
 </select>
 
 <select id="${queryPagingMethodPrefix}${entity.entityBeanName}" parameterType="java.util.Map" resultType="java.util.HashMap">
-	<include refid="${queryPagingMethodPrefix}Condition"/>
-<![CDATA[#foreach($sort in ${entity.sorts})#if ($velocityCount == 1)order by #end #if ($velocityCount != 1), #end t1.${sort} #end]]>
+#if(${database}=="mysql") 
+<include refid="${queryPagingMethodPrefix}Condition"/>
+#foreach($sort in ${entity.sorts})#if ($velocityCount == 1)order by #end #if ($velocityCount != 1), #end t1.${sort} #end
 	<if test = "__start !=null">
 		<if test = "__length !=null">
 			<![CDATA[limit #{__start}, #{__length}]]>
 		</if>
 	</if>
+#elseif(${database}=="oracle")
+select * from ( select row_.*, rownum rownum_ from (
+<include refid="${queryPagingMethodPrefix}Condition"/>
+#foreach($sort in ${entity.sorts})#if ($velocityCount == 1)order by #end #if ($velocityCount != 1), #end t1.${sort} #end
+) row_ ) where rownum_ &lt;= #{__start}+#{__length} and rownum_ &gt; #{__start}
+#end
 </select>
 
 <select id="${getPagingCountPrefix}${entity.entityBeanName}" parameterType="java.util.Map" resultType="java.lang.Integer">

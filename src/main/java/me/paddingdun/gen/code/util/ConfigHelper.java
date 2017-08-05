@@ -7,15 +7,21 @@ import java.io.File;
 import java.io.StringWriter;
 import java.text.MessageFormat;
 
+import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import me.paddingdun.gen.code.IConsant;
+import me.paddingdun.gen.code.annotation.Value1;
 import me.paddingdun.gen.code.data.table2.Entity;
+import me.paddingdun.gen.code.db.DBType;
 import me.paddingdun.gen.code.user.TableConfig;
 
 /**
@@ -26,7 +32,28 @@ import me.paddingdun.gen.code.user.TableConfig;
  * @since 1.0
  * @version 2.0
  */
+@Component
+@Lazy(false)
 public class ConfigHelper {
+	
+	private static ConfigHelper helper = null;
+	
+	@PostConstruct
+	public void init(){
+		helper = this;
+	}
+	
+	@Value1(def="mysql")
+	private String database;
+	
+	/**
+	 * 返回数据库类型;
+	 * @return
+	 */
+	public static DBType database(){
+		return DBType.parse(helper.getDatabase());
+	}
+	
 
 	/**
 	 * 表格配置文件名称;
@@ -130,5 +157,13 @@ public class ConfigHelper {
 		}
 
 		return result;
+	}
+
+	public String getDatabase() {
+		return database;
+	}
+
+	public void setDatabase(String database) {
+		this.database = database;
 	}
 }

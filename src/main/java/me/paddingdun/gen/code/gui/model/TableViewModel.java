@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import me.paddingdun.gen.code.IConsant;
 import me.paddingdun.gen.code.annotation.Value1;
 import me.paddingdun.gen.code.data.table2.Entity;
+import me.paddingdun.gen.code.util.ConfigHelper;
 import me.paddingdun.gen.code.util.GenFilenameHelper;
 import me.paddingdun.gen.code.util.PathHelper;
 
@@ -241,6 +242,13 @@ public class TableViewModel {
 	 */
 	@Value1(def="true")
 	private Boolean jspFulled;
+	
+	/**
+	 * add by 2017-08-02
+	 * 日志输出类包名称,适配日志类;
+	 */
+	@Value1(def="")
+	private String logHelperPackageName;
 	
 	public String getDefaultCollectionHelperPackageName() {
 		return defaultCollectionHelperPackageName;
@@ -663,6 +671,18 @@ public class TableViewModel {
 
 	public void setWebActionToEditMethodName(String webActionToEditMethodName) {
 		this.webActionToEditMethodName = webActionToEditMethodName;
+	}
+
+	public String getLogHelperPackageName() {
+		return logHelperPackageName;
+	}
+
+	public void setLogHelperPackageName(String logHelperPackageName) {
+		this.logHelperPackageName = logHelperPackageName;
+	}
+	
+	public String getDatabase() {
+		return ConfigHelper.database().name();
 	}
 	
 }
