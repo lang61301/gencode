@@ -49,9 +49,9 @@ public class MainFrame extends javax.swing.JFrame {
 
         toolBar = new javax.swing.JToolBar();
         container = new javax.swing.JDesktopPane();
-        menuBar = new javax.swing.JMenuBar();
-        fileMenu = new javax.swing.JMenu();
-        editMenu = new javax.swing.JMenu();
+//        menuBar = new javax.swing.JMenuBar();
+//        fileMenu = new javax.swing.JMenu();
+//        editMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setExtendedState(6);
@@ -92,6 +92,15 @@ public class MainFrame extends javax.swing.JFrame {
 			}
         });
         
+        genNewEntity = new JButton("Generate New Entity");
+        genNewEntity.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Message msg = new Message(DesignerPerspective.MESSAGE_GEN_NEW_ENTITY);
+				perspective.sendMessage(msg);
+			}
+        });
+        
         genWork = new JButton("Generate Work");
         genWork.setToolTipText("便于工作临时生成");
         genWork.addActionListener(new ActionListener(){
@@ -108,6 +117,8 @@ public class MainFrame extends javax.swing.JFrame {
         toolBar.add(genEntity);
         
         toolBar.add(genWork);
+        
+        toolBar.add(genNewEntity);
 
         javax.swing.GroupLayout containerLayout = new javax.swing.GroupLayout(container);
         container.setLayout(containerLayout);
@@ -121,13 +132,13 @@ public class MainFrame extends javax.swing.JFrame {
             .addGap(0, 248, Short.MAX_VALUE)
         );
 
-        fileMenu.setText("File");
-        menuBar.add(fileMenu);
+//        fileMenu.setText("File");
+//        menuBar.add(fileMenu);
+//
+//        editMenu.setText("Edit");
+//        menuBar.add(editMenu);
 
-        editMenu.setText("Edit");
-        menuBar.add(editMenu);
-
-        setJMenuBar(menuBar);
+//        setJMenuBar(menuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -227,6 +238,10 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton closeProject;
     
     private javax.swing.JButton genEntity;
+    /**
+     * 按照目录结构生成;
+     */
+    private javax.swing.JButton genNewEntity;
     
     /**
      * 工作生成代码控制;

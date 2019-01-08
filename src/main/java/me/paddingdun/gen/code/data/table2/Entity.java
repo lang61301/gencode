@@ -114,6 +114,12 @@ public class Entity extends WapperDBTable {
 	 */
 	private String editPermission;
 	
+	/**
+	 * 子包名
+	 * add by 2019-01-03;
+	 */
+	private String subPackageName;
+	
 	/** end 配置参数 end **/
 	
 	public Entity(IDBTable dbTable){
@@ -260,6 +266,14 @@ public class Entity extends WapperDBTable {
 
 	public void setTableColumnsHeight(int tableColumnsHeight) {
 		this.tableColumnsHeight = tableColumnsHeight;
+	}
+
+	public String getSubPackageName() {
+		return subPackageName;
+	}
+
+	public void setSubPackageName(String subPackageName) {
+		this.subPackageName = subPackageName;
 	}
 
 }

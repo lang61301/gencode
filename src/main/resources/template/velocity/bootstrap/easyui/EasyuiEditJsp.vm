@@ -18,7 +18,7 @@
   <body>
 #end
 #parse("template/velocity/jspComponent.vm")
-<form class="form-horizontal ${entity.entityBeanName}formEdit" action="#[[${]]#${jspContextPathVar}#[[}]]#${webActionRequestMapping}/${webActionEditMethodName}" method="post">
+<form class="form-horizontal ${entity.entityBeanName}formEdit" action="#[[${]]#${jspContextPathVar}#[[}]]#${webActionRequestMapping}/edit" method="post">
 		<%--初始高度103px, 每增加一行增加45px--%>
 			<div class="col-xs-12" style="margin-top:15px">
 				#foreach( $column in $entity.tableColumns)

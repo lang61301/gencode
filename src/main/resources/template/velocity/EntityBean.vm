@@ -3,6 +3,10 @@
  */
 package ${pojoFullPackageName};
 
+import javax.persistence.Table;
+
+import ${pojoFullPackageName}.base.Base${entity.entityBeanName};
+
 /**
  * @author paddingdun
  * ${entity.tableCommon} dto
@@ -10,7 +14,8 @@ package ${pojoFullPackageName};
  * @since 1.0
  * @version 1.0
  */
-public class ${entity.entityBeanName} extends ${pojoFullPackageName}.base.Base${entity.entityBeanName} implements java.io.Serializable {
+@Table(name = "${entity.tableName}")
+public class ${entity.entityBeanName} extends Base${entity.entityBeanName} implements java.io.Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	

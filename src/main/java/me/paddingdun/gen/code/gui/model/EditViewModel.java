@@ -61,6 +61,12 @@ public class EditViewModel {
 	 * add by 2016年9月8日
 	 */
 	private String editPermission;
+	
+	/**
+	 * 子包名
+	 * add by 2019-01-03;
+	 */
+	private String subPackageName;
 
 	public String getQuerySql() {
 		return querySql;
@@ -116,5 +122,13 @@ public class EditViewModel {
 
 	public void setEditPermission(String editPermission) {
 		this.editPermission = editPermission;
+	}
+
+	public String getSubPackageName() {
+		return subPackageName;
+	}
+
+	public void setSubPackageName(String subPackageName) {
+		this.subPackageName = subPackageName;
 	}
 }

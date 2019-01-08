@@ -810,10 +810,10 @@ public class TableView extends AbstractView {
 						 model.getEntity().getEntityBeanName(),
 						 sqlMapBaseContent);
 						 
-						 String sqlMapContent = VelocityHelper.sqlMap(model);
-						 FileHelper.genSqlMapXmlFile(saveFile.getAbsolutePath(),
-						 model.getEntity().getEntityBeanName(),
-						 sqlMapContent);
+//						 String sqlMapContent = VelocityHelper.sqlMap(model);
+//						 FileHelper.genSqlMapXmlFile(saveFile.getAbsolutePath(),
+//						 model.getEntity().getEntityBeanName(),
+//						 sqlMapContent);
 						// System.out.println(sqlMapContent);
 						
 						 String sqlMapBaseIDaoContent =
@@ -941,6 +941,122 @@ public class TableView extends AbstractView {
 						FileHelper.genCommonJavaFile(saveFile.getAbsolutePath(), model.getPojoFullPackageName(),
 								model.getEntity().getEntityBeanName(), java1);
 						
+
+						EventQueue.invokeLater(new Runnable() {
+							public void run() {
+								JOptionPane.showMessageDialog(null, "生成文件完成!");
+							}
+						});
+						return null;
+					}
+				});
+			}
+		}
+	}
+	
+	/**
+	 * 新增;
+	 * @param evt
+	 */
+	private void btnGenNewActionPerformed(java.awt.event.ActionEvent evt) {
+		if (model != null) {
+			fileChooser.setFileSelectionMode(JFileChooser.SAVE_DIALOG | JFileChooser.DIRECTORIES_ONLY);
+			fileChooser.setCurrentDirectory(new File("/home/pdd/桌面"));
+			int opt = fileChooser.showSaveDialog(null);
+			// 保存;
+			if (JFileChooser.APPROVE_OPTION == opt) {
+				TaskHelper.runInNonEDT(new Callable<Integer[]>() {
+					public Integer[] call() throws Exception {
+						File saveFile = fileChooser.getSelectedFile();
+						if (!saveFile.exists())
+							saveFile.mkdirs();
+						// 设置全局值;
+						// ModelHelper.complexGetAndSimpleSet(TableView.this,
+						// model);
+
+						//获取EditViewModel;
+						EditView ev = perspective.getEditView(); 
+						ev.setModelValue();
+						EditViewModel evm = ev.getModel();
+						
+						if(StringUtils.isBlank(evm.getSubPackageName())) {
+							EventQueue.invokeLater(new Runnable() {
+								public void run() {
+									JOptionPane.showMessageDialog(null, "子包名称不能为空!");
+								}
+							});
+							return null;
+						}
+						
+						// 加工model;ok
+						ModelHelper.processTableViewModel(model, evm);
+
+						//生成java base bean;
+						String baseJavaContent = VelocityHelper.baseEntityBean(model);
+						// System.out.println(javaContent);
+						FileHelper.genBasePojoJavaFile(saveFile.getAbsolutePath(), model.getPojoFullPackageName(),
+								model.getEntity().getEntityBeanName(), baseJavaContent);
+						
+						//生成java bean;
+						String javaContent = VelocityHelper.entityBean(model);
+						// System.out.println(javaContent);
+						FileHelper.genPojoJavaFile(saveFile.getAbsolutePath(), model.getPojoFullPackageName(),
+								model.getEntity().getEntityBeanName(), javaContent);
+						
+						//生成mybatis的pojo xml;
+						 String sqlMapContent = VelocityHelper.sqlMap(model);
+						 FileHelper.genSqlMapXmlFile(saveFile.getAbsolutePath(),
+						 model.getEntity().getSubPackageName(),
+						 model.getEntity().getEntityBeanName(),
+						 sqlMapContent);
+						// System.out.println(sqlMapContent);
+						
+						//生成dao java;
+						 String sqlMapIDaoContent =
+						 VelocityHelper.sqlMapIDao(model);
+						 FileHelper.genSqlMapIDaoJavaFile(saveFile.getAbsolutePath(),
+						 model.getDaoFullPackageName(),
+						 model.getEntity().getEntityBeanName(),
+						 sqlMapIDaoContent);
+						
+						 //生成service 接口;
+						 String sqlMapIServiceContent =
+						 VelocityHelper.sqlMapIService(model);
+						 FileHelper.genSqlMapIServiceJavaFile(saveFile.getAbsolutePath(),
+						 model.getServiceFullPackageName(),
+						 model.getEntity().getEntityBeanName(),
+						 sqlMapIServiceContent);
+						
+						 //生成service实现类;
+						 String sqlMapServiceImplContent =
+						 VelocityHelper.sqlMapServiceImpl(model);
+						 FileHelper.genSqlMapServiceImplJavaFile(saveFile.getAbsolutePath(),
+						 model.getServiceImplFullPackageName(),
+						 model.getEntity().getEntityBeanName(),
+						 sqlMapServiceImplContent);
+						
+						 //生成action java;
+						 String springWebActionContent =
+						 VelocityHelper.springWebAction(model);
+						 FileHelper.genSpringWebActionJavaFile(saveFile.getAbsolutePath(),
+						 model.getWebActionFullPackageName(),
+						 model.getEntity().getEntityBeanName(),
+						 springWebActionContent);
+						 
+						 //生成list;
+						String easyuiListJspContent = 
+								VelocityHelper.easyuiListJsp(model);
+						FileHelper.genEasyuiListJspFile(saveFile.getAbsolutePath(),
+								model.getEntity().getSubPackageName(),
+								model.getEntity().getEntityBeanName(),
+								easyuiListJspContent);
+						
+						String easyuiEditJspContent = 
+								VelocityHelper.easyuiEditJsp(model);
+						FileHelper.genEasyuiEditJspFile(saveFile.getAbsolutePath(),
+								model.getEntity().getSubPackageName(),
+								model.getEntity().getEntityBeanName(),
+								easyuiEditJspContent);
 
 						EventQueue.invokeLater(new Runnable() {
 							public void run() {
@@ -1275,6 +1391,11 @@ public class TableView extends AbstractView {
 		//临时工作生成;
 		}else if (DesignerPerspective.MESSAGE_GEN_WORK_ENTITY.equals(message.getName())) {
 			btnWorkGenActionPerformed(null);
+		
+		//按照目录去生成
+		}else if (DesignerPerspective.MESSAGE_GEN_NEW_ENTITY.equals(message.getName())) {
+			btnGenNewActionPerformed(null);
 		}
+		
 	}
 }

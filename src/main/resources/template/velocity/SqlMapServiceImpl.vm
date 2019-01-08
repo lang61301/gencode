@@ -2,18 +2,105 @@
  * 
  */
 package ${serviceImplFullPackageName};
+#parse("template/velocity/fun.vm")
+
+import ${pojoFullPackageName}.${entity.entityBeanName};
+import ${baseMapperPackageName}.BaseMapper;
+import ${daoFullPackageName}.${sqlMapIDaoJavaClassName};
+import ${serviceFullPackageName}.${sqlMapIServiceJavaClassName};
+
+import org.springframework.beans.factory.annotation.Autowired;
+import ${idataCollectionPackageName}.IDataCollection;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Collections;
+import java.util.List;
+
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+
+import ${pagingPackageName}.Paging;
+import ${defaultListDataCollectionPackageName}.DefaultListDataCollection;
+
+import ${defaultCollectionHelperPackageName}.CollectionHelper;
+
 /**
- * autogen
  * @author paddingdun
  * ${entity.tableCommon} service impl;
  * @date ${date}
  */
 @org.springframework.stereotype.Service
-public class ${sqlMapServiceImplJavaClassName} extends ${serviceImplFullPackageName}.base.${sqlMapBaseServiceImplJavaClassName} implements ${serviceFullPackageName}.${sqlMapIServiceJavaClassName} {
+@org.springframework.transaction.annotation.Transactional
+public class ${sqlMapServiceImplJavaClassName} extends ${baseMapperPackageName}.BaseService<${entity.entityBeanName}> implements ${sqlMapIServiceJavaClassName} {
 	
 	/**
-	 * ${sqlMapServiceImplJavaClassName} log variant;
+	 * ${sqlMapServiceImplJavaClassName} log 变量;
 	 */
 	private final static ${logHelperPackageName}.LogHelper logger = ${logHelperPackageName}.LogHelper.getLogger(${sqlMapServiceImplJavaClassName}.class);
+	
+	@Autowired
+    private ${sqlMapIDaoJavaClassName} dao;
+    
+    @Override
+   	public BaseMapper<${entity.entityBeanName}> getBaseMapper() {
+		return dao;
+   	}
+   	
+   	@Override
+	public IDataCollection<Map<String, Object>> queryPaging(${entity.entityBeanName} obj, Paging paging) {
+		DefaultListDataCollection<Map<String, Object>> result = new DefaultListDataCollection<Map<String, Object>>();
+		List<Map<String, Object>> empty = Collections.emptyList();
+		result.setRows(empty);
+		Page<Map<String, Object>> pageInfo = PageHelper.startPage(paging.getPage(), paging.getRows());
+		
+		Map<String, Object> params = new HashMap<String, Object>();
+		CollectionHelper.object2Map(obj, params);
+		
+		this.dao.queryPaging(params);
+		long total = pageInfo.getTotal();
+		if(0l == total) {
+			return result;
+		}
+		result.setTotal(Long.valueOf(total).intValue());
+		result.setRows(pageInfo.getResult());
+		result.setStart(paging.getStart());
+		result.setLength(paging.getLength());
+		return result;
+	}
+	
+	/**
+	 * delete pojo by[] pk;
+	 */
+	@Override
+	public void delete(#pks_argument_array(${entity.tableColumns})){
+		Map<String, Object> params = new HashMap<String, Object>();
+		#pks_params(${entity.tableColumns})
+		this.dao.delete(params);
+	}
+	
+	/**
+	 * get pojo by pk;
+	 */
+	@Override
+	public ${entity.entityBeanName} get(#pks_argument(${entity.tableColumns})) {
+		#pks_set_obj(${entity.tableColumns}, ${entity.entityBeanName})
+		return result;
+	}
+	
+	/**
+	 * save pojo;
+	 */
+	@Override
+	public void save(${entity.entityBeanName} obj){
+	this.dao.insertSelective(obj);
+	}
+	
+	/**
+	 * update pojo;
+	 */
+	@Override
+	public void update(${entity.entityBeanName} obj){
+	this.dao.updateByPrimaryKeySelective(obj);
+	}
 	
 }

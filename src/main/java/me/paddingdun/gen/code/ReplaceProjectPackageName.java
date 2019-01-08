@@ -10,13 +10,18 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.StringReader;
 import java.util.Collection;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.Node;
+import org.dom4j.io.SAXReader;
 
 
 /**
@@ -34,16 +39,19 @@ public class ReplaceProjectPackageName {
 	 * @param args
 	 */
 	public static void rpl(String[] args) throws Exception{
-		String dir_src	  = "D:\\home\\doc\\frame\\YJBackend";
+		String dir_src	  = "D:\\home\\doc\\frame\\ssh2";
 //		String dir_src	  = "D:\\home\\doc\\frame\\ssh2";
 		
-		String dir_target = "D:\\home\\doc\\frame\\a1";
+		String dir_target = "D:\\home\\doc\\frame\\srm";
 		String charset 	  = "UTF-8";
 		
+		//新的工程名称;
+		String new_project_name = "srm";
+		
 		//需要替换的包名;
-		String mark_base_package	  = "com.yj";
+		String mark_base_package	  = "me.paddingdun";
 		//替换后的包名;
-		String rpl_base_package 	  = "com.xjyl";
+		String rpl_base_package 	  = "com.xb.srm";
 		
 		//可以被替换的包名;
 		String rpl_mark_base_package  = mark_base_package.replaceAll(Pattern.quote("."), Matcher.quoteReplacement("\\") + Matcher.quoteReplacement("."));
@@ -65,6 +73,43 @@ public class ReplaceProjectPackageName {
 			FileUtils.deleteDirectory(base_target_java);
 		}
 		base_target_java.mkdirs();
+		
+		//pom.xml
+		File file_pom = new File(base_src, "pom.xml");
+		if(file_pom.exists()){
+			SAXReader reader = new SAXReader();
+			Document pom_doc = reader.read(file_pom);
+			Element root =pom_doc.getRootElement();
+			Element g = root.element("groupId");
+			g.setText(rpl_base_package);
+			Element artifact = root.element("artifactId");
+			artifact.setText(new_project_name);
+			Element n = root.element("name");
+			n.setText(new_project_name + " Maven Webapp");
+			Element fn = root.element("build").element("finalName");
+			fn.setText(new_project_name);
+			
+			StringReader sr = new  StringReader( pom_doc.asXML() );
+			File file_target_pom = new File(dir_target, "pom.xml");
+			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file_target_pom), charset));
+			
+			BufferedReader br = new BufferedReader(sr);
+			String line = null;
+			boolean firstLine = true;
+			while((line = br.readLine()) != null){
+				if(firstLine){
+					firstLine = false;
+					continue;
+				}
+				bw.write(line);
+				
+				bw.write('\r');
+				bw.write('\n');
+			}
+			
+			br.close();
+			bw.close();
+		}
 		
 		File base_target_resource =  new File(dir_target, dir_resource);
 		if(base_target_resource.exists()){

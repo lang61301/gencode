@@ -62,6 +62,12 @@ public class DesignerPerspective extends AbstractPerspective {
 	public final static String MESSAGE_GEN_ENTITY = "gen_entity";
 	
 	/**
+	 * add by 2019-01-03
+	 * 生成新实体文件;
+	 */
+	public final static String MESSAGE_GEN_NEW_ENTITY = "gen_new_entity";
+	
+	/**
 	 * 模板临时生成文件;
 	 */
 	public final static String MESSAGE_GEN_WORK_ENTITY = "gen_work_entity";

@@ -461,7 +461,7 @@ public class ModelHelper {
 		entity.setShowPermission(editViewModel.isShowPermission());
 		entity.setQueryPermission(editViewModel.getQueryPermission());
 		entity.setEditPermission(editViewModel.getEditPermission());
-		
+		entity.setSubPackageName(editViewModel.getSubPackageName());
 		
 		//javabean 属性集合;
 		Set<String> set_propertyNames = new HashSet<String>();

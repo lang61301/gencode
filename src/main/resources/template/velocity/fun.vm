@@ -56,3 +56,7 @@
 	#end
 );
 #end
+
+#macro( pks_set_obj $cols $javaBeanName )
+#foreach( $column in ${cols}) #if (${column.primary}) ${javaBeanName} result = this.dao.selectByPrimaryKey(${column.propertyName}); #end #end
+#end

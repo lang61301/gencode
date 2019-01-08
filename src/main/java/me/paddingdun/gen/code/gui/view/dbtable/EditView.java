@@ -151,6 +151,7 @@ public class EditView extends AbstractView {
         
         queryPermission = new JTextField();
         editPermission = new JTextField();
+        subPackageName = new JTextField();
         
         TableLayout tableLayout_rootSp = new TableLayout();
         double border = 2;			      		
@@ -159,7 +160,7 @@ public class EditView extends AbstractView {
         tableLayout_rootSp.setColumn(col_size);
         double h0 = 26;
         double h1 = 120;
-        tableLayout_rootSp.setRow(new double[]{border, h0, h1, h0, h0, h1, h0, h0, border});
+        tableLayout_rootSp.setRow(new double[]{border, h0, h1, h0, h0, h1, h0, h0, h0, border});
         rootP.setLayout(tableLayout_rootSp);
         
         int lastColumn = col_size.length - 2;
@@ -202,6 +203,11 @@ public class EditView extends AbstractView {
         rootP.add(queryPermission, MessageFormat.format("5,{0},6,{0}", row));
         rootP.add(new JLabel("编辑"), MessageFormat.format("7,{0},7,{0}", row));
         rootP.add(editPermission, MessageFormat.format("8,{0}," + lastColumn+ ",{0}", row));
+        
+        
+        row++;
+        rootP.add(new JLabel("子包名"), MessageFormat.format("1,{0},2,{0}", row));
+        rootP.add(subPackageName, MessageFormat.format("3,{0}, 4 ,{0}", row));
 
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
@@ -255,6 +261,10 @@ public class EditView extends AbstractView {
     @ModelValue(category = ModelValueCategory.Entity, valueGetFuncName = "getText", valueSetFuncName = "setText")
     private javax.swing.JTextField editPermission;
     
+    
+    @ModelValue(category = ModelValueCategory.Entity, valueGetFuncName = "getText", valueSetFuncName = "setText")
+    private javax.swing.JTextField subPackageName;
+    
     // End of variables declaration                   
 
 
@@ -283,12 +293,14 @@ public class EditView extends AbstractView {
 									model.setShowPermission(false);
 									model.setQueryPermission("");
 									model.setEditPermission("");
+									model.setSubPackageName("");
 								}else{
 									model.setQuerySql(eb.getQuerySql());
 									model.setDeleteSql(eb.getDeleteSql());
 									model.setShowPermission(eb.isShowPermission());
 									model.setQueryPermission(eb.getQueryPermission());
 									model.setEditPermission(eb.getEditPermission());
+									model.setSubPackageName(eb.getSubPackageName());
 								}
 								
 								EventQueue.invokeLater(new Runnable() {

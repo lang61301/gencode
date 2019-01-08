@@ -50,12 +50,17 @@ public class FileHelper {
 		genJavaFile(baseDir, pkgName + ".base", fileName, fileContent);
 	}
 	
-	public static void genSqlMapXmlFile(String baseDir, String entityName, String fileContent){
+	public static void genSqlMapXmlFile(String baseDir, String subPackageName, String entityName, String fileContent){
 
 		String fn = GenFilenameHelper.sqlMapXmlFileName(entityName);
 		BufferedWriter bw = null;
 		try {
-			bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(baseDir, fn)), Charset.forName("UTF-8")));
+			File dir = new File(baseDir, subPackageName);
+			if(!dir.exists() 
+					&& !dir.isDirectory()){
+				dir.mkdirs();
+			}
+			bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(dir, fn)), Charset.forName("UTF-8")));
 			bw.write(fileContent);
 		} catch (Exception e) {
 			e.printStackTrace();

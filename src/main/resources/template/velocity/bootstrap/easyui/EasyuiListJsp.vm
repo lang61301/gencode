@@ -91,7 +91,7 @@ $(document).ready(function(){
 	
 	me.Table.init({
 			tableId:table_id,
-			url:"#[[${]]#${jspContextPathVar}#[[}]]#${webActionRequestMapping}/${queryPagingMethodPrefix}",
+			url:"#[[${]]#${jspContextPathVar}#[[}]]#${webActionRequestMapping}/queryPaging",
 		    idField:"${entity.key.columnAlias}",
 			queryParams:query_param,
 			toolbar:"#${entity.entityBeanName}Toolbar",
@@ -127,7 +127,7 @@ $(document).ready(function(){
 });
 
 function edit2(id, title) {
-	 var url = "#[[${]]#${jspContextPathVar}#[[}]]#${webActionRequestMapping}/${webActionToEditMethodName}";
+	 var url = "#[[${]]#${jspContextPathVar}#[[}]]#${webActionRequestMapping}/toEdit";
     if (!!id) {
     	me.Table.clear(table_id);
         url+="?${entity.key.propertyName}="+id;
@@ -158,7 +158,7 @@ function delete2(id) {
 		var objData = {};
 		objData["${entity.key.propertyName}"]=dataArr;
 		me.Util.ajax({
-			url:"#[[${]]#${jspContextPathVar}#[[}]]#${webActionRequestMapping}/${deleteMethodPrefix}",
+			url:"#[[${]]#${jspContextPathVar}#[[}]]#${webActionRequestMapping}/delete",
 			data:objData,
 			ok:function(data){
 					me.Table.clear(table_id);

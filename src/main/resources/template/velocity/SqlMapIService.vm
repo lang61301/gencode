@@ -3,12 +3,26 @@
  */
 package ${serviceFullPackageName};
 
+import java.util.Map;
+import ${pagingPackageName}.Paging;
+import ${idataCollectionPackageName}.IDataCollection;
+import ${pojoFullPackageName}.${entity.entityBeanName};
+import ${ibaseServicePackageName}.IBaseService;
+
 /**
- * autogen
  * @author paddingdun
  * ${entity.tableCommon} service interface;
  * @date ${date}
  */
-public interface ${sqlMapIServiceJavaClassName} extends ${serviceFullPackageName}.base.${sqlMapBaseServiceJavaClassName} {
+public interface ${sqlMapIServiceJavaClassName} extends IBaseService<${entity.entityBeanName}> {
 	
+	IDataCollection<Map<String, Object>> queryPaging(${entity.entityBeanName} obj, Paging paging);
+	
+	void delete(#pks_argument_array(${entity.tableColumns}));
+	
+	public ${entity.entityBeanName} get(#pks_argument(${entity.tableColumns}));
+	
+	void save(${entity.entityBeanName} obj);
+	
+	void update(${entity.entityBeanName} obj);
 }

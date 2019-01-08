@@ -204,6 +204,24 @@ public class TableViewModel {
 	private String baseCtrlPackageName;
 	
 	/**
+	 * add by 2018-01-07
+	 */
+	@Value1
+	private String baseMapperPackageName;
+	
+	/**
+	 * add by 2018-01-07
+	 */
+	@Value1
+	private String baseServicePackageName;
+	
+	/**
+	 * add by 2018-01-07
+	 */
+	@Value1
+	private String ibaseServicePackageName;
+	
+	/**
 	 * jsp中datatables表格id;
 	 */
 	@Value1(def="table_id")
@@ -553,28 +571,28 @@ public class TableViewModel {
 	
 	public String getPojoFullPackageName() {
 		if(pojoFullPackageName == null){
-			pojoFullPackageName = PathHelper.concatPackageName(basePackageName, pojoPackageName, null);
+			pojoFullPackageName = PathHelper.concatPackageName(basePackageName, pojoPackageName, entity.getSubPackageName());
 		}
 		return pojoFullPackageName;
 	}
 	
 	public String getDaoFullPackageName() {
 		if(daoFullPackageName == null){
-			daoFullPackageName = PathHelper.concatPackageName(basePackageName, daoPackageName, null);
+			daoFullPackageName = PathHelper.concatPackageName(basePackageName, daoPackageName, entity.getSubPackageName());
 		}
 		return daoFullPackageName;
 	}
 	
 	public String getServiceFullPackageName() {
 		if(serviceFullPackageName == null){
-			serviceFullPackageName = PathHelper.concatPackageName(basePackageName, servicePackageName, null);
+			serviceFullPackageName = PathHelper.concatPackageName(basePackageName, servicePackageName, entity.getSubPackageName());
 		}
 		return serviceFullPackageName;
 	}
 	
 	public String getWebActionFullPackageName() {
 		if(webActionFullPackageName == null){
-			webActionFullPackageName = PathHelper.concatPackageName(basePackageName, webActionPackageName, null);
+			webActionFullPackageName = PathHelper.concatPackageName(basePackageName, webActionPackageName, entity.getSubPackageName());
 		}
 		return webActionFullPackageName;
 	}
@@ -622,7 +640,7 @@ public class TableViewModel {
 	 * @return
 	 */
 	public String getSpringJspViewResolverMiddleFullPath() {
-		return PathHelper.concatJspMiddlePath(getJspWebinfAfterDir(), entity.getEntityBeanName());
+		return PathHelper.concatJspMiddlePath(getJspWebinfAfterDir(), entity.getSubPackageName(), entity.getEntityBeanName());
 	}
 	
 	/**
@@ -630,7 +648,7 @@ public class TableViewModel {
 	 * @return
 	 */
 	public String getSpringListJspViewResolverMiddleFullPath() {
-		return PathHelper.concatJspMiddlePath(getJspWebinfAfterDir(), GenFilenameHelper.easyuiListFN(entity.getEntityBeanName()) );
+		return PathHelper.concatJspMiddlePath(getJspWebinfAfterDir(), entity.getSubPackageName(), GenFilenameHelper.easyuiListFN(entity.getEntityBeanName()) );
 	}
 
 	public Entity getEntity() {
@@ -683,6 +701,30 @@ public class TableViewModel {
 	
 	public String getDatabase() {
 		return ConfigHelper.database().name();
+	}
+
+	public String getBaseMapperPackageName() {
+		return baseMapperPackageName;
+	}
+
+	public void setBaseMapperPackageName(String baseMapperPackageName) {
+		this.baseMapperPackageName = baseMapperPackageName;
+	}
+
+	public String getBaseServicePackageName() {
+		return baseServicePackageName;
+	}
+
+	public void setBaseServicePackageName(String baseServicePackageName) {
+		this.baseServicePackageName = baseServicePackageName;
+	}
+
+	public String getIbaseServicePackageName() {
+		return ibaseServicePackageName;
+	}
+
+	public void setIbaseServicePackageName(String ibaseServicePackageName) {
+		this.ibaseServicePackageName = ibaseServicePackageName;
 	}
 	
 }

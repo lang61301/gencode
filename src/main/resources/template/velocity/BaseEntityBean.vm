@@ -3,6 +3,9 @@
  */
 package ${pojoFullPackageName}.base;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+
 /**
  * @author paddingdun
  * ${entity.tableCommon} do
@@ -10,7 +13,7 @@ package ${pojoFullPackageName}.base;
  * @since 1.0
  * @version 1.0
  */
-public abstract class Base${entity.entityBeanName} implements java.io.Serializable {
+public class Base${entity.entityBeanName} implements java.io.Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -21,6 +24,10 @@ public abstract class Base${entity.entityBeanName} implements java.io.Serializab
 	#if($column.gson)
 	@com.google.gson.annotations.SerializedName("${column.columnAlias}")
 	#end
+	#if($column.primary)
+	@Id
+	#end
+	@Column(name = "${column.columnName}")
     private ${column.javaType} ${column.propertyName};
     	
 	#end

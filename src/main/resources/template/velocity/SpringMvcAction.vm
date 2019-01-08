@@ -3,23 +3,41 @@
  */
 package ${webActionFullPackageName};
 #parse("template/velocity/fun.vm")
+
+import org.springframework.beans.factory.annotation.Autowired;
+import ${serviceFullPackageName}.${sqlMapIServiceJavaClassName};
+import ${baseCtrlPackageName}.BaseCtrl;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod.POST;
+import org.springframework.web.bind.annotation.RequestMethod.GET;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import ${jsonResultPackageName}.JsonResult2;
+import ${idataCollectionPackageName}.IDataCollection;
+import ${pojoFullPackageName}.${entity.entityBeanName};
+import ${pagingPackageName}.Paging;
+import ${businessExceptionPackageName}.BusinessException;
+import ${ierrorCodePackageName}.IErrorCode.UNKNOW_EXCEPTION;
+
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+
 /**
- * autogen
  * @author paddingdun
  * ${entity.tableCommon} spring web controller;
  * @date ${date}
  */
 @org.springframework.stereotype.Controller
-@org.springframework.web.bind.annotation.RequestMapping("${webActionRequestMapping}")
-public class ${springWebActionJavaClassName} extends ${baseCtrlPackageName}.BaseCtrl {
+@RequestMapping("${webActionRequestMapping}")
+public class ${springWebActionJavaClassName} extends BaseCtrl {
 
 	/**
-	 * ${springWebActionJavaClassName} log variant;
+	 * ${springWebActionJavaClassName} log 变量;
 	 */
 	private final static ${logHelperPackageName}.LogHelper logger = ${logHelperPackageName}.LogHelper.getLogger(${springWebActionJavaClassName}.class);
 	
-	@org.springframework.beans.factory.annotation.Autowired
-	private ${serviceFullPackageName}.${sqlMapIServiceJavaClassName} service;
+	@Autowired
+	private ${sqlMapIServiceJavaClassName} service;
 	
 	/**
 	 * index;
@@ -28,8 +46,8 @@ public class ${springWebActionJavaClassName} extends ${baseCtrlPackageName}.Base
 	#if(${entity.showPermission})
 	@org.apache.shiro.authz.annotation.RequiresPermissions("${entity.queryPermission}")
 	#end
-	@org.springframework.web.bind.annotation.RequestMapping
-	public String index() {
+	@RequestMapping("/list")
+	public String list() {
 		return "${springListJspViewResolverMiddleFullPath}";
 	}
 
@@ -39,18 +57,18 @@ public class ${springWebActionJavaClassName} extends ${baseCtrlPackageName}.Base
 	 * @param paging
 	 * @return
 	 */
-	@org.springframework.web.bind.annotation.RequestMapping(value="/${queryPagingMethodPrefix}", method = org.springframework.web.bind.annotation.RequestMethod.POST)
-	@org.springframework.web.bind.annotation.ResponseBody
-	public ${jsonResultPackageName}.JsonResult2<${idataCollectionPackageName}.IDataCollection<java.util.Map<java.lang.String, java.lang.Object>>> ${queryPagingMethodPrefix}(${pojoFullPackageName}.${entity.entityBeanName} obj, ${pagingPackageName}.Paging paging) {
-		${jsonResultPackageName}.JsonResult2<${idataCollectionPackageName}.IDataCollection<java.util.Map<java.lang.String, java.lang.Object>>> jr = new ${jsonResultPackageName}.JsonResult2<${idataCollectionPackageName}.IDataCollection<java.util.Map<java.lang.String, java.lang.Object>>>();
+	@RequestMapping(value="/queryPaging", method = RequestMethod.POST)
+	@ResponseBody
+	public JsonResult2<IDataCollection<Map<String, Object>>> queryPaging(${entity.entityBeanName} obj, Paging paging) {
+		JsonResult2<IDataCollection<Map<String, Object>>> jr = new JsonResult2<IDataCollection<Map<String, Object>>>();
 		try{
-			${idataCollectionPackageName}.IDataCollection<java.util.Map<java.lang.String, java.lang.Object>> data = service.${queryPagingMethodPrefix}${entity.entityBeanName}(obj, paging);
+			IDataCollection<java.util.Map<String, Object>> data = service.queryPaging(obj, paging);
 			jr.setData(data);
-		}catch(${businessExceptionPackageName}.BusinessException e){
-			jr.setStatus(${ierrorCodePackageName}.IErrorCode.UNKNOW_EXCEPTION);
+		}catch(BusinessException e){
+			jr.setStatus(IErrorCode.UNKNOW_EXCEPTION);
 			jr.setMsg(e.getMessage());
-		}catch(java.lang.Exception e){
-			jr.setStatus(${ierrorCodePackageName}.IErrorCode.UNKNOW_EXCEPTION);
+		}catch(Exception e){
+			jr.setStatus(IErrorCode.UNKNOW_EXCEPTION);
 			jr.setMsg("查询异常");
 			e.printStackTrace();
 		}
@@ -64,15 +82,15 @@ public class ${springWebActionJavaClassName} extends ${baseCtrlPackageName}.Base
 	#if(${entity.showPermission})
 	@org.apache.shiro.authz.annotation.RequiresPermissions("${entity.editPermission}")
 	#end
-	@org.springframework.web.bind.annotation.RequestMapping(value = "/${webActionToEditMethodName}", method = org.springframework.web.bind.annotation.RequestMethod.GET)
-	public String ${webActionToEditMethodName}(javax.servlet.http.HttpServletRequest request, #pks_web_argument1(${entity.tableColumns})) {
-		${pojoFullPackageName}.${entity.entityBeanName} obj = new ${pojoFullPackageName}.${entity.entityBeanName}();
+	@RequestMapping(value = "/toEdit", method = RequestMethod.GET)
+	public String toEdit(HttpServletRequest request, #pks_web_argument1(${entity.tableColumns})) {
+		${entity.entityBeanName} obj = new ${entity.entityBeanName}();
 		boolean add_flag = #pks_argus_isnull(${entity.key})
 		//to new;
 		if(add_flag){
 		//to edit;
 		}else{
-			obj = service.${getMethodPrefix}${entity.entityBeanName}(${entity.key.propertyName});
+			obj = service.get(${entity.key.propertyName});
 		}
 		request.setAttribute("obj", obj);
 		return "${springJspViewResolverMiddleFullPath}";
@@ -86,24 +104,24 @@ public class ${springWebActionJavaClassName} extends ${baseCtrlPackageName}.Base
 	#if(${entity.showPermission})
 	@org.apache.shiro.authz.annotation.RequiresPermissions("${entity.editPermission}")
 	#end
-	@org.springframework.web.bind.annotation.RequestMapping(value="/${webActionEditMethodName}", method = org.springframework.web.bind.annotation.RequestMethod.POST)
-	@org.springframework.web.bind.annotation.ResponseBody
-	public ${jsonResultPackageName}.JsonResult2<java.lang.Void> ${webActionEditMethodName}(${pojoFullPackageName}.${entity.entityBeanName} obj) {
-		${jsonResultPackageName}.JsonResult2<java.lang.Void> jr = new ${jsonResultPackageName}.JsonResult2<java.lang.Void>();
+	@RequestMapping(value="/edit", method = RequestMethod.POST)
+	@ResponseBody
+	public JsonResult2<Void> edit(${entity.entityBeanName} obj) {
+		JsonResult2<Void> jr = new JsonResult2<Void>();
 		try{
 			#set($objName="obj")
 			boolean save = #pks_isnull(${entity.tableColumns} ${objName})
 			if(save){
-				service.${saveMethodPrefix}${entity.entityBeanName}(obj);
+				service.save(obj);
 			}else{
-				service.${updateMethodPrefix}${entity.entityBeanName}(obj);
+				service.update(obj);
 			}
 			jr.setMsg("保存成功!");
-		}catch(${businessExceptionPackageName}.BusinessException e){
-			jr.setStatus(${ierrorCodePackageName}.IErrorCode.UNKNOW_EXCEPTION);
+		}catch(BusinessException e){
+			jr.setStatus(IErrorCode.UNKNOW_EXCEPTION);
 			jr.setMsg(e.getMessage());
 		}catch(java.lang.Exception e){
-			jr.setStatus(${ierrorCodePackageName}.IErrorCode.UNKNOW_EXCEPTION);
+			jr.setStatus(IErrorCode.UNKNOW_EXCEPTION);
 			jr.setMsg("保存异常");
 			e.printStackTrace();
 		}
@@ -113,18 +131,18 @@ public class ${springWebActionJavaClassName} extends ${baseCtrlPackageName}.Base
 	/**
 	 * get object;
 	 */
-	@org.springframework.web.bind.annotation.RequestMapping(value="/${getMethodPrefix}")
-	@org.springframework.web.bind.annotation.ResponseBody
-	public ${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${entity.entityBeanName}> ${getMethodPrefix}(#pks_web_argument(${entity.tableColumns})) {
-		${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${entity.entityBeanName}> jr = new ${jsonResultPackageName}.JsonResult2<${pojoFullPackageName}.${entity.entityBeanName}>();
+	@RequestMapping(value="/get")
+	@ResponseBody
+	public JsonResult2<${entity.entityBeanName}> get(#pks_web_argument(${entity.tableColumns})) {
+		JsonResult2<${entity.entityBeanName}> jr = new JsonResult2<${entity.entityBeanName}>();
 		try{
-			${pojoFullPackageName}.${entity.entityBeanName} obj = service.${getMethodPrefix}${entity.entityBeanName}(#pks_call_argument(${entity.tableColumns}));
+			${entity.entityBeanName} obj = service.get(#pks_call_argument(${entity.tableColumns}));
 			jr.setData(obj);
-		}catch(${businessExceptionPackageName}.BusinessException e){
-			jr.setStatus(${ierrorCodePackageName}.IErrorCode.UNKNOW_EXCEPTION);
+		}catch(BusinessException e){
+			jr.setStatus(IErrorCode.UNKNOW_EXCEPTION);
 			jr.setMsg(e.getMessage());
 		}catch(java.lang.Exception e){
-			jr.setStatus(${ierrorCodePackageName}.IErrorCode.UNKNOW_EXCEPTION);
+			jr.setStatus(IErrorCode.UNKNOW_EXCEPTION);
 			jr.setMsg("获取对象异常");
 			e.printStackTrace();
 		}
@@ -137,18 +155,18 @@ public class ${springWebActionJavaClassName} extends ${baseCtrlPackageName}.Base
 	#if(${entity.showPermission})
 	@org.apache.shiro.authz.annotation.RequiresPermissions("${entity.editPermission}")
 	#end
-	@org.springframework.web.bind.annotation.RequestMapping(value="/${deleteMethodPrefix}")
-	@org.springframework.web.bind.annotation.ResponseBody
-	public ${jsonResultPackageName}.JsonResult2<java.lang.Void> ${deleteMethodPrefix}(#pks_web_argument_array(${entity.tableColumns})) {
-		${jsonResultPackageName}.JsonResult2<java.lang.Void> jr = new ${jsonResultPackageName}.JsonResult2<java.lang.Void>();
+	@RequestMapping(value="/delete")
+	@ResponseBody
+	public JsonResult2<Void> delete(#pks_web_argument_array(${entity.tableColumns})) {
+		JsonResult2<Void> jr = new JsonResult2<Void>();
 		try{
-			service.${deleteMethodPrefix}${entity.entityBeanName}(#pks_call_argument(${entity.tableColumns}));
+			service.delete(#pks_call_argument(${entity.tableColumns}));
 			jr.setMsg("删除成功!");
-		}catch(${businessExceptionPackageName}.BusinessException e){
-			jr.setStatus(${ierrorCodePackageName}.IErrorCode.UNKNOW_EXCEPTION);
+		}catch(BusinessException e){
+			jr.setStatus(UNKNOW_EXCEPTION);
 			jr.setMsg(e.getMessage());
 		}catch(java.lang.Exception e){
-			jr.setStatus(${ierrorCodePackageName}.IErrorCode.UNKNOW_EXCEPTION);
+			jr.setStatus(IErrorCode.UNKNOW_EXCEPTION);
 			jr.setMsg("删除对象异常");
 			e.printStackTrace();
 		}
