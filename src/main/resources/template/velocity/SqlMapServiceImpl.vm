@@ -8,6 +8,7 @@ import ${pojoFullPackageName}.${entity.entityBeanName};
 import ${baseMapperPackageName}.BaseMapper;
 import ${daoFullPackageName}.${sqlMapIDaoJavaClassName};
 import ${serviceFullPackageName}.${sqlMapIServiceJavaClassName};
+import ${baseServicePackageName}.BaseService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import ${idataCollectionPackageName}.IDataCollection;
@@ -31,7 +32,7 @@ import ${defaultCollectionHelperPackageName}.CollectionHelper;
  */
 @org.springframework.stereotype.Service
 @org.springframework.transaction.annotation.Transactional
-public class ${sqlMapServiceImplJavaClassName} extends ${baseMapperPackageName}.BaseService<${entity.entityBeanName}> implements ${sqlMapIServiceJavaClassName} {
+public class ${sqlMapServiceImplJavaClassName} extends BaseService<${entity.entityBeanName}> implements ${sqlMapIServiceJavaClassName} {
 	
 	/**
 	 * ${sqlMapServiceImplJavaClassName} log 变量;
@@ -75,7 +76,7 @@ public class ${sqlMapServiceImplJavaClassName} extends ${baseMapperPackageName}.
 	public void delete(#pks_argument_array(${entity.tableColumns})){
 		Map<String, Object> params = new HashMap<String, Object>();
 		#pks_params(${entity.tableColumns})
-		this.dao.delete(params);
+		this.dao.deletes(params);
 	}
 	
 	/**
@@ -92,7 +93,14 @@ public class ${sqlMapServiceImplJavaClassName} extends ${baseMapperPackageName}.
 	 */
 	@Override
 	public void save(${entity.entityBeanName} obj){
-	this.dao.insertSelective(obj);
+	#foreach( $column in ${entity.tableColumns})
+	#if(${column.editRenderShow} == false)
+	#if(${column.newValueJavaCode})
+		${column.newValueJavaCode}
+	#end
+	#end
+	#end
+		this.dao.insertSelective(obj);
 	}
 	
 	/**

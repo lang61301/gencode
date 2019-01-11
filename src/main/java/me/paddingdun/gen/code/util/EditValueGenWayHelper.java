@@ -117,7 +117,7 @@ public class EditValueGenWayHelper {
 		}else if( way == EditValueGenWayType.date ){
 			return MessageFormat.format("{0}.{1}({2});", "obj", setMethod, "new java.sql.Date(new java.util.Date().getTime())");
 		}else if( way == EditValueGenWayType.uuid ){
-			return MessageFormat.format("{0}.{1}({2});", "obj", setMethod, "java.util.UUID.randomUUID().toString()");
+			return MessageFormat.format("{0}.{1}({2});", "obj", setMethod, "java.util.UUID.randomUUID().toString().replaceAll(\"-\", \"\")");
 		}else{
 			return null;
 		}

@@ -25,6 +25,7 @@ public class ${entity.entityBeanName} extends Base${entity.entityBeanName} imple
 	 * ${column.title}
 	 * ext query parameter property;
 	 */
+	@javax.persistence.Transient
     private ${column.javaType} ${column.propertyName};
     #end	
 	#end

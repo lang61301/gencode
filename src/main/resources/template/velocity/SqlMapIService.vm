@@ -2,6 +2,7 @@
  * 
  */
 package ${serviceFullPackageName};
+#parse("template/velocity/fun.vm")
 
 import java.util.Map;
 import ${pagingPackageName}.Paging;

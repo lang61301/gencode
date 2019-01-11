@@ -16,7 +16,7 @@
 </select>
 
 #set($j=0)
-<delete id="delete" parameterType="java.util.Map">
+<delete id="deletes" parameterType="java.util.Map">
 <![CDATA[delete from ${entity.tableName} where #foreach( $column in ${entity.tableColumns}) #if (${column.primary}) #if ($j != 0)and #end ${column.columnName} in ]]> 
 <foreach item="${column.propertyName}" collection="${column.propertyName}" open="(" close=")" separator=",">
 <![CDATA[$H{${column.propertyName}}]]>

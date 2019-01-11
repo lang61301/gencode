@@ -268,6 +268,38 @@ public class TableViewModel {
 	@Value1(def="")
 	private String logHelperPackageName;
 	
+	/**
+	 * add by 2019-01-09
+	 */
+	@Value1
+	private String xmlParentDir;
+	/**
+	 * add by 2019-01-09
+	 */
+	@Value1
+	private String dataParentDir;
+	/**
+	 * add by 2019-01-09
+	 */
+	@Value1
+	private String daoParentDir;
+	/**
+	 * add by 2019-01-09
+	 */
+	@Value1
+	private String serviceParentDir;
+	/**
+	 * add by 2019-01-09
+	 */
+	@Value1
+	private String actionParentDir;
+	/**
+	 * add by 2019-01-09
+	 */
+	@Value1
+	private String jspParentDir;
+	
+	
 	public String getDefaultCollectionHelperPackageName() {
 		return defaultCollectionHelperPackageName;
 	}
@@ -725,6 +757,54 @@ public class TableViewModel {
 
 	public void setIbaseServicePackageName(String ibaseServicePackageName) {
 		this.ibaseServicePackageName = ibaseServicePackageName;
+	}
+
+	public String getXmlParentDir() {
+		return xmlParentDir;
+	}
+
+	public void setXmlParentDir(String xmlParentDir) {
+		this.xmlParentDir = xmlParentDir;
+	}
+
+	public String getDataParentDir() {
+		return dataParentDir;
+	}
+
+	public void setDataParentDir(String dataParentDir) {
+		this.dataParentDir = dataParentDir;
+	}
+
+	public String getDaoParentDir() {
+		return daoParentDir;
+	}
+
+	public void setDaoParentDir(String daoParentDir) {
+		this.daoParentDir = daoParentDir;
+	}
+
+	public String getServiceParentDir() {
+		return serviceParentDir;
+	}
+
+	public void setServiceParentDir(String serviceParentDir) {
+		this.serviceParentDir = serviceParentDir;
+	}
+
+	public String getActionParentDir() {
+		return actionParentDir;
+	}
+
+	public void setActionParentDir(String actionParentDir) {
+		this.actionParentDir = actionParentDir;
+	}
+
+	public String getJspParentDir() {
+		return jspParentDir;
+	}
+
+	public void setJspParentDir(String jspParentDir) {
+		this.jspParentDir = jspParentDir;
 	}
 	
 }

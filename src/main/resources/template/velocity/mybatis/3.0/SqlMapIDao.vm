@@ -6,6 +6,9 @@ package ${daoFullPackageName};
 import java.util.List;
 import java.util.Map;
 
+import ${baseMapperPackageName}.BaseMapper;
+import ${pojoFullPackageName}.${entity.entityBeanName};
+
 /**
  * @author paddingdun
  * ${entity.tableCommon} dao interface;
@@ -14,9 +17,9 @@ import java.util.Map;
  * @version 1.0
  */
 @org.springframework.stereotype.Repository
-public interface ${sqlMapIDaoJavaClassName} extends ${baseMapperPackageName}.BaseMapper<${pojoFullPackageName}.${entity.entityBeanName}> {
+public interface ${sqlMapIDaoJavaClassName} extends BaseMapper<${entity.entityBeanName}> {
 
-	List<Map<String, Object> queryPaging(Map<String, Object> params);
+	List<Map<String, Object>> queryPaging(Map<String, Object> params);
 	
-	void delete(Map<String, Object> params);
+	void deletes(Map<String, Object> params);
 }

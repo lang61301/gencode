@@ -21,10 +21,10 @@ import java.util.Vector;
 import java.util.concurrent.Callable;
 
 import javax.swing.BorderFactory;
+import javax.swing.GenDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
@@ -33,8 +33,6 @@ import javax.swing.table.TableCellEditor;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
-import com.sun.tools.javac.util.Name.Table;
-
 import layout.TableLayout;
 import me.paddingdun.gen.code.IConsant;
 import me.paddingdun.gen.code.data.message.Message;
@@ -42,8 +40,6 @@ import me.paddingdun.gen.code.data.option.ModelValue;
 import me.paddingdun.gen.code.data.option.ModelValueCategory;
 import me.paddingdun.gen.code.data.option.Option;
 import me.paddingdun.gen.code.data.table.CellEditorType;
-import me.paddingdun.gen.code.data.table.DBColumn;
-import me.paddingdun.gen.code.data.table.IDBColumn;
 import me.paddingdun.gen.code.data.table2.Entity;
 import me.paddingdun.gen.code.data.table2.ListColumn;
 import me.paddingdun.gen.code.data.table2.TableColumn;
@@ -51,6 +47,7 @@ import me.paddingdun.gen.code.data.tabletree.DBTable;
 import me.paddingdun.gen.code.data.tabletree.IDBTable;
 import me.paddingdun.gen.code.db.TableHelper2;
 import me.paddingdun.gen.code.gui.model.EditViewModel;
+import me.paddingdun.gen.code.gui.model.GenDialogModel;
 import me.paddingdun.gen.code.gui.model.OptionComboBoxModel;
 import me.paddingdun.gen.code.gui.model.TableViewModel;
 import me.paddingdun.gen.code.gui.perspective.designer.DesignerPerspective;
@@ -116,6 +113,7 @@ public class TableView extends AbstractView {
 		setResizable(true);
 		setTitle("数据库表/查询列表详细内容");
 		fileChooser = new javax.swing.JFileChooser();
+		genDialog = new GenDialog("选择框", 360, 320);
 		p = new javax.swing.JSplitPane();
 		p0t = new javax.swing.JPanel();
 		pt = new javax.swing.JSplitPane();
@@ -960,20 +958,25 @@ public class TableView extends AbstractView {
 	 */
 	private void btnGenNewActionPerformed(java.awt.event.ActionEvent evt) {
 		if (model != null) {
-			fileChooser.setFileSelectionMode(JFileChooser.SAVE_DIALOG | JFileChooser.DIRECTORIES_ONLY);
-			fileChooser.setCurrentDirectory(new File("/home/pdd/桌面"));
-			int opt = fileChooser.showSaveDialog(null);
-			// 保存;
-			if (JFileChooser.APPROVE_OPTION == opt) {
+			int opt = -1;
+			GenDialogModel dgModel = null;
+			if(StringUtils.isBlank(model.getXmlParentDir())
+					|| StringUtils.isBlank(model.getDataParentDir())
+					|| StringUtils.isBlank(model.getDaoParentDir())
+					|| StringUtils.isBlank(model.getServiceParentDir())
+					|| StringUtils.isBlank(model.getActionParentDir())
+					|| StringUtils.isBlank(model.getJspParentDir())) {
+				JOptionPane.showMessageDialog(null, "本地父文件路径!");
+				return;
+			}else {
+				dgModel = genDialog.showDialog(null);
+			}
+			if (null == dgModel) {
+				return;
+			}
+			final GenDialogModel dgModel1 = dgModel;
 				TaskHelper.runInNonEDT(new Callable<Integer[]>() {
 					public Integer[] call() throws Exception {
-						File saveFile = fileChooser.getSelectedFile();
-						if (!saveFile.exists())
-							saveFile.mkdirs();
-						// 设置全局值;
-						// ModelHelper.complexGetAndSimpleSet(TableView.this,
-						// model);
-
 						//获取EditViewModel;
 						EditView ev = perspective.getEditView(); 
 						ev.setModelValue();
@@ -991,72 +994,95 @@ public class TableView extends AbstractView {
 						// 加工model;ok
 						ModelHelper.processTableViewModel(model, evm);
 
-						//生成java base bean;
-						String baseJavaContent = VelocityHelper.baseEntityBean(model);
-						// System.out.println(javaContent);
-						FileHelper.genBasePojoJavaFile(saveFile.getAbsolutePath(), model.getPojoFullPackageName(),
-								model.getEntity().getEntityBeanName(), baseJavaContent);
+						boolean baseData = dgModel1.isBaseData();
+						if(baseData) {
+							//生成java base bean;
+							String baseJavaContent = VelocityHelper.baseEntityBean(model);
+							// System.out.println(javaContent);
+							//保存位置和包名是分离的
+							FileHelper.genBasePojoJavaFile(model.getDataParentDir(),
+									model.getEntity().getSubPackageName(),
+									model.getEntity().getEntityBeanName(), baseJavaContent);
+						}
 						
+						boolean data = dgModel1.isData();
+						if(data) {
 						//生成java bean;
 						String javaContent = VelocityHelper.entityBean(model);
 						// System.out.println(javaContent);
-						FileHelper.genPojoJavaFile(saveFile.getAbsolutePath(), model.getPojoFullPackageName(),
+						FileHelper.genPojoJavaFile(model.getDataParentDir(), model.getEntity().getSubPackageName(),
 								model.getEntity().getEntityBeanName(), javaContent);
+						}
 						
+						boolean xml  = dgModel1.isXml();
+						if(xml) {
 						//生成mybatis的pojo xml;
 						 String sqlMapContent = VelocityHelper.sqlMap(model);
-						 FileHelper.genSqlMapXmlFile(saveFile.getAbsolutePath(),
+						 FileHelper.genSqlMapXmlFile(model.getXmlParentDir(),
 						 model.getEntity().getSubPackageName(),
 						 model.getEntity().getEntityBeanName(),
 						 sqlMapContent);
 						// System.out.println(sqlMapContent);
+						}
 						
-						//生成dao java;
+						boolean dao = dgModel1.isDao();
+						if(dao) {
+							//生成dao java;
 						 String sqlMapIDaoContent =
 						 VelocityHelper.sqlMapIDao(model);
-						 FileHelper.genSqlMapIDaoJavaFile(saveFile.getAbsolutePath(),
-						 model.getDaoFullPackageName(),
+						 FileHelper.genSqlMapIDaoJavaFile(model.getDaoParentDir(),
+								 model.getEntity().getSubPackageName() ,
 						 model.getEntity().getEntityBeanName(),
 						 sqlMapIDaoContent);
+						}
 						
-						 //生成service 接口;
+						boolean service = dgModel1.isService();
+						if(service) {
+							//生成service 接口;
 						 String sqlMapIServiceContent =
 						 VelocityHelper.sqlMapIService(model);
-						 FileHelper.genSqlMapIServiceJavaFile(saveFile.getAbsolutePath(),
-						 model.getServiceFullPackageName(),
+						 FileHelper.genSqlMapIServiceJavaFile(model.getServiceParentDir(),
+						 model.getEntity().getSubPackageName(),
 						 model.getEntity().getEntityBeanName(),
 						 sqlMapIServiceContent);
 						
 						 //生成service实现类;
 						 String sqlMapServiceImplContent =
 						 VelocityHelper.sqlMapServiceImpl(model);
-						 FileHelper.genSqlMapServiceImplJavaFile(saveFile.getAbsolutePath(),
-						 model.getServiceImplFullPackageName(),
+						 FileHelper.genSqlMapServiceImplJavaFile(model.getServiceParentDir(),
+						 model.getEntity().getSubPackageName() + ".impl",
 						 model.getEntity().getEntityBeanName(),
 						 sqlMapServiceImplContent);
+						}	
 						
 						 //生成action java;
+						boolean action = dgModel1.isAction();
+						if(action) {
 						 String springWebActionContent =
 						 VelocityHelper.springWebAction(model);
-						 FileHelper.genSpringWebActionJavaFile(saveFile.getAbsolutePath(),
-						 model.getWebActionFullPackageName(),
+						 FileHelper.genSpringWebActionJavaFile(model.getActionParentDir(),
+						 model.getEntity().getSubPackageName(),
 						 model.getEntity().getEntityBeanName(),
 						 springWebActionContent);
+						}
 						 
+						boolean jsp = dgModel1.isJsp();
+						if(jsp) {
 						 //生成list;
 						String easyuiListJspContent = 
 								VelocityHelper.easyuiListJsp(model);
-						FileHelper.genEasyuiListJspFile(saveFile.getAbsolutePath(),
+						FileHelper.genEasyuiListJspFile(model.getJspParentDir(),
 								model.getEntity().getSubPackageName(),
 								model.getEntity().getEntityBeanName(),
 								easyuiListJspContent);
-						
+						//生成edit;
 						String easyuiEditJspContent = 
 								VelocityHelper.easyuiEditJsp(model);
-						FileHelper.genEasyuiEditJspFile(saveFile.getAbsolutePath(),
+						FileHelper.genEasyuiEditJspFile(model.getJspParentDir(),
 								model.getEntity().getSubPackageName(),
 								model.getEntity().getEntityBeanName(),
 								easyuiEditJspContent);
+						}
 
 						EventQueue.invokeLater(new Runnable() {
 							public void run() {
@@ -1066,7 +1092,6 @@ public class TableView extends AbstractView {
 						return null;
 					}
 				});
-			}
 		}
 	}
 
@@ -1235,6 +1260,7 @@ public class TableView extends AbstractView {
 	@ModelValue(valueGetFuncName = "getText", valueSetFuncName = "setText")
 	private javax.swing.JTextField deleteMethodPrefix;
 	private javax.swing.JFileChooser fileChooser;
+	private GenDialog genDialog;
 
 	@ModelValue(valueGetFuncName = "getText", valueSetFuncName = "setText")
 	private javax.swing.JTextField getMethodPrefix;

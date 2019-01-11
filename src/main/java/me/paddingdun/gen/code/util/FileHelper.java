@@ -23,6 +23,22 @@ import org.apache.commons.lang.StringUtils;
  */
 public class FileHelper {
 	
+	private static void genFile(String baseDir, String fileName, String fileContent){
+		File dir = new File(baseDir);
+		if(!dir.exists())
+			dir.mkdirs();
+		
+		BufferedWriter bw = null;
+		try {
+			bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(dir, fileName)), Charset.forName("UTF-8")));
+			bw.write(fileContent);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			IOHelper.close(bw);
+		}
+	}
+	
 	private static void genJavaFile(String baseDir, String pkgName, String fileName, String fileContent){
 		String dir_str = pkgName.replaceAll(Pattern.quote("."), Matcher.quoteReplacement(File.separator));
 		File dir = new File(baseDir, dir_str);
