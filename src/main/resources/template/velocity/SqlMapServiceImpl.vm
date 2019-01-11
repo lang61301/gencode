@@ -108,6 +108,13 @@ public class ${sqlMapServiceImplJavaClassName} extends BaseService<${entity.enti
 	 */
 	@Override
 	public void update(${entity.entityBeanName} obj){
+	#foreach( $column in ${entity.tableColumns})
+	#if(${column.editRenderShow} == false)
+	#if(${column.editValueJavaCode})
+		${column.editValueJavaCode}
+	#end
+	#end
+	#end
 	this.dao.updateByPrimaryKeySelective(obj);
 	}
 	
