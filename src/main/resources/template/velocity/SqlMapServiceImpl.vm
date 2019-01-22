@@ -52,6 +52,8 @@ public class ${sqlMapServiceImplJavaClassName} extends BaseService<${entity.enti
 		DefaultListDataCollection<Map<String, Object>> result = new DefaultListDataCollection<Map<String, Object>>();
 		List<Map<String, Object>> empty = Collections.emptyList();
 		result.setRows(empty);
+		result.setStart(paging.getStart());
+		result.setLength(paging.getLength());
 		Page<Map<String, Object>> pageInfo = PageHelper.startPage(paging.getPage(), paging.getRows());
 		
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -60,12 +62,11 @@ public class ${sqlMapServiceImplJavaClassName} extends BaseService<${entity.enti
 		this.dao.queryPaging(params);
 		long total = pageInfo.getTotal();
 		if(0l == total) {
+			result.setTotal(0);
 			return result;
 		}
 		result.setTotal(Long.valueOf(total).intValue());
 		result.setRows(pageInfo.getResult());
-		result.setStart(paging.getStart());
-		result.setLength(paging.getLength());
 		return result;
 	}
 	
